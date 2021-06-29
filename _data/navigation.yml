@@ -3,7 +3,7 @@ main:
   - title: "Quick-Start Guide"
     url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
   - title: "일상"
-    url: /categories/#daily
+    url: /categories/#일상
   - title: "카테고리"
     url: /categories/
   # - title: "Sample Collections"
