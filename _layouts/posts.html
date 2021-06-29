@@ -3,8 +3,7 @@ layout: archive
 ---
 
 {{ content }}
-s
-<ul class="taxonomy__index">
+<!-- <ul class="taxonomy__index">
   {% assign postsInYear = site.posts | where_exp: "item", "item.hidden != true" | group_by_exp: 'post', 'post.date | date: "%Y"' %}
   {% for year in postsInYear %}
     <li>
@@ -13,9 +12,9 @@ s
       </a>
     </li>
   {% endfor %}
-</ul>
+</ul> -->
 
-{% assign entries_layout = page.entries_layout | default: 'list' %}
+<!-- {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% assign postsByYear = site.posts | where_exp: "item", "item.hidden != true" | group_by_exp: 'post', 'post.date | date: "%Y"' %}
 {% for year in postsByYear %}
   <section id="{{ year.name }}" class="taxonomy__section">
@@ -27,5 +26,4 @@ s
     </div>
     <a href="#page-title" class="back-to-top">{{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
   </section>
-{% endfor %}
-e
+{% endfor %} -->
