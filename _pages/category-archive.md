@@ -1,7 +1,7 @@
 ---
-title: "Posts by Category"
+title: "일상"
 layout: categories
-permalink: /categories/
+permalink: /life/
 author_profile: true
 comments: true
 ---
