@@ -2,10 +2,10 @@
 main:
   - title: "Quick-Start Guide"
     url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
-  - title: "categories"
+  - title: "일상"
+    url: /categories/#daily
+  - title: "카테고리"
     url: /categories/
-  - title: "life"
-    url: /categories/#life
   # - title: "Sample Collections"
   #   url: /collection-archive/
   # - title: "Sitemap"
