@@ -11,7 +11,7 @@ en: &DEFAULT_EN
   pagination_previous        : "Previous"
   pagination_next            : "Next"
   breadcrumb_home_label      : "Home"
-  breadcrumb_separator       : "/"
+  breadcrumb_separator       : ">"
   menu_label                 : "Toggle menu"
   search_label               : "Toggle search"
   toc_label                  : "On this page"
@@ -655,7 +655,7 @@ ru: &DEFAULT_RU
   pagination_previous        : "Предыдущая"
   pagination_next            : "Следующая"
   breadcrumb_home_label      : "Главная"
-  breadcrumb_separator       : "/"
+  breadcrumb_separator       : ">"
   menu_label                 : "Выпадающее меню"
   search_label               :
   toc_label                  : "Содержание"
@@ -707,7 +707,7 @@ lt: &DEFAULT_LT
   pagination_previous        : "Ankstesnis"
   pagination_next            : "Sekantis"
   breadcrumb_home_label      : "Pagrindinis"
-  breadcrumb_separator       : "/"
+  breadcrumb_separator       : ">"
   menu_label                 : "Meniu rodymas"
   search_label               :
   toc_label                  : "Turinys"
@@ -757,7 +757,7 @@ gr: &DEFAULT_GR
   pagination_previous        : "Προηγούμενo"
   pagination_next            : "Επόμενo"
   breadcrumb_home_label      : "Αρχική"
-  breadcrumb_separator       : "/"
+  breadcrumb_separator       : ">"
   menu_label                 : "Μενού"
   search_label               :
   toc_label                  : "Περιεχόμενα"
@@ -809,7 +809,7 @@ sv: &DEFAULT_SV
   pagination_previous        : "Föregående"
   pagination_next            : "Nästa"
   breadcrumb_home_label      : "Hem"
-  breadcrumb_separator       : "/"
+  breadcrumb_separator       : ">"
   menu_label                 : "Växla menyläge"
   search_label               : "Växla sökläge"
   toc_label                  : "På denna sida"
@@ -1025,7 +1025,7 @@ da: &DEFAULT_DA
   pagination_previous        : "Forrige"
   pagination_next            : "Næste"
   breadcrumb_home_label      : "Home"
-  breadcrumb_separator       : "/"
+  breadcrumb_separator       : ">"
   menu_label                 : "Vis/skjul menu"
   search_label               :
   toc_label                  : "På denne side"
