@@ -1,10 +1,9 @@
 ---
 title: "홈"
-layout: splash
+layout: home
 permalink: /
 author_profile: true
 comments: true
 ---
 
-
-홈홈홈홈홈홈
+home contents
