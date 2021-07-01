@@ -2,7 +2,7 @@
 main:
   - title: "Home"
     url: '/'
-  - title: "카테고리"
+  - title: "Categories"
     url: /categories/
   # - title: "Quick-Start Guide"
   #   url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
