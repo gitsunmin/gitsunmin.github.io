@@ -221,9 +221,7 @@ plugins:
   - jekyll-feed
   - jekyll-include-cache
   - jekyll-archives
-  - jekyll-babel
-
-babel_js_extensions: 'es6, babel, jsx' # Do not process .js files
+  - jemoji
 
 # mimic GitHub Pages with --safe
 whitelist:
@@ -231,6 +229,7 @@ whitelist:
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
+  - jemoji
   - jekyll-include-cache
 
 
