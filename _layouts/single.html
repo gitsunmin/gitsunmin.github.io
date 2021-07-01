@@ -43,7 +43,6 @@ layout: default
         {{ content }}
         {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
       </section>
-1
       <footer class="page__meta">
         {% if site.data.ui-text[site.locale].meta_label %}
           <h4 class="page__meta-title">{{ site.data.ui-text[site.locale].meta_label }}</h4>
@@ -55,7 +54,18 @@ layout: default
       <!-- {% if page.share %}{% include social-share.html %}{% endif %} -->
       {% include post_pagination.html %}
     </div>
-    여기에 광고넣고싶음.
+    adsense
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- footer_1 -->
+      <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-5975295385333511"
+          data-ad-slot="3519455645"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
     
     {% if jekyll.environment == 'production' and site.comments.provider and page.comments %}
       {% include comments.html %}
