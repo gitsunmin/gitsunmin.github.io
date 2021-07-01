@@ -1,7 +1,7 @@
 ---
-title: "일상"
+title: "공부"
 layout: categories
-permalink: /categories/Study/
+permalink: /categories/Development/
 author_profile: true
 comments: true
 ---

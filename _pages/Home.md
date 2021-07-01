@@ -1,7 +1,7 @@
 ---
-title: "책"
+title: "홈"
 layout: categories
-permalink: /categories/Books/
+permalink: /
 author_profile: true
 comments: true
 ---
