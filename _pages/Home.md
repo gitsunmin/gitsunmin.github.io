@@ -1,6 +1,6 @@
 ---
 title: "홈"
-layout: single
+layout: splash
 permalink: /
 author_profile: true
 comments: true
