@@ -20,7 +20,21 @@ body {
     overflow: hidden;
   }
 }
+img[alt$=">"] {
+  float: right;
+}
 
+img[alt$="<"] {
+  float: left;
+}
+
+img[alt$="><"] {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: auto;
+  float: none!important;
+}
 h1,
 h2,
 h3,
@@ -226,6 +240,22 @@ figure {
     border-radius: $border-radius;
     -webkit-transition: $global-transition;
     transition: $global-transition;
+  }
+
+  .align-right {
+    float: right;
+  }
+  
+  .align-left {
+    float: left;
+  }
+  
+  .align-center {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+    float: none!important;
   }
 
   > a {

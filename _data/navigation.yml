@@ -1,8 +1,10 @@
 # main links
 main:
-  - title: "Home"
+  - title: "Home🏠"
     url: '/'
-  - title: "Categories"
-    url: /categories/
+  - title: "Tags🏷️"
+    url: /tags/
+  - title: "Posts by Year🗓️"
+    url: /year-archive/
   # - title: "Quick-Start Guide"
   #   url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
