@@ -93,7 +93,7 @@ analytics:
 
 # Site Author
 author:
-  name             : "SunMin, Kim"
+  name             : "Sunmin Kim"
   avatar           : "/assets/images/profile.jpeg"
   bio              : " 🏃 🏃‍♂️ 🙂"
   location         : "Suwon, South Korea"
@@ -101,7 +101,7 @@ author:
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      # url: "mailto:your.name@email.com"
+      url: "tjsals116@gmail.com"
     # - label: "Website"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin-in"
