@@ -23,6 +23,7 @@ gem "jekyll-gist"
 gem "jekyll-feed"
 gem "jekyll-include-cache"
 gem "jekyll-archives"
+# gem "jekyll-lunr-js-search"
 #
 # If you have any other plugins, put them here!
 group :jekyll_plugins do
