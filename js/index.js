@@ -1,1 +1,1 @@
-console.log('alived log!');
+console.log('%cWelcome! My Blog', 'color: #448899; font-size: 2rem');
