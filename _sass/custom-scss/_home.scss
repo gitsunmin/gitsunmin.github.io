@@ -3,18 +3,15 @@
    ==========================================================================
 */
 
-.home-container {
-  display: flex;
-  flex-direction: row;
-  &-left-flex {
-      background-color: red;
-      width: 500px;
-  }
-  &-right-flex {
-    background-color: blue;
-    width: 500px;
-  }
-  div.archive {
-      padding: 0px;
+.home-sub-title {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+.profile-posts {
+  font-size: 0.7rem;
+  margin-top: 10px;
+  border-radius: 5%;
+  a {
+    padding: 5px;
   }
 }
