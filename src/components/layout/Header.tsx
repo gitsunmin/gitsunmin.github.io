@@ -11,7 +11,11 @@ const Footer = ({ title, isRootPath }) => {
       {title}
     </Link>
   )
-  return <header className="global-header">{header}</header>
+  return <header className="global-header">
+    <div>
+    {header}
+    </div>
+  </header>
 }
 
 export default Footer

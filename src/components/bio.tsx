@@ -8,6 +8,7 @@
 import * as React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
+import Avatar from "./common/Avatar"
 
 const Bio = () => {
   const data = useStaticQuery(graphql`
@@ -19,7 +20,7 @@ const Bio = () => {
             summary
           }
           social {
-            twitter
+            github
           }
         }
       }
@@ -32,23 +33,11 @@ const Bio = () => {
 
   return (
     <div className="bio">
-      <StaticImage
-        className="bio-avatar"
-        layout="fixed"
-        formats={["auto", "webp", "avif"]}
-        src="../images/profile-pic.png"
-        width={50}
-        height={50}
-        quality={95}
-        alt="Profile picture"
-      />
+      <Avatar />
       {author?.name && (
         <p>
           Written by <strong>{author.name}</strong> {author?.summary || null}
-          {` `}
-          <a href={`https://twitter.com/${social?.twitter || ``}`}>
-            You should follow them on Twitter
-          </a>
+          <a href={`${social.github}`}>github</a>
         </p>
       )}
     </div>
