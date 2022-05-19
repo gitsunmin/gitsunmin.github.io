@@ -1,7 +1,14 @@
 import * as React from "react"
 import { Link } from "gatsby"
+import styled from "styled-components"
 
-const Footer = ({ title, isRootPath }) => {
+const StyledHeader = styled.header(({ theme }) => {
+  return {
+    height: "10rem",
+  }
+})
+
+const Header = ({ title, isRootPath }) => {
   const header = isRootPath ? (
     <h1 className="main-heading">
       <Link to="/">{title}</Link>
@@ -11,11 +18,8 @@ const Footer = ({ title, isRootPath }) => {
       {title}
     </Link>
   )
-  return <header className="global-header">
-    <div>
-    {header}
-    </div>
-  </header>
+
+  return <StyledHeader className="global-header">{header}</StyledHeader>
 }
 
-export default Footer
+export default Header

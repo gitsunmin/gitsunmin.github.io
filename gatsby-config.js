@@ -2,13 +2,14 @@ module.exports = {
   siteMetadata: {
     title: `Gitsunmin's Blog`,
     author: {
-      name: `SunMin, Kim`,
-      summary: `front-end developer`,
+      name: `김선민`,
+      job: "프론트엔드 개발자",
+      summary: `드라마 보면서 코딩하는 것을 좋아하는 개발자이며, 지금도 어쩌면...`,
     },
     description: `this is my blog`,
     siteUrl: `https://gitsunmin.github.io/`,
     social: {
-      github: 'https://github.com/gitsunmin',
+      github: "https://github.com/gitsunmin",
     },
   },
   plugins: [
@@ -128,5 +129,16 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
+    "gatsby-plugin-styled-components",
+    {
+      resolve: `gatsby-plugin-alias-imports`,
+      options: {
+        alias: {
+          "@src": "src",
+          "@components": "src/components",
+        },
+        extensions: ["ts", "js", "tsx"],
+      },
+    },
   ],
 }
