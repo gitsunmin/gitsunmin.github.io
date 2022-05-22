@@ -2,8 +2,9 @@ import * as React from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
 
-import Avatar from "./Avatar"
-import GithubIcon from "@src/components/icons/GithubIcon"
+import Avatar from "@components/common/Profile/Avatar"
+import GithubIcon from "@components/icons/GithubIcon"
+import SocialNavigation from "@components/common/Profile/SocialNavigation"
 
 const ProfileCard = styled.div({
   display: "flex",
@@ -11,7 +12,8 @@ const ProfileCard = styled.div({
 })
 
 const ProfileContents = styled.div({
-  padding: 10,
+  paddingLeft: 10,
+  fontSize: 13,
 })
 
 const Profile: React.FC<{}> = () => {
@@ -42,13 +44,7 @@ const Profile: React.FC<{}> = () => {
         <strong>{author.name}</strong> | {author?.job ?? null} <br />
         {author?.summary ?? null}
       </span>
-      <div>
-        <GithubIcon
-          onClick={() => {
-            window.open(social.github, "_blank")
-          }}
-        />
-      </div>
+      <SocialNavigation social={social} />
     </>
   )
 

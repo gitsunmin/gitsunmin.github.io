@@ -136,8 +136,9 @@ module.exports = {
         alias: {
           "@src": "src",
           "@components": "src/components",
+          "@images": "src/images",
         },
-        extensions: ["ts", "js", "tsx"],
+        extensions: ["ts", "js", "tsx", "png"],
       },
     },
   ],
