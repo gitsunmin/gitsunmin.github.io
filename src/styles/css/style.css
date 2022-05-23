@@ -1,5 +1,5 @@
 /* CSS Custom Properties Definitions */
-
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;800&display=swap');
 :root {
   --maxWidth-none: "none";
   --maxWidth-xs: 20rem;
@@ -30,9 +30,10 @@
   --fontFamily-sans: Montserrat, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family: 'Nanum Gothic', sans-serif;
   --fontFamily-serif: "Merriweather", "Georgia", Cambria, "Times New Roman",
     Times, serif;
-  --font-body: var(--fontFamily-serif);
+  --font-body: var(--font-family);
   --font-heading: var(--fontFamily-sans);
   --fontWeight-normal: 400;
   --fontWeight-medium: 500;
@@ -250,10 +251,6 @@ a:focus {
   margin-bottom: var(--spacing-20);
 }
 
-.global-header {
-  margin-bottom: var(--spacing-12);
-}
-
 .main-heading {
   font-size: var(--fontSize-7);
   margin: 0;
@@ -300,6 +297,7 @@ a:focus {
   margin-bottom: var(--spacing-0);
   min-width: 50px;
   border-radius: 100%;
+  -webkit-border-radius: 100%;
 }
 
 .blog-post header h1 {
@@ -317,6 +315,10 @@ a:focus {
 
 .gatsby-highlight {
   margin-bottom: var(--spacing-8);
+}
+
+.pointer:hover {
+  cursor: pointer;
 }
 
 /* Media queries */

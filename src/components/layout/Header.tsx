@@ -7,25 +7,33 @@ import { media } from "@src/styles/media"
 
 const StyledHeader = styled.header`
   position: relative;
-  top: 0;
+  overflow: hidden;
+  max-height: 500px;
+  border-radius: 0 0 2.5vw 2.5vw;
+  -webkit-border-radius: 0 0 2.5vw 2.5vw;
 
+  ${media.phone`
+    max-height: 100px;
+  `}
   .static-image {
-    max-height: 500px;
-    text-algin: center;
+    transform: translateY(-30%);
+    max-height: initial;
     width: 100%;
-    vertical-align: middle;
+    ${media.phone`
+      width: 100%;
+    `}
   }
 `
 
 const StyledHeaderText = styled.h1`
   text-shadow: 6px 2px 2px white;
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: var(--fontSize-7);
   ${media.phone`
-      top: 30%;
+      top: -30%;
       left: 40%;
       font-size: var(--fontSize-1);
       transform: none;

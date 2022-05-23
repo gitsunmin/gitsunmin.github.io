@@ -6,6 +6,6 @@ import "typeface-merriweather"
 import "prismjs/themes/prism.css"
 
 // normalize CSS across browsers
-import "./src/normalize.css"
+import "./src/styles/css/normalize.css"
 // custom CSS styles
-import "./src/style.css"
+import "./src/styles/css/style.css"

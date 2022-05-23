@@ -7,7 +7,7 @@ interface GithubIconProps {
 
 const GithubIcon: React.FC<GithubIconProps> = ({ onClick = () => {} }) => {
   return (
-    <span onClick={onClick}>
+    <span onClick={onClick} className="pointer">
       <StaticImage
         src="./../../images/icons/github.svg"
         width={24}
