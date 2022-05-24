@@ -5,7 +5,9 @@ import styled from "styled-components"
 import UAParser from "ua-parser-js"
 
 import { media, viewSizes } from "@src/styles/media"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+
+import { debounce } from "@src/utils"
 
 const StyledHeader = styled.header`
   position: relative;
@@ -82,24 +84,22 @@ const Header: React.FC<HeaderProps> = ({ title, isRootPath }) => {
   const parser: UAParser = new UAParser()
   const result: UAParser.IResult = parser.getResult()
   const { os } = result
-  // const header = isRootPath ? (
-  //   <h1 className="main-heading">
-  //     <Link to="/">{title}</Link>
-  //   </h1>
-  // ) : (
-  //   <Link className="header-link-home" to="/">
-  //     {title}
-  //   </Link>
-  // )
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
-  const checkOS = desktopFilter.includes(os.name)
-  const checkSize = windowWidth >= viewSizes.desktop
-  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS && checkSize)
 
-  window.addEventListener("resize", () => {
-    setWindowWidth(window.innerWidth)
-    setIsDesktop(checkOS && checkSize)
-  })
+  const checkOS = desktopFilter.includes(os.name)
+  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop)
+      window.addEventListener("resize", () => {
+        debounce(
+          () =>
+            setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop),
+          1000
+        )
+      })
+    }
+  }, [])
+
   return (
     <Link to="/">
       <StyledHeader className="global-header">
