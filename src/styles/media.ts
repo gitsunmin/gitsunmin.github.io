@@ -3,13 +3,13 @@ import { css, CSSObject, SimpleInterpolation } from "styled-components";
 
 type DeviceType = "desktop" | "tablet" | "phone";
 
-const sizes: Record<DeviceType, number> = {
+const viewSizes: Record<DeviceType, number> = {
   desktop: 1200,
   tablet: 768,
   phone: 600,
 };
 
-const media = Object.entries(sizes).reduce((acc, [key, value]) => {
+const media = Object.entries(viewSizes).reduce((acc, [key, value]) => {
   return {
     ...acc,
     [key]: (
@@ -23,4 +23,4 @@ const media = Object.entries(sizes).reduce((acc, [key, value]) => {
   };
 }, {}) as Record<DeviceType, any>;
 
-export { media };
+export { media, viewSizes };

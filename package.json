@@ -35,7 +35,8 @@
     "react-helmet": "^6.1.0",
     "styled-components": "^5.3.5",
     "typeface-merriweather": "0.0.72",
-    "typeface-montserrat": "0.0.75"
+    "typeface-montserrat": "0.0.75",
+    "ua-parser-js": "^1.0.2"
   },
   "devDependencies": {
     "@types/styled-components": "^5.1.25",
