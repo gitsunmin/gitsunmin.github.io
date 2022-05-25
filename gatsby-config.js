@@ -138,7 +138,7 @@ module.exports = {
           "@components": "src/components",
           "@images": "src/images",
         },
-        extensions: ["ts", "js", "tsx", "png"],
+        extensions: ["ts", "js", "tsx", "png", "svg"],
       },
     },
   ],

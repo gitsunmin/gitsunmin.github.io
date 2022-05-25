@@ -7,6 +7,9 @@ import UAParser from "ua-parser-js"
 import { media, viewSizes } from "@src/styles/media"
 import { useState, useEffect } from "react"
 
+import seagull1Src from "@src/images/common/header/seagull-1.svg"
+import seagull2Src from "@src/images/common/header/seagull-2.svg"
+
 import { debounce } from "@src/utils"
 
 const seagull1Keyframe = keyframes`
@@ -68,7 +71,7 @@ const StyledHeader = styled.header`
   }
   .seagull-2 {
     position: absolute;
-    transform: scale(.2, .2);
+    transform: scale(0.2, 0.2);
     animation: ${seagull2Keyframe} 4s infinite alternate;
   }
 `
@@ -141,16 +144,8 @@ const Header: React.FC<HeaderProps> = ({ title, isRootPath }) => {
           height={1000}
           className="static-image"
         />
-        <StaticImage
-          src="./../../images/common/header/seagull-1.svg"
-          alt="seagull-1.svg"
-          className="seagull-1"
-        />
-        <StaticImage
-          src="./../../images/common/header/seagull-2.svg"
-          alt="seagull-2.svg"
-          className="seagull-2"
-        />
+        <img src={seagull1Src} alt="seagull-1.svg" className="seagull-1" />
+        <img src={seagull2Src} alt="seagull-2.svg" className="seagull-2" />
         {isDesktop ? (
           <StyledMonitor>
             <StaticImage
