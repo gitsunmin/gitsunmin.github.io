@@ -1,13 +1,48 @@
 import * as React from "react"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import UAParser from "ua-parser-js"
 
 import { media, viewSizes } from "@src/styles/media"
 import { useState, useEffect } from "react"
 
 import { debounce } from "@src/utils"
+
+const seagull1Keyframe = keyframes`
+  0% {
+    top: 60%;
+    left: -10%;
+    transform: rotate(90deg);
+  }
+  50% {
+    top: 60%;
+    left: 0%;
+  }
+  100% {
+    top: 20%;
+    left: 100%;
+    transform: rotate(80deg);
+  }
+`
+const seagull2Keyframe = keyframes`
+  0% {
+    top: -60%;
+    left: -20%;
+  }
+  30% {
+    top: -58%;
+    left: -22%;
+  }
+  60% {
+    top: -61%;
+    left: -19%;
+  }
+  100% {
+    top: -59%;
+    left: -18%;
+  }
+`
 
 const StyledHeader = styled.header`
   position: relative;
@@ -29,15 +64,12 @@ const StyledHeader = styled.header`
   }
   .seagull-1 {
     position: absolute;
-    top: 40%;
-    left: 90%;
-    transform: translate(-50%, -50%);
+    animation: ${seagull1Keyframe} 4s infinite normal;
   }
   .seagull-2 {
     position: absolute;
-    top: 20%;
-    left: 20%;
-    transform: translate(-50%, -50%);
+    transform: scale(.2, .2);
+    animation: ${seagull2Keyframe} 4s infinite alternate;
   }
 `
 
