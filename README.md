@@ -7,7 +7,10 @@
     npx gatsby new my-blog-starter https://github.com/gatsbyjs/gatsby-starter-blog
     ```
 2.  **Edit Layout**
-3.  **Create Graphql.config.js**
+3.  **Create TOC**
+- [ref](https://soopdop.github.io/2020/12/03/add-table-of-content-gatsby/#%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8-%EC%84%A4%EC%B9%98-%ED%9B%84-%EB%B0%94%EB%80%90%EC%A0%90-%ED%99%95%EC%9D%B8)
+4.  **Create Graphql.config.js**
+- [how to create graphql.config.js](https://www.gatsbyjs.com/plugins/gatsby-plugin-graphql-config/?=graphql)
 
 ## 🧐 What's inside?
 
