@@ -11,6 +11,9 @@ import { debounce, checkOS } from "@src/utils"
 import seagull1Src from "@src/images/common/header/seagull-1.svg"
 import seagull2Src from "@src/images/common/header/seagull-2.svg"
 
+//* components
+import MonitorThatPlayYoutube from "@src/components/layout/header/MonitorThatPlayYoutube"
+
 const seagull1Keyframe = keyframes`
   0% {
     top: 60%;
@@ -113,22 +116,6 @@ const StyledHeaderText = styled.h1`
     `}
 `
 
-const StyledMonitor = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 70%;
-`
-
-const StyledThingInMonitor = styled.div`
-  position: absolute;
-  width: inherit;
-  height: inherit;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: var(--fontSize-7);
-`
-
 interface HeaderProps {
   title: string
   isRootPath: boolean
@@ -154,8 +141,8 @@ const Header: React.FC<HeaderProps> = ({
     }
   }, [])
 
-  const header = isRootPath ? (
-    <StyledHeader className="global-header">
+  const handledHeader = isRootPath ? (
+    <StyledHeader>
       <StaticImage
         src="./../../images/common/header-background.png"
         alt="header-background.png"
@@ -165,39 +152,27 @@ const Header: React.FC<HeaderProps> = ({
       <img src={seagull1Src} alt="seagull-1.svg" className="seagull-1" />
       <img src={seagull2Src} alt="seagull-2.svg" className="seagull-2" />
       {isDesktop ? (
-        <StyledMonitor>
-          <StaticImage
-            src="./../../images/common/header/monitor.svg"
-            alt="monitor.svg"
-          />
-          {/* @about youtube Link options: https://it4edu.tistory.com/107 */}
-          <StyledThingInMonitor>
-            <iframe
-              width="230"
-              height="140"
-              src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&modestbranding=1&rel=0`}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            ></iframe>
-          </StyledThingInMonitor>
-        </StyledMonitor>
+        <MonitorThatPlayYoutube youtubeVideoId={youtubeVideoId} />
       ) : null}
-      <StyledHeaderText>{title}</StyledHeaderText>
+      <StyledHeaderText>
+        <Link to="/">{title}</Link>
+      </StyledHeaderText>
     </StyledHeader>
   ) : (
-    <StyledLightHeader className="global-header">
+    <StyledLightHeader>
       <StaticImage
         src="./../../images/common/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"
       />
-      <StyledHeaderText>{title}</StyledHeaderText>
+      <StyledHeaderText>
+        <Link to="/">{title}</Link>
+      </StyledHeaderText>
     </StyledLightHeader>
   )
 
-  return <Link to="/">{header}</Link>
+  return handledHeader
 }
 
 export default Header
