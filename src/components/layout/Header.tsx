@@ -47,6 +47,12 @@ const seagull2Keyframe = keyframes`
   }
 `
 
+const headerScreenUpKeyframe = (maxHeight: string) => keyframes`
+  100% {
+    max-height: ${maxHeight};
+  }
+`
+
 const StyledHeader = styled.header`
   position: relative;
   overflow: hidden;
@@ -61,9 +67,6 @@ const StyledHeader = styled.header`
     transform: translateY(-30%);
     max-height: initial;
     width: 100%;
-    ${media.phone`
-      width: 100%;
-    `}
   }
   .seagull-1 {
     position: absolute;
@@ -73,6 +76,25 @@ const StyledHeader = styled.header`
     position: absolute;
     transform: scale(0.2, 0.2);
     animation: ${seagull2Keyframe} 4s infinite alternate;
+  }
+`
+
+const StyledLightHeader = styled.header`
+  position: relative;
+  overflow: hidden;
+  max-height: 400px;
+  border-radius: 0 0 2.5vw 2.5vw;
+  -webkit-border-radius: 0 0 2.5vw 2.5vw;
+  animation: ${headerScreenUpKeyframe('100px')} 2s 1 normal forwards;
+  
+  ${media.phone`
+    max-height: 100px;
+    animation: ${headerScreenUpKeyframe('75px')} 2s 1 normal forwards;
+  `}
+  .static-image {
+    transform: translateY(-30%);
+    max-height: initial;
+    width: 100%;
   }
 `
 
@@ -135,39 +157,49 @@ const Header: React.FC<HeaderProps> = ({ title, isRootPath }) => {
     }
   }, [])
 
-  return (
-    <Link to="/">
-      <StyledHeader className="global-header">
-        <StaticImage
-          src="./../../images/common/header-background.png"
-          alt="header-background.png"
-          height={1000}
-          className="static-image"
-        />
-        <img src={seagull1Src} alt="seagull-1.svg" className="seagull-1" />
-        <img src={seagull2Src} alt="seagull-2.svg" className="seagull-2" />
-        {isDesktop ? (
-          <StyledMonitor>
-            <StaticImage
-              src="./../../images/common/header/monitor.svg"
-              alt="monitor.svg"
-            />
-            <StyledThingInMonitor>
-              <iframe
-                width="230"
-                height="140"
-                src="https://www.youtube.com/embed/zXk0Bt0hLrU?autoplay=1&mute=1"
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              ></iframe>
-            </StyledThingInMonitor>
-          </StyledMonitor>
-        ) : null}
-        <StyledHeaderText>{title}</StyledHeaderText>
-      </StyledHeader>
-    </Link>
+  const header = isRootPath ? (
+    <StyledHeader className="global-header">
+      <StaticImage
+        src="./../../images/common/header-background.png"
+        alt="header-background.png"
+        height={1000}
+        className="static-image"
+      />
+      <img src={seagull1Src} alt="seagull-1.svg" className="seagull-1" />
+      <img src={seagull2Src} alt="seagull-2.svg" className="seagull-2" />
+      {isDesktop ? (
+        <StyledMonitor>
+          <StaticImage
+            src="./../../images/common/header/monitor.svg"
+            alt="monitor.svg"
+          />
+          <StyledThingInMonitor>
+            <iframe
+              width="230"
+              height="140"
+              src="https://www.youtube.com/embed/zXk0Bt0hLrU?autoplay=1&mute=1"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            ></iframe>
+          </StyledThingInMonitor>
+        </StyledMonitor>
+      ) : null}
+      <StyledHeaderText>{title}</StyledHeaderText>
+    </StyledHeader>
+  ) : (
+    <StyledLightHeader className="global-header">
+      <StaticImage
+        src="./../../images/common/header-background.png"
+        alt="header-background.png"
+        height={1000}
+        className="static-image"
+      />
+      <StyledHeaderText>{title}</StyledHeaderText>
+    </StyledLightHeader>
   )
+
+  return <Link to="/">{header}</Link>
 }
 
 export default Header
