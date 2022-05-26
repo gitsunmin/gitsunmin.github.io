@@ -73,6 +73,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 }
 
+// * graphql.config.js > src/schemas/index.graphql 로 관리
 // exports.createSchemaCustomization = ({ actions }) => {
 //   const { createTypes } = actions
 
