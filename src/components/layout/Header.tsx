@@ -84,11 +84,11 @@ const StyledLightHeader = styled.header`
   max-height: 400px;
   border-radius: 0 0 2.5vw 2.5vw;
   -webkit-border-radius: 0 0 2.5vw 2.5vw;
-  animation: ${headerScreenUpKeyframe("100px")} 2s 1 normal forwards;
+  animation: ${headerScreenUpKeyframe("100px")} 1s 1 normal forwards;
 
   ${media.mobile`
     max-height: 100px;
-    animation: ${headerScreenUpKeyframe("75px")} 2s 1 normal forwards;
+    animation: ${headerScreenUpKeyframe("75px")} 1s 1 normal forwards;
   `}
   .static-image {
     transform: translateY(-30%);
