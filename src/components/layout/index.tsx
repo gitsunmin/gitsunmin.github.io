@@ -1,5 +1,4 @@
-import * as React from "react"
-import { Link } from "gatsby"
+import React from "react"
 
 import Header from "./Header"
 import Footer from "./Footer"

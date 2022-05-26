@@ -47,6 +47,7 @@ module.exports = {
           `gatsby-remark-prismjs`,
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
+          `gatsby-remark-autolink-headers`, // * 게시물에서 헤시태그를 사용할 수 있도록 해주는 plugin
         ],
       },
     },
