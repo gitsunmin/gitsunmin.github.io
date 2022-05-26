@@ -7,6 +7,7 @@
     npx gatsby new my-blog-starter https://github.com/gatsbyjs/gatsby-starter-blog
     ```
 2.  **Edit Layout**
+3.  **Create Graphql.config.js**
 
 ## 🧐 What's inside?
 

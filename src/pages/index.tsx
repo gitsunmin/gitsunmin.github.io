@@ -6,11 +6,11 @@ import Bio from "@components/bio"
 import Seo from "@components/seo"
 
 const BlogIndex: React.FC<any> = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
+  const { siteMetadata } = data.site
   const posts = data.allMarkdownRemark.nodes
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <Layout location={location} siteMetadata={siteMetadata}>
       <Seo title="All posts" />
       <Bio />
       {posts.length === 0 ? (
@@ -64,6 +64,7 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        youtubeVideoId
       }
     }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {

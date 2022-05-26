@@ -7,6 +7,7 @@ module.exports = {
       summary: `드라마 보면서 코딩하는 것을 좋아하는 개발자이며, 지금도 어쩌면...`,
     },
     description: `this is my blog`,
+    youtubeVideoId: "zXk0Bt0hLrU", // header에서 보여주는 youtube영상의 id.
     siteUrl: `https://gitsunmin.github.io/`,
     social: {
       github: "https://github.com/gitsunmin",
@@ -142,5 +143,6 @@ module.exports = {
         extensions: ["ts", "js", "tsx", "png", "svg"],
       },
     },
+    "gatsby-plugin-graphql-config",
   ],
 }

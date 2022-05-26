@@ -2,15 +2,14 @@ import * as React from "react"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import styled, { keyframes } from "styled-components"
-import UAParser from "ua-parser-js"
-
 import { media, viewSizes } from "@src/styles/media"
 import { useState, useEffect } from "react"
 
+import { debounce, checkOS } from "@src/utils"
+
+// * 이미지 import
 import seagull1Src from "@src/images/common/header/seagull-1.svg"
 import seagull2Src from "@src/images/common/header/seagull-2.svg"
-
-import { debounce } from "@src/utils"
 
 const seagull1Keyframe = keyframes`
   0% {
@@ -60,7 +59,7 @@ const StyledHeader = styled.header`
   border-radius: 0 0 2.5vw 2.5vw;
   -webkit-border-radius: 0 0 2.5vw 2.5vw;
 
-  ${media.phone`
+  ${media.mobile`
     max-height: 100px;
   `}
   .static-image {
@@ -85,11 +84,11 @@ const StyledLightHeader = styled.header`
   max-height: 400px;
   border-radius: 0 0 2.5vw 2.5vw;
   -webkit-border-radius: 0 0 2.5vw 2.5vw;
-  animation: ${headerScreenUpKeyframe('100px')} 2s 1 normal forwards;
-  
-  ${media.phone`
+  animation: ${headerScreenUpKeyframe("100px")} 2s 1 normal forwards;
+
+  ${media.mobile`
     max-height: 100px;
-    animation: ${headerScreenUpKeyframe('75px')} 2s 1 normal forwards;
+    animation: ${headerScreenUpKeyframe("75px")} 2s 1 normal forwards;
   `}
   .static-image {
     transform: translateY(-30%);
@@ -105,7 +104,7 @@ const StyledHeaderText = styled.h1`
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: var(--fontSize-7);
-  ${media.phone`
+  ${media.mobile`
       top: -30%;
       left: 40%;
       font-size: var(--fontSize-3);
@@ -133,17 +132,15 @@ const StyledThingInMonitor = styled.div`
 interface HeaderProps {
   title: string
   isRootPath: boolean
+  youtubeVideoId: string
 }
 
-const Header: React.FC<HeaderProps> = ({ title, isRootPath }) => {
-  const desktopFilter = ["Mac OS", "Windows"]
-
-  const parser: UAParser = new UAParser()
-  const result: UAParser.IResult = parser.getResult()
-  const { os } = result
-
-  const checkOS = desktopFilter.includes(os.name)
-  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS)
+const Header: React.FC<HeaderProps> = ({
+  title,
+  youtubeVideoId,
+  isRootPath,
+}) => {
+  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS("desktop"))
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop)
@@ -173,11 +170,12 @@ const Header: React.FC<HeaderProps> = ({ title, isRootPath }) => {
             src="./../../images/common/header/monitor.svg"
             alt="monitor.svg"
           />
+          {/* @about youtube Link options: https://it4edu.tistory.com/107 */}
           <StyledThingInMonitor>
             <iframe
               width="230"
               height="140"
-              src="https://www.youtube.com/embed/zXk0Bt0hLrU?autoplay=1&mute=1"
+              src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&modestbranding=1&rel=0`}
               title="YouTube video player"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

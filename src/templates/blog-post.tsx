@@ -8,12 +8,12 @@ import TableOfContents from "@components/post/TableOfContents"
 
 const BlogPostTemplate = ({ data, location }) => {
   const post = data.markdownRemark
-  const siteTitle = data.site.siteMetadata?.title || `Title`
+  const { siteMetadata } = data.site
   const { previous, next } = data
 
   return (
     <>
-      <Layout location={location} title={siteTitle}>
+      <Layout location={location} siteMetadata={siteMetadata}>
         <Seo
           title={post.frontmatter.title}
           description={post.frontmatter.description || post.excerpt}
@@ -79,6 +79,7 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        youtubeVideoId
       }
     }
     markdownRemark(id: { eq: $id }) {

@@ -6,12 +6,13 @@ import { ThemeProvider } from "styled-components"
 import { theme } from "@src/styles/theme"
 const ROOT_PATH = `/`
 
-const Layout = ({ location, title, children }) => {
+const Layout = ({ location, siteMetadata, children }) => {
   const isRootPath = location.pathname === ROOT_PATH
+  const { title, youtubeVideoId } = siteMetadata
 
   return (
     <ThemeProvider theme={theme}>
-      <Header title={title} isRootPath={isRootPath} />
+      <Header title={title} youtubeVideoId={youtubeVideoId} isRootPath={isRootPath} />
       <div className="global-wrapper" data-is-root-path={isRootPath}>
         <main>{children}</main>
       </div>

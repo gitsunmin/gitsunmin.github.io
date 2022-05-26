@@ -1,12 +1,10 @@
 // src/styles/media.ts
 import { css, CSSObject, SimpleInterpolation } from "styled-components";
 
-type DeviceType = "desktop" | "tablet" | "phone";
-
 const viewSizes: Record<DeviceType, number> = {
   desktop: 1200,
   tablet: 768,
-  phone: 600,
+  mobile: 600,
 };
 
 const media = Object.entries(viewSizes).reduce((acc, [key, value]) => {
