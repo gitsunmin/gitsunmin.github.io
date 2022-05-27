@@ -60,7 +60,7 @@ const BlogIndex: React.FC<any> = ({ data, location }) => {
 export default BlogIndex
 
 export const pageQuery = graphql`
-  query {
+  query IndexPageQuery{
     site {
       siteMetadata {
         title

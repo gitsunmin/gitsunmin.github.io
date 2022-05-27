@@ -19,7 +19,7 @@ const NotFoundPage: React.FC<any> = ({ data, location }) => {
 export default NotFoundPage
 
 export const pageQuery = graphql`
-  query {
+  query NotFoundPageQuery {
     site {
       siteMetadata {
         title

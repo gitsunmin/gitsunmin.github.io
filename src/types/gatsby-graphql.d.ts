@@ -3452,20 +3452,20 @@ export type BioQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BioQueryQuery = { site?: { siteMetadata?: { author?: { name?: string | null, job?: string | null, summary?: string | null } | null, social?: { github?: string | null } | null } | null } | null };
 
-export type Unnamed_1_QueryVariables = Exact<{ [key: string]: never; }>;
+export type SeoQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type Unnamed_1_Query = { site?: { siteMetadata?: { title?: string | null, description?: string | null, social?: { github?: string | null } | null } | null } | null };
+export type SeoQueryQuery = { site?: { siteMetadata?: { title?: string | null, description?: string | null, social?: { github?: string | null } | null } | null } | null };
 
-export type Unnamed_2_QueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type Unnamed_2_Query = { site?: { siteMetadata?: { title?: string | null } | null } | null };
-
-export type Unnamed_3_QueryVariables = Exact<{ [key: string]: never; }>;
+export type NotFoundPageQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type Unnamed_3_Query = { site?: { siteMetadata?: { title?: string | null, youtubeVideoId?: string | null } | null } | null, allMarkdownRemark: { nodes: Array<{ excerpt?: string | null, fields?: { slug?: string | null } | null, frontmatter?: { date?: any | null, title?: string | null, description?: string | null } | null }> } };
+export type NotFoundPageQueryQuery = { site?: { siteMetadata?: { title?: string | null } | null } | null };
+
+export type IndexPageQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IndexPageQueryQuery = { site?: { siteMetadata?: { title?: string | null, youtubeVideoId?: string | null } | null } | null, allMarkdownRemark: { nodes: Array<{ excerpt?: string | null, fields?: { slug?: string | null } | null, frontmatter?: { date?: any | null, title?: string | null, description?: string | null } | null }> } };
 
 export type BlogPostBySlugQueryVariables = Exact<{
   id: Scalars['String'];
