@@ -6,10 +6,14 @@
     # create a new Gatsby site using the blog starter
     npx gatsby new my-blog-starter https://github.com/gatsbyjs/gatsby-starter-blog
     ```
+
 2.  **Edit Layout**
 3.  **Create TOC**
+
 - [ref](https://soopdop.github.io/2020/12/03/add-table-of-content-gatsby/#%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8-%EC%84%A4%EC%B9%98-%ED%9B%84-%EB%B0%94%EB%80%90%EC%A0%90-%ED%99%95%EC%9D%B8)
+
 4.  **Create Graphql.config.js**
+
 - [how to create graphql.config.js](https://www.gatsbyjs.com/plugins/gatsby-plugin-graphql-config/?=graphql)
 
 ## 🧐 What's inside?
@@ -75,8 +79,9 @@ in dev branch
 - [Query for Data with GraphQL Tutorial](https://www.gatsbyjs.com/docs/tutorial/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries).
 
 ## 🗒 To Do List (Delete on completion)
+
 - 갈매기를 클릭하면 "끼룩 끼룩" 나오면 좋을 듯 함.
-- 포스트 페이지 들어갈 때, 해더 타이틀이 좀 더 위로 올라가야할 것 같음.
+- <s>포스트 페이지 들어갈 때, 해더 타이틀이 좀 더 위로 올라가야할 것 같음. </s>
 - [카테고리 추가하기](https://soopdop.github.io/2020/11/27/add-categories-to-gatsby/)
-- 이전 블로그의 포스트들 옮기기
+- <s>이전 블로그의 포스트들 옮기기</s>
 - [rss 적용하기](https://ha-young.github.io/2020/gatsby/Gatsby-%EB%B8%94%EB%A1%9C%EA%B7%B8-RSS-Feed-%EC%83%9D%EC%84%B1%EC%8B%9C%ED%82%A4%EA%B8%B0/)
