@@ -144,5 +144,11 @@ module.exports = {
       },
     },
     "gatsby-plugin-graphql-config",
+    {
+      resolve: `gatsby-plugin-graphql-codegen`,
+      options: {
+        fileName: `./src/types/gatsby-graphql.d.ts`,
+      },
+    },
   ],
 }

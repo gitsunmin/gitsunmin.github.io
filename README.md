@@ -84,4 +84,4 @@ in dev branch
 - <s>포스트 페이지 들어갈 때, 해더 타이틀이 좀 더 위로 올라가야할 것 같음. </s>
 - [카테고리 추가하기](https://soopdop.github.io/2020/11/27/add-categories-to-gatsby/)
 - <s>이전 블로그의 포스트들 옮기기</s>
-- [rss 적용하기](https://ha-young.github.io/2020/gatsby/Gatsby-%EB%B8%94%EB%A1%9C%EA%B7%B8-RSS-Feed-%EC%83%9D%EC%84%B1%EC%8B%9C%ED%82%A4%EA%B8%B0/)
+- <s>[rss 적용하기](https://ha-young.github.io/2020/gatsby/Gatsby-%EB%B8%94%EB%A1%9C%EA%B7%B8-RSS-Feed-%EC%83%9D%EC%84%B1%EC%8B%9C%ED%82%A4%EA%B8%B0/)</s>
