@@ -73,3 +73,10 @@ in dev branch
 - [tutorial for creating a site with Gatsby](https://www.gatsbyjs.com/tutorial/)
 - [documentation](https://www.gatsbyjs.com/docs/).
 - [Query for Data with GraphQL Tutorial](https://www.gatsbyjs.com/docs/tutorial/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries).
+
+## 🗒 To Do List (Delete on completion)
+- 갈매기를 클릭하면 "끼룩 끼룩" 나오면 좋을 듯 함.
+- 포스트 페이지 들어갈 때, 해더 타이틀이 좀 더 위로 올라가야할 것 같음.
+- [카테고리 추가하기](https://soopdop.github.io/2020/11/27/add-categories-to-gatsby/)
+- 이전 블로그의 포스트들 옮기기
+- [rss 적용하기](https://ha-young.github.io/2020/gatsby/Gatsby-%EB%B8%94%EB%A1%9C%EA%B7%B8-RSS-Feed-%EC%83%9D%EC%84%B1%EC%8B%9C%ED%82%A4%EA%B8%B0/)

@@ -55,6 +55,13 @@ const headerScreenUpKeyframe = (maxHeight: string) => keyframes`
   }
 `
 
+const HeaderTextKeyframe = (top: string, left: string) => keyframes`
+  100% {
+    top: ${top};
+    left: ${left};
+  }
+`
+
 const StyledHeader = styled.header`
   position: relative;
   overflow: hidden;
@@ -113,8 +120,22 @@ const StyledHeaderText = styled.h1`
       font-size: var(--fontSize-3);
       font-weight: var(--fontWeight-bold);
       transform: none;
-    `}
+  `};
 `
+
+const StyledLightHeaderText = styled(StyledHeaderText)`
+  top: 40%;
+  left: 50%;
+  animation: ${HeaderTextKeyframe("0", "50%")} 1s 1 normal forwards;
+
+  ${media.mobile`
+    top: -30%;
+    left: 40%;
+    animation: ${HeaderTextKeyframe("-50%", "40%")} 1s 1 normal forwards;
+  `};
+`
+
+// const cry of a seagull
 
 interface HeaderProps {
   title: string
@@ -127,6 +148,7 @@ const Header: React.FC<HeaderProps> = ({
   youtubeVideoId,
   isRootPath,
 }) => {
+  let talk_seagull = ""
   const [isDesktop, setIsDesktop] = useState<boolean>(checkOS("desktop"))
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -144,13 +166,15 @@ const Header: React.FC<HeaderProps> = ({
   const handledHeader = isRootPath ? (
     <StyledHeader>
       <StaticImage
-        src="./../../images/common/header-background.png"
+        src="./../images/common/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"
       />
       <img src={seagull1Src} alt="seagull-1.svg" className="seagull-1" />
-      <img src={seagull2Src} alt="seagull-2.svg" className="seagull-2" />
+      <div className="seagull-2">
+        <img src={seagull2Src} alt="seagull-2.svg" />
+      </div>
       {isDesktop ? (
         <MonitorThatPlayYoutube youtubeVideoId={youtubeVideoId} />
       ) : null}
@@ -161,14 +185,14 @@ const Header: React.FC<HeaderProps> = ({
   ) : (
     <StyledLightHeader>
       <StaticImage
-        src="./../../images/common/header-background.png"
+        src="./../images/common/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"
       />
-      <StyledHeaderText>
+      <StyledLightHeaderText>
         <Link to="/">{title}</Link>
-      </StyledHeaderText>
+      </StyledLightHeaderText>
     </StyledLightHeader>
   )
 
