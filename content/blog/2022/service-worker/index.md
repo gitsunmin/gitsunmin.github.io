@@ -9,7 +9,6 @@ tags:
   - Frontend
   - Cache
 ---
-
 # [Service worker는 무엇일까요?](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 
 ![그림 1 from [diagrams.net](http://diagrams.net/) ](./1.png)  

@@ -6,9 +6,8 @@ categories:
   - "2021"
 tags:
   - javascript
+  - trend
 ---
-작성일시: 2021년 11월 2일
-
 2015년 ~ 2020년까지의 Javascript의 표준 목록입니다.
 
 - [ES2015 a.k.a. ES6](https://betterprogramming.pub/javascript-es2020-features-with-simple-examples-d301dbef2c37)
@@ -135,6 +134,6 @@ console.log(10_000_000_000); // 10000000000
 
 [https://github.com/tc39/proposals/blob/master/finished-proposals.md](https://github.com/tc39/proposals/blob/master/finished-proposals.md) 
 
-참조자료
+## 참조
 
 [https://chanyeong.com/blog/post/29](https://chanyeong.com/blog/post/29)
