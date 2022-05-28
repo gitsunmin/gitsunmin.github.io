@@ -11,7 +11,7 @@ const StyledTOC = styled.div`
     margin-left: "0px";
 
     li {
-      color: blue;
+      color: ${props => props.theme.color.primary};
       p {
         a {
           decoration: none;
