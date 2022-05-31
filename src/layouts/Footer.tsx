@@ -8,6 +8,9 @@ const StyledFooter = styled.footer`
     ${({ theme }) => theme.color.white}
   );
   text-align: center;
+  position: fixed;
+  bottom: 0;
+  width:100%;
 `
 
 const Footer: React.FC = ({}) => {

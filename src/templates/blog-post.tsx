@@ -1,15 +1,21 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { Link, graphql, PageProps } from "gatsby"
+import kebabCase from 'lodash/kebabCase'
 
 import Layout from "@src/layouts"
 import Bio from "@components/bio"
 import Seo from "@components/seo"
 import TableOfContents from "@components/post/TableOfContents"
+import Chip from "@components/UI/Chip"
+import ChipGroup from "@components/UI/group/ChipGroup"
+import { BlogPostBySlugQuery } from "@src/types/gatsby-graphql"
 
-const BlogPostTemplate = ({ data, location }) => {
-  const post = data.markdownRemark
+const BlogPostTemplate = ({
+  data,
+  location,
+}: PageProps<BlogPostBySlugQuery>) => {
   const { siteMetadata } = data.site
-  const { previous, next } = data
+  const { previous, next, markdownRemark: post } = data
 
   return (
     <>
@@ -32,8 +38,13 @@ const BlogPostTemplate = ({ data, location }) => {
             dangerouslySetInnerHTML={{ __html: post.html }}
             itemProp="articleBody"
           />
-          <hr />
           <footer>
+            <ChipGroup>
+              {post.frontmatter?.tags?.map(tag => (
+                <Chip to={`/tag/${kebabCase(tag)}`}>{tag}</Chip>
+              ))}
+            </ChipGroup>
+            <hr />
             <Bio />
           </footer>
         </article>
@@ -91,6 +102,8 @@ export const pageQuery = graphql`
         title
         date(formatString: "MMMM DD, YYYY")
         description
+        tags
+        categories
       }
     }
     previous: markdownRemark(id: { eq: $previousPostId }) {

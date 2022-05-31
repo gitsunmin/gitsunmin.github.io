@@ -23,7 +23,7 @@
       "@components/*": ["src/components/*"],
       "@images": ["src/images"]
     },
-    "typeRoots": ["/node_modules/@types", "/src/types"]
+    "typeRoots": ["/node_modules/@types", "/src/types/**"]
   },
   "include": ["src"]
 }

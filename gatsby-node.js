@@ -1,6 +1,19 @@
 const path = require(`path`)
-const fs = require(`fs`)
+const _ = require(`lodash`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
+
+function flatTags(allMarkdownRemark) {
+  const uniqueTags = new Set()
+  // Iterate over all articles
+  allMarkdownRemark.nodes.forEach(node => {
+    // Iterate over each category in an article
+    node.frontmatter.tags.forEach(tag => {
+      uniqueTags.add(tag)
+    })
+  })
+  // Create new array with duplicates removed
+  return Array.from(uniqueTags)
+}
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
@@ -21,12 +34,15 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             fields {
               slug
             }
+            frontmatter {
+              categories
+              tags
+            }
           }
         }
       }
     `
   )
-
   if (result.errors) {
     reporter.panicOnBuild(
       `There was an error loading your blog posts`,
@@ -34,6 +50,27 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
     return
   }
+
+  const { allMarkdownRemark } = result.data
+
+  // Create array of every category without duplicates
+  const flatedTags = flatTags(allMarkdownRemark)
+  flatedTags.forEach(tag => {
+    reporter.info(`Creating page: tag/${tag}`)
+    createPage({
+      path: `tag/${_.kebabCase(tag)}`,
+      component: require.resolve("./src/templates/blog-tag.tsx"),
+      context: {
+        tag,
+        // Create an array of ids of articles in this category
+        ids: allMarkdownRemark.nodes
+          .filter(node => {
+            return node.frontmatter.tags.includes(tag)
+          })
+          .map(node => node.id),
+      },
+    })
+  })
 
   const posts = result.data.allMarkdownRemark.nodes
 

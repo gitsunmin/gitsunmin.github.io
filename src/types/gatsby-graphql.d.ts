@@ -3474,7 +3474,14 @@ export type BlogPostBySlugQueryVariables = Exact<{
 }>;
 
 
-export type BlogPostBySlugQuery = { site?: { siteMetadata?: { title?: string | null, youtubeVideoId?: string | null } | null } | null, markdownRemark?: { id: string, excerpt?: string | null, html?: string | null, tableOfContents?: string | null, frontmatter?: { title?: string | null, date?: any | null, description?: string | null } | null } | null, previous?: { fields?: { slug?: string | null } | null, frontmatter?: { title?: string | null } | null } | null, next?: { fields?: { slug?: string | null } | null, frontmatter?: { title?: string | null } | null } | null };
+export type BlogPostBySlugQuery = { site?: { siteMetadata?: { title?: string | null, youtubeVideoId?: string | null } | null } | null, markdownRemark?: { id: string, excerpt?: string | null, html?: string | null, tableOfContents?: string | null, frontmatter?: { title?: string | null, date?: any | null, description?: string | null, tags?: Array<string | null> | null, categories?: Array<any | null> | null } | null } | null, previous?: { fields?: { slug?: string | null } | null, frontmatter?: { title?: string | null } | null } | null, next?: { fields?: { slug?: string | null } | null, frontmatter?: { title?: string | null } | null } | null };
+
+export type TagsTemplateQueryQueryVariables = Exact<{
+  ids: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
+}>;
+
+
+export type TagsTemplateQueryQuery = { site?: { siteMetadata?: { title?: string | null, youtubeVideoId?: string | null } | null } | null, allMarkdownRemark: { nodes: Array<{ id: string, excerpt?: string | null, fields?: { slug?: string | null } | null, frontmatter?: { title?: string | null, categories?: Array<any | null> | null, description?: string | null, tags?: Array<string | null> | null, date?: any | null } | null }> } };
 
 export type GatsbyImageSharpFixedFragment = { base64?: string | null, width: number, height: number, src: string, srcSet: string };
 
