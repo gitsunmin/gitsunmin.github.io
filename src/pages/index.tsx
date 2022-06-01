@@ -33,7 +33,11 @@ const BlogIndex: React.FC<any> = ({ data, location }) => {
                 >
                   <header>
                     <h2>
-                      <Link to={post.fields.slug} itemProp="url">
+                      <Link
+                        to={post.fields.slug}
+                        itemProp="url"
+                        state={{ previousPath: location.pathname }}
+                      >
                         <span itemProp="headline">{title}</span>
                       </Link>
                     </h2>
@@ -60,7 +64,7 @@ const BlogIndex: React.FC<any> = ({ data, location }) => {
 export default BlogIndex
 
 export const pageQuery = graphql`
-  query IndexPageQuery{
+  query IndexPageQuery {
     site {
       siteMetadata {
         title

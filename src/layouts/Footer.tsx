@@ -2,11 +2,7 @@ import * as React from "react"
 import styled from "styled-components"
 
 const StyledFooter = styled.footer`
-  background: linear-gradient(
-    0,
-    ${({ theme }) => theme.color.primary},
-    ${({ theme }) => theme.color.white}
-  );
+  background: ${({ theme }) => theme.color.primary};
   text-align: center;
   position: fixed;
   bottom: 0;

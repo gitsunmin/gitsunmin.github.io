@@ -1,22 +1,16 @@
 import React, { useState } from "react"
-import { WindowLocation } from "@reach/router"
+import { ThemeProvider } from "styled-components"
+import type { WindowLocation } from "@reach/router"
 
-import Header from "./Header"
-import Footer from "./Footer"
-import styled, { ThemeProvider } from "styled-components"
+import Header from "@src/layouts/Header"
+import Wrapper from '@src/layouts/Wrapper'
+import Footer from "@src/layouts/Footer"
+
 import { theme } from "@src/styles/theme"
 import { debounce } from "@src/utils"
 
 import { SiteSiteMetadata } from "@src/types/gatsby-graphql"
 
-const StyledWrapper = styled.div`
-  margin: 0 auto;
-  max-width: ${theme.maxWidth("wrapper")};
-  padding: ${theme.spacing(10)} ${theme.spacing(5)};
-  margin-bottom: ${theme.spacing(20)};
-`
-
-const ROOT_PATH = `/`
 
 interface LayoutProps {
   location: WindowLocation
@@ -30,21 +24,24 @@ const Layout: React.FC<LayoutProps> = ({
   children,
 }) => {
   const { title, youtubeVideoId } = siteMetadata
-  const isRootPath = location.pathname === ROOT_PATH
   const [isViewsable, setIsViewsable] = useState<boolean>(false)
 
+  /**
+   * * scroll이 바닥에 있을 때 Footer를 보여주기 위한 함수
+   */
   const handleScroll = () => {
-    console.log('handleScroll')
-    const scrollTop: number = document.documentElement.scrollTop
-    const offsetHeight: number = document.documentElement.offsetHeight
-    const clientHeight: number = document.documentElement.clientHeight
-    if (scrollTop + clientHeight + 200 > offsetHeight) {
-      setIsViewsable(true)
-    } else {
-      setIsViewsable(false)
+    if (document) {
+      const scrollTop: number = document?.documentElement.scrollTop ?? 0
+      const offsetHeight: number = document?.documentElement.offsetHeight ?? 0
+      const clientHeight: number = document?.documentElement.clientHeight ?? 0
+      if (scrollTop + clientHeight + 200 > offsetHeight) {
+        setIsViewsable(true)
+      } else {
+        setIsViewsable(false)
+      }
     }
   }
-  window?.addEventListener("scroll", event => {
+  window?.addEventListener("scroll", () => {
     debounce(() => {
       handleScroll()
     }, 100)
@@ -55,11 +52,9 @@ const Layout: React.FC<LayoutProps> = ({
       <Header
         title={title}
         youtubeVideoId={youtubeVideoId}
-        isRootPath={isRootPath}
+        location={location}
       />
-      <StyledWrapper>
-        <main>{children}</main>
-      </StyledWrapper>
+      <Wrapper>{children}</Wrapper>
       {isViewsable ? <Footer /> : null}
     </ThemeProvider>
   )

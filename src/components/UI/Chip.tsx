@@ -1,7 +1,8 @@
 import React from "react"
 import styled from "styled-components"
-import { navigate } from "gatsby"
+
 import { theme } from "@src/styles/theme"
+import { movePath } from "@src/utils"
 
 const StyledChip = styled.span`
   height: ${theme.spacing(8)};
@@ -23,7 +24,7 @@ interface ChipProps {
 
 const Chip: React.FC<ChipProps> = ({ children, to }) => {
   const onClick = () => {
-    to && navigate(to)
+    to && movePath(to)
   }
   return <StyledChip onClick={onClick}>{children}</StyledChip>
 }

@@ -11,9 +11,8 @@ interface TagsTemplatePageContext {
   tag: string
 }
 
-const StyledHeader = styled.h1`
-  margin: ${theme.spacing(4)} 0;
-  span {
+const StyledHeader = styled.span`
+  .tag {
     color: ${theme.color.primary};
   }
 `
@@ -27,57 +26,54 @@ const TagsTemplate = ({
   const { siteMetadata } = site
   const { tag } = pageContext
   return (
-    <>
-      <Layout location={location} siteMetadata={siteMetadata}>
-        <Helmet title={tag} />
-        <StyledHeader>
-          About <span>{tag}</span> tag
-        </StyledHeader>
-        <ul>
-          {allMarkdownRemark.nodes.map((node, index) => {
-            return (
-              <ol key={index} style={{ listStyle: `none` }}>
-                <li key={index}>
-                  <article
-                    className="post-list-item"
-                    itemScope
-                    itemType="http://schema.org/Article"
-                    key={index}
-                  >
-                    <header>
-                      <h2>
-                        <Link to={node.fields.slug} itemProp="url">
-                          <span itemProp="headline">
-                            {node.frontmatter.title}
-                          </span>
-                        </Link>
-                      </h2>
-                      <small>{node.frontmatter.date}</small>
-                    </header>
-                    <section>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: node.frontmatter.description || node.excerpt,
-                        }}
-                        itemProp="description"
-                      />
-                    </section>
-                  </article>
-                </li>
-              </ol>
-              // <li key={node.frontmatter.title}>
-              //   <Link to={node.fields.slug}>
-              //     <span>{node.frontmatter.title}</span>
-              //     <span>
-              //       <time>{node.frontmatter.date}</time>
-              //     </span>
-              //   </Link>
-              // </li>
-            )
-          })}
-        </ul>
-      </Layout>
-    </>
+    <Layout location={location} siteMetadata={siteMetadata}>
+      <Helmet title={`${tag} tag`} />
+      <StyledHeader>
+        <h1>
+          <span className="tag">{tag}</span> tag
+        </h1>
+        <span>TOTAL: {allMarkdownRemark.nodes.length}</span>
+      </StyledHeader>
+      <ul>
+        {allMarkdownRemark.nodes.map((node, index) => {
+          return (
+            <ol key={index} style={{ listStyle: `none` }}>
+              <li key={index}>
+                <article
+                  className="post-list-item"
+                  itemScope
+                  itemType="http://schema.org/Article"
+                  key={index}
+                >
+                  <header>
+                    <h2>
+                      <Link
+                        to={node.fields.slug}
+                        itemProp="url"
+                        state={{ previousPath: location.pathname }}
+                      >
+                        <span itemProp="headline">
+                          {node.frontmatter.title}
+                        </span>
+                      </Link>
+                    </h2>
+                    <small>{node.frontmatter.date}</small>
+                  </header>
+                  <section>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: node.frontmatter.description || node.excerpt,
+                      }}
+                      itemProp="description"
+                    />
+                  </section>
+                </article>
+              </li>
+            </ol>
+          )
+        })}
+      </ul>
+    </Layout>
   )
 }
 

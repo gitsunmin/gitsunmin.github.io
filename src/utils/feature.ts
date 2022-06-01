@@ -1,3 +1,6 @@
+import { navigate } from "gatsby"
+import type { NavigateOptions } from "@reach/router"
+
 let timer
 export const debounce = (callback, delay) => {
   return ((...args) => {
@@ -6,4 +9,11 @@ export const debounce = (callback, delay) => {
       callback?.(args)
     }, delay)
   })()
+}
+
+export const movePath = (
+  path: string,
+  options?: NavigateOptions<{ previousPath: string }>
+) => {
+  navigate(path, options ?? { state: { previousPath: location.pathname } })
 }

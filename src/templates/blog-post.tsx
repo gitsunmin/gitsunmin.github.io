@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, graphql, PageProps } from "gatsby"
-import kebabCase from 'lodash/kebabCase'
+import kebabCase from "lodash/kebabCase"
 
 import Layout from "@src/layouts"
 import Bio from "@components/bio"
@@ -41,7 +41,9 @@ const BlogPostTemplate = ({
           <footer>
             <ChipGroup>
               {post.frontmatter?.tags?.map((tag, index) => (
-                <Chip to={`/tag/${kebabCase(tag)}`} key={index}>{tag}</Chip>
+                <Chip to={`/tag/${kebabCase(tag)}`} key={index}>
+                  {tag}
+                </Chip>
               ))}
             </ChipGroup>
             <hr />
@@ -60,14 +62,22 @@ const BlogPostTemplate = ({
           >
             <li>
               {previous && (
-                <Link to={previous.fields.slug} rel="prev">
+                <Link
+                  to={previous.fields.slug}
+                  rel="prev"
+                  state={{ previousPath: location.pathname }}
+                >
                   ← {previous.frontmatter.title}
                 </Link>
               )}
             </li>
             <li>
               {next && (
-                <Link to={next.fields.slug} rel="next">
+                <Link
+                  to={next.fields.slug}
+                  rel="next"
+                  state={{ previousPath: location.pathname }}
+                >
                   {next.frontmatter.title} →
                 </Link>
               )}

@@ -1,11 +1,11 @@
-import * as React from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 import styled, { keyframes } from "styled-components"
-import { media, viewSizes } from "@src/styles/media"
-import { useState, useEffect } from "react"
+import type { WindowLocation } from "@reach/router"
 
 import { debounce, checkOS } from "@src/utils"
+import { media, viewSizes } from "@src/styles/media"
 
 // * 이미지 import
 import seagull1Src from "@src/images/common/header/seagull-1.svg"
@@ -88,16 +88,16 @@ const StyledHeader = styled.header`
   }
 `
 
-const StyledLightHeader = styled.header`
+const StyledLightHeader = styled.header<{ isFolded: boolean }>`
   position: relative;
   overflow: hidden;
-  max-height: 400px;
   border-radius: 0 0 2.5vw 2.5vw;
   -webkit-border-radius: 0 0 2.5vw 2.5vw;
+  max-height: ${props => (props.isFolded ? "100px" : "400px")};
   animation: ${headerScreenUpKeyframe("100px")} 1s 1 normal forwards;
 
   ${media.mobile`
-    max-height: 100px;
+    max-height: ${props => (props.isFolded ? "75px" : "100px")};
     animation: ${headerScreenUpKeyframe("75px")} 1s 1 normal forwards;
   `}
   .static-image {
@@ -108,14 +108,13 @@ const StyledLightHeader = styled.header`
 `
 
 const StyledHeaderText = styled.h1`
-  color: white;
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: var(--fontSize-7);
   ${media.mobile`
-      top: -30%;
+      top: 20%;
       left: 40%;
       font-size: var(--fontSize-3);
       font-weight: var(--fontWeight-bold);
@@ -123,31 +122,31 @@ const StyledHeaderText = styled.h1`
   `};
 `
 
-const StyledLightHeaderText = styled(StyledHeaderText)`
-  top: 40%;
+const StyledLightHeaderText = styled(StyledHeaderText)<{
+  isFolded: boolean
+}>`
+  top: ${props => (props.isFolded ? "35%" : "60%")};
   left: 50%;
-  animation: ${HeaderTextKeyframe("0", "50%")} 1s 1 normal forwards;
+  animation: ${HeaderTextKeyframe("35%", "50%")} 1s 1 normal forwards;
 
   ${media.mobile`
-    top: -30%;
+    top: ${props => (props.isFolded ? "0" : "20%")};
     left: 40%;
-    animation: ${HeaderTextKeyframe("-50%", "40%")} 1s 1 normal forwards;
+    animation: ${HeaderTextKeyframe("0", "40%")} 1s 1 normal forwards;
   `};
 `
-
-// const cry of a seagull
-
+const ROOT_PATH = `/`
 interface HeaderProps {
   title: string
-  isRootPath: boolean
   youtubeVideoId: string
+  location: WindowLocation<{ key: string; previousPath: string }>
 }
 
-const Header: React.FC<HeaderProps> = ({
-  title,
-  youtubeVideoId,
-  isRootPath,
-}) => {
+const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
+  const isRootPath = location.pathname === ROOT_PATH
+  const isFolded = location.state?.previousPath !== ROOT_PATH
+  console.log('isFolded:', isFolded);
+
   let talk_seagull = ""
   const [isDesktop, setIsDesktop] = useState<boolean>(checkOS("desktop"))
   useEffect(() => {
@@ -179,19 +178,23 @@ const Header: React.FC<HeaderProps> = ({
         <MonitorThatPlayYoutube youtubeVideoId={youtubeVideoId} />
       ) : null}
       <StyledHeaderText>
-        <Link to="/">{title}</Link>
+        <Link to="/" state={{ previousPath: location.pathname }}>
+          {title}
+        </Link>
       </StyledHeaderText>
     </StyledHeader>
   ) : (
-    <StyledLightHeader>
+    <StyledLightHeader isFolded={isFolded}>
       <StaticImage
         src="./../images/common/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"
       />
-      <StyledLightHeaderText>
-        <Link to="/">{title}</Link>
+      <StyledLightHeaderText isFolded={isFolded}>
+        <Link to="/" state={{ previousPath: location.pathname }}>
+          {title}
+        </Link>
       </StyledLightHeaderText>
     </StyledLightHeader>
   )
