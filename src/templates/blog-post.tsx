@@ -40,8 +40,8 @@ const BlogPostTemplate = ({
           />
           <footer>
             <ChipGroup>
-              {post.frontmatter?.tags?.map(tag => (
-                <Chip to={`/tag/${kebabCase(tag)}`}>{tag}</Chip>
+              {post.frontmatter?.tags?.map((tag, index) => (
+                <Chip to={`/tag/${kebabCase(tag)}`} key={index}>{tag}</Chip>
               ))}
             </ChipGroup>
             <hr />

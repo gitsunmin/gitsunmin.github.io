@@ -34,14 +34,15 @@ const TagsTemplate = ({
           About <span>{tag}</span> tag
         </StyledHeader>
         <ul>
-          {allMarkdownRemark.nodes.map(node => {
+          {allMarkdownRemark.nodes.map((node, index) => {
             return (
-              <ol style={{ listStyle: `none` }}>
-                <li key={node.fields.slug}>
+              <ol key={index} style={{ listStyle: `none` }}>
+                <li key={index}>
                   <article
                     className="post-list-item"
                     itemScope
                     itemType="http://schema.org/Article"
+                    key={index}
                   >
                     <header>
                       <h2>
