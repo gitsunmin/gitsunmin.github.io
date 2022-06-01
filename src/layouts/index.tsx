@@ -30,7 +30,7 @@ const Layout: React.FC<LayoutProps> = ({
    * * scroll이 바닥에 있을 때 Footer를 보여주기 위한 함수
    */
   const handleScroll = () => {
-    if (document) {
+    if (typeof document !== 'undefined') {
       const scrollTop: number = document?.documentElement.scrollTop ?? 0
       const offsetHeight: number = document?.documentElement.offsetHeight ?? 0
       const clientHeight: number = document?.documentElement.clientHeight ?? 0
@@ -41,11 +41,13 @@ const Layout: React.FC<LayoutProps> = ({
       }
     }
   }
-  window?.addEventListener("scroll", () => {
-    debounce(() => {
-      handleScroll()
-    }, 100)
-  })
+  if (typeof window !== 'undefined') {
+    window.addEventListener("scroll", () => {
+      debounce(() => {
+        handleScroll()
+      }, 100)
+    })
+  }
 
   return (
     <ThemeProvider theme={theme}>
