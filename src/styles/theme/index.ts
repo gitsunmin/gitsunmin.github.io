@@ -9,6 +9,7 @@ const color = {
   purple: "rgba(107, 82, 248, 1)",
   whiteDarker: "rgba(233, 233, 233, 0.96)",
   skyblue: "rgb(135,206,235)",
+  orange: '#FFA500',
 }
 
 const SPACING_VARIABLES = {

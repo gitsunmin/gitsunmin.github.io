@@ -10,7 +10,14 @@ import "./src/styles/css/normalize.css"
 // custom CSS styles
 import "./src/styles/css/style.css"
 
-console.log(
-  "%cHello my blog",
-  "font-size: 24px; color: orange; background: teal;"
-)
+// React, Recoil 적용
+import React from "react"
+import {RecoilRoot} from "recoil"
+
+export const wrapRootElement = ({ element }) => {
+  return (
+    <RecoilRoot>
+      {element}
+    </RecoilRoot>
+  )
+}

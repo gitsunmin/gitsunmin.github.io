@@ -145,7 +145,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
   const isRootPath = location.pathname === ROOT_PATH
   const isFolded = location.state?.previousPath !== ROOT_PATH
-  console.log('isFolded:', isFolded);
 
   let talk_seagull = ""
   const [isDesktop, setIsDesktop] = useState<boolean>(checkOS("desktop"))
