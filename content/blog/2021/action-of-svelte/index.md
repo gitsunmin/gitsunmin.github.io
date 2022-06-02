@@ -9,6 +9,7 @@ tags:
   - Frontend
   - Svelte
 ---
+
 ### 1. 목표
 
 - Svelte가 화면을 어떻게 그려내고 있는지를 확인한다.

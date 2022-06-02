@@ -8,6 +8,7 @@ tags:
   - javascript
   - trend
 ---
+
 2015년 ~ 2020년까지의 Javascript의 표준 목록입니다.
 
 - [ES2015 a.k.a. ES6](https://betterprogramming.pub/javascript-es2020-features-with-simple-examples-d301dbef2c37)

@@ -9,6 +9,7 @@ tags:
   - Frontend
   - trend
 ---
+
 > 아래의 내용은 **[The state of JavaScript & FE, 2021 Edition (2021년 FE 동향, 한방에 끝내기)](https://deview.kr/2021/sessions/508) 라는 박재성님의 발표를 보고 내용을 정리한 것입니다**
 > 
 ## 1. ECMAScript
