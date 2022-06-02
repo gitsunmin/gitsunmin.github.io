@@ -78,6 +78,11 @@ in dev branch
 - [documentation](https://www.gatsbyjs.com/docs/).
 - [Query for Data with GraphQL Tutorial](https://www.gatsbyjs.com/docs/tutorial/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries).
 
+## 🗒 update Project's dependencies
+```shell
+> npx npm-check-update -u
+```
+
 ## 🗒 To Do List (Delete on completion)
 
 - 갈매기를 클릭하면 "끼룩 끼룩" 나오면 좋을 듯 함.

@@ -10,11 +10,11 @@ tags:
   - Svelte
 ---
 
-### 1. 목표
+### **1. 목표**
 
 - Svelte가 화면을 어떻게 그려내고 있는지를 확인한다.
 
-### 2. svelte를 compile하는 방법
+### **2. svelte를 compile하는 방법**
 
 (저는 svelte 3.43.0버전을 사용하였습니다.)
 
@@ -62,7 +62,7 @@ node ./index.js
 
 그러면  [github repository의 output](https://github.com/gitsunmin/how-to-run-svelte-compiler/blob/master/output.js) 처럼 compile된 javascript 코드를 확인할 수 있습니다.
 
-### 3. svelte complier는 어떤 것들을 리턴하는가
+### **3. svelte complier는 어떤 것들을 리턴하는가**
 
 [svelte 공식 docs](https://svelte.dev/docs#svelte_compile) 에 나와있는 내용과 직접 로그를 찍어 확인한 결과는 아래와 같습니다.
 
@@ -94,7 +94,7 @@ node ./index.js
     - `writable`: `true` 인 경우에는 `let` or `var` 에 의해 선언된 것. (`const`, `class` 또는 `function` 은 `false`)
 - `stats`: 컴파일러 진단을 위해 Svelte 개발자 팀에서 사용하는 객체입니다. 동일하게 유지하기 위해 그것에 의존하지 말라고 하네요!
 
-### 4.  compile된 javascript 코드는 화면을 어떻게 그리고있을까?
+### **4.  compile된 javascript 코드는 화면을 어떻게 그리고있을까?**
 
 간단하게 `click` 버튼을 만들고, 버튼을 클릭하면, True/False가 토글되면서 보여지는 애플리케이션을 예시로, `compile`된 output.js를 간단하게 만들어 보았습니다. → [output.js](https://github.com/gitsunmin/how-to-run-svelte-compiler/blob/master/output.js)
 
@@ -473,11 +473,11 @@ node ./index.js
             ```
             
 
-### 5.결론
+### **5.결론**
 
 - VirtureDOM을 사용하지 않고, DOM API만을 이용하여 화면을 그리고 있으며, 변경사항을 관리하는 방법을 bitmasks라는 것을 이용하여 변경사항을 관리함.
 
-## 참조
+### **참조**
 
 [https://ichi.pro/ko/meolis-sog-e-svelte-keompail-247581368156757](https://ichi.pro/ko/meolis-sog-e-svelte-keompail-247581368156757)
 

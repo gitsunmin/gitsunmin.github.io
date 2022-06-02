@@ -10,7 +10,7 @@ tags:
   - Cache
 ---
 
-# [Service worker는 무엇일까요?](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+### **[Service worker는 무엇일까요?](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)**
 
 ![그림 1 from [diagrams.net](http://diagrams.net/) ](./1.png)  
 _그림 1 from [diagrams.net](http://diagrams.net/)_
@@ -21,11 +21,11 @@ _그림 1 from [diagrams.net](http://diagrams.net/)_
 > - 보안상의 이유로 대부분의 브라우저에서 HTTPS에서만 동작 허용
 >   - NOTE: FireFox는 HTTP에서 설정을 통해서 동작할 수 있습니다.
 
-# 어떻게 사용 할까요?
+### **어떻게 사용 할까요?**
 
 저는 간단하게 Service Worker 환경을 만들고, 이미지가 캐싱 되는 과정을 설명하는 걸로 간단한 사용법 만을 소개하겠습니다.
 
-## 간단한 환경을 설정
+#### **간단한 환경을 설정**
 
 간단한 환경의 디렉토리를 보면
 
@@ -89,7 +89,7 @@ _그림2_
 ![그림3](./3.png)    
 _그림3_
 
-## 캐시 사용하기
+#### **캐시 사용하기**
 
 위에서 셋팅한 환경에서 이미지를 하나 등록 해 보겠습니다.
 
