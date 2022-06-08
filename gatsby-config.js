@@ -4,9 +4,9 @@ module.exports = {
     author: {
       name: `김선민`, // 프로필에서 보여주는 이름
       job: "프론트엔드 개발자", // 프로필에서 보여주는 직업
-      summary: `드라마 보면서 코딩하는 것을 좋아하는 개발자이며, 지금도 어쩌면...`, // 프로필에서 보여주는 자기소개
+      summary: `프론트엔드 개발자로 열일하고 있는 개발자입니다.`, // 프로필에서 보여주는 자기소개
     },
-    description: ``, // 블로그 설명
+    description: `김선민의 블로그입니다.`, // 블로그 설명
     youtubeVideoId: "_MyNykuihfA", // header에서 보여주는 youtube영상의 id.
     siteUrl: `https://gitsunmin.github.io/`,
     social: {

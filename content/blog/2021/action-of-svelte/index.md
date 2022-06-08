@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Svelte의 동작"
-description: "Svelte의 동작"
+description: "Svelte의 동작을 자세하게 살펴보았습니다."
 date: "2021-09-28T23:46:37.121Z"
 categories:
   - "2021"

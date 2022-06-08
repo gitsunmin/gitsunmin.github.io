@@ -1,12 +1,12 @@
 ---
 title: "2021년 Javascript 최신 동향"
-description: "2021년 Javascript 최신 동향"
+description: "2021년 Javascript 최신 동향을 정리 해두었습니다."
 date: "2021-11-02T22:12:03.284Z"
 categories:
   - "2021"
 tags:
-  - javascript
-  - trend
+  - Javascript
+  - Trend
 ---
 
 2015년 ~ 2020년까지의 Javascript의 표준 목록입니다.

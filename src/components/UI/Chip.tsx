@@ -5,10 +5,9 @@ import { theme } from "@src/styles/theme"
 import { movePath } from "@src/utils"
 
 const StyledChip = styled.span`
-  height: ${theme.spacing(8)};
+  height: ${theme.spacing(5)};
   background: ${theme.color.gainsboro};
   padding: ${theme.spacing(0)} ${theme.spacing(2)};
-  margin-right: ${theme.spacing(2)};
   color: ${theme.color.grey};
   font-size: ${theme.fontSize(0)};
   :hover {

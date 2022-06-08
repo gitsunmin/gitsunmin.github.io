@@ -1,20 +1,20 @@
 import * as React from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
-import { Github } from '@styled-icons/boxicons-logos/Github'
+import { Github } from "@styled-icons/boxicons-logos/Github"
 
 import Avatar from "@src/components/UI/Avatar"
 import SocialGroup from "@src/components/UI/group/SocialGroup"
+import { theme } from "@src/styles/theme"
 
-const ProfileCard = styled.div({
-  display: "flex",
-  padding: 10,
-})
+const ProfileCard = styled.div`
+  display: flex;
+`
 
-const ProfileContents = styled.div({
-  paddingLeft: 10,
-  fontSize: 13,
-})
+const ProfileContents = styled.div`
+  padding-left: ${theme.spacing(4)};;
+  font-size: ${theme.fontSize(0)};
+`
 
 const Profile: React.FC<{}> = () => {
   const data = useStaticQuery(graphql`
@@ -58,7 +58,12 @@ const Profile: React.FC<{}> = () => {
       </span>
       <SocialGroup>
         {/* add on other social icon */}
-        <Github width={30} onClick={() => { social.github && window.open(social.github, "_blank") }}/>
+        <Github
+          width={30}
+          onClick={() => {
+            social.github && window.open(social.github, "_blank")
+          }}
+        />
       </SocialGroup>
     </>
   )

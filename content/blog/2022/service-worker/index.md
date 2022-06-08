@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "Service worker"
-description: "Service worker"
+description: "Service worker에 대해서 간단하게 설명해 보았습니다."
 date: "2022-01-20T23:46:37.121Z"
 categories:
   - "2022"

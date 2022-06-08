@@ -1,13 +1,13 @@
 ---
 layout: single
 title: "[데뷰 리뷰]2021년 FE 동향, 한방에 끝내기"
-description: "[데뷰 리뷰]2021년 FE 동향, 한방에 끝내기"
+description: "영상을 보고 내용을 정리 하였습니다."
 date: "2021-11-25T23:46:37.121Z"
 categories:
   - "2021"
 tags:
   - Frontend
-  - trend
+  - Trend
 ---
 
 > 아래의 내용은 **[The state of JavaScript & FE, 2021 Edition (2021년 FE 동향, 한방에 끝내기)](https://deview.kr/2021/sessions/508) 라는 박재성님의 발표를 보고 내용을 정리한 것입니다**

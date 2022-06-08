@@ -1,6 +1,12 @@
 import * as React from "react"
+import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
-import { theme } from '@src/styles/theme'
+import { theme } from "@src/styles/theme"
+import kebabCase from "lodash/kebabCase"
+
+import Bio from "@src/components/app/bio"
+import ChipGroup from "@src/components/UI/group/ChipGroup"
+import Chip from "@src/components/UI/Chip"
 
 const StyledDrawer = styled.div<{ width: string; open: boolean }>`
   position: fixed;
@@ -24,7 +30,7 @@ const StyledDrawerHeader = styled.header`
 
 const StyledDrawerWrapper = styled.div`
   height: 100%;
-  padding: ${theme.spacing(2)}
+  padding: ${theme.spacing(2)} ${theme.spacing(4)};
 `
 
 interface DrawerProps {
@@ -38,6 +44,23 @@ const Drawer: React.FC<DrawerProps> = ({
   width = "300px",
   onClose = () => {},
 }) => {
+  const data = useStaticQuery(graphql`
+    query AllTagsQuery {
+      allMarkdownRemark {
+        nodes {
+          frontmatter {
+            tags
+          }
+        }
+      }
+    }
+  `)
+
+  const tagList = [
+    ...new Set<string>(
+      data?.allMarkdownRemark.nodes.map(post => post.frontmatter.tags).flat()
+    ),
+  ]
   let touchX = 0
 
   const onTouchStart = event => {
@@ -66,7 +89,19 @@ const Drawer: React.FC<DrawerProps> = ({
       >
         <StyledDrawerHeader></StyledDrawerHeader>
         <hr />
-        <StyledDrawerWrapper>In Ready...</StyledDrawerWrapper>
+        <StyledDrawerWrapper>
+          <Bio />
+          <h4>All tags</h4>
+          <ChipGroup>
+            {tagList.map((tag, index) => {
+              return (
+                <Chip key={index} to={`/tag/${kebabCase(tag)}`}>
+                  {tag}
+                </Chip>
+              )
+            })}
+          </ChipGroup>
+        </StyledDrawerWrapper>
       </StyledDrawer>
     </>
   )

@@ -6,6 +6,8 @@ import Layout from "@src/layouts"
 import { TagsTemplateQueryQuery } from "@src/types/gatsby-graphql"
 import { theme } from "@src/styles/theme"
 
+import { StyledArticle } from '@src/pages'
+
 interface TagsTemplatePageContext {
   ids: string[]
   tag: string
@@ -21,7 +23,7 @@ const TagsTemplate = ({
   data,
   pageContext,
   location,
-}: PageProps<TagsTemplateQueryQuery, TagsTemplatePageContext>) => {
+}: PageProps<TagsTemplateQueryQuery, TagsTemplatePageContext, { key: string; previousPath: string }>) => {
   const { allMarkdownRemark, site } = data
   const { siteMetadata } = site
   const { tag } = pageContext
@@ -39,7 +41,7 @@ const TagsTemplate = ({
           return (
             <ol key={index} style={{ listStyle: `none` }}>
               <li key={index}>
-                <article
+                <StyledArticle
                   className="post-list-item"
                   itemScope
                   itemType="http://schema.org/Article"
@@ -67,7 +69,7 @@ const TagsTemplate = ({
                       itemProp="description"
                     />
                   </section>
-                </article>
+                </StyledArticle>
               </li>
             </ol>
           )
