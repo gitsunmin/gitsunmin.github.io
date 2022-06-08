@@ -8,8 +8,8 @@ import { debounce, checkOS } from "@src/utils"
 import { media, viewSizes } from "@src/styles/media"
 
 // * 이미지 import
-import seagull1Src from "@src/images/common/header/seagull-1.svg"
-import seagull2Src from "@src/images/common/header/seagull-2.svg"
+import seagull1Src from "@src/images/header/seagull-1.svg"
+import seagull2Src from "@src/images/header/seagull-2.svg"
 
 //* components
 import MonitorThatPlayYoutube from "@src/components/layout/header/MonitorThatPlayYoutube"
@@ -164,7 +164,7 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
   const handledHeader = isRootPath ? (
     <StyledHeader>
       <StaticImage
-        src="./../images/common/header/header-background.png"
+        src="./../images/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"
@@ -185,7 +185,7 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
   ) : (
     <StyledLightHeader isFolded={isFolded}>
       <StaticImage
-        src="./../images/common/header/header-background.png"
+        src="./../images/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"

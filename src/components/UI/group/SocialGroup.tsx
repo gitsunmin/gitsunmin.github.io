@@ -7,13 +7,13 @@ const StyledCard = styled.div({
   padding: 5,
 })
 
-interface SocialNavigationProps {
+interface SocialGroupProps {
   social: {
     github: string
   }
 }
 
-const SocialNavigation: React.FC<SocialNavigationProps> = ({ social }) => {
+const SocialGroup: React.FC<SocialGroupProps> = ({ social }) => {
   return (
     <StyledCard>
       <GithubIcon
@@ -25,4 +25,4 @@ const SocialNavigation: React.FC<SocialNavigationProps> = ({ social }) => {
   )
 }
 
-export default SocialNavigation
+export default SocialGroup

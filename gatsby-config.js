@@ -1,12 +1,12 @@
 module.exports = {
   siteMetadata: {
-    title: `Gitsunmin's Blog`,
+    title: `Gitsunmin's Blog`, // 내 블로그 이름
     author: {
-      name: `김선민`,
-      job: "프론트엔드 개발자",
-      summary: `드라마 보면서 코딩하는 것을 좋아하는 개발자이며, 지금도 어쩌면...`,
+      name: `김선민`, // 프로필에서 보여주는 이름
+      job: "프론트엔드 개발자", // 프로필에서 보여주는 직업
+      summary: `드라마 보면서 코딩하는 것을 좋아하는 개발자이며, 지금도 어쩌면...`, // 프로필에서 보여주는 자기소개
     },
-    description: `this is my blog`,
+    description: ``, // 블로그 설명
     youtubeVideoId: "_MyNykuihfA", // header에서 보여주는 youtube영상의 id.
     siteUrl: `https://gitsunmin.github.io/`,
     social: {
@@ -54,12 +54,6 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    // {
-    //   resolve: `gatsby-plugin-google-analytics`,
-    //   options: {
-    //     trackingId: `ADD YOUR TRACKING ID HERE`,
-    //   },
-    // },
     {
       resolve: `gatsby-plugin-feed`,
       options: {

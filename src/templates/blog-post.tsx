@@ -13,7 +13,7 @@ import { BlogPostBySlugQuery } from "@src/types/gatsby-graphql"
 const BlogPostTemplate = ({
   data,
   location,
-}: PageProps<BlogPostBySlugQuery>) => {
+}: PageProps<BlogPostBySlugQuery, object, { key: string; previousPath: string }>) => {
   const { siteMetadata } = data.site
   const { previous, next, markdownRemark: post } = data
 

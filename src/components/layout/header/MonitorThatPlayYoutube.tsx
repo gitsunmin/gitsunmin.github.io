@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-import MonitorSVG from "@src/images/common/header/monitor.svg"
+import MonitorSVG from "@src/images/header/monitor.svg"
 
 const StyledMonitor = styled.div`
   position: absolute;

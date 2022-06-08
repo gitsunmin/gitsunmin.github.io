@@ -6,7 +6,7 @@
  */
 
 import React from "react"
-import Profile from "@components/common/Profile"
+import Profile from "@src/components/app/Profile"
 
 const Bio = () => {
   return (
