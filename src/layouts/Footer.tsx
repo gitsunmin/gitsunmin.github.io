@@ -2,7 +2,6 @@ import * as React from "react"
 import styled from "styled-components"
 
 const StyledFooter = styled.footer`
-  background: ${({ theme }) => theme.color.primary};
   text-align: center;
   position: fixed;
   bottom: 0;
