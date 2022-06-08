@@ -1,6 +1,7 @@
 import * as React from "react"
 import { graphql, useStaticQuery } from "gatsby"
 import styled from "styled-components"
+import { Github } from '@styled-icons/boxicons-logos/Github'
 
 import Avatar from "@src/components/UI/Avatar"
 import SocialGroup from "@src/components/UI/group/SocialGroup"
@@ -30,7 +31,7 @@ const Profile: React.FC<{}> = () => {
           }
         }
       }
-      imageSharp(fixed: { originalName: { eq: "profile.png" } }) {
+      profileImage: imageSharp(fixed: { originalName: { eq: "profile.png" } }) {
         gatsbyImageData(
           layout: FIXED
           backgroundColor: ""
@@ -47,7 +48,7 @@ const Profile: React.FC<{}> = () => {
   // Set these values by editing "siteMetadata" in gatsby-config.js
   const author = data.site.siteMetadata?.author
   const social = data.site.siteMetadata?.social
-  const profileImage = data.imageSharp?.gatsbyImageData
+  const profileImage = data.profileImage?.gatsbyImageData
 
   const contents = author?.name && (
     <>
@@ -55,7 +56,10 @@ const Profile: React.FC<{}> = () => {
         <strong>{author.name}</strong> | {author?.job ?? null} <br />
         {author?.summary ?? null}
       </span>
-      <SocialGroup social={social} />
+      <SocialGroup>
+        {/* add on other social icon */}
+        <Github width={30} onClick={() => { social.github && window.open(social.github, "_blank") }}/>
+      </SocialGroup>
     </>
   )
 

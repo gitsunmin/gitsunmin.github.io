@@ -3462,7 +3462,7 @@ export type ImageSharpSortInput = {
 export type BioQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BioQueryQuery = { site?: { siteMetadata?: { author?: { name?: string | null, job?: string | null, summary?: string | null } | null, social?: { github?: string | null } | null } | null } | null, imageSharp?: { gatsbyImageData: any } | null };
+export type BioQueryQuery = { site?: { siteMetadata?: { author?: { name?: string | null, job?: string | null, summary?: string | null } | null, social?: { github?: string | null } | null } | null } | null, profileImage?: { gatsbyImageData: any } | null };
 
 export type SeoQueryQueryVariables = Exact<{ [key: string]: never; }>;
 

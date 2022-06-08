@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil"
 import type { WindowLocation } from "@reach/router"
 
 import Navigation from "@src/layouts/Navigation"
-import Header from "@src/layouts/Header"
+import Header from "@src/layouts/header"
 import Wrapper from "@src/layouts/Wrapper"
 import Footer from "@src/layouts/Footer"
 import Drawer from "@src/layouts/Drawer"

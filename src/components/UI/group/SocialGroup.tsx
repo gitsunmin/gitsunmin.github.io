@@ -1,28 +1,23 @@
 import * as React from "react"
 import styled from "styled-components"
+import { theme } from '@src/styles/theme'
 
-import GithubIcon from "@components/icons/GithubIcon"
-
-const StyledCard = styled.div({
-  padding: 5,
-})
+const StyledCard = styled.div`
+  display: flex;
+  margin-top: ${theme.spacing(2)};
+  flex-direction: row;
+  gap: 10px;
+  svg, img:hover {
+    cursor: pointer;
+  }
+`
 
 interface SocialGroupProps {
-  social: {
-    github: string
-  }
+  children: React.ReactNode
 }
 
-const SocialGroup: React.FC<SocialGroupProps> = ({ social }) => {
-  return (
-    <StyledCard>
-      <GithubIcon
-        onClick={() => {
-          social.github && window.open(social.github, "_blank")
-        }}
-      />
-    </StyledCard>
-  )
+const SocialGroup: React.FC<SocialGroupProps> = ({ children }) => {
+  return <StyledCard>{children}</StyledCard>
 }
 
 export default SocialGroup

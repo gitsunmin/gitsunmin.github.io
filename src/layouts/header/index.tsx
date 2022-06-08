@@ -12,7 +12,7 @@ import seagull1Src from "@src/images/header/seagull-1.svg"
 import seagull2Src from "@src/images/header/seagull-2.svg"
 
 //* components
-import MonitorThatPlayYoutube from "@src/components/layout/header/MonitorThatPlayYoutube"
+import MonitorThatPlayYoutube from "@src/layouts/header/MonitorThatPlayYoutube"
 
 const seagull1Keyframe = keyframes`
   0% {
@@ -146,7 +146,6 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
   const isRootPath = location.pathname === ROOT_PATH
   const isFolded = location.state?.previousPath !== ROOT_PATH
 
-  let talk_seagull = ""
   const [isDesktop, setIsDesktop] = useState<boolean>(checkOS("desktop"))
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -164,7 +163,7 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
   const handledHeader = isRootPath ? (
     <StyledHeader>
       <StaticImage
-        src="./../images/header/header-background.png"
+        src="../../images/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"
@@ -185,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
   ) : (
     <StyledLightHeader isFolded={isFolded}>
       <StaticImage
-        src="./../images/header/header-background.png"
+        src="../../images/header/header-background.png"
         alt="header-background.png"
         height={1000}
         className="static-image"

@@ -2,8 +2,8 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 
 import Layout from "@src/layouts"
-import Bio from "@components/bio"
-import Seo from "@components/seo"
+import Bio from "@src/components/app/bio"
+import Seo from "@src/components/app/seo"
 
 const BlogIndex: React.FC<any> = ({ data, location }) => {
   const { siteMetadata } = data.site
