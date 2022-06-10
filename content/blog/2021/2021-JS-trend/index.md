@@ -20,7 +20,7 @@ tags:
 
 2021년에는 어떤 변화가 있었는지 알아보려고합니다.
 
-### **String.prototype.replaceAll()**
+## String.prototype.replaceAll()
 
 Javascript는 replace만 존재했었고, 한 String에 공통된 문자를 수정하려면, `정규표현식`을 이용하여 아래와 같은 방법을 사용해야 했습니다.
 
@@ -40,7 +40,7 @@ const STR = '안녕하세요. 감사합니다. 안녕하세요. 고맙습니다.
 STR.replaceAll('안녕하세요', 1); // '1. 감사합니다. 1. 고맙습니다.'
 ```
 
-### **Promise.any()**
+## Promise.any()
 
 `Promise.any()`는 `Array.prototype.some()`와 비슷한 기능으로 이해를 했습니다. 하나라도 true인 경우에는 true, 전부 false인 경우에는 false를 리턴 하듯이, `Promise.any()`는 Array에 담긴 Promise들을 차례대로 실행하며 처음으로 성공한 Promise의 결과값을 리턴합니다.  단, 모두 실패한 경우에는 Error가 발생합니다.
 
@@ -68,7 +68,7 @@ Promise.any(allFailurePromises)
 // AggregateError: All promises were rejected
 ```
 
-### **WeakRefs**
+## WeakRefs
 
 javascript는 어떤 객체를 참조하고 있을 때, 사용이(참조) 멈추지 않는다면, 가비지컬렉터가 메모리를 삭제하지 않는 언어입니다. 하지만, weakRefs를 사용하게되면, 해당 객체의 참조 여부와는 상관 없이 일정 시간이 지나면 가비지컬렉터가 메모리를 삭제하여 사용할 수 없도록 합니다.
 
@@ -100,7 +100,7 @@ setInterval(printName, 3000); // 반복적으로 log를 찍는다.
 // TypeError: Cannot read property 'name' of undefined
 ```
 
-### **Logical assignment operators(논리 할당 연산자)**
+## Logical assignment operators(논리 할당 연산자)
 
 Typescript 4.0 버전 부터 지원하던 기능인데, javascript의 기능으로 사용할 수 있도록 지원하게 되었습니다.
 
@@ -116,7 +116,7 @@ obj.prop &&= foo();
 obj.prop ??= foo();
 ```
 
-### **Numeric separators (숫자 구분 기호)**
+## Numeric separators (숫자 구분 기호)
 
 금액 관련 숫자에 3자리마다 콤마를 찍듯이, 구분자 _(언더바)를 사용하여 사람이 읽기 쉽도록 작성하여도, javascript에서는 구분자를 사용하지 않았을 때랑 같은 숫자로 취급을 하는 기능이다.
 
@@ -131,10 +131,10 @@ obj.prop ??= foo();
 console.log(10_000_000_000); // 10000000000
 ```
 
-### **앞으로 Javascript는 어떤 기능을 추가할 것인가?**
+## 앞으로 Javascript는 어떤 기능을 추가할 것인가?
 
 [https://github.com/tc39/proposals/blob/master/finished-proposals.md](https://github.com/tc39/proposals/blob/master/finished-proposals.md) 
 
-### **참조**
+## 참조
 
 [https://chanyeong.com/blog/post/29](https://chanyeong.com/blog/post/29)

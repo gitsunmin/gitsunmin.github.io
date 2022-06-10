@@ -13,6 +13,7 @@ const StyledTOC = styled.div`
 
     li {
       color: ${theme.color.primary};
+      font-weight: bold;
       p {
         a {
           decoration: none;

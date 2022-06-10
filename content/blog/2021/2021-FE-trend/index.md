@@ -12,7 +12,7 @@ tags:
 
 > 아래의 내용은 **[The state of JavaScript & FE, 2021 Edition (2021년 FE 동향, 한방에 끝내기)](https://deview.kr/2021/sessions/508) 라는 박재성님의 발표를 보고 내용을 정리한 것입니다**
 > 
-### 1. ECMAScript
+## 1. ECMAScript
 
 - ECMAScript 2021 / 2022
 - 새롭게 추가될 명세들
@@ -33,7 +33,7 @@ tags:
         | Error Cause (stage3) | 오류 객체 초기화시 추가 옵션 객체 필드 cause 추가 |
         | Temporal (stage3) | 모던한 날짜/시간 API를 제공해 기존 Date 객체를 개선 |
 
-### 2. WebAssembly
+## 2. WebAssembly
 
 - WebAssembly는
     - 친숙한 도구와 언어로 개발을 하고 wasm(web assembly modules)으로 컴파일 → 모든 OS에서 실행되거나 다른 언어에 임배드해서 사용 가능하도록 하는 기술이다.
@@ -56,7 +56,7 @@ tags:
 - [WebAssembly Roadamp](https://webassembly.org/roadmap/)
     - ECMA script와 다르게 1년 단위로 표준화를 하지는 않고있고, 5단계의 명세 작성 프로세스를 갖고있음
 
-### 3. Framework
+## 3. Framework
 
 - React
     - Server Component
@@ -168,7 +168,7 @@ tags:
     - 불변성 인터페이스 원리를 따르지만, VDOM을 사용하지 않고 완전히 다르게 구현
     - (svelte보다 빠르다고 알려져있음)
 
-### 4. Runtime
+## 4. Runtime
 
 - Node.js
     - N-API → Node-API이름 변경
@@ -203,7 +203,7 @@ tags:
     - deno 번들러: packup 개발중
     - MDN호환성 테이블에 Deno 항목 노출되기 시작
 
-### 5. Package Manager
+## 5. Package Manager
 
 - npm
     - github에 npm 인수 (20년 3월) 후, 주요 소식은 Github 블로그를 통해 공유
@@ -228,7 +228,7 @@ tags:
     - 효율적 디스크 사용으로 유명
     - 많은 프로젝트에서 동일한 패키지를 가지고 있을 경우에 다시 다운 받지 않고, 재사용하여 디스크 사용을 효율적으로 함
 
-### 6. Tools: Bundler/Build
+## 6. Tools: Bundler/Build
 
 - esbuild
     - go로 작성된 번들로러 20년 1월에  개발되었다.
@@ -265,7 +265,7 @@ tags:
         - 브라우저 실행을 위해 snowpack은 이들을 단일 파일로 번들리하고, 네이티브 ESM으로 사용될 수 있게 한다.
         - svelteKit에서 채택되었지만, Vite에 밀려났다.
 
-### 7. PWA
+## 7. PWA
 
 - 브라우저 벤더들의 서로 다른 방향성
     - Goolgle, MS, Samsung 에서는
@@ -282,7 +282,7 @@ tags:
     - 안드로이드 PWA를 다운로드 가능
     - Apple App Store도 다운로드 가능 하지만, 공식적인 문서가 제공되고 있지는 않기 때문에 배포에 어려움이 있음.
 
-### 8. 네이티브로의 이동
+## 8. 네이티브로의 이동
 
 - ES6 지원율
     - 주요 브라우저에서 98% ~ 100% 정도 되어서 ES6 이전의 버전으로 트랜스파일링을 할 필요는 없어지고 있다고 느껴짐
@@ -296,7 +296,7 @@ tags:
             - CSS Sprite
     - 21년 9월 기준 HTTP/2 점유율이 67%를 차지
 
-### 요약
+## 요약
 
 - webAssembly 실사용 확산은 더디지만, 미래의 얼굴
 - 프레임워크는 여전히 React 강세
@@ -305,7 +305,7 @@ tags:
 - Toolchain: 자바스크립트를 위해서 비자바스크립트 언어로 지원하는 경향이 있음.
 - PWA의 메인 스트림으로의 성장은 하고있지만, 결국 [webkit](https://ko.wikipedia.org/wiki/%EC%9B%B9%ED%82%B7)의 향방에 달려있다.
 
-### 참조
+## 참조
 
 - [https://ahnheejong.name/articles/ecmascript-tc39/](https://ahnheejong.name/articles/ecmascript-tc39/)
 - [https://beomy.github.io/tech/javascript/cjs-amd-umd-esm/](https://beomy.github.io/tech/javascript/cjs-amd-umd-esm/)
