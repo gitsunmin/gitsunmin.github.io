@@ -28,17 +28,15 @@ Gatsby는 React와 GaraphQL을 기반으로 정적 사이트를 만드는 프레
 
 ### 무작정 생성
 
-Gatsby는 npm에서 gatsby를 설치하여 생성하는 방법이 있고, npx로 간편하게 할수도 있습니다. 
-
-```jsx
-> npm install -g gatsby
-> gatsby new my-blog
+Gatsby는 npm에서 gatsby를 설치하여 생성하는 방법이 있고, npx로 간편하게 할수도 있습니다.
+```bash
+npm install -g gatsby
+gatsby new my-blog
 
 // or
 
-> npx gatsby new my-blog
+npx gatsby new my-blog
 ```
-
 (저는 npx를 사용하는게 편하고, 글로벌로 설치하고 싶진않아서 npx를 사용했습니다.)
 
 위의 명령어에서 “my-blog”에 원하는 프로젝트명을 작성하시면 됩니다. 
@@ -60,15 +58,12 @@ Gatsby는 Starter 팩? 기본 템플릿들을 제공하는데 (참고: [Gatsby S
 new 바로 다음에 오는 파라미터는 생성되는 프로젝트의 이름이면서 폴더의 이름으로 생성되니, 원하는걸 넣으시면 됩니다.
 
 생성된 템플릿들마다 조금씩 다르게 설정되어 있긴한데, package.json을 보시면 
-
 ```bash
 gatsby develop
 ```
-
 를 사용하는 script가 있을 것입니다. (없으면 그냥 만들어주면 됩니다.)
 
 저는 이렇게 해 주었습니다.
-
 ```json
 // package.json
 
@@ -78,15 +73,12 @@ gatsby develop
 }
 ...
 ```
-
 해당 script를 실행하면, 개발서버를 띄울 수 있고 graphQL playground까지 함께 켜지는 것을 볼 수 있습니다.
-
 ```bash
 npm run start
 // start에 추가하면 좋은점 -> run 안붙여도됨 😀
 npm start
 ```
-
 ![그림5](./4.png)
 
 이렇게 하면 Gatsby로 프로젝트를 생성하고, 간단하게 개발서버를 켜는 것 까지 할 수 있습니다.
@@ -127,37 +119,27 @@ npm start
     ![그림10](./9.png)
     
 2. Gatsby 프로젝트로 이동 후에, git 명령어로 Repository를 연결합니다.
-    
     ```bash
     git remote add origin <복사한 URL>
     ```
-    
 3. Gatsby 프로젝트를 계속 개발할 브랜치를 생성해 줍니다. (master는 배포용으로 두려고 합니다.)
-    
     ```bash
     // git branch <생성할 브랜치> <복사할 브랜치>
     git branch dev master
     ```
-    
 4. dev 브랜치에서 push를 해줍니다. 이렇게 하면 dev 브랜치에 잘 올라간 것을 확인할 수 있습니다.
-    
     ```bash
     git push --set-upstream origin dev
     ```
-    
-
 ### 배포용 브랜치에 빌드된 gatsby 저장
 
 빌드를 한 다음에 빌드된 폴더를 복사해 두었다가, master 브랜치로 옮겨서 배포를 해도 되지만, 이것을 간편하게 할 수 있는 방법이 있습니다. → [gh-pages](https://www.npmjs.com/package/gh-pages)
 
 1. 대부분 gh-pages가 설치되어있겠지만, 안 되어있는 경우에는 설치를 해줍니다.
-    
     ```bash
     npm install gh-pages --save-dev
     ```
-    
 2. 저는 master 브랜치에서 배포를 할 것이기 때문에, 아래와 같이 script에 등록 해주었습니다. 
-    
     ```json
     "script": {
     	"deploy": "gatsby build && gh-pages -d public -b master",
@@ -169,13 +151,15 @@ npm start
     }
     ...
     ```
-    
-3. master 브랜치를 확인 하시면 push가 된 것을 확인할 수 있고 빌드된 파일들을 볼 수 있을 것입니다.
-4. 이제 master 브랜치의 코드가 배포되도록 설정을 하면됩니다.
-    
+3. dev브랜치에서 등록한 script를 실행 해 보겠습니다.
+    ```bash
+    npm run deploy
+    ```
+4. master 브랜치를 확인 하시면 push가 된 것을 확인할 수 있고 빌드된 파일들을 볼 수 있을 것입니다.
+5. 이제 master 브랜치의 코드가 배포되도록 설정을 하면됩니다.
+
     ![그림11](./10.png)
-    
-5. 그러면 5 ~ 10분 뒤에 브랜치명으로 배포가 된 것을 확인할 수 있습니다. 저는 [gitsunmin.github.io](http://gitsunmin.github.io/) 이렇게 되었습니다.
+6. 그러면 5 ~ 10분 뒤에 브랜치명으로 배포가 된 것을 확인할 수 있습니다. 저는 [gitsunmin.github.io](http://gitsunmin.github.io/) 이렇게 되었습니다.
 
 ## 결론
 
