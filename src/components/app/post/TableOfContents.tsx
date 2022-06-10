@@ -1,3 +1,4 @@
+import { theme } from "@src/styles/theme"
 import React from "react"
 import styled from "styled-components"
 
@@ -11,7 +12,7 @@ const StyledTOC = styled.div`
     margin-left: "0px";
 
     li {
-      color: ${props => props.theme.color.primary};
+      color: ${theme.color.primary};
       p {
         a {
           decoration: none;

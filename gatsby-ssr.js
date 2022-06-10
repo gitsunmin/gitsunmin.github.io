@@ -7,13 +7,19 @@ import "prismjs/themes/prism.css"
 
 // normalize CSS across browsers
 import "./src/styles/css/normalize.css"
-// custom CSS styles
-import "./src/styles/css/style.css"
 
 // React, Recoil 적용
 import React from "react"
 import { RecoilRoot } from "recoil"
+import { ThemeProvider } from 'styled-components'
+import GlobalStyle from "@src/styles"
+import { theme } from "@src/styles/theme"
 
 export const wrapRootElement = ({ element }) => {
-  return <RecoilRoot>{element}</RecoilRoot>
+  return (
+    <RecoilRoot>
+      <GlobalStyle />
+      <ThemeProvider theme={theme}>{element}</ThemeProvider>
+    </RecoilRoot>
+  )
 }

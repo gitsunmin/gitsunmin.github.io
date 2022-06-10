@@ -18,8 +18,6 @@ tags:
 - 새롭게 추가될 명세들
     - 2021 - [https://gitsunmin.github.io/2021/790FBE70-5F97-43C9-8B4B-6FF68308975E/](https://gitsunmin.github.io/2021/790FBE70-5F97-43C9-8B4B-6FF68308975E/)
     - 2022
-        
-        
         | 명세 | 설명 |
         | --- | --- |
         | RegExp Match indices | 새로운 d 플래그를 통해서 매칭 문자열의 시작과 종료 index를 반환 |
@@ -28,8 +26,6 @@ tags:
         | Accessible Object, prototype.hasOwnProperty | Object.prototype.hasOwnProperty → Object.hasOwn()로 접근성 개선 |
         | Class Static Block | 클래스 정의시에 추가적인 static 초기화 방법을 제공 |
     - Stage 3 단계의 명세들 (이후 명세에 추가될 후보군들)
-        
-        
         | 명세 | 설명 |
         | --- | --- |
         | Import Assertions (stage3) | 서버가 잘못된 MIME 타입을 잘못 처리해 발생할 수 있는 보안이슈를 제거하기 위함 |

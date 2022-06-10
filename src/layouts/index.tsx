@@ -1,5 +1,4 @@
-import React, { useState, MouseEventHandler } from "react"
-import { ThemeProvider } from "styled-components"
+import React, { useState } from "react"
 import { useRecoilState } from "recoil"
 import type { WindowLocation } from "@reach/router"
 
@@ -9,11 +8,10 @@ import Wrapper from "@src/layouts/Wrapper"
 import Footer from "@src/layouts/Footer"
 import Drawer from "@src/layouts/Drawer"
 
-import { theme } from "@src/styles/theme"
 import { debounce } from "@src/utils"
 
 import { SiteSiteMetadata } from "@src/types/gatsby-graphql"
-import { DrawerState } from '@src/store';
+import { DrawerState } from "@src/store"
 
 interface LayoutProps {
   location: WindowLocation<{ key: string; previousPath: string }>
@@ -58,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({
   }
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Header
         title={title}
         youtubeVideoId={youtubeVideoId}
@@ -67,8 +65,8 @@ const Layout: React.FC<LayoutProps> = ({
       <Navigation onClickButton={toggleDrawer} />
       <Wrapper>{children}</Wrapper>
       {isViewsable ? <Footer /> : null}
-      <Drawer open={drawerOpen} onClose={toggleDrawer}/>
-    </ThemeProvider>
+      <Drawer open={drawerOpen} onClose={toggleDrawer} />
+    </>
   )
 }
 

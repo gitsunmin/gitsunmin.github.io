@@ -10,9 +10,12 @@ const StyledChip = styled.span`
   padding: ${theme.spacing(0)} ${theme.spacing(2)};
   color: ${theme.color.grey};
   font-size: ${theme.fontSize(0)};
+
   :hover {
     cursor: pointer;
-    color: ${theme.color.black};
+    color: ${theme.color.primary};
+    font-weight: bold;
+    background: ${theme.color.whiteDarker};
   }
 `
 

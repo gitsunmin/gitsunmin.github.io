@@ -7,7 +7,7 @@ module.exports = {
       summary: `프론트엔드 개발자로 열일하고 있는 개발자입니다.`, // 프로필에서 보여주는 자기소개
     },
     description: `김선민의 블로그입니다.`, // 블로그 설명
-    youtubeVideoId: "_MyNykuihfA", // header에서 보여주는 youtube영상의 id.
+    youtubeVideoId: "81LbX4btbzg", // header에서 보여주는 youtube영상의 id.
     siteUrl: `https://gitsunmin.github.io/`,
     social: {
       github: "https://github.com/gitsunmin",

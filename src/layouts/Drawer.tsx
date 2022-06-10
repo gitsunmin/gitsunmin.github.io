@@ -4,9 +4,12 @@ import styled from "styled-components"
 import { theme } from "@src/styles/theme"
 import kebabCase from "lodash/kebabCase"
 
-import Bio from "@src/components/app/bio"
-import ChipGroup from "@src/components/UI/group/ChipGroup"
-import Chip from "@src/components/UI/Chip"
+import Bio from "@components/app/bio"
+import ChipGroup from "@components/UI/group/ChipGroup"
+import Chip from "@components/UI/Chip"
+import TreeView from "@components/UI/TreeView"
+
+import { MENU } from "@src/data"
 
 const StyledDrawer = styled.div<{ width: string; open: boolean }>`
   position: fixed;
@@ -91,7 +94,9 @@ const Drawer: React.FC<DrawerProps> = ({
         <hr />
         <StyledDrawerWrapper>
           <Bio />
-          <h4>All tags</h4>
+          <h4>Menu</h4>
+          <TreeView nodes={MENU} />
+          <h4>All Tags</h4>
           <ChipGroup>
             {tagList.map((tag, index) => {
               return (

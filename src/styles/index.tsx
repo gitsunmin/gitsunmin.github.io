@@ -1,3 +1,6 @@
+import { createGlobalStyle } from "styled-components"
+
+const GlobalStyle = createGlobalStyle`
 /* CSS Custom Properties Definitions */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;800&display=swap');
 :root {
@@ -296,3 +299,7 @@ a:focus {
     list-style-position: inside;
   }
 }
+
+`
+
+export default GlobalStyle
