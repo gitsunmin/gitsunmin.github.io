@@ -8,8 +8,8 @@ interface TreeViewProps {
 const TreeView: React.FC<TreeViewProps> = ({ nodes }) => {
   return (
     <>
-      {nodes.map(node => (
-        <TreeNode node={node} />
+      {nodes.map((node, index) => (
+        <TreeNode key={index} node={node} />
       ))}
     </>
   )
