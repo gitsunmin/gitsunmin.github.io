@@ -3472,7 +3472,7 @@ export type AllTagsQueryQuery = { allMarkdownRemark: { nodes: Array<{ frontmatte
 export type NotFoundPageQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NotFoundPageQueryQuery = { site?: { siteMetadata?: { title?: string | null } | null } | null };
+export type NotFoundPageQueryQuery = { site?: { siteMetadata?: { title?: string | null, youtubeVideoId?: string | null } | null } | null };
 
 export type IndexPageQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
