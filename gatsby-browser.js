@@ -11,15 +11,17 @@ import "./src/styles/css/normalize.css"
 // React, Recoil 적용
 import React from "react"
 import { RecoilRoot } from "recoil"
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from "styled-components"
 import GlobalStyle from "@src/styles"
 import { theme } from "@src/styles/theme"
 
 export const wrapRootElement = ({ element }) => {
   return (
     <RecoilRoot>
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>{element}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        {element}
+      </ThemeProvider>
     </RecoilRoot>
   )
 }
