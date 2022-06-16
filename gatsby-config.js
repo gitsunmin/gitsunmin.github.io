@@ -144,5 +144,11 @@ module.exports = {
         fileName: `./src/types/gatsby-graphql.d.ts`,
       },
     },
+    {
+      resolve: `gatsby-plugin-disqus`,
+      options: {
+        shortname: `gitsunmins-blog-1`,
+      },
+    },
   ],
 };
