@@ -70,15 +70,5 @@ in dev branch
 
 ## 🗒 update Project's dependencies
 ```shell
-> npx npm-check-update -u
+> npx npm-check-updates -u
 ```
-
-## 🗒 To Do List (Delete on completion)
-
-- 갈매기를 클릭하면 "끼룩 끼룩" 나오면 좋을 듯 함.
-- 댓글 기능 추가하기
-- youtube 채널 연결
-- 메뉴 네비게이션 기능 추가
-- 게시물 작성
-  - 기초 컨텐츠
-  - gatsby로 블로그만들기 컨텐츠
