@@ -1,32 +1,36 @@
-import React from "react"
-import { Helmet } from "react-helmet"
-import { graphql, PageProps, Link } from "gatsby"
-import styled from "styled-components"
-import Layout from "@src/layouts"
-import { TagsTemplateQueryQuery } from "@src/types/gatsby-graphql"
-import { theme } from "@src/styles/theme"
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { graphql, PageProps, Link } from 'gatsby';
+import styled from 'styled-components';
+import Layout from '@src/layouts';
+import { TagsTemplateQueryQuery } from '@src/types/gatsby-graphql';
+import { theme } from '@src/styles/theme';
 
-import { StyledArticle } from '@src/pages'
+import { StyledArticle } from '@src/pages';
 
 interface TagsTemplatePageContext {
-  ids: string[]
-  tag: string
+  ids: string[];
+  tag: string;
 }
 
 const StyledHeader = styled.span`
   .tag {
     color: ${theme.color.primary};
   }
-`
+`;
 
 const TagsTemplate = ({
   data,
   pageContext,
   location,
-}: PageProps<TagsTemplateQueryQuery, TagsTemplatePageContext, { key: string; previousPath: string }>) => {
-  const { allMarkdownRemark, site } = data
-  const { siteMetadata } = site
-  const { tag } = pageContext
+}: PageProps<
+  TagsTemplateQueryQuery,
+  TagsTemplatePageContext,
+  { key: string; previousPath: string }
+>) => {
+  const { allMarkdownRemark, site } = data;
+  const { siteMetadata } = site;
+  const { tag } = pageContext;
   return (
     <Layout location={location} siteMetadata={siteMetadata}>
       <Helmet title={`${tag} tag`} />
@@ -54,9 +58,7 @@ const TagsTemplate = ({
                         itemProp="url"
                         state={{ previousPath: location.pathname }}
                       >
-                        <span itemProp="headline">
-                          {node.frontmatter.title}
-                        </span>
+                        <span itemProp="headline">{node.frontmatter.title}</span>
                       </Link>
                     </h2>
                     <small>{node.frontmatter.date}</small>
@@ -72,12 +74,12 @@ const TagsTemplate = ({
                 </StyledArticle>
               </li>
             </ol>
-          )
+          );
         })}
       </ul>
     </Layout>
-  )
-}
+  );
+};
 
 export const query = graphql`
   query TagsTemplateQuery($ids: [String]!) {
@@ -104,6 +106,6 @@ export const query = graphql`
       }
     }
   }
-`
+`;
 
-export default TagsTemplate
+export default TagsTemplate;

@@ -1,13 +1,13 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react';
+import styled from 'styled-components';
 
-import MonitorSVG from "@src/images/header/monitor.svg"
+import MonitorSVG from '@src/images/header/monitor.svg';
 
 const StyledMonitor = styled.div`
   position: absolute;
   top: 32%;
   left: 70%;
-`
+`;
 
 const StyledThingInMonitor = styled.div`
   position: relative;
@@ -15,14 +15,12 @@ const StyledThingInMonitor = styled.div`
   height: inherit;
   margin-top: -66.5%;
   left: 11.5%;
-`
+`;
 
 interface MonitorThatPlayYoutubeProps {
-  youtubeVideoId: string
+  youtubeVideoId: string;
 }
-const MonitorThatPlayYoutube: React.FC<MonitorThatPlayYoutubeProps> = ({
-  youtubeVideoId,
-}) => {
+const MonitorThatPlayYoutube: React.FC<MonitorThatPlayYoutubeProps> = ({ youtubeVideoId }) => {
   return (
     <StyledMonitor>
       <img src={MonitorSVG} alt="monitor.svg" />
@@ -38,7 +36,7 @@ const MonitorThatPlayYoutube: React.FC<MonitorThatPlayYoutubeProps> = ({
         ></iframe>
       </StyledThingInMonitor>
     </StyledMonitor>
-  )
-}
+  );
+};
 
-export default MonitorThatPlayYoutube
+export default MonitorThatPlayYoutube;

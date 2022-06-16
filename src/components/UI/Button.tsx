@@ -1,7 +1,7 @@
-import React, { MouseEventHandler } from "react"
-import styled from "styled-components"
+import React, { MouseEventHandler } from 'react';
+import styled from 'styled-components';
 
-import { theme } from "@src/styles/theme"
+import { theme } from '@src/styles/theme';
 
 /**
  * * [Button] props about Style
@@ -9,13 +9,13 @@ import { theme } from "@src/styles/theme"
  * - color?: string; // default: white
  */
 interface ButtonStyleProps {
-  backgroundColor?: string
-  color?: string
+  backgroundColor?: string;
+  color?: string;
 }
 
 interface ButtonProps extends ButtonStyleProps {
-  children: React.ReactNode
-  onClick?: (event: MouseEventHandler) => void
+  children: React.ReactNode;
+  onClick?: (event: MouseEventHandler) => void;
 }
 
 const StyledButton = styled.button<ButtonStyleProps>`
@@ -23,28 +23,19 @@ const StyledButton = styled.button<ButtonStyleProps>`
   border-radius: ${theme.spacing(2)};
   cursor: pointer;
   border: none;
-  background-color: ${props => props.backgroundColor ?? theme.color.primary};
-  color: ${props => props.color ?? theme.color.orange};
+  background-color: ${(props) => props.backgroundColor ?? theme.color.primary};
+  color: ${(props) => props.color ?? theme.color.orange};
 
   display: flex;
   align-items: center;
-`
+`;
 
-const Button: React.FC<ButtonProps> = ({
-  children,
-  backgroundColor,
-  color,
-  onClick,
-}) => {
+const Button: React.FC<ButtonProps> = ({ children, backgroundColor, color, onClick }) => {
   return (
-    <StyledButton
-      backgroundColor={backgroundColor}
-      color={color}
-      onClick={onClick}
-    >
+    <StyledButton backgroundColor={backgroundColor} color={color} onClick={onClick}>
       {children}
     </StyledButton>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

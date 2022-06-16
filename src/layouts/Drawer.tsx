@@ -1,15 +1,15 @@
-import React from "react"
-import { graphql, useStaticQuery } from "gatsby"
-import styled from "styled-components"
-import { theme } from "@src/styles/theme"
-import kebabCase from "lodash/kebabCase"
+import React from 'react';
+import { graphql, useStaticQuery } from 'gatsby';
+import styled from 'styled-components';
+import { theme } from '@src/styles/theme';
+import kebabCase from 'lodash/kebabCase';
 
-import Bio from "@components/app/bio"
-import ChipGroup from "@components/UI/group/ChipGroup"
-import Chip from "@components/UI/Chip"
-import TreeView from "@components/UI/TreeView"
+import Bio from '@components/app/bio';
+import ChipGroup from '@components/UI/group/ChipGroup';
+import Chip from '@components/UI/Chip';
+import TreeView from '@components/UI/TreeView';
 
-import { MENU } from "@src/data"
+import { MENU } from '@src/data';
 
 const StyledDrawer = styled.div<{ width: string; open: boolean }>`
   position: fixed;
@@ -22,31 +22,27 @@ const StyledDrawer = styled.div<{ width: string; open: boolean }>`
 
   transition: right 0.5s cubic-bezier(0.82, 0.085, 0.395, 0.895);
 
-  width: ${props => props.width};
-  right: -${props => props.width};
-  ${props => (props.open ? `right: 0;` : `right: -${props.width}`)};
-`
+  width: ${(props) => props.width};
+  right: -${(props) => props.width};
+  ${(props) => (props.open ? `right: 0;` : `right: -${props.width}`)};
+`;
 
 const StyledDrawerHeader = styled.header`
   height: 50px;
-`
+`;
 
 const StyledDrawerWrapper = styled.div`
   height: 100%;
   padding: ${theme.spacing(2)} ${theme.spacing(4)};
-`
+`;
 
 interface DrawerProps {
-  open?: boolean
-  width?: string
-  onClose?: () => void
+  open?: boolean;
+  width?: string;
+  onClose?: () => void;
 }
 
-const Drawer: React.FC<DrawerProps> = ({
-  open = true,
-  width = "300px",
-  onClose = () => {},
-}) => {
+const Drawer: React.FC<DrawerProps> = ({ open = true, width = '300px', onClose = () => {} }) => {
   const data = useStaticQuery(graphql`
     query AllTagsQuery {
       allMarkdownRemark {
@@ -57,39 +53,32 @@ const Drawer: React.FC<DrawerProps> = ({
         }
       }
     }
-  `)
+  `);
 
   const tagList = [
-    ...new Set<string>(
-      data?.allMarkdownRemark.nodes.map(post => post.frontmatter.tags).flat()
-    ),
-  ]
-  let touchX = 0
+    ...new Set<string>(data?.allMarkdownRemark.nodes.map((post) => post.frontmatter.tags).flat()),
+  ];
+  let touchX = 0;
 
-  const onTouchStart = event => {
-    const myTouch = event.touches[0]
-    const x = myTouch?.pageX ?? 0
-    touchX = x
-  }
+  const onTouchStart = (event) => {
+    const myTouch = event.touches[0];
+    const x = myTouch?.pageX ?? 0;
+    touchX = x;
+  };
 
-  const onTouchEnd = event => {
-    const myTouch = event.changedTouches[0]
-    const x = myTouch?.pageX ?? 0
+  const onTouchEnd = (event) => {
+    const myTouch = event.changedTouches[0];
+    const x = myTouch?.pageX ?? 0;
     if (touchX < x) {
-      onClose()
+      onClose();
     } else {
       // open
     }
-  }
+  };
 
   return (
     <>
-      <StyledDrawer
-        width={width}
-        open={open}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
+      <StyledDrawer width={width} open={open} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <StyledDrawerHeader></StyledDrawerHeader>
         <hr />
         <StyledDrawerWrapper>
@@ -103,13 +92,13 @@ const Drawer: React.FC<DrawerProps> = ({
                 <Chip key={index} to={`/tag/${kebabCase(tag)}`}>
                   {tag}
                 </Chip>
-              )
+              );
             })}
           </ChipGroup>
         </StyledDrawerWrapper>
       </StyledDrawer>
     </>
-  )
-}
+  );
+};
 
-export default Drawer
+export default Drawer;

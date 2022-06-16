@@ -1,8 +1,8 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react';
+import styled from 'styled-components';
 
-import { theme } from "@src/styles/theme"
-import { movePath } from "@src/utils"
+import { theme } from '@src/styles/theme';
+import { movePath } from '@src/utils';
 
 const StyledChip = styled.span`
   height: ${theme.spacing(5)};
@@ -17,18 +17,18 @@ const StyledChip = styled.span`
     font-weight: bold;
     background: ${theme.color.whiteDarker};
   }
-`
+`;
 
 interface ChipProps {
-  to?: string
-  children: React.ReactNode
+  to?: string;
+  children: React.ReactNode;
 }
 
 const Chip: React.FC<ChipProps> = ({ children, to }) => {
   const onClick = () => {
-    to && movePath(to)
-  }
-  return <StyledChip onClick={onClick}>{children}</StyledChip>
-}
+    to && movePath(to);
+  };
+  return <StyledChip onClick={onClick}>{children}</StyledChip>;
+};
 
-export default Chip
+export default Chip;

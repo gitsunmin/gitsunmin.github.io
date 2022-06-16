@@ -1,21 +1,21 @@
-import React from "react"
-import { Link, graphql, PageProps } from "gatsby"
-import kebabCase from "lodash/kebabCase"
+import React from 'react';
+import { Link, graphql, PageProps } from 'gatsby';
+import kebabCase from 'lodash/kebabCase';
 
-import Layout from "@src/layouts"
-import Bio from "@src/components/app/bio"
-import Seo from "@src/components/app/seo"
-import TableOfContents from "@src/components/app/post/TableOfContents"
-import Chip from "@components/UI/Chip"
-import ChipGroup from "@components/UI/group/ChipGroup"
-import { BlogPostBySlugQuery } from "@src/types/gatsby-graphql"
+import Layout from '@src/layouts';
+import Bio from '@src/components/app/bio';
+import Seo from '@src/components/app/seo';
+import TableOfContents from '@src/components/app/post/TableOfContents';
+import Chip from '@components/UI/Chip';
+import ChipGroup from '@components/UI/group/ChipGroup';
+import { BlogPostBySlugQuery } from '@src/types/gatsby-graphql';
 
 const BlogPostTemplate = ({
   data,
   location,
 }: PageProps<BlogPostBySlugQuery, object, { key: string; previousPath: string }>) => {
-  const { siteMetadata } = data.site
-  const { previous, next, markdownRemark: post } = data
+  const { siteMetadata } = data.site;
+  const { previous, next, markdownRemark: post } = data;
 
   return (
     <>
@@ -24,20 +24,13 @@ const BlogPostTemplate = ({
           title={post.frontmatter.title}
           description={post.frontmatter.description || post.excerpt}
         />
-        <article
-          className="blog-post"
-          itemScope
-          itemType="http://schema.org/Article"
-        >
+        <article className="blog-post" itemScope itemType="http://schema.org/Article">
           <header>
             <h1 itemProp="headline">{post.frontmatter.title}</h1>
             <p>{post.frontmatter.date}</p>
           </header>
           <TableOfContents contents={post.tableOfContents} />
-          <section
-            dangerouslySetInnerHTML={{ __html: post.html }}
-            itemProp="articleBody"
-          />
+          <section dangerouslySetInnerHTML={{ __html: post.html }} itemProp="articleBody" />
           <footer>
             <ChipGroup>
               {post.frontmatter?.tags?.map((tag, index) => (
@@ -73,11 +66,7 @@ const BlogPostTemplate = ({
             </li>
             <li>
               {next && (
-                <Link
-                  to={next.fields.slug}
-                  rel="next"
-                  state={{ previousPath: location.pathname }}
-                >
+                <Link to={next.fields.slug} rel="next" state={{ previousPath: location.pathname }}>
                   {next.frontmatter.title} →
                 </Link>
               )}
@@ -86,17 +75,13 @@ const BlogPostTemplate = ({
         </nav>
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default BlogPostTemplate
+export default BlogPostTemplate;
 
 export const pageQuery = graphql`
-  query BlogPostBySlug(
-    $id: String!
-    $previousPostId: String
-    $nextPostId: String
-  ) {
+  query BlogPostBySlug($id: String!, $previousPostId: String, $nextPostId: String) {
     site {
       siteMetadata {
         title
@@ -133,4 +118,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;

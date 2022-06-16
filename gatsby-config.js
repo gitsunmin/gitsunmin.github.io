@@ -3,14 +3,14 @@ module.exports = {
     title: `Gitsunmin's Blog`, // 내 블로그 이름
     author: {
       name: `김선민`, // 프로필에서 보여주는 이름
-      job: "프론트엔드 개발자", // 프로필에서 보여주는 직업
+      job: '프론트엔드 개발자', // 프로필에서 보여주는 직업
       summary: `프론트엔드 개발자로 열일하고 있는 개발자입니다.`, // 프로필에서 보여주는 자기소개
     },
     description: `김선민의 블로그입니다.`, // 블로그 설명
-    youtubeVideoId: "81LbX4btbzg", // header에서 보여주는 youtube영상의 id.
+    youtubeVideoId: '81LbX4btbzg', // header에서 보여주는 youtube영상의 id.
     siteUrl: `https://gitsunmin.github.io/`,
     social: {
-      github: "https://github.com/gitsunmin",
+      github: 'https://github.com/gitsunmin',
     },
   },
   plugins: [
@@ -72,15 +72,15 @@ module.exports = {
         feeds: [
           {
             serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.nodes.map(node => {
+              return allMarkdownRemark.nodes.map((node) => {
                 return Object.assign({}, node.frontmatter, {
                   description: node.excerpt,
                   date: node.frontmatter.date,
                   url: site.siteMetadata.siteUrl + node.fields.slug,
                   guid: site.siteMetadata.siteUrl + node.fields.slug,
-                  custom_elements: [{ "content:encoded": node.html }],
-                })
-              })
+                  custom_elements: [{ 'content:encoded': node.html }],
+                });
+              });
             },
             query: `
               {
@@ -101,8 +101,8 @@ module.exports = {
                 }
               }
             `,
-            output: "/rss.xml",
-            title: "Gatsby Starter Blog RSS Feed",
+            output: '/rss.xml',
+            title: 'Gatsby Starter Blog RSS Feed',
           },
         ],
       },
@@ -125,19 +125,19 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
-    "gatsby-plugin-styled-components",
+    'gatsby-plugin-styled-components',
     {
       resolve: `gatsby-plugin-alias-imports`,
       options: {
         alias: {
-          "@src": "src",
-          "@components": "src/components",
-          "@images": "src/images",
+          '@src': 'src',
+          '@components': 'src/components',
+          '@images': 'src/images',
         },
-        extensions: ["ts", "js", "tsx", "png", "svg"],
+        extensions: ['ts', 'js', 'tsx', 'png', 'svg'],
       },
     },
-    "gatsby-plugin-graphql-config",
+    'gatsby-plugin-graphql-config',
     {
       resolve: `gatsby-plugin-graphql-codegen`,
       options: {
@@ -145,4 +145,4 @@ module.exports = {
       },
     },
   ],
-}
+};

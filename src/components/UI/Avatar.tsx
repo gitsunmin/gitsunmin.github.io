@@ -1,6 +1,6 @@
-import React from "react"
-import { GatsbyImage, getImage, IGatsbyImageData } from "gatsby-plugin-image"
-import styled from "styled-components"
+import React from 'react';
+import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
+import styled from 'styled-components';
 
 const StyledAvatar = styled.div`
   img {
@@ -10,10 +10,10 @@ const StyledAvatar = styled.div`
     border-radius: 100%;
     -webkit-border-radius: 100%;
   }
-`
+`;
 
 interface AvatarProps {
-  image?: IGatsbyImageData
+  image?: IGatsbyImageData;
 }
 
 const Avatar: React.FC<AvatarProps> = ({ image }) => {
@@ -21,7 +21,7 @@ const Avatar: React.FC<AvatarProps> = ({ image }) => {
     <StyledAvatar>
       <GatsbyImage image={getImage(image)} alt="Profile picture" />
     </StyledAvatar>
-  )
-}
+  );
+};
 
-export default Avatar
+export default Avatar;

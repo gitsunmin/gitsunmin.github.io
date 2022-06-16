@@ -1,8 +1,8 @@
-import React from "react"
-import TreeNode from '@components/UI/TreeNode'
+import React from 'react';
+import TreeNode from '@components/UI/TreeNode';
 
 interface TreeViewProps {
-  nodes: Menu[]
+  nodes: Menu[];
 }
 
 const TreeView: React.FC<TreeViewProps> = ({ nodes }) => {
@@ -12,7 +12,7 @@ const TreeView: React.FC<TreeViewProps> = ({ nodes }) => {
         <TreeNode key={index} node={node} />
       ))}
     </>
-  )
-}
+  );
+};
 
-export default TreeView
+export default TreeView;

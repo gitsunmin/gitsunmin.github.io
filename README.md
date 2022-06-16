@@ -6,6 +6,7 @@
     # create a new Gatsby site using the blog starter
     npx gatsby new my-blog-starter https://github.com/gatsbyjs/gatsby-starter-blog
     ```
+
 ## 🧐 What's inside?
 
 A quick look at the top-level files and directories you'll see in a Gatsby project.
@@ -69,6 +70,7 @@ in dev branch
 - [Query for Data with GraphQL Tutorial](https://www.gatsbyjs.com/docs/tutorial/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries).
 
 ## 🗒 update Project's dependencies
+
 ```shell
 > npx npm-check-updates -u
 ```

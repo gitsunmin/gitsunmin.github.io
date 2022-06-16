@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
-import styled, { keyframes } from "styled-components"
-import type { WindowLocation } from "@reach/router"
+import React, { useState, useEffect } from 'react';
+import { Link } from 'gatsby';
+import { StaticImage } from 'gatsby-plugin-image';
+import styled, { keyframes } from 'styled-components';
+import type { WindowLocation } from '@reach/router';
 
-import { debounce, checkOS } from "@src/utils"
-import { media, viewSizes } from "@src/styles/media"
+import { debounce, checkOS } from '@src/utils';
+import { media, viewSizes } from '@src/styles/media';
 
 // * 이미지 import
-import seagull1Src from "@src/images/header/seagull-1.svg"
-import seagull2Src from "@src/images/header/seagull-2.svg"
+import seagull1Src from '@src/images/header/seagull-1.svg';
+import seagull2Src from '@src/images/header/seagull-2.svg';
 
 //* components
-import MonitorThatPlayYoutube from "@src/layouts/header/MonitorThatPlayYoutube"
+import MonitorThatPlayYoutube from '@src/layouts/header/MonitorThatPlayYoutube';
 
 const seagull1Keyframe = keyframes`
   0% {
@@ -29,7 +29,7 @@ const seagull1Keyframe = keyframes`
     left: 100%;
     transform: rotate(80deg);
   }
-`
+`;
 const seagull2Keyframe = keyframes`
   0% {
     top: -60%;
@@ -47,20 +47,20 @@ const seagull2Keyframe = keyframes`
     top: -59%;
     left: -18%;
   }
-`
+`;
 
 const headerScreenUpKeyframe = (maxHeight: string) => keyframes`
   100% {
     max-height: ${maxHeight};
   }
-`
+`;
 
 const HeaderTextKeyframe = (top: string, left: string) => keyframes`
   100% {
     top: ${top};
     left: ${left};
   }
-`
+`;
 
 const StyledHeader = styled.header`
   position: relative;
@@ -86,26 +86,26 @@ const StyledHeader = styled.header`
     transform: scale(0.2, 0.2);
     animation: ${seagull2Keyframe} 4s infinite alternate;
   }
-`
+`;
 
 const StyledLightHeader = styled.header<{ isFolded: boolean }>`
   position: relative;
   overflow: hidden;
   border-radius: 0 0 2.5vw 2.5vw;
   -webkit-border-radius: 0 0 2.5vw 2.5vw;
-  max-height: ${props => (props.isFolded ? "100px" : "400px")};
-  animation: ${headerScreenUpKeyframe("100px")} 1s 1 normal forwards;
+  max-height: ${(props) => (props.isFolded ? '100px' : '400px')};
+  animation: ${headerScreenUpKeyframe('100px')} 1s 1 normal forwards;
 
   ${media.mobile`
-    max-height: ${props => (props.isFolded ? "75px" : "100px")};
-    animation: ${headerScreenUpKeyframe("75px")} 1s 1 normal forwards;
+    max-height: ${(props) => (props.isFolded ? '75px' : '100px')};
+    animation: ${headerScreenUpKeyframe('75px')} 1s 1 normal forwards;
   `}
   .static-image {
     transform: translateY(-30%);
     max-height: initial;
     width: 100%;
   }
-`
+`;
 
 const StyledHeaderText = styled.h1`
   position: absolute;
@@ -120,45 +120,41 @@ const StyledHeaderText = styled.h1`
       font-weight: var(--fontWeight-bold);
       transform: none;
   `};
-`
+`;
 
 const StyledLightHeaderText = styled(StyledHeaderText)<{
-  isFolded: boolean
+  isFolded: boolean;
 }>`
-  top: ${props => (props.isFolded ? "35%" : "60%")};
+  top: ${(props) => (props.isFolded ? '35%' : '60%')};
   left: 50%;
-  animation: ${HeaderTextKeyframe("35%", "50%")} 1s 1 normal forwards;
+  animation: ${HeaderTextKeyframe('35%', '50%')} 1s 1 normal forwards;
 
   ${media.mobile`
-    top: ${props => (props.isFolded ? "0" : "20%")};
+    top: ${(props) => (props.isFolded ? '0' : '20%')};
     left: 40%;
-    animation: ${HeaderTextKeyframe("0", "40%")} 1s 1 normal forwards;
+    animation: ${HeaderTextKeyframe('0', '40%')} 1s 1 normal forwards;
   `};
-`
-const ROOT_PATH = `/`
+`;
+const ROOT_PATH = `/`;
 interface HeaderProps {
-  title: string
-  youtubeVideoId: string
-  location: WindowLocation<{ key: string; previousPath: string }>
+  title: string;
+  youtubeVideoId: string;
+  location: WindowLocation<{ key: string; previousPath: string }>;
 }
 
 const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
-  const isRootPath = location.pathname === ROOT_PATH
-  const isFolded = location.state?.previousPath !== ROOT_PATH
+  const isRootPath = location.pathname === ROOT_PATH;
+  const isFolded = location.state?.previousPath !== ROOT_PATH;
 
-  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS("desktop"))
+  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS('desktop'));
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop)
-      window.addEventListener("resize", () => {
-        debounce(
-          () =>
-            setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop),
-          1000
-        )
-      })
+    if (typeof window !== 'undefined') {
+      setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop);
+      window.addEventListener('resize', () => {
+        debounce(() => setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop), 1000);
+      });
     }
-  }, [])
+  }, []);
 
   const handledHeader = isRootPath ? (
     <StyledHeader>
@@ -172,9 +168,7 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
       <div className="seagull-2">
         <img src={seagull2Src} alt="seagull-2.svg" />
       </div>
-      {isDesktop ? (
-        <MonitorThatPlayYoutube youtubeVideoId={youtubeVideoId} />
-      ) : null}
+      {isDesktop ? <MonitorThatPlayYoutube youtubeVideoId={youtubeVideoId} /> : null}
       <StyledHeaderText>
         <Link to="/" state={{ previousPath: location.pathname }}>
           {title}
@@ -195,9 +189,9 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
         </Link>
       </StyledLightHeaderText>
     </StyledLightHeader>
-  )
+  );
 
-  return handledHeader
-}
+  return handledHeader;
+};
 
-export default Header
+export default Header;

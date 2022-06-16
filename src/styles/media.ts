@@ -1,5 +1,5 @@
 // src/styles/media.ts
-import { css, CSSObject, SimpleInterpolation } from "styled-components";
+import { css, CSSObject, SimpleInterpolation } from 'styled-components';
 
 const viewSizes: Record<DeviceType, number> = {
   desktop: 1200,

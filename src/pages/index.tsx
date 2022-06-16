@@ -1,21 +1,21 @@
-import React from "react"
-import { Link, graphql, PageProps } from "gatsby"
-import kebabCase from "lodash/kebabCase"
-import styled from "styled-components"
+import React from 'react';
+import { Link, graphql, PageProps } from 'gatsby';
+import kebabCase from 'lodash/kebabCase';
+import styled from 'styled-components';
 
-import { IndexPageQueryQuery } from "@src/types/gatsby-graphql"
+import { IndexPageQueryQuery } from '@src/types/gatsby-graphql';
 
 // Layout
-import Layout from "@src/layouts"
+import Layout from '@src/layouts';
 
 // App
-import Bio from "@src/components/app/bio"
-import Seo from "@src/components/app/seo"
+import Bio from '@src/components/app/bio';
+import Seo from '@src/components/app/seo';
 
 // UI
-import ChipGroup from "@components/UI/group/ChipGroup"
-import Chip from "@components/UI/Chip"
-import { theme } from "@src/styles/theme"
+import ChipGroup from '@components/UI/group/ChipGroup';
+import Chip from '@components/UI/Chip';
+import { theme } from '@src/styles/theme';
 
 export const StyledArticle = styled.article`
   margin-bottom: ${theme.spacing(8)};
@@ -39,18 +39,14 @@ export const StyledArticle = styled.article`
   section {
     margin-bottom: ${theme.spacing(2)};
   }
-`
+`;
 
 const BlogIndexPage = ({
   data,
   location,
-}: PageProps<
-  IndexPageQueryQuery,
-  object,
-  { key: string; previousPath: string }
->) => {
-  const { siteMetadata } = data.site
-  const posts = data.allMarkdownRemark.nodes
+}: PageProps<IndexPageQueryQuery, object, { key: string; previousPath: string }>) => {
+  const { siteMetadata } = data.site;
+  const posts = data.allMarkdownRemark.nodes;
 
   return (
     <Layout location={location} siteMetadata={siteMetadata}>
@@ -60,15 +56,12 @@ const BlogIndexPage = ({
         <p>게시물 조회에 실패 하였습니다.</p>
       ) : (
         <ol style={{ listStyle: `none` }}>
-          {posts.map(post => {
-            const title = post.frontmatter.title || post.fields.slug
+          {posts.map((post) => {
+            const title = post.frontmatter.title || post.fields.slug;
 
             return (
               <li key={post.fields.slug}>
-                <StyledArticle
-                  itemScope
-                  itemType="http://schema.org/Article"
-                >
+                <StyledArticle itemScope itemType="http://schema.org/Article">
                   <header>
                     <h2>
                       <Link
@@ -95,20 +88,20 @@ const BlogIndexPage = ({
                         <Chip key={index} to={`/tag/${kebabCase(tag)}`}>
                           {tag}
                         </Chip>
-                      )
+                      );
                     })}
                   </ChipGroup>
                 </StyledArticle>
               </li>
-            )
+            );
           })}
         </ol>
       )}
     </Layout>
-  )
-}
+  );
+};
 
-export default BlogIndexPage
+export default BlogIndexPage;
 
 export const pageQuery = graphql`
   query IndexPageQuery {
@@ -134,4 +127,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;

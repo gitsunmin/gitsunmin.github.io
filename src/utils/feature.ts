@@ -1,19 +1,16 @@
-import { navigate } from "gatsby"
-import type { NavigateOptions } from "@reach/router"
+import { navigate } from 'gatsby';
+import type { NavigateOptions } from '@reach/router';
 
-let timer
+let timer;
 export const debounce = (callback, delay) => {
   return ((...args) => {
-    clearTimeout(timer)
+    clearTimeout(timer);
     timer = setTimeout(() => {
-      callback?.(args)
-    }, delay)
-  })()
-}
+      callback?.(args);
+    }, delay);
+  })();
+};
 
-export const movePath = (
-  path: string,
-  options?: NavigateOptions<{ previousPath: string }>
-) => {
-  navigate(path, options ?? { state: { previousPath: location.pathname } })
-}
+export const movePath = (path: string, options?: NavigateOptions<{ previousPath: string }>) => {
+  navigate(path, options ?? { state: { previousPath: location.pathname } });
+};

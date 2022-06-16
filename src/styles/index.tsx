@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
 /* CSS Custom Properties Definitions */
@@ -300,6 +300,6 @@ a:focus {
   }
 }
 
-`
+`;
 
-export default GlobalStyle
+export default GlobalStyle;
