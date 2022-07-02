@@ -1,22 +1,29 @@
-import React from 'react';
-import { Disqus } from 'gatsby-plugin-disqus';
+import React, { createRef, useEffect } from 'react';
 
-interface CommentProps {
-  siteUrl: string;
-  pathName: string;
-  postId: string;
-  postTitle: string;
-}
+interface CommentProps {}
 
-const Comment: React.FC<CommentProps> = ({ pathName, postId, postTitle, siteUrl }) => {
-  let disqusConfig = {
-    url: `${siteUrl}${pathName}`,
-    identifier: postId,
-    title: postTitle,
-  };
+const Comment: React.FC<CommentProps> = ({}) => {
+  const containerRef = createRef<any>();
+
+  useEffect(() => {
+    const utterances = document.createElement('script');
+    const attributes = {
+      src: 'https://utteranc.es/client.js',
+      repo: 'gitsunmin/gitsunmin.github.io',
+      'issue-term': 'title',
+      label: 'comment',
+      theme: 'github-light',
+      crossOrigin: 'anonymous',
+      async: 'true',
+    };
+    Object.entries(attributes).forEach(([key, value]) => {
+      utterances.setAttribute(key, value);
+    });
+    containerRef.current.appendChild(utterances);
+  }, []);
   return (
     <>
-      <Disqus config={disqusConfig} />
+      <div id="comment" ref={containerRef} />
     </>
   );
 };

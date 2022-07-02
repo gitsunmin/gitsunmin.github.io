@@ -8,7 +8,7 @@ import Seo from '@src/components/app/seo';
 import TableOfContents from '@src/components/app/post/TableOfContents';
 import Chip from '@components/UI/Chip';
 import ChipGroup from '@components/UI/group/ChipGroup';
-import Comment from '@components/app/comment'
+import Comment from '@components/app/comment';
 
 import { BlogPostBySlugQuery } from '@src/types/gatsby-graphql';
 
@@ -77,7 +77,7 @@ const BlogPostTemplate = ({
             </li>
           </ul>
         </nav>
-        <Comment pathName={pathname} postId={post.id} postTitle={post?.frontmatter?.title ?? 'title'} siteUrl={origin} />
+        <Comment />
       </Layout>
     </>
   );
