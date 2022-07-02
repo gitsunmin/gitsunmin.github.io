@@ -3,8 +3,8 @@ import { graphql, useStaticQuery } from 'gatsby';
 import styled from 'styled-components';
 import { Github } from '@styled-icons/boxicons-logos/Github';
 
-import Avatar from '@src/components/UI/Avatar';
-import SocialGroup from '@src/components/UI/group/SocialGroup';
+import Avatar from '@components/UI/Avatar';
+import IconGroup from '@components/UI/group/IconGroup';
 import { theme } from '@src/styles/theme';
 
 const ProfileCard = styled.div`
@@ -14,6 +14,13 @@ const ProfileCard = styled.div`
 const ProfileContents = styled.div`
   padding-left: ${theme.spacing(4)};
   font-size: ${theme.fontSize(0)};
+`;
+
+const StyledSocialIcon = styled.span`
+  svg,
+  img:hover {
+    cursor: pointer;
+  }
 `;
 
 const Profile: React.FC<{}> = () => {
@@ -56,15 +63,17 @@ const Profile: React.FC<{}> = () => {
         <strong>{author.name}</strong> | {author?.job ?? null} <br />
         {author?.summary ?? null}
       </span>
-      <SocialGroup>
+      <IconGroup>
         {/* add on other social icon */}
-        <Github
-          width={30}
-          onClick={() => {
-            social.github && window.open(social.github, '_blank');
-          }}
-        />
-      </SocialGroup>
+        <StyledSocialIcon>
+          <Github
+            width={30}
+            onClick={() => {
+              social.github && window.open(social.github, '_blank');
+            }}
+          />
+        </StyledSocialIcon>
+      </IconGroup>
     </>
   );
 
