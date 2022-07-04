@@ -8,7 +8,7 @@ const StyledChipGroup = styled.span`
   flex-wrap: wrap;
   align-items: center;
   width: inherit;
-  gap: ${theme.spacing(2)};
+  gap: ${({ theme }) => theme.spacing(2)};
 `;
 
 const StyledTagsIcon = styled(Tags)``;

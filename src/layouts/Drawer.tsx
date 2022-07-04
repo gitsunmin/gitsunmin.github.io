@@ -1,7 +1,6 @@
 import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import styled from 'styled-components';
-import { theme } from '@src/styles/theme';
 import kebabCase from 'lodash/kebabCase';
 
 import Bio from '@components/app/bio';
@@ -33,7 +32,7 @@ const StyledDrawerHeader = styled.header`
 
 const StyledDrawerWrapper = styled.div`
   height: 100%;
-  padding: ${theme.spacing(2)} ${theme.spacing(4)};
+  padding: ${({ theme }) => theme.spacing(2)} ${({ theme }) => theme.spacing(4)};
 `;
 
 interface DrawerProps {

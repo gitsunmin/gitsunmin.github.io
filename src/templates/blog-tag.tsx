@@ -4,7 +4,6 @@ import { graphql, PageProps, Link } from 'gatsby';
 import styled from 'styled-components';
 import Layout from '@src/layouts';
 import { TagsTemplateQueryQuery } from '@src/types/gatsby-graphql';
-import { theme } from '@src/styles/theme';
 
 import { StyledArticle } from '@src/pages';
 
@@ -15,7 +14,7 @@ interface TagsTemplatePageContext {
 
 const StyledHeader = styled.span`
   .tag {
-    color: ${theme.color.primary};
+    color: ${({ theme }) => theme.color.primary};
   }
 `;
 

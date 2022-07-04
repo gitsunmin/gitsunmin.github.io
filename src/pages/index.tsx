@@ -15,29 +15,28 @@ import Seo from '@src/components/app/seo';
 // UI
 import ChipGroup from '@components/UI/group/ChipGroup';
 import Chip from '@components/UI/Chip';
-import { theme } from '@src/styles/theme';
 
 export const StyledArticle = styled.article`
-  margin-bottom: ${theme.spacing(8)};
-  margin-top: ${theme.spacing(8)};
+  margin-bottom: ${({ theme }) => theme.spacing(8)};
+  margin-top: ${({ theme }) => theme.spacing(8)};
 
   p {
-    margin-bottom: ${theme.spacing(0)};
+    margin-bottom: ${({ theme }) => theme.spacing(0)};
   }
 
   h2 {
-    font-size: ${theme.fontSize(4)};
-    color: ${theme.color.black};
-    margin-bottom: ${theme.spacing(2)};
-    margin-top: ${theme.spacing(0)};
+    font-size: ${({ theme }) => theme.fontSize(4)};
+    color: ${({ theme }) => theme.color.black};
+    margin-bottom: ${({ theme }) => theme.spacing(2)};
+    margin-top: ${({ theme }) => theme.spacing(0)};
   }
 
   header {
-    margin-bottom: ${theme.spacing(2)};
+    margin-bottom: ${({ theme }) => theme.spacing(2)};
   }
 
   section {
-    margin-bottom: ${theme.spacing(2)};
+    margin-bottom: ${({ theme }) => theme.spacing(2)};
   }
 `;
 

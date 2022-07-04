@@ -20,22 +20,22 @@ const StyledList = styled.li`
   -ms-user-select: none;
   user-select: none;
 
-  margin: ${theme.spacing(2)} 0;
+  margin: ${({ theme }) => theme.spacing(2)} 0;
   label:hover {
     cursor: pointer;
-    color: ${theme.color.primary};
+    color: ${({ theme }) => theme.color.primary};
   }
 
   .arrow-right {
     margin-left: 12px;
   }
   .prefix-icon {
-    margin-right: ${theme.spacing(2)};
+    margin-right: ${({ theme }) => theme.spacing(2)};
   }
 `;
 
 const StyledPrefixIcon = styled.span`
-  margin-right: ${theme.spacing(2)};
+  margin-right: ${({ theme }) => theme.spacing(2)};
 `;
 
 const iconMap = {

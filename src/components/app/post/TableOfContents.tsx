@@ -1,4 +1,3 @@
-import { theme } from '@src/styles/theme';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -12,7 +11,7 @@ const StyledTOC = styled.div`
     margin-left: '0px';
 
     li {
-      color: ${theme.color.primary};
+      color: ${({ theme }) => theme.color.primary};
       font-weight: bold;
       p {
         a {

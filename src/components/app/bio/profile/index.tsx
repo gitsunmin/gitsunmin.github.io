@@ -5,15 +5,14 @@ import { Github } from '@styled-icons/boxicons-logos/Github';
 
 import Avatar from '@components/UI/Avatar';
 import IconGroup from '@components/UI/group/IconGroup';
-import { theme } from '@src/styles/theme';
 
 const ProfileCard = styled.div`
   display: flex;
 `;
 
 const ProfileContents = styled.div`
-  padding-left: ${theme.spacing(4)};
-  font-size: ${theme.fontSize(0)};
+  padding-left: ${({ theme }) => theme.spacing(4)};
+  font-size: ${({ theme }) => theme.fontSize(0)};
 `;
 
 const StyledSocialIcon = styled.span`

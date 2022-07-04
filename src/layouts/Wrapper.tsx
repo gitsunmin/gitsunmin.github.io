@@ -1,13 +1,12 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { theme } from '@src/styles/theme';
 
 const StyledWrapper = styled.main`
   margin: 0 auto;
-  max-width: ${theme.maxWidth('wrapper')};
-  padding: ${theme.spacing(10)} ${theme.spacing(5)};
-  margin-bottom: ${theme.spacing(20)};
+  max-width: ${({ theme }) => theme.maxWidth('wrapper')};
+  padding: ${({ theme }) => theme.spacing(10)} ${({ theme }) => theme.spacing(5)};
+  margin-bottom: ${({ theme }) => theme.spacing(20)};
 `;
 
 interface WrapperProps {

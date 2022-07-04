@@ -1,21 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { theme } from '@src/styles/theme';
 import { movePath } from '@src/utils';
 
 const StyledChip = styled.span`
-  height: ${theme.spacing(5)};
-  background: ${theme.color.gainsboro};
-  padding: ${theme.spacing(0)} ${theme.spacing(2)};
-  color: ${theme.color.grey};
-  font-size: ${theme.fontSize(0)};
+  height: ${({ theme }) => theme.spacing(5)};
+  background: ${({ theme }) => theme.color.gainsboro};
+  padding: ${({ theme }) => theme.spacing(0)} ${({ theme }) => theme.spacing(2)};
+  color: ${({ theme }) => theme.color.grey};
+  font-size: ${({ theme }) => theme.fontSize(0)};
 
   :hover {
     cursor: pointer;
-    color: ${theme.color.primary};
+    color: ${({ theme }) => theme.color.primary};
     font-weight: bold;
-    background: ${theme.color.whiteDarker};
+    background: ${({ theme }) => theme.color.whiteDarker};
   }
 `;
 

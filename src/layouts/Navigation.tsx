@@ -14,7 +14,7 @@ const StyledNavigation = styled.nav`
 `;
 
 interface NavigationProps {
-  onClickButton?: (event: MouseEventHandler) => void;
+  onClickButton?: (event) => void;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ onClickButton }) => {
