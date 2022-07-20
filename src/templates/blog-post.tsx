@@ -90,7 +90,6 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
-        youtubeVideoId
       }
     }
     markdownRemark(id: { eq: $id }) {

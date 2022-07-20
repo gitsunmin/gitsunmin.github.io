@@ -20,7 +20,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ location, siteMetadata, children }) => {
-  const { title, youtubeVideoId } = siteMetadata;
+  const { title } = siteMetadata;
   const [isViewsable, setIsViewsable] = useState<boolean>(false);
   const [drawerOpen, setDrawerOpen] = useRecoilState(DrawerState);
 
@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ location, siteMetadata, children }) => 
 
   return (
     <>
-      <Header title={title} youtubeVideoId={youtubeVideoId} location={location} />
+      <Header title={title} location={location} />
       <Navigation onClickButton={toggleDrawer} />
       <Wrapper>{children}</Wrapper>
       {isViewsable ? <Footer /> : null}

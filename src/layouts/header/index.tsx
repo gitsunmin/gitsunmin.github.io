@@ -138,23 +138,12 @@ const StyledLightHeaderText = styled(StyledHeaderText)<{
 const ROOT_PATH = `/`;
 interface HeaderProps {
   title: string;
-  youtubeVideoId: string;
   location: WindowLocation<{ key: string; previousPath: string }>;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
+const Header: React.FC<HeaderProps> = ({ title, location }) => {
   const isRootPath = location.pathname === ROOT_PATH;
   const isFolded = location.state?.previousPath !== ROOT_PATH;
-
-  const [isDesktop, setIsDesktop] = useState<boolean>(checkOS('desktop'));
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop);
-      window.addEventListener('resize', () => {
-        debounce(() => setIsDesktop(checkOS && window?.innerWidth >= viewSizes.desktop), 1000);
-      });
-    }
-  }, []);
 
   const handledHeader = isRootPath ? (
     <StyledHeader>
@@ -168,7 +157,6 @@ const Header: React.FC<HeaderProps> = ({ title, youtubeVideoId, location }) => {
       <div className="seagull-2">
         <img src={seagull2Src} alt="seagull-2.svg" />
       </div>
-      {isDesktop ? <MonitorThatPlayYoutube youtubeVideoId={youtubeVideoId} /> : null}
       <StyledHeaderText>
         <Link to="/" state={{ previousPath: location.pathname }}>
           {title}

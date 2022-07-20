@@ -85,7 +85,6 @@ export const query = graphql`
     site {
       siteMetadata {
         title
-        youtubeVideoId
       }
     }
     allMarkdownRemark(filter: { id: { in: $ids } }) {

@@ -107,7 +107,6 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
-        youtubeVideoId
       }
     }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {

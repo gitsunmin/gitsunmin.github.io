@@ -1,7 +1,6 @@
 type SiteSiteMetadata {
   author: Author
   siteUrl: String
-  youtubeVideoId: String
   social: Social
 }
 
