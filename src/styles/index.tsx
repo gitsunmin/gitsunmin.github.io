@@ -2,7 +2,12 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
 /* CSS Custom Properties Definitions */
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;800&display=swap');
+
+@font-face {
+  font-family: 'Nanum Gothic';
+  src: url(static/fonts/NanumGothic-Regular.ttf) format('woff2');
+ }
+ 
 :root {
   --maxWidth-none: "none";
   --maxWidth-xs: 20rem;
