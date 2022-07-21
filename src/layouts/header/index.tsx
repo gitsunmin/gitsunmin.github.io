@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 import styled, { keyframes } from 'styled-components';
 import type { WindowLocation } from '@reach/router';
 
-import { debounce, checkOS } from '@src/utils';
-import { media, viewSizes } from '@src/styles/media';
+import { media } from '@src/styles/media';
 
 // * 이미지 import
 import seagull1Src from '@src/images/header/seagull-1.svg';
 import seagull2Src from '@src/images/header/seagull-2.svg';
-
-//* components
-import MonitorThatPlayYoutube from '@src/layouts/header/MonitorThatPlayYoutube';
 
 const seagull1Keyframe = keyframes`
   0% {
