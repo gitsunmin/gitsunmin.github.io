@@ -2,9 +2,13 @@ import React from 'react';
 import { graphql, useStaticQuery } from 'gatsby';
 import styled from 'styled-components';
 import { Github } from '@styled-icons/boxicons-logos/Github';
+import { Email } from '@styled-icons/material/Email';
 
 import Avatar from '@components/UI/Avatar';
 import IconGroup from '@components/UI/group/IconGroup';
+import { BioQueryQuery } from '@src/types/gatsby-graphql';
+import { copyToClipboard } from '@src/utils';
+import { theme } from '@src/styles/theme'
 
 const ProfileCard = styled.div`
   display: flex;
@@ -23,7 +27,7 @@ const StyledSocialIcon = styled.span`
 `;
 
 const Profile: React.FC<{}> = () => {
-  const data = useStaticQuery(graphql`
+  const data = useStaticQuery<BioQueryQuery>(graphql`
     query BioQuery {
       site {
         siteMetadata {
@@ -34,6 +38,7 @@ const Profile: React.FC<{}> = () => {
           }
           social {
             github
+            email
           }
         }
       }
@@ -67,8 +72,21 @@ const Profile: React.FC<{}> = () => {
         <StyledSocialIcon>
           <Github
             width={30}
+            color={theme.color.gainsboro}
             onClick={() => {
               social.github && window.open(social.github, '_blank');
+            }}
+          />
+        </StyledSocialIcon>
+        <StyledSocialIcon>
+          <Email
+            width={30}
+            color={theme.color.gainsboro}
+            onClick={() => {
+              if (social.email) {
+                copyToClipboard(social.email);
+                alert('이메일을 복사하였습니다.');
+              }
             }}
           />
         </StyledSocialIcon>

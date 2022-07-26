@@ -10,6 +10,7 @@ module.exports = {
     siteUrl: `https://gitsunmin.github.io/`,
     social: {
       github: 'https://github.com/gitsunmin',
+      email: 'tjsals116@gmail.com',
     },
   },
   plugins: [

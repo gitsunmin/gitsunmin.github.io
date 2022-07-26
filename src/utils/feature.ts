@@ -14,3 +14,12 @@ export const debounce = (callback, delay) => {
 export const movePath = (path: string, options?: NavigateOptions<{ previousPath: string }>) => {
   navigate(path, options ?? { state: { previousPath: location.pathname } });
 };
+
+export const copyToClipboard = (value: any) => {
+  const textarea = document.createElement('textarea');
+  document.body.appendChild(textarea);
+  textarea.value = value;
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+};
