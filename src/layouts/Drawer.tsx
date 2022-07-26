@@ -10,6 +10,8 @@ import TreeView from '@components/UI/TreeView';
 
 import { MENU } from '@src/data';
 
+const SENSITIVITY_X = 50;
+
 const StyledDrawer = styled.div<{ width: string; open: boolean }>`
   position: fixed;
   top: 0;
@@ -68,7 +70,7 @@ const Drawer: React.FC<DrawerProps> = ({ open = true, width = '300px', onClose =
   const onTouchEnd = (event) => {
     const myTouch = event.changedTouches[0];
     const x = myTouch?.pageX ?? 0;
-    if (touchX < x) {
+    if (x - touchX > SENSITIVITY_X) {
       onClose();
     } else {
       // open
