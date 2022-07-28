@@ -49,7 +49,7 @@ playground는 총 4개의 영역으로 구분이 되어있는데, 왼쪽부터
 - 2번째 영역의 Query의 조회 결과값
 - GraphQL의 Schema
 
-```graphql
+```javascript
 query MyQuery {
   allMarkdownRemark {
     nodes {
@@ -73,7 +73,7 @@ query MyQuery {
 
 프로젝트 생성 시 처음에 있는 src/pages/index.js 를 보시면, 아래쪽에 `pageQuery` 라고 있는것이 보일 것입니다. (참고: [https://www.gatsbyjs.com/docs/how-to/querying-data/page-query/](https://www.gatsbyjs.com/docs/how-to/querying-data/page-query/))
 
-```jsx
+```javascript
 export const pageQuery = graphql`
   query {
     site {
@@ -100,9 +100,9 @@ export const pageQuery = graphql`
 
 여기서 pagqQuery 이름은 중요한 값은 아닙니다. 아무런 이름으로 해도, 페이지가 로드 되기 전에 해당 query를 조회합니다.
 
-그리고는 export default로 내보내는 jsx에서 data라는 이름의 props로 받아서 사용할 수 있습니다.
+그리고는 export default로 내보내는 javascript에서 data라는 이름의 props로 받아서 사용할 수 있습니다.
 
-```jsx
+```javascript
 const BlogIndex = ({ data, location }) => {
 ...
 }
@@ -116,7 +116,7 @@ Pagq에서는 위와 같이 페이지가 로드되기 전에 미리 불러오는
 
 src/components/bio.js 경로를 참고하시면 됩니다. 없으면, 아래의 코드를 보셔도됩니다.
 
-```jsx
+```javascript
 import { useStaticQuery, graphql } from "gatsby"
 
 const Bio = () => {
@@ -138,7 +138,7 @@ const Bio = () => {
 }
 ```
 
-이렇게 gatsby에서 useStaticQuery을 사용하면, 동기적으로 GraphQL을 사용하여 원하는 Query를 사용하여 jsx내에서 사용이 가능합니다.
+이렇게 gatsby에서 useStaticQuery을 사용하면, 동기적으로 GraphQL을 사용하여 원하는 Query를 사용하여 javascript내에서 사용이 가능합니다.
 
 ## 태그 기능 추가
 
@@ -162,7 +162,7 @@ markdown으로 작성된 게시물을 보면, 아래의 그림처럼 title, desc
 
 위 의 쿼리는 어디서 불러오면 될까요? 우선, 게시물의 최 하단에 데이터를 뿌려보겠습니다. 그러기 위해서는 src/templates/blog-post.js 이 파일을 수정해야합니다. 이 파일은 markdown으로 작성된 게시물이 실제 HTML로 변환되기 위한 템플릿으로서, gatsby-node.js 파일에서 createPage method를 이용하여 등록한 것입니다.
 
-```graphql
+```javascript
 # src/templates/blog-post.js 의 PageQuery
 
 markdownRemark(id: { eq: $id }) {
@@ -191,7 +191,7 @@ markdownRemark(id: { eq: $id }) {
 저는 위의 그림과 같은 구조로 Tag의 UI를 만들어 보았습니다. Chip 이라고하는 것에 tag를 넣고 이 Chip들을 감쌀 수 있는 Chip Group을 만들어서 Chip들이 항상 같은 Layout을 갖도록 해 두었습니다.
 
 - Chip
-  ```jsx
+  ```javascript
   import { navigate } from "gatsby"
 
   const Chip = ({ children, to }) => {
@@ -220,7 +220,7 @@ markdownRemark(id: { eq: $id }) {
   }
   ```
 - Chip Group
-  ```jsx
+  ```javascript
   const ChipGroup = ({ children }) => <span class="chip-group">{children}</span>
 
   export default ChipGroup
@@ -237,7 +237,7 @@ markdownRemark(id: { eq: $id }) {
 
 src/templates/blog-post.js 에서 원하는 위치에서
 
-```jsx
+```javascript
 <ChipGroup>
   {data.markdownRemark.frontmatter.tags?.map((tag, index) => (
     <Chip to={`/tag/${kebabCase(tag)}`} key={index}>
@@ -257,7 +257,7 @@ src/templates/blog-post.js 에서 원하는 위치에서
 
 우선 src/templates/blog-tag.js 파일을 만들어 줍니다. 그리고, 저는 src/pages/index.js를 참고하여 만들어 보았습니다.
 
-```jsx
+```javascript
 import React from "react"
 import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
@@ -351,7 +351,7 @@ export const query = graphql`
 export default TagsTemplate
 ```
 
-이렇게 만들어진 jsx는 gatsby-node.js에서 등록을 해야합니다.
+이렇게 만들어진 javascript는 gatsby-node.js에서 등록을 해야합니다.
 
 gatsby-node.js 파일을 보시면 `exports.createPages` 이 함수를 사용하고 있는것을 볼 수 있는데, 여기서 페이지를 만들 수 있습니다.
 
@@ -365,7 +365,7 @@ gatsby-node.js 파일을 보시면 `exports.createPages` 이 함수를 사용하
 
 플로우는 간단합니다. graphql로 tag데이터를 불러오고, 불러온 tag 데이터를 이용하여 action으로 tag별로 페이지를 만듭니다. 여기서 page는 위에서 만든 template을 사용해야합니다. 마지막으로 reporter로 페이지가 생성되었다는 것을 로그로 찍어 줍니다.
 
-```jsx
+```javascript
 // createPages안에서 graphql을 이용합니다. (tags를 포함합니다.)
 ...
 const result = await graphql(
@@ -390,7 +390,7 @@ const result = await graphql(
 
 가져온 tags 데이터를 하나의 Array로 만들기 위한 함수를 하나 만들어 줍니다.
 
-```jsx
+```javascript
 function flatTags(allMarkdownRemark) {
   const uniqueTags = new Set()
   allMarkdownRemark.nodes.forEach(node => {
@@ -404,31 +404,31 @@ function flatTags(allMarkdownRemark) {
 
 위 의 함수를 사용하여 page를 만들어줍니다.
 
-```jsx
+```javascript
 const _ = require('lodash')
 ...
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
 ...
-	const { allMarkdownRemark } = result;
-	const tagTemplate = require.resolve('./src/templates/blog-tag.js');
+  const { allMarkdownRemark } = result;
+  const tagTemplate = require.resolve('./src/templates/blog-tag.js');
 
-	  const flatedTags = flatTags(allMarkdownRemark);
-	  flatedTags.forEach((tag) => {
-	    createPage({
-	      path: `tag/${_.kebabCase(tag)}`,
-	      component: tagTemplate,
-	      context: { // context는 template에서 pageContext로 불러올 수 있습니다.
-	        tag, // 태그 이름을 넣어줍니다.
-	        ids: allMarkdownRemark.nodes
-	          .filter((node) => {
-	            return node.frontmatter.tags.includes(tag);
-	          })
-	          .map((node) => node.id),
-	      },
-	    });
-	    reporter.info(`Creating page: tag/${tag}`); // 생성된 tag 페이지를 로그로 표현합니다.
-	  });
+    const flatedTags = flatTags(allMarkdownRemark);
+    flatedTags.forEach((tag) => {
+      createPage({
+        path: `tag/${_.kebabCase(tag)}`,
+        component: tagTemplate,
+        context: { // context는 template에서 pageContext로 불러올 수 있습니다.
+          tag, // 태그 이름을 넣어줍니다.
+          ids: allMarkdownRemark.nodes
+            .filter((node) => {
+              return node.frontmatter.tags.includes(tag);
+            })
+            .map((node) => node.id),
+        },
+      });
+      reporter.info(`Creating page: tag/${tag}`); // 생성된 tag 페이지를 로그로 표현합니다.
+    });
 ...
 }
 ```

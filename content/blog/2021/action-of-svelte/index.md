@@ -26,7 +26,7 @@ npm i --save-dev svelte
 
 Root Path에 아래와 같이 코드를 작성 후에 실행을 시켜준다.
 
-```jsx
+```javascript
 // file 관련된 node 기본 라이브러리
 const fs = require('fs');
 const path = require('path');
@@ -39,15 +39,15 @@ const pathToComponent = path.join(__dirname, './src/component.svelte');
 const svelteCode = fs.readFileSync(pathToComponent, 'utf-8');
 // 변환된 text를 input으로하여 svelte의 compiler를 실행
 const compiled = svelteCompiler.compile(svelteCode);
-/
- * compile method가 리턴하는 것들
- js
- css
- ast
- warnings
- vars
- stat
- */
+/* 
+compile method가 리턴하는 것들
+  js
+  css
+  ast
+  warnings
+  vars
+  stat
+*/
 
 // compiler의 output을 ./output.js 경로의 파일로 리턴 (js만 이용하여 리턴)
 fs.writeFileSync(path.join(__dirname, './output.js'), compiled.js.code, 'utf-8');
@@ -100,154 +100,155 @@ node ./index.js
 - 처음 화면을 로드할 때의 실행 `init()`
     - `component.$$` 초기화 (component 관련 *state, lifecycle, 등*)
         - `component.$$`  의 `interface`와 실제 초기화되는 로직
-            
-            ```tsx
-            interface T$$ {
-            	dirty: number[];
-            	ctx: null | any;
-            	bound: any;
-            	update: () => void;
-            	callbacks: any;
-            	after_update: any[];
-            	props: Record<string, 0 | string>;
-            	fragment: null | false | Fragment;
-            	not_equal: any;
-            	before_update: any[];
-            	context: Map<any, any>;
-            	on_mount: any[];
-            	on_destroy: any[];
-            	skip_bound: boolean;
-            	on_disconnect: any[];
-            	root:Element | ShadowRoot
-            }
-            
-            const $$: T$$ = component.$$ = {
-            		fragment: null,
-            		ctx: null,
-            
-            		// state
-            		props,
-            		update: noop,
-            		not_equal,
-            		bound: blank_object(),
-            
-            		// lifecycle
-            		on_mount: [],
-            		on_destroy: [],
-            		on_disconnect: [],
-            		before_update: [],
-            		after_update: [],
-            		context: new Map(options.context || (parent_component ? parent_component.$$.context : [])),
-            
-            		// everything else
-            		callbacks: blank_object(),
-            		dirty,
-            		skip_bound: false,
-            		root: options.target || parent_component.$$.root
-            	};
-            ```
-            
+    ```tsx
+    interface T$$ {
+      dirty: number[];
+      ctx: null | any;
+      bound: any;
+      update: () => void;
+      callbacks: any;
+      after_update: any[];
+      props: Record<string, 0 | string>;
+      fragment: null | false | Fragment;
+      not_equal: any;
+      before_update: any[];
+      context: Map<any, any>;
+      on_mount: any[];
+      on_destroy: any[];
+      skip_bound: boolean;
+      on_disconnect: any[];
+      root:Element | ShadowRoot
+    }
+
+    const $$: T$$ = component.$$ = {
+      fragment: null,
+      ctx: null,
+
+      // state
+      props,
+      update: noop,
+      not_equal,
+      bound: blank_object(),
+
+      // lifecycle
+      on_mount: [],
+      on_destroy: [],
+      on_disconnect: [],
+      before_update: [],
+      after_update: [],
+      context: new Map(options.context || 
+        (parent_component ?
+          parent_component.$$.context
+          : [])
+        ),
+
+      // everything else
+      callbacks: blank_object(),
+      dirty,
+      skip_bound: false,
+      root: options.target || parent_component.$$.root
+    };
+    ```
     - `$$.ctx` 셋팅, output.js의 `instance`함수 실행 결과값 저장
         - instance 예시
-            
-            ```jsx
-            function instance($$self, $$props, $$invalidate) {
-            	let isClick = false;
-            
-            	function SMButtonClick() {
-            		$$invalidate(0, isClick = !isClick);
-            	}
-            
-            	return [isClick, SMButtonClick];
-            }
-            
-            // 실제 동작하는 부분을 함수로 뺴둔 것입니다.
-            const $$invalidate = (i, ret, ...rest) => {
-            	const value = rest.length ? rest[0] : ret;
-            	if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
-            		if (!$$.skip_bound && $$.bound[i]) $$.bound[i](value);
-            		if (ready) make_dirty(component, i);
-            	}
-            }
-            ```
+        ```javascript
+        function instance($$self, $$props, $$invalidate) {
+          let isClick = false;
+        
+          function SMButtonClick() {
+            $$invalidate(0, isClick = !isClick);
+          }
+        
+          return [isClick, SMButtonClick];
+        }
+        
+        // 실제 동작하는 부분을 함수로 뺴둔 것입니다.
+        const $$invalidate = (i, ret, ...rest) => {
+          const value = rest.length ? rest[0] : ret;
+          if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
+            if (!$$.skip_bound && $$.bound[i]) $$.bound[i](value);
+            if (ready) make_dirty(component, i);
+          }
+        }
+        ```
             
     - `$$.fragment` 생성
         - *`interface* Fragment`
             
-            ```jsx
+            ```javascript
             /**
              * INTERNAL, DO NOT USE. Code may change at any time.
              */
             export interface Fragment {
-            	key: string | null;
-            	first: null;
-            	/* create  */ c: () => void;
-            	/* claim   */ l: (nodes: any) => void;
-            	/* hydrate */ h: () => void;
-            	/* mount   */ m: (target: HTMLElement, anchor: any) => void;
-            	/* update  */ p: (ctx: any, dirty: any) => void;
-            	/* measure */ r: () => void;
-            	/* fix     */ f: () => void;
-            	/* animate */ a: () => void;
-            	/* intro   */ i: (local: any) => void;
-            	/* outro   */ o: (local: any) => void;
-            	/* destroy */ d: (detaching: 0 | 1) => void;
+              key: string | null;
+              first: null;
+              /* create  */ c: () => void;
+              /* claim   */ l: (nodes: any) => void;
+              /* hydrate */ h: () => void;
+              /* mount   */ m: (target: HTMLElement, anchor: any) => void;
+              /* update  */ p: (ctx: any, dirty: any) => void;
+              /* measure */ r: () => void;
+              /* fix     */ f: () => void;
+              /* animate */ a: () => void;
+              /* intro   */ i: (local: any) => void;
+              /* outro   */ o: (local: any) => void;
+              /* destroy */ d: (detaching: 0 | 1) => void;
             }
             ```
             
         - `output.js` 예시
             
-            ```jsx
+            ```javascript
             function create_fragment(ctx) {
-            	let h1;
-            	let t1;
-            	let div;
-            	let t2;
-            	let t3;
-            	let button;
-            	let mounted;
-            	let dispose;
+              let h1;
+              let t1;
+              let div;
+              let t2;
+              let t3;
+              let button;
+              let mounted;
+              let dispose;
             
-            	return {
-            		c() {
-            			h1 = element("h1");
-            			h1.textContent = "Svelte Compiler는 어떻게 실행될까?";
-            			t1 = space();
-            			div = element("div");
-            			t2 = text(/*isClick*/ ctx[0]);
-            			t3 = space();
-            			button = element("button");
-            			button.textContent = "클릭";
-            			attr(div, "class", "cl svelte-17q3uc1");
-            		},
-            		m(target, anchor) {
-            			insert(target, h1, anchor);
-            			insert(target, t1, anchor);
-            			insert(target, div, anchor);
-            			append(div, t2);
-            			insert(target, t3, anchor);
-            			insert(target, button, anchor);
+              return {
+                c() {
+                  h1 = element("h1");
+                  h1.textContent = "Svelte Compiler는 어떻게 실행될까?";
+                  t1 = space();
+                  div = element("div");
+                  t2 = text(/*isClick*/ ctx[0]);
+                  t3 = space();
+                  button = element("button");
+                  button.textContent = "클릭";
+                  attr(div, "class", "cl svelte-17q3uc1");
+                },
+                m(target, anchor) {
+                   insert(target, h1, anchor);
+                  insert(target, t1, anchor);
+                  insert(target, div, anchor);
+                  append(div, t2);
+                  insert(target, t3, anchor);
+                  insert(target, button, anchor);
             
-            			if (!mounted) {
-            				dispose = listen(button, "click", /*SMButtonClick*/ ctx[1]());
-            				mounted = true;
-            			}
-            		},
-            		p(ctx, [dirty]) {
-            			if (dirty & /*isClick*/ 1) set_data(t2, /*isClick*/ ctx[0]);
-            		},
-            		i: noop,
-            		o: noop,
-            		d(detaching) {
-            			if (detaching) detach(h1);
-            			if (detaching) detach(t1);
-            			if (detaching) detach(div);
-            			if (detaching) detach(t3);
-            			if (detaching) detach(button);
-            			mounted = false;
-            			dispose();
-            		}
-            	};
+                  if (!mounted) {
+                    dispose = listen(button, "click", /*SMButtonClick*/ ctx[1]());
+                    mounted = true;
+                  }
+                },
+                p(ctx, [dirty]) {
+                  if (dirty & /*isClick*/ 1) set_data(t2, /*isClick*/ ctx[0]);
+                },
+                i: noop,
+                o: noop,
+                d(detaching) {
+                  if (detaching) detach(h1);
+                  if (detaching) detach(t1);
+                  if (detaching) detach(div);
+                  if (detaching) detach(t3);
+                  if (detaching) detach(button);
+                  mounted = false;
+                  dispose();
+                }
+              };
             }
             ```
             
@@ -255,87 +256,87 @@ node ./index.js
         
          `output.js`의 예시
         
-        ```jsx
+        ```javascript
         c() {
-        	h1 = element("h1");
-        	h1.textContent = "Svelte Compiler는 어떻게 실행될까?";
-        	t1 = space();
-        	div = element("div");
-        	t2 = text(/*isClick*/ ctx[0]);
-        	t3 = space();
-        	button = element("button");
-        	button.textContent = "클릭";
-        	attr(div, "class", "cl svelte-17q3uc1");
+          h1 = element("h1");
+          h1.textContent = "Svelte Compiler는 어떻게 실행될까?";
+          t1 = space();
+          div = element("div");
+          t2 = text(/*isClick*/ ctx[0]);
+          t3 = space();
+          button = element("button");
+          button.textContent = "클릭";
+          attr(div, "class", "cl svelte-17q3uc1");
         },
         // type에 맞게 선언이 되어짐.
         // text() 예시
         export function text(data: string) {
-        	return document.createTextNode(data); // 텍스트 노드를 리턴
-        	// https://developer.mozilla.org/ko/docs/Web/API/Document/createTextNode
+          return document.createTextNode(data); // 텍스트 노드를 리턴
+          // https://developer.mozilla.org/ko/docs/Web/API/Document/createTextNode
         }
         ```
         
     - `mount_component()` → `$$.fragment.m() 실행`
         
-        ```jsx
+        ```javascript
         // https://github.dev/sveltejs/svelte
         // src/runtime/internal/Component.ts
         export function mount_component(component, target, anchor, customElement) {
-        	const { fragment, on_mount, on_destroy, after_update } = component.$$;
+          const { fragment, on_mount, on_destroy, after_update } = component.$$;
         
-        	fragment && fragment.m(target, anchor);
+          fragment && fragment.m(target, anchor);
         
-        	if (!customElement) {
-        		// onMount happens before the initial afterUpdate
-        		add_render_callback(() => {
+          if (!customElement) {
+            // onMount happens before the initial afterUpdate
+            add_render_callback(() => {
         
-        			const new_on_destroy = on_mount.map(run).filter(is_function);
-        			if (on_destroy) {
-        				on_destroy.push(...new_on_destroy);
-        			} else {
-        				// Edge case - component was destroyed immediately,
-        				// most likely as a result of a binding initialising
-        				run_all(new_on_destroy);
-        			}
-        			component.$$.on_mount = [];
-        		});
-        	}
+              const new_on_destroy = on_mount.map(run).filter(is_function);
+              if (on_destroy) {
+                on_destroy.push(...new_on_destroy);
+              } else {
+                // Edge case - component was destroyed immediately,
+                // most likely as a result of a binding initialising
+                run_all(new_on_destroy);
+              }
+              component.$$.on_mount = [];
+            });
+          }
         
-        	after_update.forEach(add_render_callback);
+          after_update.forEach(add_render_callback);
         }
         ```
         
     - `$$.fragment.m()`
         
-        ```jsx
+        ```javascript
         // output.js
         m(target, anchor) {
-        	insert(target, h1, anchor);
-        	insert(target, t1, anchor);
-        	insert(target, div, anchor);
-        	append(div, t2);
-        	insert(target, t3, anchor);
-        	insert(target, button, anchor);
+          insert(target, h1, anchor);
+          insert(target, t1, anchor);
+          insert(target, div, anchor);
+          append(div, t2);
+          insert(target, t3, anchor);
+          insert(target, button, anchor);
         
-        	if (!mounted) {
-        		dispose = listen(button, "click", /*SMButtonClick*/ ctx[1]());
-        		mounted = true;
-        	}
+          if (!mounted) {
+            dispose = listen(button, "click", /*SMButtonClick*/ ctx[1]());
+            mounted = true;
+          }
         },
         
         // https://github.dev/sveltejs/svelte
         // src/runtime/internal/dom.ts
         export function insert(target: Node, node: Node, anchor?: Node) {
-        	target.insertBefore(node, anchor || null);
+          target.insertBefore(node, anchor || null);
         }
         
         export function append(target: Node, node: Node) {
-        	target.appendChild(node);
+          target.appendChild(node);
         }
         
         export function listen(node: EventTarget, event: string, handler: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | EventListenerOptions) {
-        	node.addEventListener(event, handler, options);
-        	return () => node.removeEventListener(event, handler, options);
+          node.addEventListener(event, handler, options);
+          return () => node.removeEventListener(event, handler, options);
         }
         ```
         
@@ -344,21 +345,21 @@ node ./index.js
     - 변경사항이 있을 때, `$$.dirty` 라는 변수로 값의 수정 여부를 반영하여 저장함.
         - `make_dirty()`
             
-            ```jsx
+            ```javascript
             // src/runtime/internal/Component.ts
             function make_dirty(component, i) {
-            	if (component.$$.dirty[0] === -1) {
-            		dirty_components.push(component);
-            		schedule_update(); // 예약
-            		component.$$.dirty.fill(0);
-            	}
-            	component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
+              if (component.$$.dirty[0] === -1) {
+                dirty_components.push(component);
+                schedule_update(); // 예약
+                component.$$.dirty.fill(0);
+              }
+              component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
             }
             ```
             
             - dirty를 추가하는 방식 [bitmasks](https://blog.bitsrc.io/the-art-of-bitmasking-ec58ab1b4c03)
             
-            ```jsx
+            ```javascript
             component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
             // case 1
             // i = 1
@@ -371,103 +372,101 @@ node ./index.js
         - `$$.dirty`의 타입은 `number[]`이고, javascript에서 number로 31비트까지 저장을 할 수 있다.
             - (32비트인데 마이너스 부호가 1비트를 차지한다.)
         - 그러므로 $$.dirty의 한 index에 31가지의 True/False의 값을 저장할 수 있다.
-    - 변경한 내용으로 DOM을 업데이트하도록 예약을 합니다. → `schedule_update()`
+    - 변경한 내용으로 DOM을 업데이트하도록 예약을 합니다. → `schedule_update()`    
         - `schedule_update()`
-            
-            ```jsx
+            ```javascript
             // src/runtime/internal/scheduler.ts
             export function schedule_update() {
-            	if (!update_scheduled) {
-            		update_scheduled = true;
-            		resolved_promise.then(flush);
-            	}
+              if (!update_scheduled) {
+                update_scheduled = true;
+                resolved_promise.then(flush);
+              }
             }
             ```
             
     - `$$.dirty`로 표시한 각 구성 요소에 대해 업데이트를 호출합니다. → `flush()`
         - `flush()`
-            
-            ```jsx
+            ```javascript
             // src/runtime/internal/scheduler.ts
             export function flush() {
-            	if (flushing) return;
-            	flushing = true;
+              if (flushing) return;
+              flushing = true;
             
-            	do {
-            		// first, call beforeUpdate functions
-            		// and update components
-            		for (let i = 0; i < dirty_components.length; i += 1) {
-            			const component = dirty_components[i];
-            			set_current_component(component);
-            			update(component.$$);
-            		}
-            		set_current_component(null);
+              do {
+                // first, call beforeUpdate functions
+                // and update components
+                for (let i = 0; i < dirty_components.length; i += 1) {
+                  const component = dirty_components[i];
+                  set_current_component(component);
+                  update(component.$$);
+                }
+                set_current_component(null);
             
-            		dirty_components.length = 0;
+                dirty_components.length = 0;
             
-            		while (binding_callbacks.length) binding_callbacks.pop()();
+                while (binding_callbacks.length) binding_callbacks.pop()();
             
-            		// then, once components are updated, call
-            		// afterUpdate functions. This may cause
-            		// subsequent updates...
-            		for (let i = 0; i < render_callbacks.length; i += 1) {
-            			const callback = render_callbacks[i];
+                // then, once components are updated, call
+                // afterUpdate functions. This may cause
+                // subsequent updates...
+                for (let i = 0; i < render_callbacks.length; i += 1) {
+                  const callback = render_callbacks[i];
             
-            			if (!seen_callbacks.has(callback)) {
-            				// ...so guard against infinite loops
-            				seen_callbacks.add(callback);
+                  if (!seen_callbacks.has(callback)) {
+                    // ...so guard against infinite loops
+                    seen_callbacks.add(callback);
             
-            				callback();
-            			}
-            		}
+                    callback();
+                  }
+                }
             
-            		render_callbacks.length = 0;
-            	} while (dirty_components.length);
+                render_callbacks.length = 0;
+              } while (dirty_components.length);
             
-            	while (flush_callbacks.length) {
-            		flush_callbacks.pop()();
-            	}
+              while (flush_callbacks.length) {
+                flush_callbacks.pop()();
+              }
             
-            	update_scheduled = false;
-            	flushing = false;
-            	seen_callbacks.clear();
+              update_scheduled = false;
+              flushing = false;
+              seen_callbacks.clear();
             }
             ```
             
         - `update()`
             
-            ```jsx
+            ```javascript
             function update($$) {
-            	if ($$.fragment !== null) {
-            		$$.update();
-            		run_all($$.before_update);
-            		const dirty = $$.dirty;
-            		$$.dirty = [-1]; // dirty를 초기화할 수 있도록 값을 변경
-            		$$.fragment && $$.fragment.p($$.ctx, dirty);
+              if ($$.fragment !== null) {
+                $$.update();
+                run_all($$.before_update);
+                const dirty = $$.dirty;
+                $$.dirty = [-1]; // dirty를 초기화할 수 있도록 값을 변경
+                $$.fragment && $$.fragment.p($$.ctx, dirty);
             
-            		$$.after_update.forEach(add_render_callback);
-            	}
+                $$.after_update.forEach(add_render_callback);
+              }
             }
             ```
             
         - `$$.fragment.p($$.ctx, dirty)`
             
-            ```jsx
+            ```javascript
             // output.js
             p(ctx, [dirty]) {
-            	// dirty에 저장될 때, 2진법으로 변환 되어서 2^0에 1로 저장이 되어있는지 확인
-            	// (수정이 되었는지 확인)
-            	if (dirty & /*isClick*/ 1) {
-            		set_data(t2, /*isClick*/ ctx[0]);
-            		// isClick을 변경
-            	}
+              // dirty에 저장될 때, 2진법으로 변환 되어서 2^0에 1로 저장이 되어있는지 확인
+              // (수정이 되었는지 확인)
+              if (dirty & /*isClick*/ 1) {
+                set_data(t2, /*isClick*/ ctx[0]);
+                // isClick을 변경
+              }
             },
             
             // https://github.dev/sveltejs/svelte
             // src/runtime/internal/dom.ts
             export function set_data(text, data) {
-            	data = '' + data;
-            	if (text.wholeText !== data) text.data = data;
+              data = '' + data;
+              if (text.wholeText !== data) text.data = data;
             }
             ```
             

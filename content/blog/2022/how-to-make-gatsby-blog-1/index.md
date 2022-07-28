@@ -142,12 +142,12 @@ npm start
 2. 저는 master 브랜치에서 배포를 할 것이기 때문에, 아래와 같이 script에 등록 해주었습니다. 
     ```json
     "script": {
-    	"deploy": "gatsby build && gh-pages -d public -b master",
-    	// gatsby build: gatsby 프로젝트를 빌드하는 명령어
-    	// &&: 이전 명령이 완료되면 다음 명령을 실행
-    	// gh-pages -d public -b master
-    	// : public 폴더를 master 브랜치로 push 합니다. 
-    	...
+      "deploy": "gatsby build && gh-pages -d public -b master",
+      // gatsby build: gatsby 프로젝트를 빌드하는 명령어
+      // &&: 이전 명령이 완료되면 다음 명령을 실행
+      // gh-pages -d public -b master
+      // : public 폴더를 master 브랜치로 push 합니다. 
+      ...
     }
     ...
     ```

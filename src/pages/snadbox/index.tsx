@@ -7,7 +7,6 @@ import Layout from '@src/layouts/sandbox';
 import { SandBoxPageQuery } from '@src/types/gatsby-graphql';
 
 const SandBoxPage = ({
-  data,
   location,
 }: PageProps<SandBoxPageQuery, object, { key: string; previousPath: string }>) => {
   return (

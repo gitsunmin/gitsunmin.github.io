@@ -91,7 +91,7 @@ tags:
             - `<script setup>`
                 - SFC의 새로운 스크립트 타입으로, 최상위 바인딩을 템플릿에 노출
                     
-                    ```jsx
+                    ```javascript
                     <script setup>
                     console.log('hello script setup')
                     </script>
@@ -102,7 +102,7 @@ tags:
             - Ref Sugar
                 - 반응형 변수 `$()`사용을 위한 컴파일러 매크로 집합
                 
-                ```jsx
+                ```javascript
                 // declaring a reactive variable backed by an underlying ref
                 let count = $ref(1)
                 

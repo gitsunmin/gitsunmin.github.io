@@ -12,6 +12,8 @@ import Comment from '@components/app/comment';
 
 import { BlogPostBySlugQuery } from '@src/types/gatsby-graphql';
 
+import 'gatsby-remark-vscode/styles.css';
+
 const BlogPostTemplate = ({
   data,
   location,

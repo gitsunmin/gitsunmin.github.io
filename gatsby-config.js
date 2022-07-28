@@ -43,7 +43,7 @@ module.exports = {
           {
             resolve: `gatsby-remark-images`,
             options: {
-              maxWidth: 630,
+              maxWidth: 1024,
             },
           },
           {
@@ -52,10 +52,15 @@ module.exports = {
               wrapperStyle: `margin-bottom: 1.0725rem`,
             },
           },
-          `gatsby-remark-prismjs`,
+          {
+            resolve: `gatsby-remark-vscode`, // @Link https://www.gatsbyjs.com/plugins/gatsby-remark-vscode/
+            options: {
+              theme: 'Abyss' // Or install your favorite theme from GitHub
+            }
+          },
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
-          `gatsby-remark-autolink-headers`, // * 게시물에서 헤시태그를 사용할 수 있도록 해주는 plugin
+          `gatsby-remark-autolink-headers`, // * 게시물에서 헤시 태그를 사용할 수 있도록 해주는 plugin
         ],
       },
     },
