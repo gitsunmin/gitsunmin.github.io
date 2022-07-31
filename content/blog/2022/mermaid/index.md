@@ -265,7 +265,7 @@ flowchart LR
 
 ## 결론
 
-mermaid의 기본적인 사용법을 알아보았습니다. 더 자세한 내용은 공식문서의 내용을 살펴보시면 좋을 것 같습니다. ([공식문서](https://mermaid-js.github.io/mermaid/#/README)) **📊 Diagram Syntax** 부분을 참고하시면 문법에 대해서는 익숙해질 것 같습니다. 그리고 참고로 그냥 보는 용이 아니라, npm을 통해서 다운로드 받아서 서비스에서도 사용이 가능합니다. Gatsby에서도 plugin이 있어서 공유하겠습니다. ([gatsby plugin](https://www.gatsbyjs.com/plugins/gatsby-remark-mermaid/))
+mermaid의 기본적인 사용법을 알아보았습니다. 위에서는 flowchart로 설정하여 예시를 만들어보았는데, 다른 다이어그램을 사용할 때에 추가적으로 숙지해야할 것들이 있습니다. 공식문서를 참고하셔서 활용하시면 좋을 것 같습니다. ([공식문서](https://mermaid-js.github.io/mermaid/#/README)) **📊 Diagram Syntax** 부분을 참고하시면 문법에 대해서는 익숙해질 것 같습니다. 그리고 참고로 그냥 보는용이 아니라, npm을 통해서 다운로드 받아서 서비스에서도 사용이 가능합니다. Gatsby에서도 plugin이 있어서 공유하겠습니다. ([gatsby plugin](https://www.gatsbyjs.com/plugins/gatsby-remark-mermaid/))
 
 ## 참고
 
