@@ -173,7 +173,7 @@ node ./index.js
         ```
             
     - `$$.fragment` 생성
-        - *`interface* Fragment`
+        - `interface Fragment`
             
             ```javascript
             /**
