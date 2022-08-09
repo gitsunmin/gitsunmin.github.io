@@ -55,7 +55,7 @@ module.exports = {
           {
             resolve: `gatsby-remark-vscode`, // @Link https://www.gatsbyjs.com/plugins/gatsby-remark-vscode/
             options: {
-              theme: 'Abyss' // Or install your favorite theme from GitHub
+              theme: 'Dark (Visual Studio)' // @Link https://www.gatsbyjs.com/plugins/gatsby-remark-vscode/#themes
             }
           },
           `gatsby-remark-copy-linked-files`,

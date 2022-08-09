@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 const StyledAvatar = styled.div`
   img {
-    margin-right: var(--spacing-4);
-    margin-bottom: var(--spacing-0);
+    margin-right: ${({ theme }) => theme.spacing(4)};
+    margin-bottom: ${({ theme }) => theme.spacing(0)};
     min-width: 50px;
     border-radius: 100%;
     -webkit-border-radius: 100%;
