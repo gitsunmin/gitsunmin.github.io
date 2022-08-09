@@ -149,6 +149,7 @@ module.exports = {
         extensions: ['ts', 'js', 'tsx', 'png', 'svg'],
       },
     },
+    'gatsby-plugin-sitemap',
     'gatsby-plugin-graphql-config',
     {
       resolve: `gatsby-plugin-graphql-codegen`,
