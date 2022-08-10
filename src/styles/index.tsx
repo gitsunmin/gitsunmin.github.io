@@ -5,7 +5,7 @@ const GlobalStyle = createGlobalStyle`
 
 @font-face {
   font-family: 'Nanum Gothic';
-  src: url(static/fonts/NanumGothic-Regular.ttf) format('woff2');
+  src: url(fonts/NanumGothic-Regular.ttf) format('woff2');
  }
  
 :root {
