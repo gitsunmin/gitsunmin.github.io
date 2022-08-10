@@ -281,10 +281,6 @@ a:focus {
   font-family: var(--font-heading);
 }
 
-.blog-post-nav ul {
-  margin: var(--spacing-0);
-}
-
 .gatsby-highlight {
   margin-bottom: var(--spacing-8);
 }

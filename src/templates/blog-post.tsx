@@ -9,6 +9,7 @@ import TableOfContents from '@src/components/app/post/TableOfContents';
 import Chip from '@components/UI/Chip';
 import ChipGroup from '@components/UI/group/ChipGroup';
 import Comment from '@components/app/comment';
+import Card from '@components/UI/Card';
 
 import { BlogPostBySlugQuery } from '@src/types/gatsby-graphql';
 
@@ -49,7 +50,7 @@ const BlogPostTemplate = ({
             <Bio />
           </footer>
         </article>
-        <nav className="blog-post-nav">
+        <nav>
           <ul
             style={{
               display: `flex`,
@@ -60,22 +61,27 @@ const BlogPostTemplate = ({
             }}
           >
             <li>
+            <Card>
               {previous && (
                 <Link
                   to={previous.fields.slug}
                   rel="prev"
                   state={{ previousPath: location.pathname }}
                 >
-                  ← {previous.frontmatter.title}
+                  {previous.frontmatter.title}
                 </Link>
               )}
+            </Card>
             </li>
             <li>
-              {next && (
-                <Link to={next.fields.slug} rel="next" state={{ previousPath: location.pathname }}>
-                  {next.frontmatter.title} →
-                </Link>
-              )}
+              <Card>
+                {next && (
+                  <Link to={next.fields.slug} rel="next" state={{ previousPath: location.pathname }} activeStyle={{ color: "red" }}
+                  >
+                    {next.frontmatter.title}
+                  </Link>
+                )}
+              </Card>
             </li>
           </ul>
         </nav>
