@@ -1,7 +1,11 @@
-const path = require(`path`);
-const _ = require(`lodash`);
-const { createFilePath } = require(`gatsby-source-filesystem`);
-
+const path = require('path');
+const fs = require('fs');
+const _ = require('lodash');
+const { createFilePath } = require('gatsby-source-filesystem');
+  
+/**
+ * * tag를 펼쳐주는 함수
+ */
 function flatTags(allMarkdownRemark) {
   const uniqueTags = new Set();
   // Iterate over all articles
@@ -14,6 +18,42 @@ function flatTags(allMarkdownRemark) {
   // Create new array with duplicates removed
   return Array.from(uniqueTags);
 }
+
+/**
+ * * 해당 폴더 안의 모든 파일을 createPage 함수로 실행하여 만들 수 있도록 array로 만들어주는 함수
+ */
+const getPageInfoInPath = (path) => {
+  console.log('path:', path);
+  try {
+    if (!path.endsWith('/')) throw new Error('needed forder path');
+
+    const pages = [];
+
+    const filesInForder = fs.readdirSync(path);
+
+    for (const file of filesInForder) {
+      console.log('file:', file);
+      console.log('bbb:', file.includes('.'));
+      if (file.includes('.')) {
+        const [filename, fileExtension] = file.split('.');
+        
+        if (fileExtension === 'tsx') { 
+          pages.push({
+            path: `${path}${filename}`,
+            component: require.resolve(`./${path}${file}`),
+          });
+        }
+      } else { 
+        const childPages = getPageInfoInPath(`${path}${file}/`);
+        pages.push(...childPages);
+        // console.log('aaaaa:', a);
+      }
+    }
+    return pages;
+  } catch (error) {
+    console.error(error);    
+  }
+};
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;
@@ -95,7 +135,20 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   createPage({
     path: '/sandbox',
     component: require.resolve('./src/pages/snadbox/index.tsx'),
+    defer: true,
   });
+  reporter.info(`Created Sandbox Main Page`);
+
+  const sandboxPages = getPageInfoInPath(`src/pages/snadbox/pages/`);
+  console.log('sandboxPages:', sandboxPages);
+  for (const sandboxPage of sandboxPages) { 
+    console.log('sandboxPage:', sandboxPage);
+    createPage({
+      path,
+      component
+   })
+  }
+  console.log('sandboxPages:', sandboxPages);
 };
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
