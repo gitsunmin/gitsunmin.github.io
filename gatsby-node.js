@@ -22,8 +22,7 @@ function flatTags(allMarkdownRemark) {
 /**
  * * 해당 폴더 안의 모든 파일을 createPage 함수로 실행하여 만들 수 있도록 array로 만들어주는 함수
  */
-const getPageInfoInPath = (path) => {
-  console.log('path:', path);
+const getPageInfoInPath = (path = '', folderName = '') => {
   try {
     if (!path.endsWith('/')) throw new Error('needed forder path');
 
@@ -32,21 +31,22 @@ const getPageInfoInPath = (path) => {
     const filesInForder = fs.readdirSync(path);
 
     for (const file of filesInForder) {
-      console.log('file:', file);
-      console.log('bbb:', file.includes('.'));
       if (file.includes('.')) {
         const [filename, fileExtension] = file.split('.');
         
         if (fileExtension === 'tsx') { 
           pages.push({
-            path: `${path}${filename}`,
+            path: `/${folderName}/${filename}`,
             component: require.resolve(`./${path}${file}`),
           });
         }
-      } else { 
-        const childPages = getPageInfoInPath(`${path}${file}/`);
+      } else {
+        const splitPath = path.split('/');
+        const lastTwoForderNames = splitPath.slice(-2);
+        const folderPath = `${lastTwoForderNames.join('/')}${file}`;
+        const childPages = getPageInfoInPath(`${path}${file}/`, folderPath);
+
         pages.push(...childPages);
-        // console.log('aaaaa:', a);
       }
     }
     return pages;
@@ -132,23 +132,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   /**
    * * 샌드박스 프로젝트
    */
-  createPage({
-    path: '/sandbox',
-    component: require.resolve('./src/pages/snadbox/index.tsx'),
-    defer: true,
-  });
   reporter.info(`Created Sandbox Main Page`);
 
-  const sandboxPages = getPageInfoInPath(`src/pages/snadbox/pages/`);
-  console.log('sandboxPages:', sandboxPages);
+  const sandboxPages = getPageInfoInPath(`src/pages/sandbox/`, 'sandbox');
   for (const sandboxPage of sandboxPages) { 
-    console.log('sandboxPage:', sandboxPage);
+    const { path, component } = sandboxPage;
     createPage({
       path,
-      component
-   })
+      component,
+    });
   }
-  console.log('sandboxPages:', sandboxPages);
 };
 
 exports.onCreateNode = ({ node, actions, getNode }) => {

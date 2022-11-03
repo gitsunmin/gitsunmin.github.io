@@ -12,7 +12,7 @@ const SandBoxPage = ({
   return (
     <Layout location={location}>
       <Helmet title="샌드박스" />
-      <h1>준비중입니다.</h1>
+      <h1>준비중입니다. (index)</h1>
     </Layout>
   );
 };
