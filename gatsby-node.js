@@ -31,6 +31,7 @@ const getPageInfoInPath = (path = '', folderName = '') => {
     const filesInForder = fs.readdirSync(path);
 
     for (const file of filesInForder) {
+      /* 폴더명인지, 파일명인지를 구분하기 위한 if */
       if (file.includes('.')) {
         const [filename, fileExtension] = file.split('.');
         
