@@ -4,6 +4,8 @@
 export const enum MenuId {
   BLOG = 'BLOG',
   SANDBOX = 'SANDBOX',
+  SANDBOX_GAME = 'SANDBOX_GAME',
+  SANDBOX_LAB = 'SANDBOX_LAB',
 }
 
 /**
@@ -12,6 +14,8 @@ export const enum MenuId {
 export const enum MenuURL {
   BLOG = '/',
   SANDBOX = '/sandbox',
+  SANDBOX_GAME = '/sandbox/game',
+  SANDBOX_LAB = '/sandbox/lab',
 }
 
 /**
@@ -20,4 +24,6 @@ export const enum MenuURL {
 export const enum MenuTitle {
   BLOG = '블로그',
   SANDBOX = '샌드박스',
+  SANDBOX_GAME = '게임',
+  SANDBOX_LAB = '연구실',
 }
