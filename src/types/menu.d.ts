@@ -11,4 +11,4 @@ type MenuURLType = '/' | '/sandbox' | '/sandbox/game' | '/sandbox/lab';
 /**
  * * Munu의 타이틀을 정의
  */
-type MenuTitleType = '블로그' | '샌드박스' | '샌드박스 - 게임' | '샌드박스 - 연구실';
+type MenuTitleType = '블로그' | '샌드박스' | '게임' | '연구실';
