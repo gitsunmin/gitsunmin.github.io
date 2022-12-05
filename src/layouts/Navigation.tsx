@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from 'react';
 import styled from 'styled-components';
-import { Hamburger } from '@styled-icons/fa-solid/Hamburger';
+import { List } from '@styled-icons/foundation/List';
 import { theme } from '@src/styles/theme';
 
 import Button from '@src/components/UI/Button';
@@ -21,7 +21,7 @@ const Navigation: React.FC<NavigationProps> = ({ onClickButton }) => {
   return (
     <StyledNavigation>
       <Button backgroundColor="transparent" onClick={onClickButton}>
-        <Hamburger size={theme.spacing(8)} />
+        <List color="black" size={theme.spacing(8)} />
       </Button>
     </StyledNavigation>
   );
