@@ -1,16 +1,4 @@
-const color = {
-  white: 'rgb(250, 250, 250)',
-  black: 'rgb(30, 31, 33, 0.94)',
-  yellow: 'rgb(253, 216, 4)',
-  gainsboro: 'rgb(220,220,220)',
-  grey: 'rgb(128,128,128)',
-  lightgray: 'rgb(211,211,211)',
-  silver: 'rgb(192,192,192)',
-  purple: 'rgba(107, 82, 248, 1)',
-  whiteDarker: 'rgba(233, 233, 233, 0.96)',
-  skyblue: 'rgb(135,206,235)',
-  orange: '#FFA500',
-};
+import { COLORS, COLOR_THEME } from './palette';
 
 const SPACING_VARIABLES = {
   0: '0',
@@ -80,8 +68,9 @@ const maxWidth = (target: keyof typeof MAX_WIDTH_VARIABLES) => {
 
 export const theme = {
   color: {
-    ...color,
-    primary: color.skyblue,
+    ...COLORS,
+    primary: COLORS.skyblue,
+    ...COLOR_THEME,
   },
   spacing,
   fontSize,
