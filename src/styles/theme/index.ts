@@ -69,8 +69,7 @@ const maxWidth = (target: keyof typeof MAX_WIDTH_VARIABLES) => {
 export const theme = {
   color: {
     ...COLORS,
-    primary: COLORS.skyblue,
-    ...COLOR_THEME,
+    ...COLOR_THEME.light,
   },
   spacing,
   fontSize,
