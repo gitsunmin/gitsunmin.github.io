@@ -7,11 +7,4 @@ export const MENU: Menu[] = [
     title: MenuTitle.BLOG,
     icon: 'Documents',
   },
-  {
-    id: MenuId.SANDBOX,
-    url: MenuURL.SANDBOX,
-    title: MenuTitle.SANDBOX,
-    icon: 'Toys',
-    open: false,
-  },
 ];
