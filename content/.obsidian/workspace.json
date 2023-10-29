@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "dc748ce40bb7680c",
+        "id": "efbac61f15d4b6d6",
         "type": "tabs",
         "children": [
           {
-            "id": "88cf2d5fa7c3f6b4",
+            "id": "ea381cf845abbedf",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "blog/strange-typescript-story/index.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -69,7 +65,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 279.5
   },
   "right": {
     "id": "84189c6ec0803b24",
@@ -85,7 +81,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "blog/strange-typescript-story/index.md",
+                "file": "blog/deview-review-2023/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +98,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "blog/strange-typescript-story/index.md",
+                "file": "blog/deview-review-2023/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "blog/strange-typescript-story/index.md"
+                "file": "blog/deview-review-2023/index.md"
               }
             }
           },
@@ -156,10 +152,24 @@
       "command-palette:명령어 팔레트 열기": false
     }
   },
-  "active": "88cf2d5fa7c3f6b4",
+  "active": "aad431dd54964395",
   "lastOpenFiles": [
-    "blog/z-index-priority/index.md",
+    "blog/made-custom-date-picker/index.md",
+    "blog/deview-review-2023/index.md",
+    "blog/deview-review-2023",
+    "blog/made-calculator/index.md",
+    "blog/made-custom-date-picker",
+    "blog/about-basic-viewport/index.md",
+    "blog/made-calculator",
+    "blog/monorepo/index.md",
+    "blog/about-basic-viewport",
+    "blog/flutter-life-cycle/index.md",
+    "blog/monorepo",
+    "blog/flutter-import-and-part/index.md",
+    "blog/flutter-life-cycle",
+    "blog/flutter-import-and-part",
     "blog/strange-typescript-story/index.md",
+    "blog/z-index-priority/index.md",
     "blog/service-worker/index.md",
     "blog/mermaid/index.md",
     "blog/map-and-functor/index.md",
@@ -168,7 +178,6 @@
     "blog/action-of-svelte/index.md",
     "blog/2021-JS-trend/index.md",
     "blog/2021-FE-trend/index.md",
-    "blog/무제 파일.md",
     "templates/post_template.md",
     "blog/무제 파일 1.md",
     "무제 파일.md",
@@ -179,13 +188,6 @@
     "content/blog/2021-FE-trend/index.md",
     "public/page-data/index/page-data.json",
     "public/page-data/index",
-    "public/page-data/dev-404-page/page-data.json",
-    "public/page-data/dev-404-page",
-    "public/page-data/404.html/page-data.json",
-    "public/page-data/404.html",
-    "public/page-data/sq/d/2899924383.json",
-    "public/static/673ee448deb337acea3db31f178121d1",
-    "public/static/93fc4c8b05b1f76af44c17920ed66596",
     "public/favicon-32x32.png",
     "public/icons/icon-512x512.png",
     "public/icons/icon-384x384.png",

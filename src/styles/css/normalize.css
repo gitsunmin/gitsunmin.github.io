@@ -158,6 +158,11 @@ sup {
 
 img {
   border-style: none;
+  max-width: 400px;
+}
+
+p:has(img) {
+  text-align: center;
 }
 
 /* Forms
@@ -351,4 +356,9 @@ summary {
 
 [hidden] {
   display: none;
+}
+
+ul {
+  padding-left: 20;
+  margin: 0;
 }
