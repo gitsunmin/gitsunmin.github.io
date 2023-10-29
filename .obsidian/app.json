@@ -1,0 +1,12 @@
+{
+  "newFileLocation": "folder",
+  "newFileFolderPath": "content/blog",
+  "attachmentFolderPath": "./",
+  "userIgnoreFilters": [
+    "node_modules/",
+    "plugins/",
+    "public/",
+    "static/",
+    "src/"
+  ]
+}

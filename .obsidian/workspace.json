@@ -1,0 +1,172 @@
+{
+  "main": {
+    "id": "f0ed3248727cca16",
+    "type": "split",
+    "children": [
+      {
+        "id": "ed103d52703a131c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5db45339d55f790c",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "fc21747ba2ae3426",
+    "type": "split",
+    "children": [
+      {
+        "id": "5b2d8b8eb40bc6df",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "aad431dd54964395",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "22c09a0dbe67a544",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "dd8c05be9f67e119",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "84189c6ec0803b24",
+    "type": "split",
+    "children": [
+      {
+        "id": "c188efa000a9380f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ed79020a3ce7f3ad",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "content/blog/how-to-make-gatsby-blog-1/3.png",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4abadc47c50f1ddd",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "content/blog/how-to-make-gatsby-blog-1/3.png",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "f4f51a54dcbbfcea",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "4b7c66f442fab140",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "content/blog/how-to-make-gatsby-blog-1/3.png"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:퀵 스위처 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 데일리 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false
+    }
+  },
+  "active": "aad431dd54964395",
+  "lastOpenFiles": [
+    "public/page-data/index/page-data.json",
+    "public/page-data/index",
+    "public/page-data/dev-404-page/page-data.json",
+    "public/page-data/dev-404-page",
+    "public/page-data/404.html/page-data.json",
+    "public/page-data/404.html",
+    "public/page-data/sq/d/2899924383.json",
+    "public/static/673ee448deb337acea3db31f178121d1",
+    "public/static/93fc4c8b05b1f76af44c17920ed66596",
+    "public/static/69a2a177c2c8842605c0b6ecfc4ebbd5",
+    "public/static/aa5b0667f55b92d6666dfc56afdb7ad5",
+    "public/favicon-32x32.png",
+    "public/icons/icon-512x512.png",
+    "public/icons/icon-384x384.png",
+    "public/icons/icon-256x256.png",
+    "public/icons/icon-192x192.png",
+    "public/icons/icon-144x144.png",
+    "public/icons/icon-96x96.png",
+    "public/icons/icon-72x72.png",
+    "public/icons/icon-48x48.png",
+    "content/blog/무제 파일.md",
+    "content/blog/z-index-priority/index.md",
+    "content/blog/action-of-svelte/index.md",
+    "content/blog/2021-FE-trend/index.md"
+  ]
+}
