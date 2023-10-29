@@ -1,20 +1,17 @@
-import React from 'react';
-import { Link, graphql, PageProps } from 'gatsby';
-import kebabCase from 'lodash/kebabCase';
-import styled from 'styled-components';
-
-import { IndexPageQueryQuery } from '@src/types/gatsby-graphql';
-
-// Layout
-import Layout from '@src/layouts';
+import { Link, PageProps, graphql } from 'gatsby';
 
 // App
 import Bio from '@src/components/app/bio';
-import Seo from '@src/components/app/seo';
-
+import Chip from '@components/UI/Chip';
 // UI
 import ChipGroup from '@components/UI/group/ChipGroup';
-import Chip from '@components/UI/Chip';
+import { IndexPageQueryQuery } from '@src/types/gatsby-graphql';
+// Layout
+import Layout from '@src/layouts';
+import React from 'react';
+import Seo from '@src/components/app/seo';
+import kebabCase from 'lodash/kebabCase';
+import styled from 'styled-components';
 
 export const StyledArticle = styled.article`
   margin-bottom: ${({ theme }) => theme.spacing(8)};
@@ -102,27 +99,24 @@ const BlogIndexPage = ({
 
 export default BlogIndexPage;
 
-export const pageQuery = graphql`
-  query IndexPageQuery {
-    site {
-      siteMetadata {
-        title
-      }
+export const pageQuery = graphql`query IndexPageQuery {
+  site {
+    siteMetadata {
+      title
     }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
-      nodes {
-        excerpt
-        fields {
-          slug
-        }
-
-        frontmatter {
-          date(formatString: "MMMM DD, YYYY")
-          title
-          description
-          tags
-        }
+  }
+  allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
+    nodes {
+      excerpt
+      fields {
+        slug
+      }
+      frontmatter {
+        date(formatString: "MMMM DD, YYYY")
+        title
+        description
+        tags
       }
     }
   }
-`;
+}`;

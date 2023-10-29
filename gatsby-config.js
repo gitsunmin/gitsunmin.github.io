@@ -1,4 +1,5 @@
 module.exports = {
+  trailingSlash: `always`,
   siteMetadata: {
     title: `Gitsunmin's Blog`, // 내 블로그 이름
     author: {
@@ -94,25 +95,21 @@ module.exports = {
                 });
               });
             },
-            query: `
-              {
-                allMarkdownRemark(
-                  sort: { order: DESC, fields: [frontmatter___date] },
-                ) {
-                  nodes {
-                    excerpt
-                    html
-                    fields {
-                      slug
-                    }
-                    frontmatter {
-                      title
-                      date
-                    }
+            query: `{
+              allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
+                nodes {
+                  excerpt
+                  html
+                  fields {
+                    slug
+                  }
+                  frontmatter {
+                    title
+                    date
                   }
                 }
               }
-            `,
+            }`,
             output: '/rss.xml',
             title: 'Gatsby Starter Blog RSS Feed',
           },
@@ -150,7 +147,6 @@ module.exports = {
       },
     },
     'gatsby-plugin-sitemap',
-    'gatsby-plugin-graphql-config',
     {
       resolve: `gatsby-plugin-graphql-codegen`,
       options: {
