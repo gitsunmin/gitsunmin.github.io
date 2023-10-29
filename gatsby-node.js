@@ -11,7 +11,7 @@ function flatTags(allMarkdownRemark) {
   // Iterate over all articles
   allMarkdownRemark.nodes.forEach((node) => {
     // Iterate over each category in an article
-    node.frontmatter.tags.forEach((tag) => {
+    node && node.frontmatter.tags.forEach((tag) => {
       uniqueTags.add(tag);
     });
   });
