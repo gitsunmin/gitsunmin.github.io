@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "ed103d52703a131c",
+        "id": "dc748ce40bb7680c",
         "type": "tabs",
         "children": [
           {
-            "id": "5db45339d55f790c",
+            "id": "88cf2d5fa7c3f6b4",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "blog/strange-typescript-story/index.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/blog/how-to-make-gatsby-blog-1/3.png",
+                "file": "blog/strange-typescript-story/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -98,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/blog/how-to-make-gatsby-blog-1/3.png",
+                "file": "blog/strange-typescript-story/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,7 +125,17 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/blog/how-to-make-gatsby-blog-1/3.png"
+                "file": "blog/strange-typescript-story/index.md"
+              }
+            }
+          },
+          {
+            "id": "a12c64a8b8205fdd",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency"
               }
             }
           }
@@ -142,8 +156,27 @@
       "command-palette:명령어 팔레트 열기": false
     }
   },
-  "active": "aad431dd54964395",
+  "active": "88cf2d5fa7c3f6b4",
   "lastOpenFiles": [
+    "blog/z-index-priority/index.md",
+    "blog/strange-typescript-story/index.md",
+    "blog/service-worker/index.md",
+    "blog/mermaid/index.md",
+    "blog/map-and-functor/index.md",
+    "blog/how-to-make-gatsby-blog-2/index.md",
+    "blog/how-to-make-gatsby-blog-1/index.md",
+    "blog/action-of-svelte/index.md",
+    "blog/2021-JS-trend/index.md",
+    "blog/2021-FE-trend/index.md",
+    "blog/무제 파일.md",
+    "templates/post_template.md",
+    "blog/무제 파일 1.md",
+    "무제 파일.md",
+    "templates",
+    "blog/2021-FE-trend/2021-FE-trend.md",
+    "blog/how-to-make-gatsby-blog-1/0.png",
+    "2023-10-29.md",
+    "content/blog/2021-FE-trend/index.md",
     "public/page-data/index/page-data.json",
     "public/page-data/index",
     "public/page-data/dev-404-page/page-data.json",
@@ -153,8 +186,6 @@
     "public/page-data/sq/d/2899924383.json",
     "public/static/673ee448deb337acea3db31f178121d1",
     "public/static/93fc4c8b05b1f76af44c17920ed66596",
-    "public/static/69a2a177c2c8842605c0b6ecfc4ebbd5",
-    "public/static/aa5b0667f55b92d6666dfc56afdb7ad5",
     "public/favicon-32x32.png",
     "public/icons/icon-512x512.png",
     "public/icons/icon-384x384.png",
@@ -166,7 +197,6 @@
     "public/icons/icon-48x48.png",
     "content/blog/무제 파일.md",
     "content/blog/z-index-priority/index.md",
-    "content/blog/action-of-svelte/index.md",
-    "content/blog/2021-FE-trend/index.md"
+    "content/blog/action-of-svelte/index.md"
   ]
 }

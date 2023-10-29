@@ -1,7 +1,7 @@
 ---
-title: "2021년 Javascript 최신 동향"
-description: "2021년 Javascript 최신 동향을 정리 해두었습니다."
-date: "2021-11-02T22:12:03.284Z"
+title: 2021년 Javascript 최신 동향
+description: 2021년 Javascript 최신 동향을 정리 해두었습니다.
+date: 2021-11-02 12:00:00
 categories:
   - "2021"
 tags:

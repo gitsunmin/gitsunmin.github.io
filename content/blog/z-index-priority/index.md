@@ -1,7 +1,7 @@
 ---
-title: "z-index 우선순위"
-description: "z-index의 우선순위를 알아보았습니다."
-date: "2022-07-27T00:12:37.121Z"
+title: z-index 우선순위
+description: z-index의 우선순위를 알아보았습니다.
+date: 2022-07-27 12:00:00
 categories:
   - "2022"
 tags:

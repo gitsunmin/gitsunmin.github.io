@@ -1,7 +1,7 @@
 ---
-title: "Map, Functor 그리고 ts-belt"
-description: "함수형 프로그래밍의 map과 functor를 설명합니다."
-date: "2023-09-16T00:02:37.121Z"
+title: Map, Functor 그리고 ts-belt
+description: 함수형 프로그래밍의 map과 functor를 설명합니다.
+date: 2023-09-16 12:00:00
 categories:
   - "2023"
 tags:

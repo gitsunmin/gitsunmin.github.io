@@ -1,7 +1,7 @@
 ---
-title: "gatsby로 블로그 만들기 (1)"
-description: "Gatsby 프로젝트를 생성하고, github로 배포하는 것을 설명하였습니다."
-date: "2022-06-11T23:46:37.121Z"
+title: gatsby로 블로그 만들기 (1)
+description: Gatsby 프로젝트를 생성하고, github로 배포하는 것을 설명하였습니다.
+date: 2022-06-11 12:00:00
 categories:
   - "2022"
 tags:

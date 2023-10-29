@@ -60,25 +60,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;
 
   // Define a template for blog post
-  const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
+  const blogPostTemplate = path.resolve(`./src/templates/blog-post.tsx`);
 
   // Get all markdown blog posts sorted by date
-  const result = await graphql(
-    `{
-  allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
-    nodes {
-      id
-      fields {
-        slug
-      }
-      frontmatter {
-        categories
-        tags
+  const result = await graphql(`{
+    allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
+      nodes {
+        id
+        fields {
+          slug
+        }
+        frontmatter {
+          categories
+          tags
+        }
       }
     }
-  }
-}`,
-  );
+  }`);
   if (result.errors) {
     reporter.panicOnBuild(`There was an error loading your blog posts`, result.errors);
     return;
@@ -115,10 +113,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     posts.forEach((post, index) => {
       const previousPostId = index === 0 ? null : posts[index - 1].id;
       const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id;
+      const path = post.fields.slug;
 
       createPage({
-        path: post.fields.slug,
-        component: blogPost,
+        path,
+        component: blogPostTemplate,
         context: {
           id: post.id,
           previousPostId,

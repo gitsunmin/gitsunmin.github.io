@@ -1,7 +1,7 @@
 ---
-title: "gatsby로 블로그 만들기 (2)"
-description: "Gatsby 프로젝트에 게시물 작성하고, graphql을 사용하는 방법을 설명합니다."
-date: "2022-06-16"
+title: gatsby로 블로그 만들기 (2)
+description: Gatsby 프로젝트에 게시물 작성하고, graphql을 사용하는 방법을 설명합니다.
+date: 2022-06-16 12:00:00
 categories:
   - "2022"
 tags:
