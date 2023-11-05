@@ -4,15 +4,19 @@
     "type": "split",
     "children": [
       {
-        "id": "efbac61f15d4b6d6",
+        "id": "c552f2f025d4b38c",
         "type": "tabs",
         "children": [
           {
-            "id": "ea381cf845abbedf",
+            "id": "26c60aa19dec6924",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "blog/deview-review-2023/index.md",
+                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -98,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "blog/deview-review-2023/index.md",
+                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "blog/deview-review-2023/index.md"
+                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md"
               }
             }
           },
@@ -152,10 +156,15 @@
       "command-palette:명령어 팔레트 열기": false
     }
   },
-  "active": "aad431dd54964395",
+  "active": "26c60aa19dec6924",
   "lastOpenFiles": [
-    "blog/made-custom-date-picker/index.md",
+    "blog/flutter-life-cycle/index.md",
+    "blog/gatsby-migrating-from-v4-to-v5/index.md",
+    "blog/2021-FE-trend/index.md",
+    "blog/2021-JS-trend/index.md",
+    "blog/gatsby-migrating-from-v4-to-v5",
     "blog/deview-review-2023/index.md",
+    "blog/made-custom-date-picker/index.md",
     "blog/deview-review-2023",
     "blog/made-calculator/index.md",
     "blog/made-custom-date-picker",
@@ -163,7 +172,6 @@
     "blog/made-calculator",
     "blog/monorepo/index.md",
     "blog/about-basic-viewport",
-    "blog/flutter-life-cycle/index.md",
     "blog/monorepo",
     "blog/flutter-import-and-part/index.md",
     "blog/flutter-life-cycle",
@@ -176,8 +184,6 @@
     "blog/how-to-make-gatsby-blog-2/index.md",
     "blog/how-to-make-gatsby-blog-1/index.md",
     "blog/action-of-svelte/index.md",
-    "blog/2021-JS-trend/index.md",
-    "blog/2021-FE-trend/index.md",
     "templates/post_template.md",
     "blog/무제 파일 1.md",
     "무제 파일.md",
@@ -187,7 +193,6 @@
     "2023-10-29.md",
     "content/blog/2021-FE-trend/index.md",
     "public/page-data/index/page-data.json",
-    "public/page-data/index",
     "public/favicon-32x32.png",
     "public/icons/icon-512x512.png",
     "public/icons/icon-384x384.png",
@@ -198,7 +203,6 @@
     "public/icons/icon-72x72.png",
     "public/icons/icon-48x48.png",
     "content/blog/무제 파일.md",
-    "content/blog/z-index-priority/index.md",
-    "content/blog/action-of-svelte/index.md"
+    "content/blog/z-index-priority/index.md"
   ]
 }
