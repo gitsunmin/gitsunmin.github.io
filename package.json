@@ -48,7 +48,7 @@
   "scripts": {
     "build": "gatsby build",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "deploy": "gatsby build && gh-pages -d public -b master",
+    "deploy": "npm run clean && gatsby build && gh-pages -d public -b master",
     "push": "git push && npm run deploy",
     "start": "gatsby clean && gatsby develop",
     "serve": "gatsby serve",
