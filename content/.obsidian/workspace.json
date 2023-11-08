@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "26c60aa19dec6924",
+            "id": "461b154b8720db1a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md",
+                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 279.5
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "84189c6ec0803b24",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md",
+                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md",
+                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "blog/gatsby-migrating-from-v4-to-v5/index.md"
+                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md"
               }
             }
           },
@@ -156,53 +157,53 @@
       "command-palette:명령어 팔레트 열기": false
     }
   },
-  "active": "26c60aa19dec6924",
+  "active": "aad431dd54964395",
   "lastOpenFiles": [
-    "blog/flutter-life-cycle/index.md",
-    "blog/gatsby-migrating-from-v4-to-v5/index.md",
-    "blog/2021-FE-trend/index.md",
-    "blog/2021-JS-trend/index.md",
-    "blog/gatsby-migrating-from-v4-to-v5",
-    "blog/deview-review-2023/index.md",
-    "blog/made-custom-date-picker/index.md",
-    "blog/deview-review-2023",
-    "blog/made-calculator/index.md",
-    "blog/made-custom-date-picker",
-    "blog/about-basic-viewport/index.md",
-    "blog/made-calculator",
-    "blog/monorepo/index.md",
-    "blog/about-basic-viewport",
-    "blog/monorepo",
-    "blog/flutter-import-and-part/index.md",
-    "blog/flutter-life-cycle",
-    "blog/flutter-import-and-part",
-    "blog/strange-typescript-story/index.md",
+    "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
+    "blog/refactoring-with-the-separation-of-oncerns-rinciple",
+    "templates/post_template.md",
+    "templates",
     "blog/z-index-priority/index.md",
+    "blog/z-index-priority",
+    "blog/strange-typescript-story/index.md",
+    "blog/strange-typescript-story",
     "blog/service-worker/index.md",
+    "blog/service-worker/6.png",
+    "blog/service-worker/5.png",
+    "blog/service-worker/4.png",
+    "blog/service-worker/3.png",
+    "blog/service-worker/2.png",
+    "blog/service-worker/1.png",
+    "blog/service-worker",
+    "blog/monorepo/index.md",
+    "blog/monorepo",
     "blog/mermaid/index.md",
+    "blog/mermaid/9.png",
+    "blog/mermaid/8.png",
+    "blog/mermaid/7.png",
+    "blog/mermaid/6.png",
+    "blog/mermaid",
     "blog/map-and-functor/index.md",
+    "blog/map-and-functor",
+    "blog/made-custom-date-picker/index.md",
+    "blog/made-custom-date-picker",
+    "blog/made-calculator/index.md",
+    "blog/made-calculator",
+    "blog/flutter-life-cycle/index.md",
+    "blog/flutter-import-and-part/index.md",
+    "blog/deview-review-2023/index.md",
+    "blog/action-of-svelte/index.md",
+    "blog/about-basic-viewport/index.md",
+    "blog/2021-JS-trend/index.md",
+    "blog/2021-FE-trend/index.md",
+    "blog/separation-of-concerns/index.md",
+    "blog/gatsby-migrating-from-v4-to-v5/index.md",
     "blog/how-to-make-gatsby-blog-2/index.md",
     "blog/how-to-make-gatsby-blog-1/index.md",
-    "blog/action-of-svelte/index.md",
-    "templates/post_template.md",
     "blog/무제 파일 1.md",
     "무제 파일.md",
-    "templates",
     "blog/2021-FE-trend/2021-FE-trend.md",
-    "blog/how-to-make-gatsby-blog-1/0.png",
     "2023-10-29.md",
-    "content/blog/2021-FE-trend/index.md",
-    "public/page-data/index/page-data.json",
-    "public/favicon-32x32.png",
-    "public/icons/icon-512x512.png",
-    "public/icons/icon-384x384.png",
-    "public/icons/icon-256x256.png",
-    "public/icons/icon-192x192.png",
-    "public/icons/icon-144x144.png",
-    "public/icons/icon-96x96.png",
-    "public/icons/icon-72x72.png",
-    "public/icons/icon-48x48.png",
-    "content/blog/무제 파일.md",
-    "content/blog/z-index-priority/index.md"
+    "content/blog/2021-FE-trend/index.md"
   ]
 }
