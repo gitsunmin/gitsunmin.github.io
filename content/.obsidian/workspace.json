@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "c552f2f025d4b38c",
+        "id": "47ce6d8d5886cc34",
         "type": "tabs",
         "children": [
           {
-            "id": "461b154b8720db1a",
+            "id": "a3d2247557a0c1a1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
+                "file": "blog/web-dev's-guide-to-the-flutter/index.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,8 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "84189c6ec0803b24",
@@ -86,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
+                "file": "blog/web-dev's-guide-to-the-flutter/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
+                "file": "blog/web-dev's-guide-to-the-flutter/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md"
+                "file": "blog/web-dev's-guide-to-the-flutter/index.md"
               }
             }
           },
@@ -157,11 +156,15 @@
       "command-palette:명령어 팔레트 열기": false
     }
   },
-  "active": "aad431dd54964395",
+  "active": "a3d2247557a0c1a1",
   "lastOpenFiles": [
+    "templates/post_template.md",
+    "blog/web-dev's-guide-to-the-flutter/index.md",
+    "blog/무제 파일.md",
+    "blog/web-dev's-guide-to-the-flutter/index.md",
+    "blog/web-dev's-guide-to-the-flutter",
     "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
     "blog/refactoring-with-the-separation-of-oncerns-rinciple",
-    "templates/post_template.md",
     "templates",
     "blog/z-index-priority/index.md",
     "blog/z-index-priority",
@@ -188,7 +191,6 @@
     "blog/made-custom-date-picker/index.md",
     "blog/made-custom-date-picker",
     "blog/made-calculator/index.md",
-    "blog/made-calculator",
     "blog/flutter-life-cycle/index.md",
     "blog/flutter-import-and-part/index.md",
     "blog/deview-review-2023/index.md",
@@ -201,9 +203,6 @@
     "blog/how-to-make-gatsby-blog-2/index.md",
     "blog/how-to-make-gatsby-blog-1/index.md",
     "blog/무제 파일 1.md",
-    "무제 파일.md",
-    "blog/2021-FE-trend/2021-FE-trend.md",
-    "2023-10-29.md",
-    "content/blog/2021-FE-trend/index.md"
+    "무제 파일.md"
   ]
 }
