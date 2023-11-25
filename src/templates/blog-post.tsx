@@ -1,19 +1,18 @@
-import React from 'react';
-import { Link, graphql, PageProps } from 'gatsby';
-import kebabCase from 'lodash/kebabCase';
+import 'gatsby-remark-vscode/styles.css';
 
-import Layout from '@src/layouts';
+import { Link, PageProps, graphql } from 'gatsby';
+
 import Bio from '@src/components/app/bio';
-import Seo from '@src/components/app/seo';
-import TableOfContents from '@src/components/app/post/TableOfContents';
+import { BlogPostBySlugQuery } from '@src/types/gatsby-graphql';
+import Card from '@components/UI/Card';
 import Chip from '@components/UI/Chip';
 import ChipGroup from '@components/UI/group/ChipGroup';
 import Comment from '@components/app/comment';
-import Card from '@components/UI/Card';
-
-import { BlogPostBySlugQuery } from '@src/types/gatsby-graphql';
-
-import 'gatsby-remark-vscode/styles.css';
+import Layout from '@src/layouts';
+import React from 'react';
+import Seo from '@src/components/app/seo';
+import TableOfContents from '@src/components/app/post/TableOfContents';
+import kebabCase from 'lodash/kebabCase';
 
 const BlogPostTemplate = ({
   data,
@@ -21,6 +20,7 @@ const BlogPostTemplate = ({
 }: PageProps<BlogPostBySlugQuery, object, { key: string; previousPath: string }>) => {
   const { siteMetadata } = data.site;
   const { previous, next, markdownRemark: post } = data;
+  console.log('next:', next);
   console.log('location:', location);
   const { origin, pathname } = location;
 
@@ -61,27 +61,33 @@ const BlogPostTemplate = ({
             }}
           >
             <li>
-            <Card>
-              {previous && (
-                <Link
-                  to={previous.fields.slug}
-                  rel="prev"
-                  state={{ previousPath: location.pathname }}
-                >
-                  {previous.frontmatter.title}
-                </Link>
-              )}
-            </Card>
-            </li>
-            <li>
               <Card>
-                {next && (
-                  <Link to={next.fields.slug} rel="next" state={{ previousPath: location.pathname }} activeStyle={{ color: "red" }}
+                {previous && (
+                  <Link
+                    to={previous.fields.slug}
+                    rel="prev"
+                    state={{ previousPath: location.pathname }}
                   >
-                    {next.frontmatter.title}
+                    {previous.frontmatter.title}
                   </Link>
                 )}
               </Card>
+            </li>
+            <li>
+              {next && (
+                <Card>
+                  {
+                    <Link
+                      to={next.fields.slug}
+                      rel="next"
+                      state={{ previousPath: location.pathname }}
+                      activeStyle={{ color: 'red' }}
+                    >
+                      {next.frontmatter.title}
+                    </Link>
+                  }
+                </Card>
+              )}
             </li>
           </ul>
         </nav>
