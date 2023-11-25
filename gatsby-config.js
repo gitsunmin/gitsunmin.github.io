@@ -5,7 +5,7 @@ module.exports = {
     author: {
       name: `김선민`, // 프로필에서 보여주는 이름
       job: '프론트엔드 개발자', // 프로필에서 보여주는 직업
-      summary: `프론트엔드 개발자로 열일하고 있는 개발자입니다.`, // 프로필에서 보여주는 자기소개
+      summary: `평범한 프론트엔드 개발자의 블로그 입니다. 😅`, // 프로필에서 보여주는 자기소개
     },
     description: `김선민의 블로그입니다.`, // 블로그 설명
     siteUrl: `https://gitsunmin.github.io/`,
@@ -56,8 +56,8 @@ module.exports = {
           {
             resolve: `gatsby-remark-vscode`, // @Link https://www.gatsbyjs.com/plugins/gatsby-remark-vscode/
             options: {
-              theme: 'Dark (Visual Studio)' // @Link https://www.gatsbyjs.com/plugins/gatsby-remark-vscode/#themes
-            }
+              theme: 'Dark (Visual Studio)', // @Link https://www.gatsbyjs.com/plugins/gatsby-remark-vscode/#themes
+            },
           },
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
