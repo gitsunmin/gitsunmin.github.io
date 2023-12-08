@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "47ce6d8d5886cc34",
+        "id": "879d9a28c023acdd",
         "type": "tabs",
         "children": [
           {
-            "id": "a3d2247557a0c1a1",
+            "id": "c25d2d4cce5f33fd",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "blog/web-dev's-guide-to-the-flutter/index.md",
+                "file": "templates/post_template.md",
                 "mode": "source",
                 "source": false
               }
@@ -65,11 +65,12 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 370.5
   },
   "right": {
     "id": "84189c6ec0803b24",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "blog/web-dev's-guide-to-the-flutter/index.md",
+                "file": "templates/post_template.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "blog/web-dev's-guide-to-the-flutter/index.md",
+                "file": "templates/post_template.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "blog/web-dev's-guide-to-the-flutter/index.md"
+                "file": "templates/post_template.md"
               }
             }
           },
@@ -156,12 +157,13 @@
       "command-palette:명령어 팔레트 열기": false
     }
   },
-  "active": "a3d2247557a0c1a1",
+  "active": "c25d2d4cce5f33fd",
   "lastOpenFiles": [
+    "blog/add-flavor-to-flutter/index.md",
+    "blog/add-flavor-to-flutter",
     "templates/post_template.md",
     "blog/web-dev's-guide-to-the-flutter/index.md",
     "blog/무제 파일.md",
-    "blog/web-dev's-guide-to-the-flutter/index.md",
     "blog/web-dev's-guide-to-the-flutter",
     "blog/refactoring-with-the-separation-of-oncerns-rinciple/index.md",
     "blog/refactoring-with-the-separation-of-oncerns-rinciple",
@@ -189,7 +191,6 @@
     "blog/map-and-functor/index.md",
     "blog/map-and-functor",
     "blog/made-custom-date-picker/index.md",
-    "blog/made-custom-date-picker",
     "blog/made-calculator/index.md",
     "blog/flutter-life-cycle/index.md",
     "blog/flutter-import-and-part/index.md",
@@ -202,7 +203,6 @@
     "blog/gatsby-migrating-from-v4-to-v5/index.md",
     "blog/how-to-make-gatsby-blog-2/index.md",
     "blog/how-to-make-gatsby-blog-1/index.md",
-    "blog/무제 파일 1.md",
-    "무제 파일.md"
+    "blog/무제 파일 1.md"
   ]
 }
