@@ -1,4 +1,5 @@
 import 'gatsby-remark-vscode/styles.css';
+import '@styles/css/document.css';
 
 import { Link, PageProps, graphql } from 'gatsby';
 
@@ -20,9 +21,6 @@ const BlogPostTemplate = ({
 }: PageProps<BlogPostBySlugQuery, object, { key: string; previousPath: string }>) => {
   const { siteMetadata } = data.site;
   const { previous, next, markdownRemark: post } = data;
-  console.log('next:', next);
-  console.log('location:', location);
-  const { origin, pathname } = location;
 
   return (
     <>
@@ -36,7 +34,7 @@ const BlogPostTemplate = ({
             <h1 itemProp="headline">{post.frontmatter.title}</h1>
             <p>{post.frontmatter.date}</p>
           </header>
-          <TableOfContents contents={post.tableOfContents} />
+          {/* <TableOfContents contents={post.tableOfContents} /> */}
           <section dangerouslySetInnerHTML={{ __html: post.html }} itemProp="articleBody" />
           <footer>
             <ChipGroup>

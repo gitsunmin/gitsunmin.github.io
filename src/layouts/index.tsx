@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import type { WindowLocation } from '@reach/router';
 
-import Navigation from '@src/layouts/Navigation';
-import Header from '@src/layouts/header';
-import Wrapper from '@src/layouts/Wrapper';
-import Footer from '@src/layouts/Footer';
 import Drawer from '@src/layouts/Drawer';
-
-import { debounce } from '@src/utils';
-
-import { SiteSiteMetadata } from '@src/types/gatsby-graphql';
 import { DrawerState } from '@src/store';
+import Footer from '@src/layouts/Footer';
+import Header from '@src/layouts/header';
+import Navigation from '@src/layouts/Navigation';
+import { SiteSiteMetadata } from '@src/types/gatsby-graphql';
+import type { WindowLocation } from '@reach/router';
+import Wrapper from '@src/layouts/Wrapper';
+import { debounce } from '@src/utils';
+import { useRecoilState } from 'recoil';
 
 interface LayoutProps {
   location: WindowLocation<{ key: string; previousPath: string }>;

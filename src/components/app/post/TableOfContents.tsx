@@ -5,37 +5,17 @@ interface TableOfContentsProps {
   contents: string;
 }
 
-const StyledTOC = styled.div`
-  padding-left: 20px;
-  ul {
-    margin-left: '0px';
+const StyledTOC = styled.div``;
 
-    li {
-      color: ${({ theme }) => theme.color.primary};
-      font-weight: bold;
-      p {
-        a {
-          decoration: none;
-        }
-      }
-    }
-  }
-`;
-
-const StyledDetails = styled.details`
-  padding-left: 10px;
-  margin-bottom: 20px;
-`;
+const StyledDetails = styled.details``;
 
 const TableOfContents: React.FC<TableOfContentsProps> = ({ contents }) => (
-  <>
-    <StyledDetails>
-      <summary style={{ cursor: 'pointer' }}>
-        <strong>목차 (TOC)</strong>
-      </summary>
-      <StyledTOC dangerouslySetInnerHTML={{ __html: contents }} />
-    </StyledDetails>
-  </>
+  <StyledDetails>
+    <summary style={{ cursor: 'pointer' }}>
+      <strong>목차 (TOC)</strong>
+    </summary>
+    <StyledTOC dangerouslySetInnerHTML={{ __html: contents }} />
+  </StyledDetails>
 );
 
 export default TableOfContents;
