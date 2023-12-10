@@ -1,0 +1,10 @@
+/**
+* grvsc-code를 사용하지 않고, 단순 강조용으로 사용한 code의 style
+*/
+code:not(.grvsc-code) {
+  background-color: #1e1e1e;
+  color: #87ceeb;
+  font-weight: bold;
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.3rem;
+}

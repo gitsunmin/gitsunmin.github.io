@@ -110,17 +110,6 @@ samp {
 }
 
 /**
-  * grvsc-code를 사용하지 않고, 단순 강조용으로 사용한 code의 style
-*/
-code:not(.grvsc-code) {
-  background-color: gainsboro;
-  color: orangered;
-  font-weight: bold;
-  border-radius: 6px;
-  padding: 2px 6px;
-}
-
-/**
  * Add the correct font size in all browsers.
  */
 
