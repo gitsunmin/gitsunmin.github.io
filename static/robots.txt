@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://gitsunmin.github.io/sitemap/sitemap-index.xml
