@@ -1,0 +1,314 @@
+baseURL = "https://hugo-profile.netlify.app"
+languageCode = "ko-kr"
+title = "Gitsunmin Blog"
+theme = "hugo-profile"
+Paginate = 9
+enableRobotsTXT = true
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+page = ["HTML", "RSS"]
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[[Menus.main]]
+identifier = "blog"
+name = "Blog"
+title = "Blog posts"
+url = "/blogs"
+weight = 1
+
+# [[Menus.main]]
+# identifier = "gallery"
+# name = "Gallery"
+# title = "Blog posts"
+# url = "/gallery"
+# weight = 2
+
+[params]
+title = "Gitsunmin Blog"
+description = "Text about my cool site"
+favicon = "/images/icon.png"
+useBootstrapCDN = false
+mathjax = false
+animate = true
+
+[params.font]
+fontSize = "1rem"
+fontWeight = 400
+lineHeight = 1.5
+textAlign = "left"
+
+[params.navbar]
+align = "ms-auto"
+brandName = "Gitsunmin Blog"
+disableSearch = false
+
+[params.navbar.stickyNavBar]
+enable = true
+showOnScrollUp = true
+
+[params.navbar.menus]
+disableAbout = false
+disableExperience = false
+disableEducation = false
+disableProjects = false
+disableAchievements = false
+disableContact = false
+
+[params.hero]
+enable = true
+intro = "Hi, my name is"
+title = "Sunmin."
+subtitle = "Welcome to my blog."
+content = "안녕하세요. 웹과 앱을 개발하고 있는 평범한 프론트엔드 개발자입니다."
+image = "/images/me.png"
+
+[params.hero.bottomImage]
+enable = true
+
+[params.hero.button]
+enable = false
+name = "Resume"
+url = "#"
+download = true
+newPage = false
+
+[[params.hero.socialLinks.fontAwesomeIcons]]
+icon = "fab fa-github"
+url = "https://github.com/gitsunmin"
+
+[[params.hero.socialLinks.fontAwesomeIcons]]
+icon = "fab fa-linkedin-in"
+url = "https://www.linkedin.com/in/gitsunmin"
+
+# [[params.hero.socialLinks.customIcons]]
+# icon = "/fav.png"
+# url = "https://example.com"
+
+[params.about]
+enable = true
+title = "About Me"
+image = "/images/me.png"
+content = """
+저는 vue 2버전과 React를 사용하여 웹 프론트엔드 개발을 해왔고, 최근에는 Flutter + React를 사용하여 하이브리드 앱 개발을 하고 있습니다.
+
+지금까지 프론트엔드 개발을 하면서, 학습/경험하였던 내용들을 정리하여 블로그에 포스팅하고 있습니다.
+
+비록, 완벽한 내용들은 아니지만, 누군가에게는 도움이 되었으면 좋겠습니다.
+"""
+
+[params.about.skills]
+enable = true
+title = "제가 최근에 사용하고 있는 기술들입니다."
+items = ["HTML/CSS", "TypeScript", "React", "Flutter"]
+
+[params.experience]
+enable = false
+
+# [[params.experience.items]]
+# job = "Frontend Developer"
+# company = "마켓보로"
+# companyUrl = "https://www.marketboro.com/"
+# date = "2020.10 - 재직중"
+# content = """
+# Vue 2버전과 React를 사용하여 웹 프론트엔드 개발/운영을 하였고, Flutter + React로 하이브리드 앱을 개발하며 판교 한켠에서 일하고 있습니다.
+# """
+
+# [params.experience.items.featuredLink]
+# enable = true
+# name = "View the project"
+# url = "https://example.com"
+
+# [[params.experience.items]]
+# job = "Frontend Developer"
+# company = "(주) 코렌스"
+# companyUrl = "https://example.com"
+# date = "Sep 2020 - Dec 2021"
+# id = "22"
+# content = """
+# I am currently working as a sof
+
+# [params.experience.items.featuredLink]
+# enable = true
+# url = "https://example.com"
+
+# [params.experience.items.info]
+# enable = true
+# content = "I worked as a software developer for more than one year in Amazon."
+
+# [params.education]
+# enable = true
+# index = false
+
+# [[params.education.items]]
+# title = "Master of Business Administration"
+# date = "2013 - 2015"
+# GPA = "3.8 out of 5.0"
+# content = """
+# Extracurricular Activities
+#   - Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+#   - Tempora esse, eaque delectus nulla quo doloribus itaque expedita alias natus optio totam maxime nihil excepturi velit a animi laborum hic similique."""
+
+# [params.education.items.school]
+# name = "University of California, Berkeley"
+# url = "https://example.org"
+
+# [[params.education.items]]
+# title = "Bachelor of Science in Computer Science"
+# date = "2009 - 2013"
+# GPA = "3.9 out of 5.0"
+# content = """
+# I Publiced two papers in the ACM SIGCHI Conference on Artificial Intelligence.
+# - [Fast and Accurate Object Detection with a Single Convolutional Neural Network](https://example.com)
+# - Face mask detection using a single convolutional neural network.
+
+# Extracurricular Activities
+#   - Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+#   - Tempora esse, eaque delectus nulla quo doloribus itaque expedita alias natus optio totam maxime nihil excepturi velit a animi laborum hic similique."""
+
+# [params.education.items.school]
+# name = "Massachusetts Institute of Technology"
+# url = "https://example.org"
+
+# [params.education.items.featuredLink]
+# enable = true
+# name = "My academic record"
+# url = "https://example.com"
+
+# [[params.education.items]]
+# title = "High School"
+# GPA = "4.2 out of 5.0"
+
+# [params.education.items.school]
+# name = "Thomas Jefferson High School for Science and Technology."
+# url = "https://example.org"
+
+# [params.education.items.featuredLink]
+# enable = true
+# url = "https://example.com"
+
+# [params.achievements]
+# enable = true
+
+# [[params.achievements.items]]
+# title = "Google kickstart runner"
+# content = "I solved all problems with optimal solution."
+# url = "https://example.com"
+# image = "/images/achievment.jpg"
+
+# [[params.achievements.items]]
+# title = "Facebook Hackathon Winner"
+# content = "Developed a product using Artificial Intelligence."
+# image = "/images/achievment.jpg"
+
+# [[params.achievements.items]]
+# title = "Gitsunmin Blog"
+# content = "Developed a theme and getting 1K+ downloads per month."
+# url = "https://github.com/gurusabarish/hugo-profile"
+# image = "/images/achievment.jpg"
+
+# [[params.achievements.items]]
+# title = "Microsoft Imagine Runner"
+# content = "We are developed a product which can help others."
+
+# [[params.achievements.items]]
+# title = "Google Summer of Code"
+# content = "Contributed to a open source project."
+# url = "https://example.com"
+
+# [params.projects]
+# enable = true
+
+# [[params.projects.items]]
+# title = "Hugo Profile"
+# content = "A highly customizable and mobile first Hugo template for personal portfolio and blog."
+# image = "/images/projects/profile.png"
+# badges = ["Hugo", "Bootstrap", "Javascript"]
+
+# [params.projects.items.featured]
+# name = "Demo"
+# link = "https://hugo-profile.netlify.app"
+
+# [[params.projects.items.links]]
+# icon = "fa fa-envelope"
+# url = "mailto:?subject=Hugo%20Profile%20Template&body=Check%20it%20out:%20https%3a%2f%2fhugo-profile.netlify.app%2fblog%2fmarkdown-syntax%2f"
+
+# [[params.projects.items.links]]
+# icon = "fab fa-github"
+# url = "https://github.com/gurusabarish/hugo-profile"
+
+# [[params.projects.items.links]]
+# icon = "fab fa-twitter"
+# url = "https://twitter.com/intent/tweet?text=Check+it+out:&url=https%3A%2F%2Fgithub.com%2Fgurusabarish%2Fhugo-profile"
+
+# [[params.projects.items]]
+# title = "Image Converter"
+# content = "A web app to convert image to pdf, png to jpg, png to jpg and png to webp without database using django."
+# image = "/images/projects/converter.jpg"
+# badges = ["Django", "Bootstrap"]
+
+# [params.projects.items.featured]
+# name = "Demo"
+# link = "https://django-converter.herokuapp.com"
+
+# [[params.projects.items.links]]
+# icon = "fab fa-github"
+# url = "https://github.com/gurusabarish/converter"
+
+# [[params.projects.items]]
+# title = "Hugo Profile V2"
+# content = "A clean and simple Hugo template for personal portfolio and blog."
+# image = "/images/projects/profile2.jpg"
+# badges = ["Hugo", "Bootstrap", "Javascript"]
+
+# [params.projects.items.featured]
+# name = "Demo V2"
+# link = "https://hugo-profile-2.netlify.app"
+
+# [[params.projects.items.links]]
+# icon = "fab fa-github"
+# url = "https://github.com/gurusabarish/HugoProfileV2"
+
+# [params.contact]
+# enable = true
+# content = "My inbox is always open. Whether you have a question or just want to say hi, I’ll try my best to get back to you!"
+# email = "gurusabarisha@gmail.com"
+# btnName = "Mail me"
+
+[params.footer.recentPosts]
+path = "blogs"
+count = 3
+title = "Recent Posts"
+enable = true
+disableFeaturedImage = false
+
+[params.footer.socialNetworks]
+github = "https://github.com/gitsunmin"
+linkedin = "https://www.linkedin.com/in/gitsunmin"
+# twitter = "https://twitter.com"
+# instagram = "https://instagram.com"
+# facebook = "https://facebook.com"
+
+[params.listPages]
+disableFeaturedImage = false
+
+[params.singlePages.readTime]
+enable = true
+content = "min read"
+
+[params.singlePages.scrollprogress]
+enable = true
+
+[params.terms]
+read = "Read"
+toc = "목차"
+copyright = "All rights reserved"
+pageNotFound = "Page not found"
+emailText = "Check out this site"
+
+[params.datesFormat]
+article = "Jan 2, 2006"
+articleList = "Jan 2, 2006"
+articleRecent = "Jan 2, 2006"
