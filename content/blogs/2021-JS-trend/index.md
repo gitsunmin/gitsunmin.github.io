@@ -2,8 +2,9 @@
 title: 2021년 Javascript 최신 동향
 description: 2021년 Javascript 최신 동향을 정리 해두었습니다.
 date: 2021-11-02 12:00:00
+author: 'Gitsunmin'
 categories:
-  - "2021"
+  - '2021'
 tags:
   - Javascript
   - Trend
@@ -42,7 +43,7 @@ STR.replaceAll('안녕하세요', 1); // '1. 감사합니다. 1. 고맙습니다
 
 ## Promise.any()
 
-`Promise.any()`는 `Array.prototype.some()`와 비슷한 기능으로 이해를 했습니다. 하나라도 true인 경우에는 true, 전부 false인 경우에는 false를 리턴 하듯이, `Promise.any()`는 Array에 담긴 Promise들을 차례대로 실행하며 처음으로 성공한 Promise의 결과값을 리턴합니다.  단, 모두 실패한 경우에는 Error가 발생합니다.
+`Promise.any()`는 `Array.prototype.some()`와 비슷한 기능으로 이해를 했습니다. 하나라도 true인 경우에는 true, 전부 false인 경우에는 false를 리턴 하듯이, `Promise.any()`는 Array에 담긴 Promise들을 차례대로 실행하며 처음으로 성공한 Promise의 결과값을 리턴합니다. 단, 모두 실패한 경우에는 Error가 발생합니다.
 
 ```javascript
 const successPromises = [
@@ -52,8 +53,8 @@ const successPromises = [
 ];
 
 Promise.any(successPromises)
-.then(value => console.log(value)) // V
-.catch(error => console.error(error));
+  .then((value) => console.log(value)) // V
+  .catch((error) => console.error(error));
 // 인덱스 3
 
 const allFailurePromises = [
@@ -63,8 +64,8 @@ const allFailurePromises = [
 ];
 
 Promise.any(allFailurePromises)
-.then(value => console.log(value))
-.catch(error => console.error(error)); // V
+  .then((value) => console.log(value))
+  .catch((error) => console.error(error)); // V
 // AggregateError: All promises were rejected
 ```
 
@@ -87,7 +88,7 @@ const printName = () => {
 
 userInfo = null; // 참조 해제
 
-setInterval(printName, 3000); // 반복적으로 log를 찍는다. 
+setInterval(printName, 3000); // 반복적으로 log를 찍는다.
 ```
 
 ```javascript
@@ -118,22 +119,22 @@ obj.prop ??= foo();
 
 ## Numeric separators (숫자 구분 기호)
 
-금액 관련 숫자에 3자리마다 콤마를 찍듯이, 구분자 _(언더바)를 사용하여 사람이 읽기 쉽도록 작성하여도, javascript에서는 구분자를 사용하지 않았을 때랑 같은 숫자로 취급을 하는 기능이다.
+금액 관련 숫자에 3자리마다 콤마를 찍듯이, 구분자 \_(언더바)를 사용하여 사람이 읽기 쉽도록 작성하여도, javascript에서는 구분자를 사용하지 않았을 때랑 같은 숫자로 취급을 하는 기능이다.
 
 ```javascript
 // before
-10000000000 // 10000000000 -> 100억
+10000000000; // 10000000000 -> 100억
 
 // after
-10_000_000_000 // 10000000000 -> 100억
-1_00_0000_00 // 100000000 -> 구분자가 꼭 3자리마다 있을 필요는 없다.
+10_000_000_000; // 10000000000 -> 100억
+1_00_0000_00; // 100000000 -> 구분자가 꼭 3자리마다 있을 필요는 없다.
 
 console.log(10_000_000_000); // 10000000000
 ```
 
 ## 앞으로 Javascript는 어떤 기능을 추가할 것인가?
 
-[https://github.com/tc39/proposals/blob/master/finished-proposals.md](https://github.com/tc39/proposals/blob/master/finished-proposals.md) 
+[https://github.com/tc39/proposals/blob/master/finished-proposals.md](https://github.com/tc39/proposals/blob/master/finished-proposals.md)
 
 ## 참조
 

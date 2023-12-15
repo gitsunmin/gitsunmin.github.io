@@ -2,11 +2,13 @@
 title: 계산기 만들기
 description: 중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.
 date: 2023-03-23 12:00:00
+author: 'Gitsunmin'
 categories:
-  - "2023"
+  - '2023'
 tags:
   - Frontend
 ---
+
 # 서론
 
 일반적으로 사람은 수학 계산을 할 때, [중위 표기법](https://ko.wikipedia.org/wiki/%EC%A4%91%EC%9C%84_%ED%91%9C%EA%B8%B0%EB%B2%95)을 사용하여 계산을 하고, 쉽게 이해할 수 있습니다. 하지만, 중위 표기법을 컴퓨터로 계산하기는 쉽지 않습니다. “우선순위”라는 것이 존재하기 때문입니다. 그래서 계산기와 같은 컴퓨터로 계산을 할 때에는 [후위 표기법](https://ko.wikipedia.org/wiki/%EC%97%AD%ED%8F%B4%EB%9E%80%EB%93%9C_%ED%91%9C%EA%B8%B0%EB%B2%95)이라는 것을 사용하여 계산을 합니다. 이 후위 표기법은 괄호나 곱하기 더하기 등의 우선순위를 따로 생각하지 않고, 순서대로 계산만 하면 되는, 컴퓨터로 계산을 할 때에는 아주 간편한 표기법입니다.
@@ -23,13 +25,13 @@ Sunting yard algorithm은 중위표기법으로 작성된 input의 내용을 Ope
 
 Sunting yard algorithm을 알기 위해서는 우선, 산수에서 사용하는 우선순위를 알고 있어야합니다.
 
-|연산자|우선순위|
-|---|---|
-|*|2|
-|/|2|
-|%|2|
-|+|1|
-|-|1|
+| 연산자 | 우선순위 |
+| ------ | -------- |
+| \*     | 2        |
+| /      | 2        |
+| %      | 2        |
+| +      | 1        |
+| -      | 1        |
 
 그리고 아래의 그림을 설명 하겠습니다
 
@@ -39,8 +41,8 @@ Sunting yard algorithm을 알기 위해서는 우선, 산수에서 사용하는 
 - b) 는 연산자가 아닌 token을 ouput으로 보냅니다.
 - c) 는 + 연산자를 Operator Stack에 넣습니다.
 - d) 는 연산자가 아닌 B를 ouput에 넣습니다.
-- e) 는 다시 * 연산자를 Operator Stack에 넣습니다.
-- f), g) 는 - 연산자를 Operator Stack에 넣으려고 하지만, - 연산자 보다 우선순위가 높은 연산자가 Stack의 가장 위에 있습니다. Operator Stack에는 들어온 순서가 있고, 새로 들어오는 연산자가 이미 Operator Stack에 TOP에 있는 연산자보다 작거나 같은 경우에는, Stack의 값을 output으로 비우고나서, 넣을 수 있습니다. 그렇기 때문에, *, + 연산자를 먼저 output으로 보내고, - 연산자를 Operator Stack에 넣습니다.
+- e) 는 다시 \* 연산자를 Operator Stack에 넣습니다.
+- f), g) 는 - 연산자를 Operator Stack에 넣으려고 하지만, - 연산자 보다 우선순위가 높은 연산자가 Stack의 가장 위에 있습니다. Operator Stack에는 들어온 순서가 있고, 새로 들어오는 연산자가 이미 Operator Stack에 TOP에 있는 연산자보다 작거나 같은 경우에는, Stack의 값을 output으로 비우고나서, 넣을 수 있습니다. 그렇기 때문에, \*, + 연산자를 먼저 output으로 보내고, - 연산자를 Operator Stack에 넣습니다.
 - h) 에서는 다시 D가 연산자가 아니기 때문에, output으로 들어갑니다.
 - i)에서는 이제 남아있는 모든 Operator Stack의 연산자를 모두 output으로 옮깁니다.
 - j) input과 Operator Stack이 모두 비었다면, 변환이 마무리 된 것입니다.

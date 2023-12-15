@@ -2,14 +2,16 @@
 title: 기묘한 Typescript 이야기
 description: Typescript의 쉽지않은 부분을 알아보았습니다.
 date: 2022-08-10 12:00:00
+author: 'Gitsunmin'
 categories:
-  - "2022"
+  - '2022'
 tags:
   - Typescript
 ---
+
 ## **배경**
 
-Typescript는 자칫 잘 못 보면 굉장히 쉬워보입니다.  하지만, Javascript만 사용한 사람에게 Generics나 Unions 등 생소한 용어도 많고, 기묘한 순간에 기묘한 Type을 선언해야 할 일들이 많이 생깁니다. 오늘은 기본적인 Typescript의 문법 보다는 좀 더 Typescript의 기묘한 부분을 공부 해 보려고 합니다.
+Typescript는 자칫 잘 못 보면 굉장히 쉬워보입니다. 하지만, Javascript만 사용한 사람에게 Generics나 Unions 등 생소한 용어도 많고, 기묘한 순간에 기묘한 Type을 선언해야 할 일들이 많이 생깁니다. 오늘은 기본적인 Typescript의 문법 보다는 좀 더 Typescript의 기묘한 부분을 공부 해 보려고 합니다.
 
 ## **Type으로 Type 만들기**
 
@@ -53,7 +55,7 @@ function example<T>(arg: T): T {
 example<string>('Hello bizarre Typescript');
 ```
 
-이렇게 사용하는 것을 보면, `T`자리에 `string`을 넣어서 사용하는 것을 알 수 있습니다. 즉, Generic은 
+이렇게 사용하는 것을 보면, `T`자리에 `string`을 넣어서 사용하는 것을 알 수 있습니다. 즉, Generic은
 
 함수를 사용할 때 **Type을 파라미터로 받아서 원하는대로 새롭게 정의할 수 있습니다.** Generic을 사용하면 위에서 문제가 되었던, 모든 Type을 허용하지만, 파라미터와 return Type이 같은 Type이 되도록 정의할 수 있습니다. 👍
 
@@ -81,7 +83,7 @@ function example3<T = string>(arg: T):  T{
 // Case 3 - Class
 class Example4<T> {
 	private _name: string = 'gitsunmin';
-	
+
 	getName(arg: T): string {
 		return this._name;
 	},
@@ -110,7 +112,7 @@ type A = keyof ArrayExample;
 type MapExample = { [k: string]: boolean };
 type M = keyof MapExample;
 ```
-    
+
 ### **typeof & ReturnType**
 
 typeof는 Javascript에도 이미 있는 문법이지만, Typescript에서는 javascript의 기본 Type이 아닌 Typescript의 Type을 알아낼 수 있습니다. 그리고 함수가 Return하는 Type을 정의하는 ReturnType과 함께 함수의 Type을 정의하는 것에 기묘하게 사용할 수 있습니다.
