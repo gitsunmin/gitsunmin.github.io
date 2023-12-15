@@ -2,11 +2,14 @@
 title: Flutter APP & Widget Life Cycle
 description: Flutter의 라이프사이클을 설명하였습니다.
 date: 2023-08-17 12:00:00
+author: 'Gitsunmin'
+image: /images/blogs/flutter_thumbnail.jpeg
 categories:
-  - "2023"
+  - '2023'
 tags:
   - Flutter
 ---
+
 # 서론
 
 Flutter는 세련된 UI와 뛰어난 성능을 제공하는 모바일 앱 개발 프레임워크입니다. APP과 Widget의 라이프사이클은 Flutter에서 앱의 행동과 성능을 이해하는 핵심요소입니다.

@@ -2,8 +2,9 @@
 title: Service worker
 description: Service worker에 대해서 간단하게 설명해 보았습니다.
 date: 2022-01-20 12:00:00
+author: 'Gitsunmin'
 categories:
-  - "2022"
+  - '2022'
 tags:
   - Frontend
   - Cache
@@ -54,22 +55,22 @@ _그림 1 from [diagrams.net](http://diagrams.net/)_
 ```javascript
 [index.js];
 // navigator: 사용자의 상태를 알려주는 인터패이스
-if ("serviceWorker" in navigator) {
+if ('serviceWorker' in navigator) {
   // Register a service worker hosted at the root of the
 
-  window.addEventListener("load", () => {
+  window.addEventListener('load', () => {
     // site using the default scope.
-    navigator.serviceWorker.register("/service-worker.js").then(
+    navigator.serviceWorker.register('/service-worker.js').then(
       function (registration) {
-        console.log("Service worker registration succeeded:", registration);
+        console.log('Service worker registration succeeded:', registration);
       },
       /*catch*/ function (error) {
-        console.log("Service worker registration failed:", error);
+        console.log('Service worker registration failed:', error);
       }
     );
   });
 } else {
-  console.log("Service workers are not supported.");
+  console.log('Service workers are not supported.');
 }
 ```
 
@@ -80,12 +81,12 @@ console.log(`HI👋, I'm service-worker`);
 
 실제 실행 화면입니다. (성공적으로 등록이 되었습니다. 하이하이)
 
-![그림2](./2.png)    
+![그림2](./2.png)  
 _그림2_
 
 개발자 도구의 Application 탭에서도 확인을 할 수 있습니다.
 
-![그림3](./3.png)    
+![그림3](./3.png)  
 _그림3_
 
 ### 캐시 사용하기
@@ -120,7 +121,7 @@ _그림3_
 
 캐시를 사용하지 않고 이미지를 불러온 경우에는 개발자 도구의 network 탭에서
 
-![그림4](./4.png)    
+![그림4](./4.png)  
 _그림4_
 
 Size 부분에 통신한 용량을 표시 해 주고 있습니다.
@@ -138,14 +139,14 @@ const CACHE_VERSION = 1;
 const Cache_NAME = `service-worker-v${CACHE_VERSION}`;
 
 // * Cache 되기를 원하는 자원의 경로
-const RESOURCES = ["/images/manja-vitolic-gKXKBY-C-Dk-unsplash.jpg"];
+const RESOURCES = ['/images/manja-vitolic-gKXKBY-C-Dk-unsplash.jpg'];
 
 /**
  * * install: 해당페이지를 처음 방문할 때 install 이벤트 발생, 페이지 자원을 캐시하는 부분
  * * - application 탭에서 cache Storage에 등록 하는 콜백
  */
-self.addEventListener("install", (event) => {
-  console.log("installing..");
+self.addEventListener('install', (event) => {
+  console.log('installing..');
   event.waitUntil(
     caches.open(Cache_NAME).then((cache) => cache.addAll(RESOURCES))
   );
@@ -154,8 +155,8 @@ self.addEventListener("install", (event) => {
 /**
  * * activate: 설치된 Service Worker가 제어 권한을 가지고 온 상태, push 및 sync와 같은 함수가 처리할 준비가 됨.
  */
-self.addEventListener("activate", (e) => {
-  console.log("activating...");
+self.addEventListener('activate', (e) => {
+  console.log('activating...');
   e.waitUntil(
     caches.keys().then((keyList) => {
       return Promise.all(
@@ -174,11 +175,11 @@ self.addEventListener("activate", (e) => {
  * * fetch: Service Worker를 설치 완료 후 캐시된 응답을 반환받음.
  * * - 네트워크 데이터가 있을 경우에 cache를 update하도록 하였음.
  */
-self.addEventListener("fetch", (event) => {
-  console.log("fetching...", event.request);
+self.addEventListener('fetch', (event) => {
+  console.log('fetching...', event.request);
   event.respondWith(
     caches.open(Cache_NAME).then((cache) => {
-      if (event.request.clone().method == "GET") {
+      if (event.request.clone().method == 'GET') {
         return cache.match(event.request).then((response) => {
           const fetchPromise = fetch(event.request).then((networkResponse) => {
             cache.put(event.request, networkResponse.clone());
@@ -194,15 +195,16 @@ self.addEventListener("fetch", (event) => {
 
 캐시를 적용한 후에는 Size 열에 ServiceWorker라고 표시가 되고 있습니다. [성공]
 
-![그림5](./5.png)    
+![그림5](./5.png)  
 _그림5_
 
 Application 탭에서 Cache 부분을 보면 Storage도 확인 할 수 있습니다.
 
-![그림6](./6.png)    
+![그림6](./6.png)  
 _그림6_
 
 이상으로 간단하게 환경을 만들어서 테스트 해 보았습니다.
 
 ## 결론
+
 service-worker는 [workBox](https://developers.google.com/web/tools/workbox)라는 툴을 이용하여 더 편하게 사용을 하고 있다고 하여 간단하게만 다루어 보았습니다. 실제 사용을 위해서 workBox를 사용해 보면 좋을 것 같습니다.
