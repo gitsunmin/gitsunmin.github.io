@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "deploy": "hugo && bunx gh-pages -d public -b master"
+  }
+}
