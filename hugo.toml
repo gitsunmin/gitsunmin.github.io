@@ -1,7 +1,7 @@
 baseURL = "https://hugo-profile.netlify.app"
 languageCode = "ko-kr"
 title = "Gitsunmin Blog"
-theme = "hugo-profile"
+theme = "gitsunmin-profile"
 Paginate = 9
 enableRobotsTXT = true
 
