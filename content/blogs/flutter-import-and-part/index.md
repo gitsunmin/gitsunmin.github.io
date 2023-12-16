@@ -1,6 +1,6 @@
 ---
 title: Flutter Import & Part
-description: Flutter의 import와 part keyword에 대해서 알아보았습니다.
+summary: Flutter의 import와 part keyword에 대해서 알아보았습니다.
 date: 2023-08-21 11:20:15
 author: 'Gitsunmin'
 image: /images/blogs/flutter_thumbnail.jpeg

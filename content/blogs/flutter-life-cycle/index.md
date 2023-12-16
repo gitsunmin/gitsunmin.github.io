@@ -1,6 +1,6 @@
 ---
 title: Flutter APP & Widget Life Cycle
-description: Flutter의 라이프사이클을 설명하였습니다.
+summary: Flutter의 라이프사이클을 설명하였습니다.
 date: 2023-08-17 12:00:00
 author: 'Gitsunmin'
 image: /images/blogs/flutter_thumbnail.jpeg

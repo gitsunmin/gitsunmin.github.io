@@ -1,6 +1,6 @@
 ---
 title: Custom Date Picker
-description: date picker를 만들면서 분석, 고민한 내용을 공유합니다.
+summary: date picker를 만들면서 분석, 고민한 내용을 공유합니다.
 date: 2023-03-14 12:00:00
 image: /images/blogs/default_thumbnail.jpeg
 author: 'Gitsunmin'

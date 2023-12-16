@@ -1,6 +1,6 @@
 ---
 title: Deview 2023을 다녀온 후
-description: deview 2023을 다녀온 후에 작성하는 요약 및 리뷰
+summary: deview 2023을 다녀온 후에 작성하는 요약 및 리뷰
 date: 2023-03-04 12:00:00
 image: https://deview.kr/2023/img/og-edit.jpg
 author: 'Gitsunmin'
@@ -277,7 +277,7 @@ type PwordError implements BaseError {
 ```tsx
 const GraphQLYearMonth = new GraphQLScalarType({
 	name: 'YearMonth',
-	description: '년월을 `YYYY-MM` 포맷의 스트링으로 받고 유효한 날짜인지 검증',
+	summary:'년월을 `YYYY-MM` 포맷의 스트링으로 받고 유효한 날짜인지 검증',
 	seialize,
 	parseValuse
 });
