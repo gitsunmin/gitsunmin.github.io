@@ -3,6 +3,7 @@ title: 기묘한 Typescript 이야기
 description: Typescript의 쉽지않은 부분을 알아보았습니다.
 date: 2022-08-10 12:00:00
 author: 'Gitsunmin'
+image: /images/blogs/typescript_thumbnail.jpeg
 categories:
   - '2022'
 tags:

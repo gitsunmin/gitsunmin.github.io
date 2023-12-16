@@ -2,6 +2,7 @@
 title: Mermaid
 description: Mermaid의 기본적인 사용법을 알아보았습니다.
 date: 2022-07-31 12:00:00
+image: /images/blogs/default_thumbnail.jpeg
 author: 'Gitsunmin'
 categories:
   - '2022'
