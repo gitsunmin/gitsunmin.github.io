@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Frontend on Gitsunmin Blog</title>
+    <link>https://hugo-profile.netlify.app/tags/frontend/</link>
+    <description>Recent content in Frontend on Gitsunmin Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Thu, 23 Mar 2023 12:00:00 +0000</lastBuildDate>
+    <atom:link href="https://hugo-profile.netlify.app/tags/frontend/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>계산기 만들기</title>
+      <link>https://hugo-profile.netlify.app/blogs/made-calculator/</link>
+      <pubDate>Thu, 23 Mar 2023 12:00:00 +0000</pubDate>
+      <guid>https://hugo-profile.netlify.app/blogs/made-calculator/</guid>
+      <description>중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.</description>
+    </item>
+    <item>
+      <title>Custom Date Picker</title>
+      <link>https://hugo-profile.netlify.app/blogs/made-custom-date-picker/</link>
+      <pubDate>Tue, 14 Mar 2023 12:00:00 +0000</pubDate>
+      <guid>https://hugo-profile.netlify.app/blogs/made-custom-date-picker/</guid>
+      <description>date picker를 만들면서 분석, 고민한 내용을 공유합니다.</description>
+    </item>
+    <item>
+      <title>Deview 2023을 다녀온 후</title>
+      <link>https://hugo-profile.netlify.app/blogs/deview-review-2023/</link>
+      <pubDate>Sat, 04 Mar 2023 12:00:00 +0000</pubDate>
+      <guid>https://hugo-profile.netlify.app/blogs/deview-review-2023/</guid>
+      <description>deview 2023을 다녀온 후에 작성하는 요약 및 리뷰</description>
+    </item>
+    <item>
+      <title>Service worker</title>
+      <link>https://hugo-profile.netlify.app/blogs/service-worker/</link>
+      <pubDate>Thu, 20 Jan 2022 12:00:00 +0000</pubDate>
+      <guid>https://hugo-profile.netlify.app/blogs/service-worker/</guid>
+      <description>Service worker에 대해서 간단하게 설명해 보았습니다.</description>
+    </item>
+    <item>
+      <title>2021년 FE 동향, 한방에 끝내기</title>
+      <link>https://hugo-profile.netlify.app/blogs/2021-fe-trend/</link>
+      <pubDate>Thu, 25 Nov 2021 12:00:00 +0000</pubDate>
+      <guid>https://hugo-profile.netlify.app/blogs/2021-fe-trend/</guid>
+      <description>영상을 보고 내용을 정리 하였습니다.</description>
+    </item>
+    <item>
+      <title>Svelte의 동작</title>
+      <link>https://hugo-profile.netlify.app/blogs/action-of-svelte/</link>
+      <pubDate>Tue, 28 Sep 2021 12:00:00 +0000</pubDate>
+      <guid>https://hugo-profile.netlify.app/blogs/action-of-svelte/</guid>
+      <description>Svelte의 동작을 자세하게 살펴보았습니다.</description>
+    </item>
+  </channel>
+</rss>

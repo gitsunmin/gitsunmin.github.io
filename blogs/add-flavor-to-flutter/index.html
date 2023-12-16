@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width">
+<link rel="icon" href=/images/favicon.png type="image/gif">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Alata&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alata&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      media="print" onload="this.media='all'" />
+<noscript>
+  <link
+          href="https://fonts.googleapis.com/css2?family=Alata&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+</noscript>
+
+
+<link rel="stylesheet" href="/css/font.css" media="all">
+
+
+
+<meta property="og:title" content="Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)" />
+<meta property="og:description" content="Flutter에서 하나의 코드로 환경별 분리하여 다르게 빌드하는 방법인 Flavor을 적용하는 방법을 소개합니다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://hugo-profile.netlify.app/blogs/add-flavor-to-flutter/" /><meta property="article:section" content="blogs" />
+<meta property="article:published_time" content="2023-12-08T01:31:29+00:00" />
+<meta property="article:modified_time" content="2023-12-08T01:31:29+00:00" /><meta property="og:site_name" content="Gitsunmin Blog" />
+
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)"/>
+<meta name="twitter:description" content="Flutter에서 하나의 코드로 환경별 분리하여 다르게 빌드하는 방법인 Flavor을 적용하는 방법을 소개합니다."/>
+
+
+<link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
+<link rel="stylesheet" href="/css/footer.css" media="all">
+
+
+<link rel="stylesheet" href="/css/theme.css" media="all">
+
+
+
+
+<style>
+    :root {
+        --text-color: #343a40;
+        --text-secondary-color: #6c757d;
+        --background-color: #eaedf0;
+        --secondary-background-color: #64ffda1a;
+        --primary-color: #007bff;
+        --secondary-color: #f8f9fa;
+
+         
+        --text-color-dark: #e4e6eb;
+        --text-secondary-color-dark: #b0b3b8;
+        --background-color-dark: #18191a;
+        --secondary-background-color-dark: #212529;
+        --primary-color-dark: #ffffff;
+        --secondary-color-dark: #212529;
+    }
+    body {
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    html {
+        background-color: var(--background-color) !important;
+    }
+
+    body::-webkit-scrollbar {
+        width: .5em;
+        height: .5em;
+        background-color: var(--background-color);
+    }
+    
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px var(--background-color);
+        border-radius: 1rem;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border-radius: 1rem;
+        background-color: var(--secondary-color);
+        outline: 1px solid var(--background-color);
+    }
+
+    #search-content::-webkit-scrollbar {
+        width: .5em;
+        height: .1em;
+        background-color: var(--background-color);
+    }
+</style>
+
+<meta name="description" content="">
+<link rel="stylesheet" href="/css/single.css">
+
+
+<script defer src="/fontawesome-6/all-6.4.2.js"></script>
+
+  <title>
+Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor) | Gitsunmin Blog
+
+  </title>
+</head>
+
+<body class="light">
+  
+  
+<script>
+    let localStorageValue = localStorage.getItem("pref-theme");
+    let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    switch (localStorageValue) {
+        case "dark":
+            document.body.classList.add('dark');
+            break;
+        case "light":
+            document.body.classList.remove('dark');
+            break;
+        default:
+            if (mediaQuery) {
+                document.body.classList.add('dark');
+            }
+            break;
+    }
+</script>
+
+
+
+
+<script>
+    var prevScrollPos = window.pageYOffset;
+    window.addEventListener("scroll", function showHeaderOnScroll() {
+        let profileHeaderElem = document.getElementById("profileHeader");
+        let currentScrollPos = window.pageYOffset;
+        let resetHeaderStyle = false;
+        let showNavBarOnScrollUp =  true ;
+        let showNavBar = showNavBarOnScrollUp ? prevScrollPos > currentScrollPos : currentScrollPos > 0;
+        if (showNavBar) {
+            profileHeaderElem.classList.add("showHeaderOnTop");
+        } else {
+            resetHeaderStyle = true;
+        }
+        if(currentScrollPos === 0) {
+            resetHeaderStyle = true;
+        }
+        if(resetHeaderStyle) {
+            profileHeaderElem.classList.remove("showHeaderOnTop");
+        }
+        prevScrollPos = currentScrollPos;        
+    });
+</script>
+
+
+
+<header id="profileHeader">
+    <nav class="pt-3 navbar navbar-expand-lg animate">
+        <div class="container-fluid mx-xs-2 mx-sm-5 mx-md-5 mx-lg-5">
+            
+            <a class="navbar-brand primary-font text-wrap" href="/">
+                
+                <img src="/images/favicon.png" width="30" height="30"
+                    class="d-inline-block align-top">
+                Gitsunmin Blog
+                
+            </a>
+
+            
+                <div>
+                    <input id="search" autocomplete="off" class="form-control mr-sm-2 d-none d-md-block" placeholder='Ctrl &#43; k to Search...'
+                        aria-label="Search" oninput="searchOnChange(event)">
+                </div>
+            
+
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <svg aria-hidden="true" height="24" viewBox="0 0 16 16" version="1.1" width="24" data-view-component="true">
+                    <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z"></path>
+                </svg>
+            </button>
+
+            
+            <div class="collapse navbar-collapse text-wrap primary-font" id="navbarContent">
+                <ul class="navbar-nav ms-auto text-center">
+                    
+                        <li class="nav-item navbar-text d-block d-md-none">
+                            <div class="nav-link">
+                                <input id="search" autocomplete="off" class="form-control mr-sm-2" placeholder='Ctrl &#43; k to Search...' aria-label="Search" oninput="searchOnChange(event)">
+                            </div>
+                        </li>
+                    
+
+                    
+                    <li class="nav-item navbar-text">
+                        <a class="nav-link" href="/#about" aria-label="about">
+                            About Me
+                        </a>
+                    </li>
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li class="nav-item navbar-text">
+                        <a class="nav-link" href="/blogs" title="Blog posts">
+                            
+                            Blog
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    <li class="nav-item navbar-text">
+                        
+                        <div class="text-center">
+                            <button id="theme-toggle">
+                                <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                </svg>
+                                <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>
+                    
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>
+<div id="content">
+<section id="single">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-12 col-lg-9">
+        <div class="pr-lg-4">
+          <div class="title mb-5">
+            <h1 class="text-center mb-4">Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)</h1>
+            <div class="text-center">
+              Gitsunmin 
+              <small>|</small>
+              2023.12.08
+
+              
+              <span id="readingTime">
+                min read
+              </span>
+              
+            </div>
+          </div>
+          
+          <div class="featured-image">
+            <img class="img-fluid mx-auto d-block" src="/images/blogs/flutter_thumbnail.jpeg" alt="Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)">
+          </div>
+          
+          <article class="page-content  p-2">
+          <h2 id="서론">서론</h2>
+<p>Flutter 개발을 하면서 같은 코드로 여러 환경을 지원하기 위한 방법으로 Flavor를 사용할 수 있습니다. 이 글에서 Flavor를 사용하는 방법에 대해서 알아보겠습니다.</p>
+<h2 id="본론">본론</h2>
+<h3 id="flavor를-사용하는-이유">Flavor를 사용하는 이유</h3>
+<p>Flutter에서는 iOS와 Android를 동시에 개발할 수 있습니다. 그리고 iOS와 Android에서는 각각 다른 환경을 지원해야 합니다. 예를 들어, iOS에서는 개발, 스테이지, 프로덕션 환경을 지원해야 합니다. 그리고 Android에서는 개발, 스테이지, 프로덕션, QA 환경을 지원해야 합니다. 이렇게 여러 환경을 지원하기 위해서는 각 환경별로 다른 설정을 해야 합니다. 이때, Flavor를 사용하면 각 환경별로 다른 설정을 할 수 있습니다.</p>
+<p>사용 툴</p>
+<ul>
+<li>macOS</li>
+<li>flutter: 3.16.1</li>
+<li>vscode: 1.84.2
+<ul>
+<li>flutter extension: 3.76.0</li>
+</ul>
+</li>
+</ul>
+<h3 id="flavor를-사용하는-방법">Flavor를 사용하는 방법</h3>
+<p>저는 예시로서 TEST와 PRODUCTION 환경을 지원하는 Flavor를 만들어 보겠습니다.</p>
+<h4 id="ios에서-flavor-적용하기">iOS에서 Flavor 적용하기</h4>
+<p>iOS에 Flavor을 적용하기 위해서는 Xcode를 사용해서 설정하는 것이 가장 쉽기 때문에 Xcode를 사용해서 설정하겠습니다.</p>
+<p>아래의 Flutter 구조에서 ios 폴더를 우클릭하여 <code>opne in Xcode</code>를 클릭합니다.</p>
+<pre tabindex="0"><code>.
+├── README.md
+├── android
+├── ios
+├── lib
+├── pubspec.lock
+├── pubspec.yaml
+└── test
+</code></pre><p>Xcode에서의 동작들은 설명하겠습니다.</p>
+<h5 id="configurations-추가하기">Configurations 추가하기</h5>
+<ol>
+<li>Xcode가 열리면, 왼쪽의 네비게이션에서 Runner와 Pods가 있을텐데, Runner를 클릭해주세요.</li>
+<li>Runner를 클릭하면, 중앙 상단에 탭중에서 info 탭을 클릭해주세요.</li>
+<li>info 탭에서 Configurations를 클릭해주세요.</li>
+<li>Debug와 Release 그리고 Profile이 있을텐데, + 버튼을 클릭하여 새로운 Configuration을 추가해주세요. 추가하실 때, 각 Configuration의 Based Configuration은 Debug, Release, Profile로 설정해주세요.</li>
+<li>각 Configuration의 이름은 <code>Debug-TEST</code>, <code>Debug-PRODUCTION</code>, <code>Release-TEST</code>, <code>Release-PRODUCTION</code>, <code>Profile-TEST</code>, <code>Profile-PRODUCTION</code>으로 설정해주세요.</li>
+</ol>
+<h5 id="schemes-추가하기">Schemes 추가하기</h5>
+<ol>
+<li>Xcode의 메뉴바에서 Product &gt; Scheme &gt; Edit Scheme&hellip;을 클릭해주세요.</li>
+<li>Runner를 클릭하고, 팝업의 하단에 <code>Duplicate Scheme</code> 버튼을 클릭해주세요.</li>
+<li>새로운 Scheme의 이름을 <code>TEST</code>, <code>PRODUCTION</code>으로 설정해주세요.</li>
+</ol>
+<h5 id="build-settings-추가하기">Build Settings 추가하기</h5>
+<ol>
+<li><code>Configurations 추가하기</code>에서 Runner를 클릭하고, PROJECT와 TARGETS 중에 TARGETS에 있는 Runner를 클릭해주세요.</li>
+<li>중앙 상단에 탭중에서 Build Settings 탭을 클릭해주세요.</li>
+<li>오른쪽 상단에 검색창에 <code>Product Bundle Identifier</code>를 검색해주세요.</li>
+<li>각 Configuration의 Product Bundle Identifier를 설정해주세요.</li>
+</ol>
+<ul>
+<li>ex)</li>
+<li>Debug-TEST: com.example.flutter.flavor.test</li>
+<li>Debug-PRODUCTION: com.example.flutter.flavor.production</li>
+<li>Release-TEST: com.example.flutter.flavor.test</li>
+<li>Release-PRODUCTION: com.example.flutter.flavor.production</li>
+<li>Profile-TEST: com.example.flutter.flavor.test</li>
+<li>Profile-PRODUCTION: com.example.flutter.flavor.production</li>
+</ul>
+<h5 id="infoplist-추가하기">Info.plist 추가하기</h5>
+<ol>
+<li><code>Build Settings 추가하기</code>를 마친 후에 같은 메뉴 탭에서 오른쪽 상단에 + 버튼을 클릭해주세요.</li>
+<li><code>Add User-Defined Setting</code>을 클릭해주세요.</li>
+<li>변수명은 자유이지만, 에시로서 저는 <code>APP_FLAVOR</code>, <code>APP_NAME</code>을 등록했습니다.
+<ul>
+<li><code>APP_FLAVOR</code>: Flovor의 이름을 설정합니다.</li>
+<li><code>APP_NAME</code>: 모바일에서 보여질 앱의 이름을 설정합니다.</li>
+</ul>
+</li>
+<li><code>APP_FLAVOR</code>의 값은 각 Configuration의 이름과 동일하게 설정해주세요.
+<ul>
+<li>ex)</li>
+<li>Debug-TEST: TEST</li>
+<li>Debug-PRODUCTION: PRODUCTION</li>
+<li>Release-TEST: TEST</li>
+<li>Release-PRODUCTION: PRODUCTION</li>
+<li>Profile-TEST: TEST</li>
+<li>Profile-PRODUCTION: PRODUCTION</li>
+<li>이렇게 설정하면, 각 Configuration의 이름에 따라서 <code>APP_FLAVOR</code>의 값이 변경됩니다.</li>
+</ul>
+</li>
+<li><code>APP_NAME</code>의 값은 이렇게 했습니다.
+<ul>
+<li>ex)</li>
+<li>Debug-TEST: TEST</li>
+<li>Debug-PRODUCTION: PRODUCTION</li>
+<li>Release-TEST: TEST</li>
+<li>Release-PRODUCTION: PRODUCTION</li>
+<li>Profile-TEST: TEST</li>
+<li>Profile-PRODUCTION: PRODUCTION</li>
+<li>이렇게 설정하면, 각 Configuration의 이름에 따라서 <code>APP_NAME</code>의 값이 변경됩니다.</li>
+</ul>
+</li>
+<li>info탭을 눌러주세요.</li>
+<li><code>Bundle display name</code>을 <code>$(APP_NAME)</code>으로 설정해주세요.</li>
+<li><code>Flvaor</code>이라는 키를 추가하고, <code>$(APP_FLAVOR)</code>로 설정해주세요.</li>
+</ol>
+<h4 id="android에서-flavor-적용하기">Android에서 Flavor 적용하기</h4>
+<h5 id="buildgradle-를-설정">build.gradle 를 설정</h5>
+<ol>
+<li>/android/app/src/build.gradle 파일을 열어주세요.</li>
+<li><code>buildTypes</code>에 아래의 코드를 추가해주세요.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>flavorDimensions <span style="color:#e6db74">&#34;default&#34;</span>
+</span></span><span style="display:flex;"><span>productFlavors <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    TEST <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        dimension <span style="color:#e6db74">&#34;default&#34;</span>
+</span></span><span style="display:flex;"><span>        applicationIdSuffix <span style="color:#e6db74">&#34;.test&#34;</span> <span style="color:#75715e">// 원하는 suffix를 설정해주세요.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        versionNameSuffix <span style="color:#e6db74">&#34;-TEST&#34;</span>
+</span></span><span style="display:flex;"><span>        resValue <span style="color:#e6db74">&#34;string&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;app_name&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;TEST&#34;</span> <span style="color:#75715e">// 원하는 앱 이름을 설정해주세요.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    PRODUCTION <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        dimension <span style="color:#e6db74">&#34;default&#34;</span>
+</span></span><span style="display:flex;"><span>        applicationIdSuffix <span style="color:#e6db74">&#34;.production&#34;</span> <span style="color:#75715e">// 원하는 suffix를 설정해주세요.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        versionNameSuffix <span style="color:#e6db74">&#34;-PRODUCTION&#34;</span>
+</span></span><span style="display:flex;"><span>        resValue <span style="color:#e6db74">&#34;string&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;app_name&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;PRODUCTION&#34;</span> <span style="color:#75715e">// 원하는 앱 이름을 설정해주세요.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><h5 id="androidmanifestxml-설정">AndroidManifest.xml 설정</h5>
+<ol>
+<li>/android/app/src/main/AndroidManifest.xml 파일을 열어주세요.</li>
+<li>&lt;application android:label=&quot;@string/app_name&quot; &hellip;&gt;를 정의해주세요.</li>
+</ol>
+<h4 id="flutter에서-flavor-사용하기">Flutter에서 Flavor 사용하기</h4>
+<h5 id="native와-소통하기">Native와 소통하기</h5>
+<h5 id="ios">ios</h5>
+<ol>
+<li><code>ios/Runner/AppDelegate.swift</code> 파일을 열어주세요.</li>
+<li><code>didFinishLaunchingWithOptions</code> 메소드에서 <code>GeneratedPluginRegistrant.register(with: self)</code> 위에 아래의 코드를 추가해주세요.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#66d9ef">let</span> channel = FlutterMethodChannel(name: <span style="color:#e6db74">&#34;flavor&#34;</span>, binaryMessenger: controller.binaryMessenger)
+</span></span><span style="display:flex;"><span>channel.setMethodCallHandler({
+</span></span><span style="display:flex;"><span>        (call: FlutterMethodCall, result: @escaping FlutterResult) -&gt; Void <span style="color:#66d9ef">in</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (call.method == <span style="color:#e6db74">&#34;getFlavor&#34;</span>) {
+</span></span><span style="display:flex;"><span>          result(Bundle.main.infoDictionary?[<span style="color:#e6db74">&#34;Flavor&#34;</span>])
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>          result(<span style="color:#e6db74">&#34;notImplemented&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      })
+</span></span></code></pre></div><h5 id="android">android</h5>
+<ol>
+<li><code>android/app/src/main/kotlin/.../flavor/MainActivity.kt</code> 파일을 열어주세요.</li>
+<li>아래의 코드를 작성해 주세요.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#66d9ef">package</span> com.example.flavor_example
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> androidx.annotation.NonNull;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> io.flutter.embedding.android.FlutterActivity
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> io.flutter.embedding.engine.FlutterEngine
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> io.flutter.plugin.common.MethodChannel
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> io.flutter.plugins.GeneratedPluginRegistrant
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span>: FlutterActivity() {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">configureFlutterEngine</span>(<span style="color:#a6e22e">@NonNull</span> flutterEngine: FlutterEngine) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">GeneratedPluginRegistrant</span>.registerWith(flutterEngine);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      MethodChannel(flutterEngine.dartExecutor.binaryMessenger, <span style="color:#e6db74">&#34;flavor&#34;</span>).setMethodCallHandler {
+</span></span><span style="display:flex;"><span>              call, result <span style="color:#f92672">-&gt;</span> result.success(<span style="color:#a6e22e">BuildConfig</span>.FLAVOR)
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="flutter">flutter</h5>
+<ol>
+<li><code>lib/main.dart</code> 파일을 열어주세요.</li>
+<li>아래의 함수를 작성해서 사용해주세요.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;package:flutter/material.dart&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#e6db74">&#39;package:flutter/services.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Future<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> _getFlavorFromNative() <span style="color:#66d9ef">async</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> platform <span style="color:#f92672">=</span> MethodChannel(<span style="color:#e6db74">&#39;flavor&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">String</span> flavor <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> platform.invokeMethod(<span style="color:#e6db74">&#39;getFlavor&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> flavor;
+</span></span><span style="display:flex;"><span>  } on PlatformException <span style="color:#66d9ef">catch</span> (e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Failed to get flavor: &#39;</span><span style="color:#e6db74">${</span>e.message<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;.&#34;</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
+<li>그리고 <code>flutter run --flavor TEST</code> 또는 <code>flutter run --flavor PRODUCTION</code>을 실행해주세요.</li>
+<li>각 네이티브에서 설정한 <code>FLAVOR</code>의 값을 가져올 수 있습니다.</li>
+</ol>
+<p>이렇게 받아온 값을 이용하여 분기를 할 수 있습니다. 또한 앱에 각 환경에 맞는 라벨이 보이도록 할 수 있습니다. 이 패키지를 사용해 보시길 추천합니다. -&gt; <a href="https://pub.dev/packages/flutter_flavor" title="https://pub.dev/packages/flutter_flavor">flutter_flavor</a></p>
+<h2 id="결론">결론</h2>
+<p>이렇게 각 환경별로 로직이나 화면을 분리하는 작업을 하는 방법을 알아 보았습니다. 이를 응용하면 여러가지 가능한 기능들이 많으니, 참고하시길 바랍니다.</p>
+
+          </article>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-3">
+        <div id="stickySideBar" class="sticky-sidebar">
+          
+          <aside class="toc">
+              <h5>
+                목차
+              </h5>
+              <div class="toc-content">
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#서론">서론</a></li>
+    <li><a href="#본론">본론</a>
+      <ul>
+        <li><a href="#flavor를-사용하는-이유">Flavor를 사용하는 이유</a></li>
+        <li><a href="#flavor를-사용하는-방법">Flavor를 사용하는 방법</a></li>
+      </ul>
+    </li>
+    <li><a href="#결론">결론</a></li>
+  </ul>
+</nav>
+              </div>
+          </aside>
+          
+
+          
+
+          
+          <aside class="social">
+            <h5>Social</h5>
+            <div class="social-content">
+              <ul class="list-inline">
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href="https://twitter.com/share?text=Flutter%ec%97%90%ec%84%9c%20%ea%b0%99%ec%9d%80%20%ec%bd%94%eb%93%9c%eb%a5%bc%20%eb%8b%a4%eb%a5%b4%ea%b2%8c%20%eb%b9%8c%eb%93%9c%ed%95%98%eb%8a%94%20%eb%b0%a9%eb%b2%95%20%28Flavor%29&url=https%3a%2f%2fhugo-profile.netlify.app%2fblogs%2fadd-flavor-to-flutter%2f">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href="https://api.whatsapp.com/send?text=Flutter%ec%97%90%ec%84%9c%20%ea%b0%99%ec%9d%80%20%ec%bd%94%eb%93%9c%eb%a5%bc%20%eb%8b%a4%eb%a5%b4%ea%b2%8c%20%eb%b9%8c%eb%93%9c%ed%95%98%eb%8a%94%20%eb%b0%a9%eb%b2%95%20%28Flavor%29: https%3a%2f%2fhugo-profile.netlify.app%2fblogs%2fadd-flavor-to-flutter%2f">
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a target="_blank" href='mailto:?subject=Flutter%ec%97%90%ec%84%9c%20%ea%b0%99%ec%9d%80%20%ec%bd%94%eb%93%9c%eb%a5%bc%20%eb%8b%a4%eb%a5%b4%ea%b2%8c%20%eb%b9%8c%eb%93%9c%ed%95%98%eb%8a%94%20%eb%b0%a9%eb%b2%95%20%28Flavor%29&amp;body=Check%20out%20this%20site https%3a%2f%2fhugo-profile.netlify.app%2fblogs%2fadd-flavor-to-flutter%2f'>
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </aside>
+          
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-9 p-4">
+        
+      </div>
+    </div>
+  </div>
+  <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
+    <i class="fas fa-angle-up"></i>
+  </button>
+</section>
+
+
+<div class="progress">
+  <div id="scroll-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<Script src="/js/scrollProgressBar.js"></script>
+
+
+<script>
+  var topScroll = document.getElementById("topScroll");
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      topScroll.style.display = "block";
+    } else {
+      topScroll.style.display = "none";
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  
+  let stickySideBarElem = document.getElementById("stickySideBar");
+  let stickyNavBar =  true ;
+  if(stickyNavBar) {
+    let headerElem = document.getElementById("profileHeader");
+    let headerHeight = headerElem.offsetHeight + 15;
+    stickySideBarElem.style.top = headerHeight + "px";
+  } else {
+    stickySideBarElem.style.top = "50px";
+  }
+</script>
+
+
+<script src="/js/readingTime.js"></script>
+
+
+
+  </div><footer>
+    
+ 
+<div class="container py-3" id="recent-posts">
+  
+  
+  <div class="h3 text-center text-secondary py-3">
+    Recent Posts
+  </div>
+  <div class="row justify-content-center">
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
+          <a href="/blogs/add-flavor-to-flutter/">
+            <img
+              src="/images/blogs/flutter_thumbnail.jpeg"
+              class="card-img-top"
+              alt="Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)"
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/add-flavor-to-flutter/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)">
+              Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>Flutter에서 하나의 코드로 환경별 분리하여 다르게 빌드하는 방법인 Flavor을 적용하는 방법을 소개합니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2023.12.08</span
+          >
+          <a
+            href="/blogs/add-flavor-to-flutter/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
+          <a href="/blogs/web-devs-guide-to-the-flutter/">
+            <img
+              src="/images/blogs/flutter_thumbnail.jpeg"
+              class="card-img-top"
+              alt="Flutter를 여행하는 웹 개발자를 위한 안내서"
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/web-devs-guide-to-the-flutter/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="Flutter를 여행하는 웹 개발자를 위한 안내서">
+              Flutter를 여행하는 웹 개발자를 위한 안내서
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>웹 개발자가 Flutter를 사용할 때에 유용한 TIP을 소개합니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2023.11.22</span
+          >
+          <a
+            href="/blogs/web-devs-guide-to-the-flutter/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
+          <a href="/blogs/map-and-functor/">
+            <img
+              src="/images/blogs/functional_programing_thumbnail.jpeg"
+              class="card-img-top"
+              alt="Map, Functor 그리고 ts-belt"
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/map-and-functor/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="Map, Functor 그리고 ts-belt">
+              Map, Functor 그리고 ts-belt
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>함수형 프로그래밍의 map과 functor를 설명합니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2023.09.16</span
+          >
+          <a
+            href="/blogs/map-and-functor/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="text-center pt-2">
+    
+    <span class="px-1">
+        <a href="https://github.com/gitsunmin" aria-label="github">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2.7em" height="2.7em" viewBox="0 0 1792 1792">
+                <path
+                    d="M522 1352q-8 9-20-3-13-11-4-19 8-9 20 3 12 11 4 19zm-42-61q9 12 0 19-8 6-17-7t0-18q9-7 17 6zm-61-60q-5 7-13 2-10-5-7-12 3-5 13-2 10 5 7 12zm31 34q-6 7-16-3-9-11-2-16 6-6 16 3 9 11 2 16zm129 112q-4 12-19 6-17-4-13-15t19-7q16 5 13 16zm63 5q0 11-16 11-17 2-17-11 0-11 16-11 17-2 17 11zm58-10q2 10-14 14t-18-8 14-15q16-2 18 9zm964-956v960q0 119-84.5 203.5t-203.5 84.5h-224q-16 0-24.5-1t-19.5-5-16-14.5-5-27.5v-239q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-121-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-86-13.5q-44 113-7 204-79 85-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-40 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 103t.5 68q0 22-11 33.5t-22 13-33 1.5h-224q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z" />
+
+                <metadata>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description about="https://iconscout.com/legal#licenses"
+                            dc:title="Github, Online, Project, Hosting, Square"
+                            dc:description="Github, Online, Project, Hosting, Square" dc:publisher="Iconscout"
+                            dc:date="2016-12-14" dc:format="image/svg+xml" dc:language="en">
+                            <dc:creator>
+                                <rdf:Bag>
+                                    <rdf:li>Font Awesome</rdf:li>
+                                </rdf:Bag>
+                            </dc:creator>
+                        </rdf:Description>
+                    </rdf:RDF>
+                </metadata>
+            </svg>
+        </a>
+    </span>
+    
+
+    
+    <span class="px-1">
+        <a href="https://www.linkedin.com/in/gitsunmin" aria-label="linkedin">
+            <svg xmlns="http://www.w3.org/2000/svg" width='2.4em' height='2.4em' fill="#fff" aria-label="LinkedIn"
+                viewBox="0 0 512 512">
+                <rect width="512" height="512" fill="#0077b5" rx="15%" />
+                <circle cx="142" cy="138" r="37" />
+                <path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198" />
+                <path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32" />
+            </svg>
+        </a>
+    </span>
+    
+
+    
+
+    
+
+    
+</div><div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-4 text-center">
+            <div class="pb-2">
+                <a href="https://hugo-profile.netlify.app" title="Gitsunmin Blog">
+                    <img alt="Footer logo" src="/images/favicon.png"
+                        height="40px" width="40px">
+                </a>
+            </div>
+            &copy; 2023  All rights reserved
+            <div class="text-secondary">
+                Made with
+                <span class="text-danger">
+                    &#10084;
+                </span>
+                and
+                <a href="https://github.com/gurusabarish/hugo-profile" target="_blank"
+                    title="Designed and developed by gurusabarish">
+                    Hugo Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div></footer><script src="/bootstrap-5/js/bootstrap.bundle.min.js"></script>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+</script>
+
+
+    <script src="/js/search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  <section id="search-content" class="py-2">
+    <div class="container" id="search-results"></div>
+  </section>
+</body>
+
+</html>
