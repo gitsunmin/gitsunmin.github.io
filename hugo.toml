@@ -1,4 +1,4 @@
-baseURL = "https://hugo-profile.netlify.app"
+baseURL = "https://gitsunmin.github.io/"
 languageCode = "ko-kr"
 title = "Gitsunmin Blog"
 theme = "gitsunmin-profile"
