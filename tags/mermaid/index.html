@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
-
-<head><meta charset="UTF-8">
+  <head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width">
@@ -106,13 +105,12 @@
   media="all"
 />
 
-  <title> Mermaid | Gitsunmin Blog 
-  </title>
-</head>
+    <title> Mermaid | Gitsunmin Blog </title>
+  </head>
 
-<body class="light">
-  
-  
+  <body class="light">
+    
+    
 <script>
     let localStorageValue = localStorage.getItem("pref-theme");
     let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -174,7 +172,7 @@
 
             
                 <div>
-                    <input id="search" autocomplete="off" class="form-control mr-sm-2 d-none d-md-block" placeholder='Ctrl &#43; k to Search...'
+                    <input id="search" autocomplete="off" class="form-control mr-sm-2 d-none d-md-block" placeholder='제목으로 검색'
                         aria-label="Search" oninput="searchOnChange(event)">
                 </div>
             
@@ -193,7 +191,7 @@
                     
                         <li class="nav-item navbar-text d-block d-md-none">
                             <div class="nav-link">
-                                <input id="search" autocomplete="off" class="form-control mr-sm-2" placeholder='Ctrl &#43; k to Search...' aria-label="Search" oninput="searchOnChange(event)">
+                                <input id="search" autocomplete="off" class="form-control mr-sm-2" placeholder='제목으로 검색' aria-label="Search" oninput="searchOnChange(event)">
                             </div>
                         </li>
                     
@@ -309,8 +307,7 @@
     </div>
   </div>
 </div>
-
-  </div><footer>
+</div><footer>
     
  
 <div class="container py-3" id="recent-posts">
@@ -544,9 +541,8 @@
 
 
 
-  <section id="search-content" class="py-2">
-    <div class="container" id="search-results"></div>
-  </section>
-</body>
-
+    <section id="search-content" class="py-2">
+      <div class="container" id="search-results"></div>
+    </section>
+  </body>
 </html>
