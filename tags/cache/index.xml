@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Cache on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/tags/cache/</link>
+    <link>https://gitsunmin.github.io/tags/cache/</link>
     <description>Recent content in Cache on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Thu, 20 Jan 2022 12:00:00 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/tags/cache/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/tags/cache/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Service worker</title>
-      <link>https://hugo-profile.netlify.app/blogs/service-worker/</link>
+      <link>https://gitsunmin.github.io/blogs/service-worker/</link>
       <pubDate>Thu, 20 Jan 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/service-worker/</guid>
+      <guid>https://gitsunmin.github.io/blogs/service-worker/</guid>
       <description>Service worker에 대해서 간단하게 설명해 보았습니다.</description>
     </item>
   </channel>

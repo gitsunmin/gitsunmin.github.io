@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Monorepo on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/blogs/monorepo/</link>
+    <link>https://gitsunmin.github.io/blogs/monorepo/</link>
     <description>Recent content in Monorepo on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Tue, 16 May 2023 12:00:00 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/blogs/monorepo/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/blogs/monorepo/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

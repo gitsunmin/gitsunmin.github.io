@@ -2,73 +2,73 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>2023 on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/categories/2023/</link>
+    <link>https://gitsunmin.github.io/categories/2023/</link>
     <description>Recent content in 2023 on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Wed, 22 Nov 2023 11:58:24 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/categories/2023/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/categories/2023/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flutter를 여행하는 웹 개발자를 위한 안내서</title>
-      <link>https://hugo-profile.netlify.app/blogs/web-devs-guide-to-the-flutter/</link>
+      <link>https://gitsunmin.github.io/blogs/web-devs-guide-to-the-flutter/</link>
       <pubDate>Wed, 22 Nov 2023 11:58:24 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/web-devs-guide-to-the-flutter/</guid>
+      <guid>https://gitsunmin.github.io/blogs/web-devs-guide-to-the-flutter/</guid>
       <description>웹 개발자가 Flutter를 사용할 때에 유용한 TIP을 소개합니다.</description>
     </item>
     <item>
       <title>Map, Functor 그리고 ts-belt</title>
-      <link>https://hugo-profile.netlify.app/blogs/map-and-functor/</link>
+      <link>https://gitsunmin.github.io/blogs/map-and-functor/</link>
       <pubDate>Sat, 16 Sep 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/map-and-functor/</guid>
+      <guid>https://gitsunmin.github.io/blogs/map-and-functor/</guid>
       <description>함수형 프로그래밍의 map과 functor를 설명합니다.</description>
     </item>
     <item>
       <title>Flutter Import &amp; Part</title>
-      <link>https://hugo-profile.netlify.app/blogs/flutter-import-and-part/</link>
+      <link>https://gitsunmin.github.io/blogs/flutter-import-and-part/</link>
       <pubDate>Mon, 21 Aug 2023 11:20:15 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/flutter-import-and-part/</guid>
+      <guid>https://gitsunmin.github.io/blogs/flutter-import-and-part/</guid>
       <description>Flutter의 import와 part keyword에 대해서 알아보았습니다.</description>
     </item>
     <item>
       <title>Flutter APP &amp; Widget Life Cycle</title>
-      <link>https://hugo-profile.netlify.app/blogs/flutter-life-cycle/</link>
+      <link>https://gitsunmin.github.io/blogs/flutter-life-cycle/</link>
       <pubDate>Thu, 17 Aug 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/flutter-life-cycle/</guid>
+      <guid>https://gitsunmin.github.io/blogs/flutter-life-cycle/</guid>
       <description>Flutter의 라이프사이클을 설명하였습니다.</description>
     </item>
     <item>
       <title>Monorepo</title>
-      <link>https://hugo-profile.netlify.app/blogs/monorepo/</link>
+      <link>https://gitsunmin.github.io/blogs/monorepo/</link>
       <pubDate>Tue, 16 May 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/monorepo/</guid>
+      <guid>https://gitsunmin.github.io/blogs/monorepo/</guid>
       <description>monorepo에 대해서 알아보았습니다.</description>
     </item>
     <item>
       <title>계산기 만들기</title>
-      <link>https://hugo-profile.netlify.app/blogs/made-calculator/</link>
+      <link>https://gitsunmin.github.io/blogs/made-calculator/</link>
       <pubDate>Thu, 23 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/made-calculator/</guid>
+      <guid>https://gitsunmin.github.io/blogs/made-calculator/</guid>
       <description>중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.</description>
     </item>
     <item>
       <title>Custom Date Picker</title>
-      <link>https://hugo-profile.netlify.app/blogs/made-custom-date-picker/</link>
+      <link>https://gitsunmin.github.io/blogs/made-custom-date-picker/</link>
       <pubDate>Tue, 14 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/made-custom-date-picker/</guid>
+      <guid>https://gitsunmin.github.io/blogs/made-custom-date-picker/</guid>
       <description>date picker를 만들면서 분석, 고민한 내용을 공유합니다.</description>
     </item>
     <item>
       <title>Deview 2023을 다녀온 후</title>
-      <link>https://hugo-profile.netlify.app/blogs/deview-review-2023/</link>
+      <link>https://gitsunmin.github.io/blogs/deview-review-2023/</link>
       <pubDate>Sat, 04 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/deview-review-2023/</guid>
+      <guid>https://gitsunmin.github.io/blogs/deview-review-2023/</guid>
       <description>deview 2023을 다녀온 후에 작성하는 요약 및 리뷰</description>
     </item>
     <item>
       <title>관심사의 분리로 해보는 리팩토링</title>
-      <link>https://hugo-profile.netlify.app/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</link>
+      <link>https://gitsunmin.github.io/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</link>
       <pubDate>Sat, 07 Jan 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</guid>
+      <guid>https://gitsunmin.github.io/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</guid>
       <description>관심사의 분리 원칙으로 리팩토링하여 코드의 품질을 향상시킨 경험을 공유합니다.</description>
     </item>
   </channel>

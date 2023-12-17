@@ -2,108 +2,108 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/tags/</link>
+    <link>https://gitsunmin.github.io/tags/</link>
     <description>Recent content in Tags on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Wed, 22 Nov 2023 11:58:24 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flutter</title>
-      <link>https://hugo-profile.netlify.app/tags/flutter/</link>
+      <link>https://gitsunmin.github.io/tags/flutter/</link>
       <pubDate>Wed, 22 Nov 2023 11:58:24 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/flutter/</guid>
+      <guid>https://gitsunmin.github.io/tags/flutter/</guid>
       <description></description>
     </item>
     <item>
       <title>FunctionalPrograming</title>
-      <link>https://hugo-profile.netlify.app/tags/functionalprograming/</link>
+      <link>https://gitsunmin.github.io/tags/functionalprograming/</link>
       <pubDate>Sat, 16 Sep 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/functionalprograming/</guid>
+      <guid>https://gitsunmin.github.io/tags/functionalprograming/</guid>
       <description></description>
     </item>
     <item>
       <title>Monorepo</title>
-      <link>https://hugo-profile.netlify.app/tags/monorepo/</link>
+      <link>https://gitsunmin.github.io/tags/monorepo/</link>
       <pubDate>Tue, 16 May 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/monorepo/</guid>
+      <guid>https://gitsunmin.github.io/tags/monorepo/</guid>
       <description></description>
     </item>
     <item>
       <title>Frontend</title>
-      <link>https://hugo-profile.netlify.app/tags/frontend/</link>
+      <link>https://gitsunmin.github.io/tags/frontend/</link>
       <pubDate>Thu, 23 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/frontend/</guid>
+      <guid>https://gitsunmin.github.io/tags/frontend/</guid>
       <description></description>
     </item>
     <item>
       <title>Review</title>
-      <link>https://hugo-profile.netlify.app/tags/review/</link>
+      <link>https://gitsunmin.github.io/tags/review/</link>
       <pubDate>Sat, 04 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/review/</guid>
+      <guid>https://gitsunmin.github.io/tags/review/</guid>
       <description></description>
     </item>
     <item>
       <title>Refactoring</title>
-      <link>https://hugo-profile.netlify.app/tags/refactoring/</link>
+      <link>https://gitsunmin.github.io/tags/refactoring/</link>
       <pubDate>Sat, 07 Jan 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/refactoring/</guid>
+      <guid>https://gitsunmin.github.io/tags/refactoring/</guid>
       <description></description>
     </item>
     <item>
       <title>Typescript</title>
-      <link>https://hugo-profile.netlify.app/tags/typescript/</link>
+      <link>https://gitsunmin.github.io/tags/typescript/</link>
       <pubDate>Wed, 10 Aug 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/typescript/</guid>
+      <guid>https://gitsunmin.github.io/tags/typescript/</guid>
       <description></description>
     </item>
     <item>
       <title>Diagram</title>
-      <link>https://hugo-profile.netlify.app/tags/diagram/</link>
+      <link>https://gitsunmin.github.io/tags/diagram/</link>
       <pubDate>Sun, 31 Jul 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/diagram/</guid>
+      <guid>https://gitsunmin.github.io/tags/diagram/</guid>
       <description></description>
     </item>
     <item>
       <title>Mermaid</title>
-      <link>https://hugo-profile.netlify.app/tags/mermaid/</link>
+      <link>https://gitsunmin.github.io/tags/mermaid/</link>
       <pubDate>Sun, 31 Jul 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/mermaid/</guid>
+      <guid>https://gitsunmin.github.io/tags/mermaid/</guid>
       <description></description>
     </item>
     <item>
       <title>Cache</title>
-      <link>https://hugo-profile.netlify.app/tags/cache/</link>
+      <link>https://gitsunmin.github.io/tags/cache/</link>
       <pubDate>Thu, 20 Jan 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/cache/</guid>
+      <guid>https://gitsunmin.github.io/tags/cache/</guid>
       <description></description>
     </item>
     <item>
       <title>Deview</title>
-      <link>https://hugo-profile.netlify.app/tags/deview/</link>
+      <link>https://gitsunmin.github.io/tags/deview/</link>
       <pubDate>Thu, 25 Nov 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/deview/</guid>
+      <guid>https://gitsunmin.github.io/tags/deview/</guid>
       <description></description>
     </item>
     <item>
       <title>Trend</title>
-      <link>https://hugo-profile.netlify.app/tags/trend/</link>
+      <link>https://gitsunmin.github.io/tags/trend/</link>
       <pubDate>Thu, 25 Nov 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/trend/</guid>
+      <guid>https://gitsunmin.github.io/tags/trend/</guid>
       <description></description>
     </item>
     <item>
       <title>Javascript</title>
-      <link>https://hugo-profile.netlify.app/tags/javascript/</link>
+      <link>https://gitsunmin.github.io/tags/javascript/</link>
       <pubDate>Tue, 02 Nov 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/javascript/</guid>
+      <guid>https://gitsunmin.github.io/tags/javascript/</guid>
       <description></description>
     </item>
     <item>
       <title>Svelte</title>
-      <link>https://hugo-profile.netlify.app/tags/svelte/</link>
+      <link>https://gitsunmin.github.io/tags/svelte/</link>
       <pubDate>Tue, 28 Sep 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/tags/svelte/</guid>
+      <guid>https://gitsunmin.github.io/tags/svelte/</guid>
       <description></description>
     </item>
   </channel>

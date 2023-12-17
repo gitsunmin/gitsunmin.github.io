@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Deview on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/tags/deview/</link>
+    <link>https://gitsunmin.github.io/tags/deview/</link>
     <description>Recent content in Deview on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Thu, 25 Nov 2021 12:00:00 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/tags/deview/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/tags/deview/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>2021년 FE 동향, 한방에 끝내기</title>
-      <link>https://hugo-profile.netlify.app/blogs/2021-fe-trend/</link>
+      <link>https://gitsunmin.github.io/blogs/2021-fe-trend/</link>
       <pubDate>Thu, 25 Nov 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/2021-fe-trend/</guid>
+      <guid>https://gitsunmin.github.io/blogs/2021-fe-trend/</guid>
       <description>영상을 보고 내용을 정리 하였습니다.</description>
     </item>
   </channel>

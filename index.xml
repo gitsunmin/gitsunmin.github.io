@@ -2,122 +2,122 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/</link>
+    <link>https://gitsunmin.github.io/</link>
     <description>Recent content on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Fri, 08 Dec 2023 01:31:29 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)</title>
-      <link>https://hugo-profile.netlify.app/blogs/add-flavor-to-flutter/</link>
+      <link>https://gitsunmin.github.io/blogs/add-flavor-to-flutter/</link>
       <pubDate>Fri, 08 Dec 2023 01:31:29 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/add-flavor-to-flutter/</guid>
+      <guid>https://gitsunmin.github.io/blogs/add-flavor-to-flutter/</guid>
       <description>Flutter에서 하나의 코드로 환경을 분리하여 다르게 빌드하는 방법인 Flavor 적용 방법을 소개합니다.</description>
     </item>
     <item>
       <title>Flutter를 여행하는 웹 개발자를 위한 안내서</title>
-      <link>https://hugo-profile.netlify.app/blogs/web-devs-guide-to-the-flutter/</link>
+      <link>https://gitsunmin.github.io/blogs/web-devs-guide-to-the-flutter/</link>
       <pubDate>Wed, 22 Nov 2023 11:58:24 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/web-devs-guide-to-the-flutter/</guid>
+      <guid>https://gitsunmin.github.io/blogs/web-devs-guide-to-the-flutter/</guid>
       <description>웹 개발자가 Flutter를 사용할 때에 유용한 TIP을 소개합니다.</description>
     </item>
     <item>
       <title>Map, Functor 그리고 ts-belt</title>
-      <link>https://hugo-profile.netlify.app/blogs/map-and-functor/</link>
+      <link>https://gitsunmin.github.io/blogs/map-and-functor/</link>
       <pubDate>Sat, 16 Sep 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/map-and-functor/</guid>
+      <guid>https://gitsunmin.github.io/blogs/map-and-functor/</guid>
       <description>함수형 프로그래밍의 map과 functor를 설명합니다.</description>
     </item>
     <item>
       <title>Flutter Import &amp; Part</title>
-      <link>https://hugo-profile.netlify.app/blogs/flutter-import-and-part/</link>
+      <link>https://gitsunmin.github.io/blogs/flutter-import-and-part/</link>
       <pubDate>Mon, 21 Aug 2023 11:20:15 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/flutter-import-and-part/</guid>
+      <guid>https://gitsunmin.github.io/blogs/flutter-import-and-part/</guid>
       <description>Flutter의 import와 part keyword에 대해서 알아보았습니다.</description>
     </item>
     <item>
       <title>Flutter APP &amp; Widget Life Cycle</title>
-      <link>https://hugo-profile.netlify.app/blogs/flutter-life-cycle/</link>
+      <link>https://gitsunmin.github.io/blogs/flutter-life-cycle/</link>
       <pubDate>Thu, 17 Aug 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/flutter-life-cycle/</guid>
+      <guid>https://gitsunmin.github.io/blogs/flutter-life-cycle/</guid>
       <description>Flutter의 라이프사이클을 설명하였습니다.</description>
     </item>
     <item>
       <title>Monorepo</title>
-      <link>https://hugo-profile.netlify.app/blogs/monorepo/</link>
+      <link>https://gitsunmin.github.io/blogs/monorepo/</link>
       <pubDate>Tue, 16 May 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/monorepo/</guid>
+      <guid>https://gitsunmin.github.io/blogs/monorepo/</guid>
       <description>monorepo에 대해서 알아보았습니다.</description>
     </item>
     <item>
       <title>계산기 만들기</title>
-      <link>https://hugo-profile.netlify.app/blogs/made-calculator/</link>
+      <link>https://gitsunmin.github.io/blogs/made-calculator/</link>
       <pubDate>Thu, 23 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/made-calculator/</guid>
+      <guid>https://gitsunmin.github.io/blogs/made-calculator/</guid>
       <description>중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.</description>
     </item>
     <item>
       <title>Custom Date Picker</title>
-      <link>https://hugo-profile.netlify.app/blogs/made-custom-date-picker/</link>
+      <link>https://gitsunmin.github.io/blogs/made-custom-date-picker/</link>
       <pubDate>Tue, 14 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/made-custom-date-picker/</guid>
+      <guid>https://gitsunmin.github.io/blogs/made-custom-date-picker/</guid>
       <description>date picker를 만들면서 분석, 고민한 내용을 공유합니다.</description>
     </item>
     <item>
       <title>Deview 2023을 다녀온 후</title>
-      <link>https://hugo-profile.netlify.app/blogs/deview-review-2023/</link>
+      <link>https://gitsunmin.github.io/blogs/deview-review-2023/</link>
       <pubDate>Sat, 04 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/deview-review-2023/</guid>
+      <guid>https://gitsunmin.github.io/blogs/deview-review-2023/</guid>
       <description>deview 2023을 다녀온 후에 작성하는 요약 및 리뷰</description>
     </item>
     <item>
       <title>관심사의 분리로 해보는 리팩토링</title>
-      <link>https://hugo-profile.netlify.app/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</link>
+      <link>https://gitsunmin.github.io/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</link>
       <pubDate>Sat, 07 Jan 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</guid>
+      <guid>https://gitsunmin.github.io/blogs/refactoring-with-the-separation-of-oncerns-rinciple/</guid>
       <description>관심사의 분리 원칙으로 리팩토링하여 코드의 품질을 향상시킨 경험을 공유합니다.</description>
     </item>
     <item>
       <title>기묘한 Typescript 이야기</title>
-      <link>https://hugo-profile.netlify.app/blogs/strange-typescript-story/</link>
+      <link>https://gitsunmin.github.io/blogs/strange-typescript-story/</link>
       <pubDate>Wed, 10 Aug 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/strange-typescript-story/</guid>
+      <guid>https://gitsunmin.github.io/blogs/strange-typescript-story/</guid>
       <description>Typescript의 쉽지않은 부분을 알아보았습니다.</description>
     </item>
     <item>
       <title>Mermaid</title>
-      <link>https://hugo-profile.netlify.app/blogs/mermaid/</link>
+      <link>https://gitsunmin.github.io/blogs/mermaid/</link>
       <pubDate>Sun, 31 Jul 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/mermaid/</guid>
+      <guid>https://gitsunmin.github.io/blogs/mermaid/</guid>
       <description>Mermaid의 기본적인 사용법을 알아보았습니다.</description>
     </item>
     <item>
       <title>Service worker</title>
-      <link>https://hugo-profile.netlify.app/blogs/service-worker/</link>
+      <link>https://gitsunmin.github.io/blogs/service-worker/</link>
       <pubDate>Thu, 20 Jan 2022 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/service-worker/</guid>
+      <guid>https://gitsunmin.github.io/blogs/service-worker/</guid>
       <description>Service worker에 대해서 간단하게 설명해 보았습니다.</description>
     </item>
     <item>
       <title>2021년 FE 동향, 한방에 끝내기</title>
-      <link>https://hugo-profile.netlify.app/blogs/2021-fe-trend/</link>
+      <link>https://gitsunmin.github.io/blogs/2021-fe-trend/</link>
       <pubDate>Thu, 25 Nov 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/2021-fe-trend/</guid>
+      <guid>https://gitsunmin.github.io/blogs/2021-fe-trend/</guid>
       <description>영상을 보고 내용을 정리 하였습니다.</description>
     </item>
     <item>
       <title>2021년 Javascript 최신 동향</title>
-      <link>https://hugo-profile.netlify.app/blogs/2021-js-trend/</link>
+      <link>https://gitsunmin.github.io/blogs/2021-js-trend/</link>
       <pubDate>Tue, 02 Nov 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/2021-js-trend/</guid>
+      <guid>https://gitsunmin.github.io/blogs/2021-js-trend/</guid>
       <description>2021년 Javascript 최신 동향을 정리 해두었습니다.</description>
     </item>
     <item>
       <title>Svelte의 동작</title>
-      <link>https://hugo-profile.netlify.app/blogs/action-of-svelte/</link>
+      <link>https://gitsunmin.github.io/blogs/action-of-svelte/</link>
       <pubDate>Tue, 28 Sep 2021 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/action-of-svelte/</guid>
+      <guid>https://gitsunmin.github.io/blogs/action-of-svelte/</guid>
       <description>Svelte의 동작을 자세하게 살펴보았습니다.</description>
     </item>
   </channel>

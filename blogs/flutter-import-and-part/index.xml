@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Flutter Import &amp; Part on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/blogs/flutter-import-and-part/</link>
+    <link>https://gitsunmin.github.io/blogs/flutter-import-and-part/</link>
     <description>Recent content in Flutter Import &amp; Part on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Mon, 21 Aug 2023 11:20:15 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/blogs/flutter-import-and-part/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/blogs/flutter-import-and-part/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

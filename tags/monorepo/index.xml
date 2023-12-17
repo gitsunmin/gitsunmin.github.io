@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Monorepo on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/tags/monorepo/</link>
+    <link>https://gitsunmin.github.io/tags/monorepo/</link>
     <description>Recent content in Monorepo on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Tue, 16 May 2023 12:00:00 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/tags/monorepo/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/tags/monorepo/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Monorepo</title>
-      <link>https://hugo-profile.netlify.app/blogs/monorepo/</link>
+      <link>https://gitsunmin.github.io/blogs/monorepo/</link>
       <pubDate>Tue, 16 May 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/monorepo/</guid>
+      <guid>https://gitsunmin.github.io/blogs/monorepo/</guid>
       <description>monorepo에 대해서 알아보았습니다.</description>
     </item>
   </channel>

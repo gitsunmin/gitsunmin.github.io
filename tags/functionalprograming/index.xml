@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>FunctionalPrograming on Gitsunmin Blog</title>
-    <link>https://hugo-profile.netlify.app/tags/functionalprograming/</link>
+    <link>https://gitsunmin.github.io/tags/functionalprograming/</link>
     <description>Recent content in FunctionalPrograming on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Sat, 16 Sep 2023 12:00:00 +0000</lastBuildDate>
-    <atom:link href="https://hugo-profile.netlify.app/tags/functionalprograming/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://gitsunmin.github.io/tags/functionalprograming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Map, Functor 그리고 ts-belt</title>
-      <link>https://hugo-profile.netlify.app/blogs/map-and-functor/</link>
+      <link>https://gitsunmin.github.io/blogs/map-and-functor/</link>
       <pubDate>Sat, 16 Sep 2023 12:00:00 +0000</pubDate>
-      <guid>https://hugo-profile.netlify.app/blogs/map-and-functor/</guid>
+      <guid>https://gitsunmin.github.io/blogs/map-and-functor/</guid>
       <description>함수형 프로그래밍의 map과 functor를 설명합니다.</description>
     </item>
   </channel>
