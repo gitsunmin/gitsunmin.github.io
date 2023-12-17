@@ -1,6 +1,7 @@
 ---
 title: Deview 2023을 다녀온 후
 summary: deview 2023을 다녀온 후에 작성하는 요약 및 리뷰
+description: deview 2023을 다녀온 후에 작성하는 요약 및 리뷰
 date: 2023-03-04 12:00:00
 image: https://deview.kr/2023/img/og-edit.jpg
 author: 'Gitsunmin'

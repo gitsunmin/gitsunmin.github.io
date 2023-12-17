@@ -1,6 +1,7 @@
 ---
 title: 계산기 만들기
 summary: 중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.
+description: 중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.
 date: 2023-03-23 12:00:00
 image: /images/blogs/default_thumbnail.jpeg
 author: 'Gitsunmin'

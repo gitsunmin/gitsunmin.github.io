@@ -3,6 +3,7 @@ author: Gitsunmin
 title: 'Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)'
 image: /images/blogs/flutter_thumbnail.jpeg
 summary: Flutter에서 하나의 코드로 환경을 분리하여 다르게 빌드하는 방법인 Flavor 적용 방법을 소개합니다.
+description: Flutter에서 하나의 코드로 환경을 분리하여 다르게 빌드하는 방법인 Flavor 적용 방법을 소개합니다.
 author: 'Gitsunmin'
 date: 2023-12-08 01:31:29
 math: true

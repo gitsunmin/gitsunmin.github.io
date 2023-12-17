@@ -1,6 +1,7 @@
 ---
 title: 'Flutter를 여행하는 웹 개발자를 위한 안내서'
 summary: 웹 개발자가 Flutter를 사용할 때에 유용한 TIP을 소개합니다.
+description: 웹 개발자가 Flutter를 사용할 때에 유용한 TIP을 소개합니다.
 date: 2023-11-22 11:58:24
 image: /images/blogs/flutter_thumbnail.jpeg
 author: 'Gitsunmin'

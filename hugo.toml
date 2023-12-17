@@ -44,6 +44,7 @@ textAlign = "left"
 align = "ms-auto"
 brandName = "Gitsunmin Blog"
 disableSearch = false
+searchPlaceholder = "제목으로 검색"
 
 [params.navbar.stickyNavBar]
 enable = true

@@ -1,6 +1,7 @@
 ---
 title: 2021년 Javascript 최신 동향
 summary: 2021년 Javascript 최신 동향을 정리 해두었습니다.
+description: 2021년 Javascript 최신 동향을 정리 해두었습니다.
 date: 2021-11-02 12:00:00
 image: /images/blogs/default_thumbnail.jpeg
 author: 'Gitsunmin'
