@@ -1,7 +1,7 @@
 baseURL = "https://gitsunmin.github.io/"
 languageCode = "ko-kr"
 title = "Gitsunmin Blog"
-theme = "gitsunmin-blog-theme"
+theme = "hugo-profile"
 Paginate = 9
 enableRobotsTXT = true
 
@@ -313,6 +313,10 @@ toc = "목차"
 copyright = "All rights reserved"
 pageNotFound = "Page not found"
 emailText = "Check out this site"
+
+[socialshare]
+enable = false
+
 
 [params.datesFormat]
 article = "2006.01.02"
