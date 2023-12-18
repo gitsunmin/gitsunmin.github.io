@@ -1,13 +1,13 @@
 async function searchOnChange(evt) {
   let searchQuery = evt.target.value;
-  var inputEle = document.querySelectorAll('input#search');
+  var inputEle = document.querySelectorAll("input#search");
   inputEle.forEach((element) => {
     element.value = searchQuery;
   });
 
-  if (searchQuery !== '') {
+  if (searchQuery !== "") {
     if (!window.searchJson) {
-      window.searchJson = await fetch('/index.json').then((res) => res.json());
+      window.searchJson = await fetch("/index.json").then((res) => res.json());
     }
 
     let searchResults = searchJson.filter((item) => {
@@ -41,7 +41,7 @@ async function searchOnChange(evt) {
       return res;
     });
     if (searchResults.length > 0) {
-      let searchResultsHtml = '';
+      let searchResultsHtml = "";
       searchResults.map((item) => {
         searchResultsHtml += `<div class="card">
                         <a href="${item.permalink}">
@@ -52,39 +52,39 @@ async function searchOnChange(evt) {
                        </a>
                     </div>`;
       });
-      document.getElementById('search-results').innerHTML = searchResultsHtml;
+      document.getElementById("search-results").innerHTML = searchResultsHtml;
     } else {
-      let searchResultsHtml = `<p class="text-center py-3">"제목이 ${searchQuery}"와 일치하는 게시물이 없습니다.</p>`;
-      document.getElementById('search-results').innerHTML = searchResultsHtml;
+      let searchResultsHtml = `<p class="text-center py-3">No results found for "${searchQuery}"</p>`;
+      document.getElementById("search-results").innerHTML = searchResultsHtml;
     }
     alignSearchContent();
-    document.getElementById('search-content').style.display = 'block';
+    document.getElementById("search-content").style.display = "block";
   } else {
-    document.getElementById('search-content').style.display = 'none';
-    document.getElementById('search-results').innerHTML = '';
+    document.getElementById("search-content").style.display = "none";
+    document.getElementById("search-results").innerHTML = "";
   }
 }
 
 function alignSearchContent() {
-  const searchButtonEle = document.querySelectorAll('#search');
+  const searchButtonEle = document.querySelectorAll("#search");
   // check if search value is not empty
   for (let i = 0; i < searchButtonEle.length; i++) {
-    if (searchButtonEle[i].value !== '') {
+    if (searchButtonEle[i].value !== "") {
       let searchButtonPosition;
       if (window.innerWidth > 768) {
         searchButtonPosition = searchButtonEle[0].getBoundingClientRect();
-        document.getElementById('search-content').style.width = '500px';
+        document.getElementById("search-content").style.width = "500px";
       } else {
-        var navbarCollapse = document.querySelector('#navbarContent');
-        navbarCollapse.classList.add('show');
+        var navbarCollapse = document.querySelector("#navbarContent");
+        navbarCollapse.classList.add("show");
         searchButtonPosition = searchButtonEle[1].getBoundingClientRect();
-        document.getElementById('search-content').style.width = '300px';
+        document.getElementById("search-content").style.width = "300px";
       }
 
-      document.getElementById('search-content').style.top =
-        searchButtonPosition.top + 50 + 'px';
-      document.getElementById('search-content').style.left =
-        searchButtonPosition.left + 'px';
+      document.getElementById("search-content").style.top =
+        searchButtonPosition.top + 50 + "px";
+      document.getElementById("search-content").style.left =
+        searchButtonPosition.left + "px";
     }
   }
 }
@@ -92,15 +92,15 @@ function alignSearchContent() {
 function resetSearch(e) {
   if (
     e.keyCode === 27 ||
-    (e.target.id !== 'search' &&
-      e.target.closest('section#search-content') === null)
+    (e.target.id !== "search" &&
+      e.target.closest("section#search-content") === null)
   ) {
-    if (document.getElementById('search-results').innerHTML !== '') {
-      document.getElementById('search-content').style.display = 'none';
-      document.getElementById('search-results').innerHTML = '';
-      var inputEle = document.querySelectorAll('input#search');
+    if (document.getElementById("search-results").innerHTML !== "") {
+      document.getElementById("search-content").style.display = "none";
+      document.getElementById("search-results").innerHTML = "";
+      var inputEle = document.querySelectorAll("input#search");
       inputEle.forEach((element) => {
-        element.value = '';
+        element.value = "";
         element.blur();
       });
     }
@@ -117,22 +117,22 @@ document.onkeyup = function () {
     // ctrl + k
     case 75:
       if (event.ctrlKey) {
-        document.getElementById('search').focus();
+        document.getElementById("search").focus();
       }
       break;
   }
 };
 
-window.addEventListener('keydown', function (e) {
+window.addEventListener("keydown", function (e) {
   if (e.keyCode === 75 && e.ctrlKey) {
     e.preventDefault();
   }
 });
 
 // Close search on click outside and on resize
-document.addEventListener('click', function (e) {
+document.addEventListener("click", function (e) {
   resetSearch(e);
 });
-window.addEventListener('resize', function (e) {
+window.addEventListener("resize", function (e) {
   alignSearchContent();
 });
