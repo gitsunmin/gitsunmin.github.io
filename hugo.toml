@@ -97,17 +97,15 @@ enable = true
 title = "About Me"
 image = "/images/me.png"
 content = """
-저는 vue 2버전과 React를 사용하여 웹 프론트엔드 개발을 해왔고, 최근에는 Flutter + React를 사용하여 하이브리드 앱 개발을 하고 있습니다.
+판교에서 웹/앱 개발을 하고 있는 평범한 프론트엔드 개발자입니다.
 
-지금까지 프론트엔드 개발을 하면서, 학습/경험하였던 내용들을 정리하여 블로그에 포스팅하고 있습니다.
-
-비록, 완벽한 내용들은 아니지만, 누군가에게는 도움이 되었으면 좋겠습니다.
+제가 경험한 내용들을 공유하기 위해서 블로그를 운영하고 있습니다.
 """
 
 [params.about.skills]
 enable = true
 title = "제가 최근에 사용하고 있는 기술들입니다."
-items = ["Flutter", "React", "TypeScript", "HTML/Css"]
+items = ["Flutter", "React", "TypeScript"]
 
 [params.experience]
 enable = false
