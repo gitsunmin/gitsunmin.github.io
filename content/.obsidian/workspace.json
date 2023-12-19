@@ -1,0 +1,161 @@
+{
+  "main": {
+    "id": "d804b5314e91eac2",
+    "type": "split",
+    "children": [
+      {
+        "id": "afcc33a85b29bf91",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0040d6eeb89b7d69",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "blogs/garden9-2023/index.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "58a693a8800d8818",
+    "type": "split",
+    "children": [
+      {
+        "id": "9e40c1e1d90ebad6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c38254f6a5fb761a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "6cae59494ccc5a5a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "98b7d3c1b629ddc2",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "db9ecb19a088b651",
+    "type": "split",
+    "children": [
+      {
+        "id": "71cb30a062b155ce",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "570d0850c260e3aa",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "blogs/garden9-2023/index.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a60e10b909492bb8",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "blogs/garden9-2023/index.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "35161b1797c63955",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "83c41283d034f6c9",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "blogs/garden9-2023/index.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:퀵 스위처 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 데일리 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false
+    }
+  },
+  "active": "0040d6eeb89b7d69",
+  "lastOpenFiles": [
+    "blogs/garden9-2023/garden9-2023-1-jandicon.png",
+    "blogs/garden9-2023/garden9-2023-1.png",
+    "blogs/garden9-2023/ed3497d3-1931-45cc-9f57-bf407f087fa6.png",
+    "templates/blog.md",
+    "blogs/garden9-2023/index.md",
+    "blogs/web-dev's-guide-to-the-flutter/index.md",
+    "blogs/2021-FE-trend/index.md",
+    "blogs/garden9-2023",
+    "templates"
+  ]
+}
