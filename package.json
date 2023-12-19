@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "deploy": "hugo && bunx gh-pages -d public -b master"
+    "deploy": "hugo && bunx gh-pages -d public -b master",
+    "pull theme": "cd ./themes && git clone --recurse-submodules -b itsunmin-blog-theme https://github.com/gitsunmin/hugo-profile.git && cd .."
   }
 }
