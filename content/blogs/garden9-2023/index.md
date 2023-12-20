@@ -4,7 +4,7 @@ image: /images/blogs/default_thumbnail.jpeg
 summary: 정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.
 description: 정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.
 author: Gitsunmin
-draft: true
+draft: false
 date: 2023-12-20 12:00:00
 math: true
 ---
