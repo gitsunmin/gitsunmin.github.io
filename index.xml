@@ -6,8 +6,15 @@
     <description>Recent content on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Fri, 08 Dec 2023 01:31:29 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 20 Dec 2023 12:00:00 +0000</lastBuildDate>
     <atom:link href="https://gitsunmin.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>정원사들 시즌9 참여 후기</title>
+      <link>https://gitsunmin.github.io/blogs/garden9-2023/</link>
+      <pubDate>Wed, 20 Dec 2023 12:00:00 +0000</pubDate>
+      <guid>https://gitsunmin.github.io/blogs/garden9-2023/</guid>
+      <description>정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.</description>
+    </item>
     <item>
       <title>Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)</title>
       <link>https://gitsunmin.github.io/blogs/add-flavor-to-flutter/</link>
