@@ -293,57 +293,14 @@ Deview 2023을 다녀온 후 | Gitsunmin Blog
 <h1 id="본론">본론</h1>
 <p>우선 저는 프론트엔드 개발자이기 때문에 일부 프론트엔드 관련된 아래 세션에만 참가를 하였고, Day1에만 참석할 수 있었습니다.</p>
 <ul>
-<li>*<strong>*하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]**</strong></li>
-<li>*<strong>*눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]**</strong></li>
-<li>*<strong>*중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]**</strong></li>
-<li>*<strong>*GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]**</strong></li>
-<li>*<strong>*SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]**</strong></li>
+<li><strong>하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]</strong></li>
+<li><strong>눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]</strong></li>
+<li><strong>중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]</strong></li>
+<li><strong>GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]</strong></li>
+<li><strong>SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]</strong></li>
 </ul>
 <p>강의 자료를 따로 제공해 주고 있어서 참조 부분에 업로드 해두겠습니다.</p>
-<h2 id="하나의-코드로-react-vue-svelte-등-모든-프레임워크를-지원할-수-있는-cfcs-reactive-최연규-naver-search">*<strong>*하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]**</strong></h2>
-<h3 id="목차">목차</h3>
-<ul>
-<li>TOC
-<h3 id="1-cfcs"><strong>1. CFCs</strong></h3>
-<ul>
-<li>2019: React, Angular, Vue 등 모든 프레임워크를 지원하는 방법 (DOM)
-<ul>
-<li>InfiniteGrid 1.x, Flicking 2.x</li>
-<li>InfiniteGrid, Flicking 3.0</li>
-</ul>
-</li>
-<li>프레임워크를 지원하는 방법</li>
-</ul>
-<h3 id="2-cfcs-dom-deview-2019"><strong>2. CFCs DOM (DEVIEW 2019)</strong></h3>
-<ul>
-<li>UI에 초점을 두는 CFCs DOM Concept</li>
-<li>CFCs DOM 개발 지연 상황</li>
-</ul>
-<h3 id="3-함수-컴포넌트의-개선과-reactive-component"><strong>3. 함수 컴포넌트의 개선과 Reactive Component</strong></h3>
-<ul>
-<li>2019 ~ : 함수 컴포넌트와 UI보다 기능에 초점을 두는 Hooks의 등장</li>
-<li>함수 컴포넌트에서 사용할 수 있는 Reactive Component</li>
-<li>프레임워크별 Reactive Component</li>
-<li>2020: egjs의 함수 컴포넌트 지원 시작 및 같은 실수를 반복하는 ImReady</li>
-<li>ImReady를 통한 프레임워크별 Reactive component 라이프사이클</li>
-</ul>
-<h3 id="4-cfcs-reactive-모듈"><strong>4. CFCs Reactive 모듈</strong></h3>
-<ul>
-<li>UI보다 기능에 초점을 두는 CFCs Reactive Concept</li>
-<li>어떻게 공통화를 할 수 있었는가?</li>
-<li>모듈로써 공개하는 CFCs Reactive</li>
-<li>CFCs 사용법</li>
-<li>CFCs를 적용한 예시</li>
-<li>CFCs를 적용한 모듈들 소개</li>
-</ul>
-<h3 id="5-다음-cfcs-concepts"><strong>5. 다음 CFCs Concepts</strong></h3>
-<ul>
-<li>CFCs Static DOM</li>
-<li>CFCs Dynamic DOM</li>
-<li>CFCs Warp</li>
-</ul>
-</li>
-</ul>
+<h2 id="하나의-코드로-react-vue-svelte-등-모든-프레임워크를-지원할-수-있는-cfcs-reactive-최연규-naver-search">하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]</h2>
 <h3 id="요약">요약</h3>
 <p><a href="https://github.com/naver/cfcs">CFCs</a>는 Naver에서 사용하는 <a href="https://naver.github.io/egjs/">egjs</a>라는 라이브러리를 React, Vue, Svelte 등 여러 프에레워크에서 제공하기 위해서 개발되었습니다. 물론 각 프레임워크 별로 코드를 작성하여 egjs를 여러 Framework에서 제공하는 것도 가능했지만, 한 번의 작업으로 여러 프레임워크를 제공하는 것이 목표였습니다.</p>
 <p>목표를 이루기 위해서 프레임워크들의 공통점을 찾았는데, 다음과 같은 공통점을 찾을 수 있었습니다.</p>
@@ -372,41 +329,7 @@ Deview 2023을 다녀온 후 | Gitsunmin Blog
 </ul>
 </li>
 </ul>
-<h2 id="눈으로-보며-듣는-음성-기록-클로바노트-서비스의-웹-기술-톺아보기-임대현이은성-naver-cloud">*<strong>*눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]**</strong></h2>
-<h3 id="목차-1">목차</h3>
-<ul>
-<li>TOC
-<h3 id="클로바노트-서비스란"><strong>클로바노트 서비스란?</strong></h3>
-<h3 id="클로바노트의-웹-기술들"><strong>클로바노트의 웹 기술들</strong></h3>
-<ul>
-<li>오프라인 지원
-<ul>
-<li>오프라인 웹을 지원하기 위해 PWA를 설정하는 방법</li>
-<li>신규 서버를 배포 후 오프라인 앱에 업데이트를 가능하게 하는 방법 들을 공유합니다.</li>
-</ul>
-</li>
-<li>반응형 UX
-<ul>
-<li>반응형 ux 로 개발했던 방법을 공유합니다.</li>
-</ul>
-</li>
-<li>줌 서비스 연동
-<ul>
-<li>줌 미팅의 오디오 데이터를 실시간으로 가져와서 클로바노트와 연결했던 방법을 공유 합니다.</li>
-</ul>
-</li>
-<li>기타 기술들
-<ul>
-<li>모노레포, 아토믹패턴, 리코일등 이미 많이 소개된 기술을 어떻게 클로바노트에서 적용하며 잘 유지하고 있는지 공유합니다.</li>
-</ul>
-</li>
-</ul>
-<h3 id="클로바노트-웹팀의-개발-문화"><strong>클로바노트 웹팀의 개발 문화</strong></h3>
-<ul>
-<li>Perfect이 아닌 Better를 만들기 위한 팀의 개발 문화 몇가지를 소개합니다.</li>
-</ul>
-</li>
-</ul>
+<h2 id="눈으로-보며-듣는-음성-기록-클로바노트-서비스의-웹-기술-톺아보기-임대현이은성-naver-cloud">눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]</h2>
 <h3 id="요약-1">요약</h3>
 <ul>
 <li>클로바 노트 소개</li>
@@ -422,38 +345,7 @@ Deview 2023을 다녀온 후 | Gitsunmin Blog
 <li>팀 문화</li>
 </ul>
 <p>클로바 노트 팀은 개발 효율화, 운영 효율화, 세계 최고의 기술력 지향을 개발 철학으로 삼고, 2주에 한 번씩 하는 스크럼을 “감성 스크럼”이라고 명명하여 사적인 이야기 또한 같이 공유하며 팀간의 우대를 쌓는다고 하였고, 이러한 감성의 교류는 코드 리뷰와 같이 예민한 작업 시에 서로에 대한 이해를 도와준다고 합니다.</p>
-<h2 id="중요한-건-꺾이지-않는-마음-스마트에디터의-도전-김성원이진-naver-etech">*<strong>*중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]**</strong></h2>
-<h3 id="목차-2">목차</h3>
-<ul>
-<li>TOC
-<h3 id="1-intro"><strong>1. Intro</strong></h3>
-<h3 id="2-se-도전기"><strong>2. SE 도전기</strong></h3>
-<ol>
-<li>과거부터 현재까지
-<ol>
-<li>1세대: contenteditable</li>
-<li>1.5세대: 블록 에디터</li>
-<li>2세대: 가상 커서 + input buffer</li>
-</ol>
-</li>
-<li>현재
-<ol>
-<li>3세대: 가상 커서 + contenteditable</li>
-<li>긴 글 성능 문제 (undo, redo, 긴 글 불러오기, 긴 글 수정하기)</li>
-<li>긴 코드 (스마트 에디터 경우 18만줄) 복잡도, 중복도 문제</li>
-<li>플랫폼으로서 다양한 디자인 요구 수용하기</li>
-<li>Dart SASS를 이용한 운영 효율화</li>
-</ol>
-</li>
-<li>미래
-<ol>
-<li>동시 편집</li>
-<li>AI</li>
-</ol>
-</li>
-</ol>
-</li>
-</ul>
+<h2 id="중요한-건-꺾이지-않는-마음-스마트에디터의-도전-김성원이진-naver-etech">중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]</h2>
 <h3 id="요약-2">요약</h3>
 <p>스마트 에디터가 지금까지 어떤 고난과 역경을 이겨냈는지를 알려주는 발표였습니다.</p>
 <p>1세대, 1.5세대 그리고 2세대, 3세대 로 구분이 되어 있는데, 한 번 요약 해 보겠습니다.</p>
@@ -465,23 +357,7 @@ Deview 2023을 다녀온 후 | Gitsunmin Blog
 <p>코드 품질과 스타일에 대한 내용도 있어서 짧게 요약하자면,</p>
 <p>코드의 복잡도와 중복을 해결하기 위해서 블록코딩이라는 것을 도입하였습니다. 불록 코딩은 명령의 단위를 최소화 하여, 하나의 블록으로 만들고, 이 블록들이 연결되어 하나의 명령을 수행하는 코딩 방법이며, 각 작은 단위의 블록에서는 성공, 실패 두 가지의 상태를 가집니다. 성공에 대한 다음 액션, 실패에 대한 다음 액션을들 정의하여 큰 블록을 만들면, 재사용성도 증가하고, 흐름의 파악이 쉽기 때문에 복잡도 또한 감소할 수 있습니다.</p>
 <p>스마트 에디터의 스타일은 2세대 부터 커스텀 스타일을 적용하였는데, 에디터를 사용하는 모든 서비스들에 따라서 너무 많은 요구사항으로 복잡한 상황이었습니다. 스마트 에디터에서는 이러한 상황에서 IE 스펙을 제외할 수 있는 점, node sass를 Dart Sass로 변경을 기점으로 문제를 해결하기 시작했습니다. IE 스펙을 제외하면서 CSS 변수를 사용할 수 있게 되었고, 공통화를 하여 복잡도를 낮출 수 있었습니다. 또, 관심사의 분리를 하였는데, 기존의 mixin, function별로 관리를 하던 css코드를 color의 mixin, font의 mixin 처럼 하나의 관심사를 두어 관심사 별로 mixin, function을 관리하는 방식으로 변경하여, 모듈화를 할 수 있었고, 복잡도가 많이 개선되었습니다.</p>
-<h2 id="graphql-잘-쓰고-계신가요-production-ready-graphql-오제관권기범-naver-glace">*<strong>*GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]**</strong></h2>
-<h3 id="목차-3">목차</h3>
-<ul>
-<li>TOC
-intro. 팀 및 발표 배경 소개
-<ol>
-<li>Schema</li>
-<li>Field Argument</li>
-<li>Enum</li>
-<li>Error handling</li>
-<li>Custom Scalar</li>
-<li>Field Resolver</li>
-<li>Normalization</li>
-<li>Fragment</li>
-</ol>
-</li>
-</ul>
+<h2 id="graphql-잘-쓰고-계신가요-production-ready-graphql-오제관권기범-naver-glace">GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]</h2>
 <h3 id="요약-3">요약</h3>
 <p>정의해야 하는 GQL 중에서 같은 이미지 이지만, 리사이징 크기에 따라서 다른 경로를 제공하는 필드가 있었습니다. 그런데 각 크기별로 GQL 필드를 차지하는것이 비효율적이라고 느껴서 발표자 분들은 Field Argument를 적용하였습니다.</p>
 <ol>
@@ -584,46 +460,7 @@ intro. 팀 및 발표 배경 소개
 <li>Fragment</li>
 </ol>
 <p>같은 GraphQL field를 여러번 사용할 경우에 schema에서 정의한 type들을 이용하여 fragment를 선언할 수 있고, 변수처럼 사용이 가능합니다.</p>
-<h2 id="ssr환경에서의-micro-frontend-구현과-퍼포먼스-향상을-위한-캐시전략-박찬진-쿠팡">*<strong>*SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]**</strong></h2>
-<h3 id="목차-4">목차</h3>
-<ul>
-<li>TOC
-<h3 id="1-content-management-platform"><strong>1. Content Management Platform</strong></h3>
-<ul>
-<li>Onsite Merchandazing System</li>
-<li>Content Management Platform</li>
-</ul>
-<h3 id="2-micro-frontend-mfe"><strong>2. Micro-Frontend (MFE)</strong></h3>
-<ul>
-<li>Micro-Frontend의 기본 구조</li>
-<li>런타임 원격 코드 동적 로딩</li>
-<li>Standard Monolith SSR</li>
-<li>Module Federation 과 SSR</li>
-<li>우리가 원했던 방식</li>
-<li>런타임 원격 코드 동적 로딩</li>
-<li>남은 문제</li>
-</ul>
-<h3 id="3-module-registry"><strong>3. Module Registry</strong></h3>
-<ul>
-<li>demo</li>
-</ul>
-<h3 id="4-rendering-walk-though"><strong>4. Rendering walk-though</strong></h3>
-<ul>
-<li>Rendering walk-though</li>
-<li>Page Code</li>
-<li>이 변화를 통해 얻은 것</li>
-</ul>
-<h3 id="5-mfe를-위한-캐시전략"><strong>5. MFE를 위한 캐시전략</strong></h3>
-<ul>
-<li>무엇을 캐시할 것인가?</li>
-<li>캐시 key 구성</li>
-<li>캐시 구현 - 동시성 문제</li>
-<li>캐시 구현 in Framework</li>
-<li>스트레스 테스트</li>
-</ul>
-<h3 id="6-결론--회고"><strong>6. 결론 / 회고</strong></h3>
-</li>
-</ul>
+<h2 id="ssr환경에서의-micro-frontend-구현과-퍼포먼스-향상을-위한-캐시전략-박찬진-쿠팡">SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]</h2>
 <h3 id="요약-4">요약</h3>
 <p>마이크로 프론트엔드를 적용하면서 있었던 고민과 회고한 내용을 발표해 주셨습니다.</p>
 <p>발표자분께서는 너무 많은 위젯을 한 팀에서 업무를 하다 보니, 과부하에 대한 대처로서 마이크로 프론트엔드를 생각하셨다고 하셨고, 1차와 2차로 나누어서 적용를 하였는데, 1차로는 mono-repo를 도입하는 것을 하셨다고 합니다.</p>
@@ -643,15 +480,15 @@ intro. 팀 및 발표 배경 소개
 <p>이렇게 Deview를 통해서 모든 정보를 얻지는 못 하더라도, 잊혀졌던 키워드만 듣고 온 것 만으로도 저에게는 긍정적인 영향이 있었습니다. 그리고, “눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기(임대현/이은성)” 세션의 발표자들의 발표하는 방식이 너무 마음에 들었습니다. 아주 긴 내용이 아주 잘 이해가 되어서, 클로바 노트로 녹음한 내용들 다시 들어보며, 발표하는 방식을 연구해 보려고 합니다.</p>
 <h1 id="참조">참조</h1>
 <ul>
-<li>*<strong>*하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]**</strong>
+<li><strong>하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]</strong>
 <a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/86e28656-af5a-4bc0-af13-142df4392303/111%E1%84%92%E1%85%A1%E1%84%82%E1%85%A1%E1%84%8B%E1%85%B4%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%85%E1%85%A9ReactVueSvelte%E1%84%8C%E1%85%A5%E1%86%AB%E1%84%87%E1%85%AE%E1%84%8C%E1%85%B5%E1%84%8B%E1%85%AF%E1%86%AB%E1%84%92%E1%85%A1%E1%84%82%E1%85%B3%E1%86%ABCFCsReactive.pdf">최연규-발표자료</a></li>
-<li>*<strong>*눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]**</strong>
+<li><strong>눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]</strong>
 <a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/972f66eb-dd57-487e-9b6e-d0ab582680ab/122%E1%84%82%E1%85%AE%E1%86%AB%E1%84%8B%E1%85%B3%E1%84%85%E1%85%A9%E1%84%87%E1%85%A9%E1%84%86%E1%85%A7%E1%84%83%E1%85%B3%E1%86%AE%E1%84%82%E1%85%B3%E1%86%AB%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%89%E1%85%A5%E1%86%BC%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%E1%84%8F%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A9%E1%84%87%E1%85%A1%E1%84%82%E1%85%A9%E1%84%90%E1%85%B3%E1%84%89%E1%85%A5%E1%84%87%E1%85%B5%E1%84%89%E1%85%B3%E1%84%8B%E1%85%B4%E1%84%8B%E1%85%B0%E1%86%B8%E1%84%80%E1%85%B5%E1%84%89%E1%85%AE%E1%86%AF%E1%84%90%E1%85%A9%E1%87%81%E1%84%8B%E1%85%A1%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5.pdf">임대현-이은성-발표자료</a></li>
-<li>*<strong>*중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]**</strong>
+<li><strong>중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]</strong>
 <a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2fcc4430-56ad-4f4d-98e9-3a593c4a4ab8/114%E1%84%8C%E1%85%AE%E1%86%BC%E1%84%8B%E1%85%AD%E1%84%92%E1%85%A1%E1%86%AB_%E1%84%80%E1%85%A5%E1%86%AB_%E1%84%81%E1%85%A5%E1%86%A9%E1%84%8B%E1%85%B5%E1%84%8C%E1%85%B5_%E1%84%8B%E1%85%A1%E1%86%AD%E1%84%82%E1%85%B3%E1%86%AB_%E1%84%86%E1%85%A1%E1%84%8B%E1%85%B3%E1%86%B7_%E1%84%8E%E1%85%AC%E1%84%8C%E1%85%A9%E1%86%BC.pdf">김성원-이진-발표자료</a></li>
-<li>*<strong>*GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]**</strong>
+<li><strong>GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]</strong>
 <a href="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fedcaeb4-691d-40c6-86e6-da529beccf1a/115Production_ready_GraphQL_1.pdf">오제관-권기범-발표자료</a></li>
-<li>*<strong>*SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]**</strong></li>
+<li><strong>SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]</strong></li>
 </ul>
 
           </article>
@@ -667,49 +504,28 @@ intro. 팀 및 발표 배경 소개
               <div class="toc-content">
                 <nav id="TableOfContents">
   <ul>
-    <li><a href="#하나의-코드로-react-vue-svelte-등-모든-프레임워크를-지원할-수-있는-cfcs-reactive-최연규-naver-search">*<strong>*하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]**</strong></a>
+    <li><a href="#하나의-코드로-react-vue-svelte-등-모든-프레임워크를-지원할-수-있는-cfcs-reactive-최연규-naver-search">하나의 코드로 React, Vue, Svelte 등 모든 프레임워크를 지원할 수 있는 CFCs Reactive [최연규, NAVER Search]</a>
       <ul>
-        <li><a href="#목차">목차</a></li>
-        <li><a href="#1-cfcs"><strong>1. CFCs</strong></a></li>
-        <li><a href="#2-cfcs-dom-deview-2019"><strong>2. CFCs DOM (DEVIEW 2019)</strong></a></li>
-        <li><a href="#3-함수-컴포넌트의-개선과-reactive-component"><strong>3. 함수 컴포넌트의 개선과 Reactive Component</strong></a></li>
-        <li><a href="#4-cfcs-reactive-모듈"><strong>4. CFCs Reactive 모듈</strong></a></li>
-        <li><a href="#5-다음-cfcs-concepts"><strong>5. 다음 CFCs Concepts</strong></a></li>
         <li><a href="#요약">요약</a></li>
       </ul>
     </li>
-    <li><a href="#눈으로-보며-듣는-음성-기록-클로바노트-서비스의-웹-기술-톺아보기-임대현이은성-naver-cloud">*<strong>*눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]**</strong></a>
+    <li><a href="#눈으로-보며-듣는-음성-기록-클로바노트-서비스의-웹-기술-톺아보기-임대현이은성-naver-cloud">눈으로 보며 듣는 음성 기록, 클로바노트 서비스의 웹 기술 톺아보기 [임대현/이은성, NAVER Cloud]</a>
       <ul>
-        <li><a href="#목차-1">목차</a></li>
-        <li><a href="#클로바노트-서비스란"><strong>클로바노트 서비스란?</strong></a></li>
-        <li><a href="#클로바노트의-웹-기술들"><strong>클로바노트의 웹 기술들</strong></a></li>
-        <li><a href="#클로바노트-웹팀의-개발-문화"><strong>클로바노트 웹팀의 개발 문화</strong></a></li>
         <li><a href="#요약-1">요약</a></li>
       </ul>
     </li>
-    <li><a href="#중요한-건-꺾이지-않는-마음-스마트에디터의-도전-김성원이진-naver-etech">*<strong>*중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]**</strong></a>
+    <li><a href="#중요한-건-꺾이지-않는-마음-스마트에디터의-도전-김성원이진-naver-etech">중요한 건 꺾이지 않는 마음: 스마트에디터의 도전 [김성원/이진, NAVER ETECH]</a>
       <ul>
-        <li><a href="#목차-2">목차</a></li>
-        <li><a href="#1-intro"><strong>1. Intro</strong></a></li>
-        <li><a href="#2-se-도전기"><strong>2. SE 도전기</strong></a></li>
         <li><a href="#요약-2">요약</a></li>
       </ul>
     </li>
-    <li><a href="#graphql-잘-쓰고-계신가요-production-ready-graphql-오제관권기범-naver-glace">*<strong>*GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]**</strong></a>
+    <li><a href="#graphql-잘-쓰고-계신가요-production-ready-graphql-오제관권기범-naver-glace">GraphQL 잘 쓰고 계신가요? (Production-ready GraphQL) [오제관/권기범, NAVER Glace]</a>
       <ul>
-        <li><a href="#목차-3">목차</a></li>
         <li><a href="#요약-3">요약</a></li>
       </ul>
     </li>
-    <li><a href="#ssr환경에서의-micro-frontend-구현과-퍼포먼스-향상을-위한-캐시전략-박찬진-쿠팡">*<strong>*SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]**</strong></a>
+    <li><a href="#ssr환경에서의-micro-frontend-구현과-퍼포먼스-향상을-위한-캐시전략-박찬진-쿠팡">SSR환경에서의 Micro-Frontend 구현과 퍼포먼스 향상을 위한 캐시전략 [박찬진, 쿠팡]</a>
       <ul>
-        <li><a href="#목차-4">목차</a></li>
-        <li><a href="#1-content-management-platform"><strong>1. Content Management Platform</strong></a></li>
-        <li><a href="#2-micro-frontend-mfe"><strong>2. Micro-Frontend (MFE)</strong></a></li>
-        <li><a href="#3-module-registry"><strong>3. Module Registry</strong></a></li>
-        <li><a href="#4-rendering-walk-though"><strong>4. Rendering walk-though</strong></a></li>
-        <li><a href="#5-mfe를-위한-캐시전략"><strong>5. MFE를 위한 캐시전략</strong></a></li>
-        <li><a href="#6-결론--회고"><strong>6. 결론 / 회고</strong></a></li>
         <li><a href="#요약-4">요약</a></li>
       </ul>
     </li>

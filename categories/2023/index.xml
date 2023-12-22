@@ -44,13 +44,6 @@
       <description>monorepo에 대해서 알아보았습니다.</description>
     </item>
     <item>
-      <title>계산기 만들기</title>
-      <link>https://gitsunmin.github.io/blogs/made-calculator/</link>
-      <pubDate>Thu, 23 Mar 2023 12:00:00 +0000</pubDate>
-      <guid>https://gitsunmin.github.io/blogs/made-calculator/</guid>
-      <description>중위 표기법을 후위 표기법으로 변환하는 알고리즘을 활용하여 계산기 프로그램을 만들어봤습니다.</description>
-    </item>
-    <item>
       <title>Custom Date Picker</title>
       <link>https://gitsunmin.github.io/blogs/made-custom-date-picker/</link>
       <pubDate>Tue, 14 Mar 2023 12:00:00 +0000</pubDate>
