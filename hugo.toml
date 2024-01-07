@@ -28,7 +28,7 @@ weight = 1
 
 [params]
 title = "Gitsunmin Blog"
-description = "Text about my cool site"
+description = "Gitsunmin Blog"
 favicon = "/images/favicon.png"
 useBootstrapCDN = false
 mathjax = false
@@ -60,10 +60,13 @@ disableContact = false
 
 [params.hero]
 enable = true
-intro = "Hi, my name is"
-title = "Gitsunmin."
-subtitle = "Welcome to my blog."
-content = "안녕하세요. 방문해주셔서 감사합니다."
+# intro = "👋 👋 👋 👋"
+title = "Gitsunmin Blog 👋"
+# subtitle = "Welcome to my blog."
+content = """
+안녕하세요.   
+평범한 프론트엔드 개발자의 블로그입니다.
+"""
 image = "/images/home_main.jpeg"
 
 [params.hero.bottomImage]
