@@ -100,16 +100,15 @@ enable = true
 title = "About Me"
 image = "/images/about_me.png"
 content = """
-2019년 7월부터 프론트엔드 개발을 시작하여, <br />
-Electron, React, Flutter 등을 사용하여 다양한 플랫폼에서 개발을 해왔습니다.
-
-현재는 Flutter + React를 활용하여 하이브리드 앱을 개발하고 있습니다.
+2019년 7월부터 Vue로 프론트엔드 개발을 시작하여,   
+React, Electron, Flutter 등을 사용하여 다양한 플랫폼에서 개발을 하고있습니다.   
+<br />
 """
 
 [params.about.skills]
 enable = true
-title = "최근에 가장 많이 사용하였던 기술 3가지 입니다."
-items = ["Flutter", "React", "TypeScript"]
+title = "최근 사용중인 기술의 목록입니다."
+items = ["React(Next.js)", "React Relay", "TypeScript", "Flutter"]
 
 [params.experience]
 enable = false
