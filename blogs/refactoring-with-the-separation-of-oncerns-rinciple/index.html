@@ -101,15 +101,16 @@
     }
 </style>
 
-<meta name="description" content="관심사의 분리 원칙으로 리팩토링하여 코드의 품질을 향상시킨 경험을 공유합니다.">
-<link rel="stylesheet" href="/css/single.css">
+<meta name="description" content="관심사의 분리 원칙으로 리팩토링하여 코드의 품질을 향상시킨 경험을 공유합니다." />
+<link rel="stylesheet" href="/css/single.css" />
 
 
-<script defer src="/fontawesome-6/all-6.4.2.js"></script>
+<script
+  defer
+  src="/fontawesome-6/all-6.4.2.js"
+></script>
 
-  <title>
-관심사의 분리로 해보는 리팩토링 | Gitsunmin Blog
-
+  <title> 관심사의 분리로 해보는 리팩토링 | Gitsunmin Blog 
   </title>
 </head>
 
@@ -271,11 +272,9 @@
           <div class="title mb-5">
             <h1 class="text-center mb-4">관심사의 분리로 해보는 리팩토링</h1>
             <div class="text-center">
-              Gitsunmin 
+              Gitsunmin
               <small>|</small>
-              2023.01.07
-
-              
+              2023.01.07 
               <span id="readingTime">
                 min read
               </span>
@@ -284,11 +283,14 @@
           </div>
           
           <div class="featured-image">
-            <img class="img-fluid mx-auto d-block" src="/images/blogs/default_thumbnail.jpeg" alt="관심사의 분리로 해보는 리팩토링">
+            <img
+              class="img-fluid mx-auto d-block"
+              src="/images/blogs/default_thumbnail.jpeg"
+              alt="관심사의 분리로 해보는 리팩토링"
+            />
           </div>
           
-          <article class="page-content  p-2">
-          <h1 id="서론">서론</h1>
+          <article class="page-content p-2"><h1 id="서론">서론</h1>
 <p>총 40만줄이 넘는 프로젝트를 운영하며 코드와 로직이 모두 복잡하여 유지보수에 어려움을 겪었습니다. &ldquo;어떻게든 해야, 나라도 코드를 수정할 수 있겠다.&ldquo;는 생각으로 리펙토링을 고려해보았습니다. 가장 먼저 각 로직을 분석하기 위해서 &ldquo;일단 나누자&quot;는 생각으로 접근하여, &ldquo;관심사의 분리&quot;를 이용한 경험을 이야기 해보려고 합니다.</p>
 <h1 id="본론">본론</h1>
 <blockquote>
@@ -570,19 +572,15 @@
 <li><a href="https://kaki104.tistory.com/725">https://kaki104.tistory.com/725</a></li>
 <li><a href="https://velog.io/@baekgom/%EA%B4%80%EC%8B%AC%EC%82%AC-%EB%B6%84%EB%A6%AC-SoC-separation-of-concerns">https://velog.io/@baekgom/%EA%B4%80%EC%8B%AC%EC%82%AC-%EB%B6%84%EB%A6%AC-SoC-separation-of-concerns</a></li>
 </ul>
-
-          </article>
+</article>
         </div>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-3">
         <div id="stickySideBar" class="sticky-sidebar">
           
           <aside class="toc">
-              <h5>
-                목차
-              </h5>
-              <div class="toc-content">
-                <nav id="TableOfContents">
+            <h5>목차</h5>
+            <div class="toc-content"><nav id="TableOfContents">
   <ul>
     <li><a href="#관심사의-분리란">관심사의 분리란?</a>
       <ul>
@@ -598,39 +596,47 @@
       </ul>
     </li>
   </ul>
-</nav>
-              </div>
+</nav></div>
           </aside>
-          
-
-          
+           
           <aside class="tags">
             <h5>Tags</h5>
             <ul class="tags-ul list-unstyled list-inline">
               
-              <li class="list-inline-item"><a href="https://gitsunmin.github.io/tags/refactoring" target="_blank">Refactoring</a></li>
+              <li class="list-inline-item">
+                <a href="https://gitsunmin.github.io/tags/refactoring" target="_blank"
+                  >Refactoring</a
+                >
+              </li>
               
             </ul>
           </aside>
-          
-
-          
+           
           <aside class="social">
             <h5>Social</h5>
             <div class="social-content">
               <ul class="list-inline">
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://twitter.com/share?text=%ea%b4%80%ec%8b%ac%ec%82%ac%ec%9d%98%20%eb%b6%84%eb%a6%ac%eb%a1%9c%20%ed%95%b4%eb%b3%b4%eb%8a%94%20%eb%a6%ac%ed%8c%a9%ed%86%a0%eb%a7%81&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2frefactoring-with-the-separation-of-oncerns-rinciple%2f">
+                  <a
+                    target="_blank"
+                    href="https://twitter.com/share?text=%ea%b4%80%ec%8b%ac%ec%82%ac%ec%9d%98%20%eb%b6%84%eb%a6%ac%eb%a1%9c%20%ed%95%b4%eb%b3%b4%eb%8a%94%20%eb%a6%ac%ed%8c%a9%ed%86%a0%eb%a7%81&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2frefactoring-with-the-separation-of-oncerns-rinciple%2f"
+                  >
                     <i class="fab fa-twitter"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://api.whatsapp.com/send?text=%ea%b4%80%ec%8b%ac%ec%82%ac%ec%9d%98%20%eb%b6%84%eb%a6%ac%eb%a1%9c%20%ed%95%b4%eb%b3%b4%eb%8a%94%20%eb%a6%ac%ed%8c%a9%ed%86%a0%eb%a7%81: https%3a%2f%2fgitsunmin.github.io%2fblogs%2frefactoring-with-the-separation-of-oncerns-rinciple%2f">
+                  <a
+                    target="_blank"
+                    href="https://api.whatsapp.com/send?text=%ea%b4%80%ec%8b%ac%ec%82%ac%ec%9d%98%20%eb%b6%84%eb%a6%ac%eb%a1%9c%20%ed%95%b4%eb%b3%b4%eb%8a%94%20%eb%a6%ac%ed%8c%a9%ed%86%a0%eb%a7%81: https%3a%2f%2fgitsunmin.github.io%2fblogs%2frefactoring-with-the-separation-of-oncerns-rinciple%2f"
+                  >
                     <i class="fab fa-whatsapp"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href='mailto:?subject=%ea%b4%80%ec%8b%ac%ec%82%ac%ec%9d%98%20%eb%b6%84%eb%a6%ac%eb%a1%9c%20%ed%95%b4%eb%b3%b4%eb%8a%94%20%eb%a6%ac%ed%8c%a9%ed%86%a0%eb%a7%81&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2frefactoring-with-the-separation-of-oncerns-rinciple%2f'>
+                  <a
+                    target="_blank"
+                    href='mailto:?subject=%ea%b4%80%ec%8b%ac%ec%82%ac%ec%9d%98%20%eb%b6%84%eb%a6%ac%eb%a1%9c%20%ed%95%b4%eb%b3%b4%eb%8a%94%20%eb%a6%ac%ed%8c%a9%ed%86%a0%eb%a7%81&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2frefactoring-with-the-separation-of-oncerns-rinciple%2f'
+                  >
                     <i class="fa fa-envelope"></i>
                   </a>
                 </li>
@@ -641,15 +647,16 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <script src="https://utteranc.es/client.js"
+    <div class="row" style="margin-top: 200px">
+      <script
+        src="https://utteranc.es/client.js"
         repo="gitsunmin/gitsunmin.github.io"
         issue-term="pathname"
         label="comment"
-        theme="dark-blue"
+        theme="preferred-color-scheme"
         crossorigin="anonymous"
-        async>
-      </script>
+        async
+      ></script>
     </div>
   </div>
   <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
@@ -659,9 +666,16 @@
 
 
 <div class="progress">
-  <div id="scroll-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  <div
+    id="scroll-progress-bar"
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
 </div>
-<Script src="/js/scrollProgressBar.js"></script>
+<script src="/js/scrollProgressBar.js"></script>
 
 
 <script>
@@ -695,9 +709,7 @@
 
 
 <script src="/js/readingTime.js"></script>
-
-
-
+ 
   </div><footer>
     
  

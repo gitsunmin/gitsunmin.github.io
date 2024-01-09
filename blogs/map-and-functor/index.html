@@ -101,15 +101,16 @@
     }
 </style>
 
-<meta name="description" content="함수형 프로그래밍의 map과 functor를 설명합니다.">
-<link rel="stylesheet" href="/css/single.css">
+<meta name="description" content="함수형 프로그래밍의 map과 functor를 설명합니다." />
+<link rel="stylesheet" href="/css/single.css" />
 
 
-<script defer src="/fontawesome-6/all-6.4.2.js"></script>
+<script
+  defer
+  src="/fontawesome-6/all-6.4.2.js"
+></script>
 
-  <title>
-Map, Functor 그리고 ts-belt | Gitsunmin Blog
-
+  <title> Map, Functor 그리고 ts-belt | Gitsunmin Blog 
   </title>
 </head>
 
@@ -271,11 +272,9 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
           <div class="title mb-5">
             <h1 class="text-center mb-4">Map, Functor 그리고 ts-belt</h1>
             <div class="text-center">
-              Gitsunmin 
+              Gitsunmin
               <small>|</small>
-              2023.09.16
-
-              
+              2023.09.16 
               <span id="readingTime">
                 min read
               </span>
@@ -284,11 +283,14 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
           </div>
           
           <div class="featured-image">
-            <img class="img-fluid mx-auto d-block" src="/images/blogs/functional_programing_thumbnail.jpeg" alt="Map, Functor 그리고 ts-belt">
+            <img
+              class="img-fluid mx-auto d-block"
+              src="/images/blogs/functional_programing_thumbnail.jpeg"
+              alt="Map, Functor 그리고 ts-belt"
+            />
           </div>
           
-          <article class="page-content  p-2">
-          <h1 id="서론">서론</h1>
+          <article class="page-content p-2"><h1 id="서론">서론</h1>
 <p>함수형 프로그래밍에는 정말 많은 내용이 있는 것 같습니다. 그 중에서 map과 functor에 대해서, 그리고 typescript로 함수형 프로그래밍을 할 수 있도록 도와주는 ts-belt라는 라이브러리를 소개하겠습니다.</p>
 <h1 id="본론">본론</h1>
 <p>우선 Map에 대해서 이야기를 해보려고 합니다.</p>
@@ -373,19 +375,15 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
 <li><a href="https://medium.com/@dtinth/what-is-a-functor-dcf510b098b6">What is a functor?. This is my attempt at explaining about… | by Thai Pangsakulyanont | Medium</a></li>
 <li><a href="https://mobily.github.io/ts-belt/api/array">https://mobily.github.io/ts-belt/api/array</a></li>
 </ul>
-
-          </article>
+</article>
         </div>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-3">
         <div id="stickySideBar" class="sticky-sidebar">
           
           <aside class="toc">
-              <h5>
-                목차
-              </h5>
-              <div class="toc-content">
-                <nav id="TableOfContents">
+            <h5>목차</h5>
+            <div class="toc-content"><nav id="TableOfContents">
   <ul>
     <li><a href="#지도">지도</a></li>
     <li><a href="#데이터-타입">데이터 타입</a></li>
@@ -393,39 +391,47 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
     <li><a href="#functor">Functor</a></li>
     <li><a href="#ts-belt">ts-belt</a></li>
   </ul>
-</nav>
-              </div>
+</nav></div>
           </aside>
-          
-
-          
+           
           <aside class="tags">
             <h5>Tags</h5>
             <ul class="tags-ul list-unstyled list-inline">
               
-              <li class="list-inline-item"><a href="https://gitsunmin.github.io/tags/functionalprograming" target="_blank">FunctionalPrograming</a></li>
+              <li class="list-inline-item">
+                <a href="https://gitsunmin.github.io/tags/functionalprograming" target="_blank"
+                  >FunctionalPrograming</a
+                >
+              </li>
               
             </ul>
           </aside>
-          
-
-          
+           
           <aside class="social">
             <h5>Social</h5>
             <div class="social-content">
               <ul class="list-inline">
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://twitter.com/share?text=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f">
+                  <a
+                    target="_blank"
+                    href="https://twitter.com/share?text=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f"
+                  >
                     <i class="fab fa-twitter"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://api.whatsapp.com/send?text=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f">
+                  <a
+                    target="_blank"
+                    href="https://api.whatsapp.com/send?text=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f"
+                  >
                     <i class="fab fa-whatsapp"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href='mailto:?subject=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f'>
+                  <a
+                    target="_blank"
+                    href='mailto:?subject=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f'
+                  >
                     <i class="fa fa-envelope"></i>
                   </a>
                 </li>
@@ -436,15 +442,16 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
         </div>
       </div>
     </div>
-    <div class="row">
-      <script src="https://utteranc.es/client.js"
+    <div class="row" style="margin-top: 200px">
+      <script
+        src="https://utteranc.es/client.js"
         repo="gitsunmin/gitsunmin.github.io"
         issue-term="pathname"
         label="comment"
-        theme="dark-blue"
+        theme="preferred-color-scheme"
         crossorigin="anonymous"
-        async>
-      </script>
+        async
+      ></script>
     </div>
   </div>
   <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
@@ -454,9 +461,16 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
 
 
 <div class="progress">
-  <div id="scroll-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  <div
+    id="scroll-progress-bar"
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
 </div>
-<Script src="/js/scrollProgressBar.js"></script>
+<script src="/js/scrollProgressBar.js"></script>
 
 
 <script>
@@ -490,9 +504,7 @@ Map, Functor 그리고 ts-belt | Gitsunmin Blog
 
 
 <script src="/js/readingTime.js"></script>
-
-
-
+ 
   </div><footer>
     
  

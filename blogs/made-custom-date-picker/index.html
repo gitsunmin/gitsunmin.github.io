@@ -101,15 +101,16 @@
     }
 </style>
 
-<meta name="description" content="date picker를 만들면서 분석, 고민한 내용을 공유합니다.">
-<link rel="stylesheet" href="/css/single.css">
+<meta name="description" content="date picker를 만들면서 분석, 고민한 내용을 공유합니다." />
+<link rel="stylesheet" href="/css/single.css" />
 
 
-<script defer src="/fontawesome-6/all-6.4.2.js"></script>
+<script
+  defer
+  src="/fontawesome-6/all-6.4.2.js"
+></script>
 
-  <title>
-Custom Date Picker | Gitsunmin Blog
-
+  <title> Custom Date Picker | Gitsunmin Blog 
   </title>
 </head>
 
@@ -271,11 +272,9 @@ Custom Date Picker | Gitsunmin Blog
           <div class="title mb-5">
             <h1 class="text-center mb-4">Custom Date Picker</h1>
             <div class="text-center">
-              Gitsunmin 
+              Gitsunmin
               <small>|</small>
-              2023.03.14
-
-              
+              2023.03.14 
               <span id="readingTime">
                 min read
               </span>
@@ -284,11 +283,14 @@ Custom Date Picker | Gitsunmin Blog
           </div>
           
           <div class="featured-image">
-            <img class="img-fluid mx-auto d-block" src="/images/blogs/default_thumbnail.jpeg" alt="Custom Date Picker">
+            <img
+              class="img-fluid mx-auto d-block"
+              src="/images/blogs/default_thumbnail.jpeg"
+              alt="Custom Date Picker"
+            />
           </div>
           
-          <article class="page-content  p-2">
-          <h1 id="서론">서론</h1>
+          <article class="page-content p-2"><h1 id="서론">서론</h1>
 <p>디자인 시스템을 개발 중에 Date Picker를 만들 기회가 생겨서 만들어보게 되었습니다. 이 글에서는 Date Picker를 만들면서 고민하였던 것들과 알게된 것들 등 정리를 해보려고합니다.</p>
 <aside> 🙏 코드의 모든 부분을 제공하지는 않습니다.
 </aside>
@@ -564,19 +566,15 @@ Custom Date Picker | Gitsunmin Blog
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes">https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes</a></li>
 <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/">https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/</a></li>
 </ul>
-
-          </article>
+</article>
         </div>
       </div>
       <div class="col-sm-12 col-md-12 col-lg-3">
         <div id="stickySideBar" class="sticky-sidebar">
           
           <aside class="toc">
-              <h5>
-                목차
-              </h5>
-              <div class="toc-content">
-                <nav id="TableOfContents">
+            <h5>목차</h5>
+            <div class="toc-content"><nav id="TableOfContents">
   <ul>
     <li><a href="#date-picker란">Date Picker란</a></li>
     <li><a href="#custom-date-picker-분석하기">Custom Date Picker 분석하기</a>
@@ -594,39 +592,47 @@ Custom Date Picker | Gitsunmin Blog
       </ul>
     </li>
   </ul>
-</nav>
-              </div>
+</nav></div>
           </aside>
-          
-
-          
+           
           <aside class="tags">
             <h5>Tags</h5>
             <ul class="tags-ul list-unstyled list-inline">
               
-              <li class="list-inline-item"><a href="https://gitsunmin.github.io/tags/frontend" target="_blank">Frontend</a></li>
+              <li class="list-inline-item">
+                <a href="https://gitsunmin.github.io/tags/frontend" target="_blank"
+                  >Frontend</a
+                >
+              </li>
               
             </ul>
           </aside>
-          
-
-          
+           
           <aside class="social">
             <h5>Social</h5>
             <div class="social-content">
               <ul class="list-inline">
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://twitter.com/share?text=Custom%20Date%20Picker&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmade-custom-date-picker%2f">
+                  <a
+                    target="_blank"
+                    href="https://twitter.com/share?text=Custom%20Date%20Picker&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmade-custom-date-picker%2f"
+                  >
                     <i class="fab fa-twitter"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href="https://api.whatsapp.com/send?text=Custom%20Date%20Picker: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmade-custom-date-picker%2f">
+                  <a
+                    target="_blank"
+                    href="https://api.whatsapp.com/send?text=Custom%20Date%20Picker: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmade-custom-date-picker%2f"
+                  >
                     <i class="fab fa-whatsapp"></i>
                   </a>
                 </li>
                 <li class="list-inline-item text-center">
-                  <a target="_blank" href='mailto:?subject=Custom%20Date%20Picker&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmade-custom-date-picker%2f'>
+                  <a
+                    target="_blank"
+                    href='mailto:?subject=Custom%20Date%20Picker&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmade-custom-date-picker%2f'
+                  >
                     <i class="fa fa-envelope"></i>
                   </a>
                 </li>
@@ -637,15 +643,16 @@ Custom Date Picker | Gitsunmin Blog
         </div>
       </div>
     </div>
-    <div class="row">
-      <script src="https://utteranc.es/client.js"
+    <div class="row" style="margin-top: 200px">
+      <script
+        src="https://utteranc.es/client.js"
         repo="gitsunmin/gitsunmin.github.io"
         issue-term="pathname"
         label="comment"
-        theme="dark-blue"
+        theme="preferred-color-scheme"
         crossorigin="anonymous"
-        async>
-      </script>
+        async
+      ></script>
     </div>
   </div>
   <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
@@ -655,9 +662,16 @@ Custom Date Picker | Gitsunmin Blog
 
 
 <div class="progress">
-  <div id="scroll-progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  <div
+    id="scroll-progress-bar"
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
 </div>
-<Script src="/js/scrollProgressBar.js"></script>
+<script src="/js/scrollProgressBar.js"></script>
 
 
 <script>
@@ -691,9 +705,7 @@ Custom Date Picker | Gitsunmin Blog
 
 
 <script src="/js/readingTime.js"></script>
-
-
-
+ 
   </div><footer>
     
  
