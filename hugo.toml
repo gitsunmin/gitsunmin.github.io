@@ -100,8 +100,8 @@ enable = true
 title = "About Me"
 image = "/images/about_me.png"
 content = """
-2019년 7월부터 Vue로 프론트엔드 개발을 시작하여,   
-React, Electron, Flutter 등을 사용하여 다양한 플랫폼에서 개발을 하고있습니다.   
+2019년에 Vue로 프론트엔드 개발을 시작하여,   
+Electron, React, Flutter 등을 사용하여 다양한 플랫폼에서 개발을 하고있습니다.   
 <br />
 """
 
