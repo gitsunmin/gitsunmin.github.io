@@ -63,10 +63,10 @@ enable = true
 # intro = "👋 👋 👋 👋"
 title = "Gitsunmin Blog 👋"
 # subtitle = "Welcome to my blog."
-content = """
-안녕하세요.   
-평범한 프론트엔드 개발자의 블로그입니다.
-"""
+# content = """
+# 안녕하세요.   
+# 평범한 프론트엔드 개발자의 블로그입니다.
+# """
 image = "/images/home_main.jpeg"
 
 [params.hero.bottomImage]
