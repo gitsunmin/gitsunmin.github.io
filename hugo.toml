@@ -87,14 +87,6 @@ url = "https://github.com/gitsunmin"
 icon = "fab fa-linkedin-in"
 url = "https://www.linkedin.com/in/gitsunmin"
 
-[[params.hero.socialLinks.fontAwesomeIcons]]
-icon = "fas fa-envelope"
-url = "mailto:tjsals116@gmail.com"
-
-# [[params.hero.socialLinks.customIcons]]
-# icon = "/fav.png"
-# url = "https://example.com"
-
 [params.about]
 enable = true
 title = "About Me"
