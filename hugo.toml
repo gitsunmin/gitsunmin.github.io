@@ -90,7 +90,7 @@ url = "https://www.linkedin.com/in/gitsunmin"
 [params.about]
 enable = true
 title = "About Me"
-image = "/images/about_me.png"
+image = "/images/me/profile.gif"
 content = """
 2019년에 Vue로 프론트엔드 개발을 시작하여,   
 Electron, React, Flutter 등을 사용하여 다양한 플랫폼에서 개발을 하고있습니다.   
