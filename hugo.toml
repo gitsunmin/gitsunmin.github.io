@@ -34,6 +34,7 @@ useBootstrapCDN = false
 mathjax = false
 animate = true
 googleSiteVerification = "kETm7W8i9VkwpCzCx8-LKkKiZKp5TINcqV-6VQG7ynM"
+gtmId = "GTM-MG4SR53N"
 
 [params.font]
 fontSize = "1rem"
