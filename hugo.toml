@@ -33,6 +33,7 @@ favicon = "/images/favicon.png"
 useBootstrapCDN = false
 mathjax = false
 animate = true
+googleSiteVerification = "kETm7W8i9VkwpCzCx8-LKkKiZKp5TINcqV-6VQG7ynM"
 
 [params.font]
 fontSize = "1rem"
