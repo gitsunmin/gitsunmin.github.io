@@ -1,5 +1,8 @@
 {
   "scripts": {
     "deploy": "hugo && bunx gh-pages -d public -b master"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.0"
   }
 }
