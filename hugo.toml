@@ -19,12 +19,12 @@ title = "Blog posts"
 url = "/blogs"
 weight = 1
 
-# [[Menus.main]]
-# identifier = "gallery"
-# name = "Gallery"
-# title = "Blog posts"
-# url = "/gallery"
-# weight = 2
+[[Menus.main]]
+identifier = "gallery"
+name = "Gallery"
+title = "Blog posts"
+url = "/gallery"
+weight = 2
 
 [params]
 title = "Gitsunmin Blog"
@@ -63,7 +63,7 @@ disableContact = false
 [params.hero]
 enable = true
 # intro = "👋 👋 👋 👋"
-title = "Gitsunmin Blog 👋"
+title = "Gitsunmin Blog"
 # subtitle = "Welcome to my blog."
 # content = """
 # 안녕하세요.   
@@ -90,17 +90,19 @@ icon = "fab fa-linkedin-in"
 url = "https://www.linkedin.com/in/gitsunmin"
 
 [params.about]
-enable = true
+enable = false
 title = "About Me"
 image = "/images/me/profile.gif"
 content = """
-2019년에 Vue로 프론트엔드 개발을 시작하여,   
-Electron, React, Flutter 등을 사용하여 다양한 플랫폼에서 개발을 하고있습니다.   
+<br/>
+<br/>
+<br/>
+안녕하세요. 👋 <br/> 평범한 프론트엔드 개발자의 블로그입니다.
 <br />
 """
 
 [params.about.skills]
-enable = true
+enable = false
 title = "최근 사용중인 기술의 목록입니다."
 items = ["React(Next.js)", "React Relay", "TypeScript", "Flutter"]
 
