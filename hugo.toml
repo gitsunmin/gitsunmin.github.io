@@ -19,12 +19,12 @@ title = "Blog posts"
 url = "/blogs"
 weight = 1
 
-[[Menus.main]]
-identifier = "gallery"
-name = "Gallery"
-title = "Blog posts"
-url = "/gallery"
-weight = 2
+# [[Menus.main]]
+# identifier = "portfolio"
+# name = "Portfolio"
+# title = "Portfolio"
+# url = "/portfolio"
+# weight = 2
 
 [params]
 title = "Gitsunmin Blog"
