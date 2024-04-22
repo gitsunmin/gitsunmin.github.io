@@ -324,4 +324,3 @@ const onClick = async () => {
 
 - https://velog.io/@seanlion/soc1
 - https://kaki104.tistory.com/725
-- https://velog.io/@baekgom/%EA%B4%80%EC%8B%AC%EC%82%AC-%EB%B6%84%EB%A6%AC-SoC-separation-of-concerns
