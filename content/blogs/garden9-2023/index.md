@@ -7,6 +7,8 @@ author: Gitsunmin
 draft: false
 date: 2023-12-20 12:00:00
 math: true
+tags:
+  - Activity
 ---
 
 ## 서론
