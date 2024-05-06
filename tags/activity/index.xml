@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Activity on Gitsunmin Blog</title>
+    <link>https://gitsunmin.github.io/tags/activity/</link>
+    <description>Recent content in Activity on Gitsunmin Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Wed, 20 Dec 2023 12:00:00 +0000</lastBuildDate>
+    <atom:link href="https://gitsunmin.github.io/tags/activity/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>정원사들 시즌9 참여 후기</title>
+      <link>https://gitsunmin.github.io/blogs/garden9-2023/</link>
+      <pubDate>Wed, 20 Dec 2023 12:00:00 +0000</pubDate>
+      <guid>https://gitsunmin.github.io/blogs/garden9-2023/</guid>
+      <description>정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.</description>
+    </item>
+  </channel>
+</rss>

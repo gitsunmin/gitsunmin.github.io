@@ -28,14 +28,16 @@
 
 
 
-<meta property="og:title" content="Svelte" />
-<meta property="og:description" content="Gitsunmin Blog" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://gitsunmin.github.io/tags/svelte/" /><meta property="og:site_name" content="Gitsunmin Blog" />
+<meta property="og:title" content="개발자를 위한 시프트 레프트 테스트" />
+<meta property="og:description" content="개발자를 위한 시프트 레프트 테스트 책을 읽고 내용을 정리 하였습니다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gitsunmin.github.io/blogs/shift-left-testing-for-developer/" /><meta property="article:section" content="blogs" />
+<meta property="article:published_time" content="2024-05-05T12:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-05T12:00:00+00:00" /><meta property="og:site_name" content="Gitsunmin Blog" />
 
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Svelte"/>
-<meta name="twitter:description" content="Gitsunmin Blog"/>
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="개발자를 위한 시프트 레프트 테스트"/>
+<meta name="twitter:description" content="개발자를 위한 시프트 레프트 테스트 책을 읽고 내용을 정리 하였습니다."/>
 
 
 <link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
@@ -99,14 +101,16 @@
     }
 </style>
 
-<meta name="description" content="Svelte of Gitsunmin Blog" />
-<link
-  rel="stylesheet"
-  href="/css/list.css"
-  media="all"
-/>
+<meta name="description" content="개발자를 위한 시프트 레프트 테스트 책을 읽고 내용을 정리 하였습니다." />
+<link rel="stylesheet" href="/css/single.css" />
 
-  <title> Svelte | Gitsunmin Blog 
+
+<script
+  defer
+  src="/fontawesome-6/all-6.4.2.js"
+></script>
+
+  <title> 개발자를 위한 시프트 레프트 테스트 | Gitsunmin Blog 
   </title>
 </head>
 
@@ -234,56 +238,181 @@
     </nav>
 </header>
 <div id="content">
-<div class="container pt-5" id="list-page">
-  <h2 class="text-center pb-2">Svelte</h2>
-  <div class="row">
-    
-    <div class="col-lg-4 col-md-6 my-3">
-      <div class="card-columns">
-        <div class="card h-100">
-          
-          <div class="card-header">
-            <a href="/blogs/action-of-svelte/">
-              <img
-                src="/images/blogs/default_thumbnail.jpeg"
-                class="card-img-top"
-                alt="Svelte의 동작"
-              />
-            </a>
-          </div>
-          
-          <div class="card-body bg-transparent p-4 shadow-sm">
-            <a href="/blogs/action-of-svelte/" class="primary-font card-title">
-              <h5 class="card-title bg-transparent" title="Svelte의 동작">
-                Svelte의 동작
-              </h5>
-            </a>
-            <div class="card-text secondary-font">
-              <p>Svelte의 동작을 자세하게 살펴보았습니다.</p>
+<section id="single">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-12 col-lg-9">
+        <div class="pr-lg-4">
+          <div class="title mb-5">
+            <h1 class="text-center mb-4">개발자를 위한 시프트 레프트 테스트</h1>
+            <div class="text-center">
+              Gitsunmin
+              <small>|</small>
+              2024.05.05 
+              <span id="readingTime">
+                min read
+              </span>
+              
             </div>
           </div>
-          <div class="mt-auto post-footer bg-transparent py-3">
-            <span class="float-start bg-transparent"
-              >2021.09.28</span
-            >
-            <a
-              href="/blogs/action-of-svelte/"
-              class="float-end btn btn-outline-info btn-sm"
-              >Read</a
-            >
+          
+          <div class="featured-image">
+            <img
+              class="img-fluid mx-auto d-block"
+              src="/images/blogs/book_review_thumbnail.webp"
+              alt="개발자를 위한 시프트 레프트 테스트"
+            />
           </div>
+          
+          <article class="page-content p-2"><h2 id="서론">서론</h2>
+<p>개발 후에 JIRA에 이슈가 생성되는 것이 싫어서, &ldquo;테스트를 공부하면 조금 나아질까?&rdquo; 하는 생각으로 읽기 시작한 책입니다.</p>
+<h2 id="본론">본론</h2>
+<p>이 책의 저자는 소프트웨어 품질 연구로 박사 학위를 취득 후, 오랜 기간 테스트 관련 업을 가져온 &ldquo;다카하시 주이치&quot;라는 사람입니다. 소프트웨어 테스팅 관련 컨설팅 경험을 바탕으로 책의 내용을 쉽게 설명 해주고 있습니다.</p>
+<p>이 책에서 말하는 시프트-레프트 테스트를 설명하자면, 아래와 같습니다.</p>
+<p>요구사항 분석, 설계, 코딩 등 소프트웨어 개발 사이클의 모든 단계에서는 의도치 않은 일이  발생할 수 있습니다. 이러한 것들을 버그라고 합니다. 하지만, 우리는 이 버그를 개발 사이클의 마지막 단계에서 QA가 모두 찾아주기를 기다립니다. 이러한 생각은 소프트웨어 개발의 일정과 품질에 부정적인 영향을 끼칩니다. 하나의 일이 끝났을 때마다 리뷰 혹은 검증을 하는 활동이 필요합니다. 즉, 테스트를 하는 시점을 점차 일의 시작 지점, 왼쪽으로 옮기는 전략이 필요합니다. 이것을 시프트-레프트라고 이야기합니다.</p>
+<p>하지만, 이 시프트-레프트를 실현하기는 쉽지 않습니다. 빠듯해 보이는 일정과, 중요해 보이지 않는 테스트 때문일 것 입니다. 이 책에서는 합리적인 방법을 소개해주고 독자들에게 시프트-레프트의 중요성을 알게 해주기 위해 노력합니다. 가장 인상적 이었던 부분들만 소개를 해 보겠습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&#34;80:20법칙&#34;
+</span></span><span style="display:flex;"><span>이 법칙은 소프트웨어의 20% 부분에서 전체의 80%의 버그가 발생한다는 법칙입니다. 즉, 우리는 이 20%에 해당하는 부분에 대해서 테스트를 작성하면, 전체 버그의 80%를 검증하는 것이 됩니다. 이 책에서는 20%에 해당하는 부분을 찾는 방법으로, 가장 최근에 가장 많이 변경된 파일을 선정하였습니다.
+</span></span></code></pre></div><p>-&gt; 항상, 복잡하고, 빠르게 작성되거나, 수정 사항이 많이 발생한 부분에서 버그가 많이 발생합니다. 테스트가 필요한 상황을 잊지 말아야할 것 같아서 작성합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>(플로우상 경우의 수가 많이 나오는 테스트의 경우)
+</span></span><span style="display:flex;"><span>&#34;이것은 데이터가 n인 경우이므로 일단 작성하기 시작하면 그 경우의 수는 무한대가 됩니다. 따라서 먼저 데이터가 1과 2일 때 확실하게 커버하고, n이라는 테스트 케이스를 적절한 개수로 한정해 작성할 수 있으면 품질 측면에서는 거의 문제가 없습니다.&#34;
+</span></span><span style="display:flex;"><span>이 이야기는 모든 경우에 수에 대해서 테스트를 작성하는 것은 비효율적이며, 감당할 수 있는 범위의 테스트를 수행하여야 한다는 이야기 입니다. 또한 저자는 이러한 복잡한 테스트는 자동화를 하여야한다고 주장합니다.
+</span></span></code></pre></div><p>-&gt; 테스트를 작성하기 전에 너무 많은 테스트 케이스 때문에 그냥 테스트를 작성하지 않은 적이 있습니다. 이 내용이 위로와 공감이 되어서 작성합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>&#34;코드 리뷰가 테스트보다 더 효율적인 버그 발견 방법&#34;
+</span></span></code></pre></div><p>-&gt; 테스트가 완벽한 것 같지만, 커버리지가 높다고 하더라도, 100% 믿을 수는 없습니다. 이러한 내용을 확인해줄 다른 사람이 있을 때, 때로는 테스트 보다 더 성능이 좋은 버그 발견 방법이라고 생각해서 작성했습니다.</p>
+<h2 id="결론">결론</h2>
+<p>테스트가 중요하고, 마지막에 한 번에 통합 테스트만 하는 것 보다도, 일이 끝나는 시점 마다 테스트 혹은 리뷰를 하여 테스트 시점을 앞 당기는 일의 중요성을 알게 되었습니다. 하지만, 프론트엔드 개발자로서 화면에 대한 테스트 방법이나 언급이 적어서 아쉬움도 있던 책입니다.</p>
+<h2 id="참조">참조</h2>
+<p>책 링크 (교보문고): <a href="https://product.kyobobook.co.kr/detail/S000200939459">https://product.kyobobook.co.kr/detail/S000200939459</a></p>
+</article>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-3">
+        <div id="stickySideBar" class="sticky-sidebar">
+          
+          <aside class="toc">
+            <h5>목차</h5>
+            <div class="toc-content"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#서론">서론</a></li>
+    <li><a href="#본론">본론</a></li>
+    <li><a href="#결론">결론</a></li>
+    <li><a href="#참조">참조</a></li>
+  </ul>
+</nav></div>
+          </aside>
+           
+          <aside class="tags">
+            <h5>Tags</h5>
+            <ul class="tags-ul list-unstyled list-inline">
+              
+              <li class="list-inline-item">
+                <a href="https://gitsunmin.github.io/tags/book" target="_blank"
+                  >Book</a
+                >
+              </li>
+              
+            </ul>
+          </aside>
+           
+          <aside class="social">
+            <h5>Social</h5>
+            <div class="social-content">
+              <ul class="list-inline">
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href="https://twitter.com/share?text=%ea%b0%9c%eb%b0%9c%ec%9e%90%eb%a5%bc%20%ec%9c%84%ed%95%9c%20%ec%8b%9c%ed%94%84%ed%8a%b8%20%eb%a0%88%ed%94%84%ed%8a%b8%20%ed%85%8c%ec%8a%a4%ed%8a%b8&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fshift-left-testing-for-developer%2f"
+                  >
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href="https://api.whatsapp.com/send?text=%ea%b0%9c%eb%b0%9c%ec%9e%90%eb%a5%bc%20%ec%9c%84%ed%95%9c%20%ec%8b%9c%ed%94%84%ed%8a%b8%20%eb%a0%88%ed%94%84%ed%8a%b8%20%ed%85%8c%ec%8a%a4%ed%8a%b8: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fshift-left-testing-for-developer%2f"
+                  >
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href='mailto:?subject=%ea%b0%9c%eb%b0%9c%ec%9e%90%eb%a5%bc%20%ec%9c%84%ed%95%9c%20%ec%8b%9c%ed%94%84%ed%8a%b8%20%eb%a0%88%ed%94%84%ed%8a%b8%20%ed%85%8c%ec%8a%a4%ed%8a%b8&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fshift-left-testing-for-developer%2f'
+                  >
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </aside>
+          
         </div>
       </div>
     </div>
-    
-    <div class="row justify-content-center">
-      <div class="col-auto m-3">
-        
-      </div>
+    <div class="row" style="margin-top: 200px">
+      <script
+        src="https://utteranc.es/client.js"
+        repo="gitsunmin/gitsunmin.github.io"
+        issue-term="pathname"
+        label="comment"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async
+      ></script>
     </div>
   </div>
-</div>
+  <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
+    <i class="fas fa-angle-up"></i>
+  </button>
+</section>
 
+
+<div class="progress">
+  <div
+    id="scroll-progress-bar"
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
+</div>
+<script src="/js/scrollProgressBar.js"></script>
+
+
+<script>
+  var topScroll = document.getElementById("topScroll");
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      topScroll.style.display = "block";
+    } else {
+      topScroll.style.display = "none";
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  
+  let stickySideBarElem = document.getElementById("stickySideBar");
+  let stickyNavBar =  true ;
+  if(stickyNavBar) {
+    let headerElem = document.getElementById("profileHeader");
+    let headerHeight = headerElem.offsetHeight + 15;
+    stickySideBarElem.style.top = headerHeight + "px";
+  } else {
+    stickySideBarElem.style.top = "50px";
+  }
+</script>
+
+
+<script src="/js/readingTime.js"></script>
+ 
   </div><footer>
     
  
