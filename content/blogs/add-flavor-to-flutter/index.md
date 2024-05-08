@@ -6,6 +6,10 @@ description: Flutter에서 하나의 코드로 환경을 분리하여 다르게 
 author: 'Gitsunmin'
 date: 2023-12-08 01:31:29
 math: true
+categories:
+  - '2023'
+tags:
+  - Flutter
 ---
 
 ## 서론
