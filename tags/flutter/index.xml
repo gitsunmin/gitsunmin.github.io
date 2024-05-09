@@ -6,8 +6,15 @@
     <description>Recent content in Flutter on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Wed, 22 Nov 2023 11:58:24 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 08 Dec 2023 01:31:29 +0000</lastBuildDate>
     <atom:link href="https://gitsunmin.github.io/tags/flutter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flutter에서 같은 코드를 다르게 빌드하는 방법 (Flavor)</title>
+      <link>https://gitsunmin.github.io/blogs/add-flavor-to-flutter/</link>
+      <pubDate>Fri, 08 Dec 2023 01:31:29 +0000</pubDate>
+      <guid>https://gitsunmin.github.io/blogs/add-flavor-to-flutter/</guid>
+      <description>Flutter에서 하나의 코드로 환경을 분리하여 다르게 빌드하는 방법인 Flavor 적용 방법을 소개합니다.</description>
+    </item>
     <item>
       <title>Flutter를 여행하는 웹 개발자를 위한 안내서</title>
       <link>https://gitsunmin.github.io/blogs/web-devs-guide-to-the-flutter/</link>
