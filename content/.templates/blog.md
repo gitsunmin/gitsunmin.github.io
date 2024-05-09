@@ -1,6 +1,6 @@
 ---
 title: 제목
-image: /images/blogs/default_thumbnail.jpeg
+image: /images/blogs/default_thumbnail.webp
 draft: false
 summary: 요약
 description: 요약

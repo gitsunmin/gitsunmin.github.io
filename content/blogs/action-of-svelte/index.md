@@ -3,7 +3,7 @@ title: Svelte의 동작
 summary: Svelte의 동작을 자세하게 살펴보았습니다.
 description: Svelte의 동작을 자세하게 살펴보았습니다.
 date: 2021-09-28 12:00:00
-image: /images/blogs/default_thumbnail.jpeg
+image: /images/blogs/default_thumbnail.webp
 author: 'Gitsunmin'
 categories:
   - '2021'

@@ -3,7 +3,7 @@ title: 관심사의 분리로 해보는 리팩토링
 summary: 관심사의 분리 원칙으로 리팩토링하여 코드의 품질을 향상시킨 경험을 공유합니다.
 description: 관심사의 분리 원칙으로 리팩토링하여 코드의 품질을 향상시킨 경험을 공유합니다.
 date: 2023-01-07 12:00:00
-image: /images/blogs/default_thumbnail.jpeg
+image: /images/blogs/default_thumbnail.webp
 author: 'Gitsunmin'
 categories:
   - '2023'

@@ -1,6 +1,6 @@
 ---
 title: 'CSS Library in 2024'
-image: /images/blogs/default_thumbnail.jpeg
+image: /images/blogs/default_thumbnail.webp
 summary: CSS 라이브러리에 대한 동향과 종류를 알아보기 위해 작성하였습니다.
 description: CSS 라이브러리에 대한 동향과 종류를 알아보기 위해 작성하였습니다.
 author: 'Gitsunmin'

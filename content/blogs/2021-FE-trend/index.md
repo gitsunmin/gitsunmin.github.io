@@ -3,7 +3,7 @@ title: '2021년 FE 동향, 한방에 끝내기'
 summary: 영상을 보고 내용을 정리 하였습니다.
 description: 영상을 보고 내용을 정리 하였습니다.
 date: 2021-11-25 12:00:00
-image: /images/blogs/default_thumbnail.jpeg
+image: /images/blogs/default_thumbnail.webp
 author: 'Gitsunmin'
 categories:
   - '2021'

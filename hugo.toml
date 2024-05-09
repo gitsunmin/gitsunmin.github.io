@@ -116,84 +116,8 @@ index = false
 [params.achievements]
 enable = false
 
-[[params.achievements.items]]
-title = "Google kickstart runner"
-content = "I solved all problems with optimal solution."
-url = "https://example.com"
-image = "/images/achievment.jpg"
-
-[[params.achievements.items]]
-title = "Facebook Hackathon Winner"
-content = "Developed a product using Artificial Intelligence."
-image = "/images/achievment.jpg"
-
-[[params.achievements.items]]
-title = "Gitsunmin Blog"
-content = "Developed a theme and getting 1K+ downloads per month."
-url = "https://github.com/gurusabarish/hugo-profile"
-image = "/images/achievment.jpg"
-
-[[params.achievements.items]]
-title = "Microsoft Imagine Runner"
-content = "We are developed a product which can help others."
-
-[[params.achievements.items]]
-title = "Google Summer of Code"
-content = "Contributed to a open source project."
-url = "https://example.com"
-
 [params.projects]
 enable = false
-
-[[params.projects.items]]
-title = "Hugo Profile"
-content = "A highly customizable and mobile first Hugo template for personal portfolio and blog."
-image = "/images/projects/profile.png"
-badges = ["Hugo", "Bootstrap", "Javascript"]
-
-[params.projects.items.featured]
-name = "Demo"
-link = "https://hugo-profile.netlify.app"
-
-[[params.projects.items.links]]
-icon = "fa fa-envelope"
-url = "mailto:?subject=Hugo%20Profile%20Template&body=Check%20it%20out:%20https%3a%2f%2fhugo-profile.netlify.app%2fblog%2fmarkdown-syntax%2f"
-
-[[params.projects.items.links]]
-icon = "fab fa-github"
-url = "https://github.com/gurusabarish/hugo-profile"
-
-[[params.projects.items.links]]
-icon = "fab fa-twitter"
-url = "https://twitter.com/intent/tweet?text=Check+it+out:&url=https%3A%2F%2Fgithub.com%2Fgurusabarish%2Fhugo-profile"
-
-[[params.projects.items]]
-title = "Image Converter"
-content = "A web app to convert image to pdf, png to jpg, png to jpg and png to webp without database using django."
-image = "/images/projects/converter.jpg"
-badges = ["Django", "Bootstrap"]
-
-[params.projects.items.featured]
-name = "Demo"
-link = "https://django-converter.herokuapp.com"
-
-[[params.projects.items.links]]
-icon = "fab fa-github"
-url = "https://github.com/gurusabarish/converter"
-
-[[params.projects.items]]
-title = "Hugo Profile V2"
-content = "A clean and simple Hugo template for personal portfolio and blog."
-image = "/images/projects/profile2.jpg"
-badges = ["Hugo", "Bootstrap", "Javascript"]
-
-[params.projects.items.featured]
-name = "Demo V2"
-link = "https://hugo-profile-2.netlify.app"
-
-[[params.projects.items.links]]
-icon = "fab fa-github"
-url = "https://github.com/gurusabarish/HugoProfileV2"
 
 [params.contact]
 enable = false

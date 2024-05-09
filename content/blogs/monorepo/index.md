@@ -3,7 +3,7 @@ title: Monorepo
 summary: monorepo에 대해서 알아보았습니다.
 description: monorepo에 대해서 알아보았습니다.
 date: 2023-05-16 12:00:00
-image: /images/blogs/cs_thumbnail.jpeg
+image: /images/blogs/cs_thumbnail.webp
 author: 'Gitsunmin'
 categories:
   - '2023'

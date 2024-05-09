@@ -1,6 +1,6 @@
 ---
 title: 정원사들 시즌9 참여 후기
-image: /images/blogs/default_thumbnail.jpeg
+image: /images/blogs/default_thumbnail.webp
 summary: 정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.
 description: 정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.
 author: Gitsunmin
