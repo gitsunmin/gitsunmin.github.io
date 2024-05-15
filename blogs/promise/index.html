@@ -28,16 +28,16 @@
 
 
 
-<meta property="og:title" content="Map, Functor 그리고 ts-belt" />
-<meta property="og:description" content="함수형 프로그래밍의 map과 functor를 설명합니다." />
+<meta property="og:title" content="I여서 Promise가 싫은줄 알았는데..." />
+<meta property="og:description" content="Javascript의 Promise 객체에 대해서 다루었습니다. I가 아니어도 Promise가 싫어질 수 있습니다." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://gitsunmin.github.io/blogs/map-and-functor/" /><meta property="article:section" content="blogs" />
-<meta property="article:published_time" content="2023-09-16T12:00:00+00:00" />
-<meta property="article:modified_time" content="2023-09-16T12:00:00+00:00" /><meta property="og:site_name" content="Gitsunmin Blog" />
+<meta property="og:url" content="https://gitsunmin.github.io/blogs/promise/" /><meta property="article:section" content="blogs" />
+<meta property="article:published_time" content="2024-05-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-15T00:00:00+00:00" /><meta property="og:site_name" content="Gitsunmin Blog" />
 
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Map, Functor 그리고 ts-belt"/>
-<meta name="twitter:description" content="함수형 프로그래밍의 map과 functor를 설명합니다."/>
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="I여서 Promise가 싫은줄 알았는데..."/>
+<meta name="twitter:description" content="Javascript의 Promise 객체에 대해서 다루었습니다. I가 아니어도 Promise가 싫어질 수 있습니다."/>
 
 
 <link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
@@ -101,7 +101,7 @@
     }
 </style>
 
-<meta name="description" content="함수형 프로그래밍의 map과 functor를 설명합니다." />
+<meta name="description" content="Javascript의 Promise 객체에 대해서 다루었습니다. I가 아니어도 Promise가 싫어질 수 있습니다." />
 <link rel="stylesheet" href="/css/single.css" />
 
 
@@ -110,7 +110,7 @@
   src="/fontawesome-6/all-6.4.2.js"
 ></script>
 
-  <title> Map, Functor 그리고 ts-belt | Gitsunmin Blog 
+  <title> I여서 Promise가 싫은줄 알았는데... | Gitsunmin Blog 
   </title>
 </head>
 
@@ -244,11 +244,11 @@
       <div class="col-sm-12 col-md-12 col-lg-9">
         <div class="pr-lg-4">
           <div class="title mb-5">
-            <h1 class="text-center mb-4">Map, Functor 그리고 ts-belt</h1>
+            <h1 class="text-center mb-4">I여서 Promise가 싫은줄 알았는데...</h1>
             <div class="text-center">
               Gitsunmin
               <small>|</small>
-              2023.09.16 
+              2024.05.15 
               <span id="readingTime">
                 min read
               </span>
@@ -259,95 +259,111 @@
           <div class="featured-image">
             <img
               class="img-fluid mx-auto d-block"
-              src="/images/blogs/functional_programing_thumbnail.webp"
-              alt="Map, Functor 그리고 ts-belt"
+              src="/images/blogs/default_thumbnail.webp"
+              alt="I여서 Promise가 싫은줄 알았는데..."
             />
           </div>
           
-          <article class="page-content p-2"><h1 id="서론">서론</h1>
-<p>함수형 프로그래밍에는 정말 많은 내용이 있는 것 같습니다. 그 중에서 map과 functor에 대해서, 그리고 typescript로 함수형 프로그래밍을 할 수 있도록 도와주는 ts-belt라는 라이브러리를 소개하겠습니다.</p>
-<h1 id="본론">본론</h1>
-<p>우선 Map에 대해서 이야기를 해보려고 합니다.</p>
-<p>보통 Map이라고 하면 어떤 것들이 생각 나시나요?</p>
-<p>저는 아래 세 가지가 생각 나더라고요.</p>
+          <article class="page-content p-2"><h2 id="서론">서론</h2>
+<p>Javascript의 Promise 객체에 대해서 정리를 해 보았습니다.</p>
+<h2 id="본론">본론</h2>
+<h3 id="promise는-무엇일까">Promise는 무엇일까?</h3>
+<p>Promise는 Javascript에서 비동기로 동작하는 액션을 관리할 때에 사용하는 class 혹은 객체입니다. 로그를 찍어보아도 아래와 같이 표시됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">Promise</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ƒ Promise() { [native code] }
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">Promise</span>.<span style="color:#a6e22e">resolve</span>())
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Promise {&lt;fulfilled&gt;: undefined}
+</span></span></span></code></pre></div><p>만약 Promise를 사용하게 된다면 아래와 같이 사용할 수 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">used</span>  <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Promise</span>((<span style="color:#a6e22e">resolve</span>, <span style="color:#a6e22e">reject</span>) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">resolve</span>(<span style="color:#e6db74">&#39;나는 사용되었다..&#39;</span>); <span style="color:#75715e">// 비동기 로직이라고 가정
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">used</span>.<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">text</span>) <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;text:&#39;</span>, <span style="color:#a6e22e">text</span>));
+</span></span></code></pre></div><p>Promise 내부에서 비동기 로직을 사용하고, 로직이 완료되었을 때, resolve를 사용하여 <code>used</code>객체의 then이 실행될 수 있도록 설계할 수 있습니다. 이 방법을 사용한다면 API 통신 뿐만아니라, 배치 작업 등 비동기 작업을 수행할 수 있습니다.</p>
+<p>resolve, reject, fulfilled와 같은 단어들이 보이는데, 이는 비동기를 위해 설계된 Promise가 가질 수 있는 상태와 연관이 있습니다. 이 Promise는 아래와 같이 3가지의 상태를 가지고 있습니다.</p>
 <ul>
-<li>지도</li>
-<li>데이터 타입의 Map</li>
-<li>함수 Map</li>
+<li>pending: <code>pending</code>은 비동기 액션이 시작되어서 종료되기 전까지의 상태를 의미합니다.</li>
+<li>fulfilled: <code>fulfilled</code>는 비동기 액션이 성공적으로 완료 되었을 때에 대한 상태를 의미합니다.</li>
+<li>rejected: <code>rejected</code>는 비동기 액션이 실패 혹은 에러로 인하여 종료되었을 때에 대한 상태를 의미합니다.</li>
 </ul>
-<p>Map이 뭐길래 이렇게 같지만 다른 의미로 사용 되고 있을까요?</p>
-<h2 id="지도">지도</h2>
-<p>Map이 왜 지도 일까요? 고대 라틴어를 사용하던 시기로 가보겠습니다. 고대 라틴어에서는 지도를 종이가 아닌 천이나 가죽에 그려서 가지고 다녔다고 합니다. 그래서 천이나 옷이라는 뜻의 mappa와 세계라는 뜻의 mundi라는 단어의 합성으로서 “mappa mundi”라는 단어로서 세계지도 라는 단어를 만들었죠. 그리고 이 “mappa mundi”는 프랑스어를 어쳐서 고대 영어로 “mapemounde”라는 단어로 사용이 되었다고 합니다. 너무 긴 이 단어는 축약이 되어서 결국 map이 되었죠.</p>
-<p>그리고 우리는 보통 “mapping”이라는 단어를 많이 사용 하잖아요. 3차원의 구 형태인 지구를 잘게 쪼개서 조각 조각들을 2차원 형태인 종이에 옮겨서 그려내는 작업을 mapping이라고 한다네요.</p>
-<h2 id="데이터-타입">데이터 타입</h2>
-<p>다음으로 데이터 타입의 Map을 한 번 알아볼게요.</p>
-<p>map은 기본적으로 key와 value를 가진 아래와 같은 형태를 가집니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">a</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">b</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">c</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">3</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">d</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">4</span>,
+<p>MDN에서 이러한 상태를 도표로 정리해둔 내용이 있어 첨부를 해보겠습니다.</p>
+<p><img src="image.png" alt="alt text"></p>
+<p>이 도표에 대한 설명을 추가로 하자면, Promise의 Pending이 끝나면, 성공 시 <code>fulfill</code>, 실패 시 <code>reject</code>로 분기가 되어집니다. 이 두 상태 모두를 포괄하는 의미 즉, Promise가 어떤 상태로든 종료된 것을 <code>Setted</code>라고 이야기 합니다. 또한, 이 Promise는 성공(fulfill)하였을 때는 <code>.then(callback)</code>으로 성공 관련 로직을 실행할 수 있습니다. 실패(reject)하였을 때는 <code>.then(_, callback)</code>(then의 두 번째 파라미터), <code>.catch(callback)</code>으로 에러를 핸들링할 수 있습니다. 그리고 <code>.then</code>의 callback에서 return된 값을 채이닝을 이용하여 또 Promise 객체를 반환하고, 다시 <code>.then</code>을 사용할 수 있습니다.</p>
+<h3 id="asyncawait">Async/Await</h3>
+<p>Async/Await은 함수를 Promise를 반환하도록 만들어 주는 Javascript의 문법입니다. 아래와 같이 사용할 수 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">a() {</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 저는 비동기 로직이에요.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Promise</span>.<span style="color:#a6e22e">resolve</span>(<span style="color:#ae81ff">1</span>)
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>a, b, c, d를 1, 2, 3, 4로 mapping하고 있습니다.</p>
-<p>엇 지도를 설명할 때에 mapping이 있었는데, 여기도 나오네요.</p>
-<p>잘 생각해보면, a, b, c, d가 지구의 조각들이고, 1, 2, 3, 4가 지도로 옮겨진 조각들이라고 생각하면 어떨까요?</p>
-<p>데이터 타입의 map과 mapping이라는 단어들은 이렇게 만들어졌습니다.</p>
-<p>결국 같은 의미를 가지고 있었네요.</p>
-<h2 id="함수">함수</h2>
-<p>그럼 함수인 Map은 또 뭘까요?</p>
-<p>보통 javascript 개발자라면, 아래와 같은 예시를 생각하실 것 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tsx" data-lang="tsx"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">array</span> <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#e6db74">&#39;d&#39;</span>];
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">output</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">array</span>.<span style="color:#a6e22e">map</span>((<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">index</span>) <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">index</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">a</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;output:&#39;</span>, <span style="color:#a6e22e">output</span>);
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// [1, 2, 3, 4];
-</span></span></span></code></pre></div><p>그런데, 어디서 많이 본, Input과 Output인 것 같습니다.</p>
-<p>함수인 Map도 사실 같은 의미를 가지고 있습니다. 원본 데이터를 사용자가 원하는 과정을 통해서 다른 데이터를 반환하는 함수 입니다. 아래 처럼 바꾸면 조금 더 쉬울 것 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tsx" data-lang="tsx"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#960050;background-color:#1e0010">지구</span><span style="color:#a6e22e">_조각들</span> <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#e6db74">&#39;d&#39;</span>];
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">mapping</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">index</span>) <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">index</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#960050;background-color:#1e0010">지도</span><span style="color:#a6e22e">_조각들</span> <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">지구</span><span style="color:#a6e22e">_조각들</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">mapping</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;지도_조각들:&#39;</span>, <span style="color:#960050;background-color:#1e0010">지도</span><span style="color:#a6e22e">_조각들</span>);
-</span></span><span style="display:flex;"><span><span style="color:#75715e">// [1, 2, 3, 4];
-</span></span></span></code></pre></div><p>위 코드를 보면 진짜 전에 등장 하였던 내용들을 모두 포함하고 있는 내용 같네요. 다만, 유심히 봐야할 것이 있습니다. 데이터 구조가 바뀌지는 않았다는 것입니다. 잘 생각해보면, 지구의 조각들을 다 버리거나 다른 조각을 추가하여 지도를 만들지 않았듯이, 함수의 map도 이전과 이후가 구조가 바뀌면 map이라고 부를 수 없습니다. 이 점을 추가하여 함수에서의 Map을 한 번 정의해 보겠습니다.</p>
-<blockquote>
-<p>함수에서의 Map은 데이터 구조의 모든 원소에 동일한 함수를 적용하여 새로운 데이터 구조를 생성하는 함수이다. 단, 이 때, 원본 데이터 구조를 변경하지 않고, 각 원소에 함수를 적용한 결과를 새로운 데이터 구조로 반환해야한다.</p>
-</blockquote>
-<h2 id="functor">Functor</h2>
-<p>위에서 Map이 가진 의미 3가지가 사실은 같은 어원을 가지고 있다는 것을 알게 되었습니다. 이 섹션에서는 “mapping 가능한 어떠한 것”을 만들어 보려고 합니다. 마치 javascript의 array 처럼요.</p>
-<p>mapping 가능한 어떠한 것을 만들기 위해서는 어떠한 것이 일단 필요할 것 같습니다. 또 이 어떠한 것은 원본 데이터를 가지고 있어야할 것 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tsx" data-lang="tsx"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">어떠한</span><span style="color:#a6e22e">_것</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">constructor</span>(<span style="color:#a6e22e">value</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">value</span>;
-</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">b</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Promise {&lt;fulfilled&gt;: 1}
+</span></span></span></code></pre></div><p>위와 같이 a함수에서는 1을 return 해주었는데 실행결과를 로그로 찍어보면, Promise 객체가 반환되는 것을 볼 수 있습니다. 또한 Promise.resolve(1)을 반환하더라도 결과는 같습니다. 이것이 async 키워드가 해주는 역합입니다. async가 붙은 함수는 위와같이 동작합니다.</p>
+<p>또한, 이 async 함수는 await 키워드를 사용할 수 있는 조건을 만들어주는데, 아래와 같이 사용할 수 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">a() {</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 저는 비동기 로직이에요.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// return 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Promise</span>.<span style="color:#a6e22e">resolve</span>(<span style="color:#ae81ff">1</span>)
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>이제 원본 데이터를 가진 <code>어떠한_것</code>을 정의하였으니, map함수를 넣어보겠습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tsx" data-lang="tsx"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">어떠한</span><span style="color:#a6e22e">_것</span> {
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">constructor</span>(<span style="color:#a6e22e">value</span>: <span style="color:#66d9ef">string</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">value</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">value</span>;
-</span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">value</span>: <span style="color:#66d9ef">string</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">map</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">fn</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">value</span>: <span style="color:#66d9ef">string</span>) <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">=&gt;</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#960050;background-color:#1e0010">어떠한</span><span style="color:#a6e22e">_것</span>(<span style="color:#a6e22e">fn</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">value</span>));
-</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">b() {</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">aa</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">a</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">aa</span>;
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>그런데, 우리 이 <code>어떠한_것</code>을 왜 만들었을까요?</p>
-<p>이 어떠한_것은 사실 함수형프로그래밍에서 사용하는 “Functor”라고 하는 개념입니다. Functor끼리는 합성이 가능하고, 원본 데이터를 변경하지 않기 때문에, 함수형 프로그래밍에서 필수 개념중에 하나 입니다. (다음 포스트에서 더욱 자세히 다루어 보겠습니다.)</p>
-<h2 id="ts-belt">ts-belt</h2>
-<p>typescript 영역에서 <a href="https://gcanti.github.io/fp-ts/">fp-ts</a>라는 라이브러리를 이용하여 함수형 프로그래밍을 구현하고 있지만, 사실 어려운 개념들이 많이 있어서 도입하기가 쉽지는 않습니다. 이의 대안으로서 좀 더 쉬고 간편한 라이브러리인 <a href="https://mobily.github.io/ts-belt/">ts-belt</a>를 소개합니다. 이 ts-belt는 pipe와 flow함수를 제공하여, 사용하다 보면 자연스럽게 함수형 프로그래밍을 하게 되는 라이브러리이며, 복잡한 기능 없이 필수적인 간편한 Functor만을 제공합니다. 비교적 러닝커브가 낮고, 함수형 프로그래밍을 처음 도입하는 분들께 적합한 라이브러리라고 생각합니다.</p>
-<h1 id="결론">결론</h1>
-<p>Map은 데이터 타입, 함수 그리고 지도로의 의미를 갖지만, 이 의미는 사실 같은 의미를 가지고 있습니다. A라는 원본의 값을 받아서 B라는 다른 값을 반환하는 것이죠. 또, 이러한 것을 가지고 있고, mapping을 할 수 있는 것을 함수형 프로그래밍에서는 Functor라고 부르기로 하였습니다. 이러한 Functor를 ts-belt라는 라이브러리를 통해서 쉽게 사용할 수 있습니다.</p>
-<h1 id="참조">참조</h1>
+</span></span></code></pre></div><p>async 키워드가 포함된 함수 즉, async function은 함수 내부에서 await 키워드를 사용할 수 있도록 합니다. 이 await 키워드는 a함수가 setted된 상태까지 함수의 실행을 멈추어줍니다. 즉, b함수는 a함수가 setted 되기 전까지는 return 되어지지 않고, pending 상태를 유지합니다.</p>
+<h3 id="애매한-약속이-잡혔다">애매한 약속이 잡혔다</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#a6e22e">Promise</span>.<span style="color:#a6e22e">resolve</span>(<span style="color:#e6db74">&#39;내가 1빠겠지?&#39;</span>).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">res</span>) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;[가장 위에 있는 log]:&#39;</span>, <span style="color:#a6e22e">res</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Promise</span>((<span style="color:#a6e22e">resolve</span>) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">setTimeout</span>(() <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">resolve</span>(<span style="color:#e6db74">&#39;나는 느림의 미학을 추구해&#39;</span>);
+</span></span><span style="display:flex;"><span>    }, <span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>}).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">res</span>) <span style="color:#f92672">=&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;[중간에 있는 log]:&#39;</span>, <span style="color:#a6e22e">res</span>);
+</span></span><span style="display:flex;"><span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;[가장 밑에 있는 log]:&#39;</span>, <span style="color:#e6db74">&#39;출발이 늦어도 괜찮아&#39;</span>);
+</span></span></code></pre></div><p>위 코드에 있는 <code>console.log</code>가 실행되는 순서를 한 번 생각해 보겠습니다. <code>Promise.resolve</code>는 사실상 Setted된 Promise 이기 때문에 바로 로그가 출력이 될 것을 기대하게 됩니다. 중간 로그는 물론 1초 뒤에 실행이 될거고요. 마지막에 그냥 찍은 로그는 그냥 바로 실행이 될 것 같습니다. 결과는 아래와 같이 출력 됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#f92672">[</span>가장 밑에 있는 log<span style="color:#f92672">]</span>: 출발이 늦어도 괜찮아
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>가장 위에 있는 log<span style="color:#f92672">]</span>: 내가 1빠겠지?
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>중간에 있는 log<span style="color:#f92672">]</span>: 나는 느림의 미학을 추구해
+</span></span></code></pre></div><p>우선, 이렇게 실행되는 이유를 알기 위해서는 싱글 스레드로 동작되어지는 Javascript의 동작에 대해서 알아야할 것 같습니다. 다행히도 <a href="https://www.youtube.com/watch?v=Xs1EMmBLpn4">JavaScript Visualized - Promise Execution</a> 영상에서 자세히 설명을 해주고 있네요. 해당 영상의 내용중 필요한 부분만 설명을 첨부해 보겠습니다.</p>
+<p>위와 같이 실행되는 이유를 순서에 촛점을 두고 설명을 해 보겠습니다.</p>
+<p>단, 배경지식으로 아래 세 가지만 주입식 인지로 받아드려주세요.</p>
 <ul>
-<li><a href="https://www.mediafine.co.kr/news/articleView.html?idxno=10360">https://www.mediafine.co.kr/news/articleView.html?idxno=10360</a></li>
-<li><a href="https://tpgns.github.io/2018/04/07/functors-and-categories/#fn2">Functors와 카테고리 - mido</a></li>
-<li><a href="https://medium.com/@dtinth/what-is-a-functor-dcf510b098b6">What is a functor?. This is my attempt at explaining about… | by Thai Pangsakulyanont | Medium</a></li>
-<li><a href="https://mobily.github.io/ts-belt/api/array">https://mobily.github.io/ts-belt/api/array</a></li>
+<li>Javascript에서는 모든 명령어가 실행되어지면 Call Stack이라고 하는 Stack 자료구조 형태로 모든 명령이 쌓입니다.</li>
+<li>Microtask Queue와 Task Queue가 있는데, Web API는 실행이 완료되면, 결과 값이 Task Queue로 이동됩니다. Promise.then에서 실행되는 내용은 Microtask Queue로 이동됩니다.</li>
+<li>Call Stack이 모두 실행되어서 비어진 경우에는 Microtask Queue에서 할일을 받아 온 다음에, Task Queue에서 다음 일을 받아온다. (Microtask Queue의 우선순위가 더 높습니다.)</li>
+</ul>
+<ol>
+<li>Javascript가 실행이 되면, 위 내용을 한 번 쭉 실행합니다.</li>
+<li>그렇게 되면, Call Stack에는 Promise.resolve, new Promise, setTimeout, then, console.log([중간]), console.log(가장 밑) 등이 순서대로 쌓이게 됩니다.</li>
+<li>그런다음에, Promise.resolve는 Microtask Queue로 이동이 되어 관리 됩니다.</li>
+<li>setTimeout은 WebAPI 영역에서 별도로 실행이 되어 1000ms 타이머를 동작 시킵니다.</li>
+<li>console.log(가장 밑)이 바로 실행이 되어집니다.</li>
+<li>Call Stack이 비었기 때문에, Microtask Queue의 내용인 <code>console.log([가장 위])</code> 실행 명령이 Call Stack으로 이동합니다.</li>
+<li>console.log([가장 위])가 실행됩니다.</li>
+<li>1000ms가 지나면, Web API 영역에서 실행되어진 resolve가 Task Queue로 이동합니다.</li>
+<li>Call Stack이 버있기 때문에, Task Queue의 내용은 Call Stack으로 이동합니다.</li>
+<li>Call Stack에 있던 <code>resolve('나는 느림의 미학을 추구해')</code> 가 실행되어집니다.</li>
+<li>resolve는 setted가 되는 시점에 다시 Microtask Queue로 이동합니다.</li>
+<li>Call Stack이 버있기 때문에, Microtask Queue에 있는 내용은 Call Stack으로 이동합니다.</li>
+<li>then에 있던 내용인 <code>console.log('[중간에 있는 log]:', '나는 느림의 미학을 추구해');</code>가 실행됩니다.</li>
+</ol>
+<p>복잡하지만, 이렇게 하면 위 결과대로 로그가 찍히는 이유를 알 수 있습니다.</p>
+<h2 id="결론">결론</h2>
+<p>Promise의 상태, Async/Await 그리고 Promise의 동작 방식에 대해서 간단하게 작성해봤습니다. 설명이 충분치 않은 부분이 있다고 생각된다면, 아래의 참조의 링크에서 좀 더 자세한 설명을 보셔도 좋을 것 같습니다.</p>
+<h2 id="참조">참조</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN Promise</a></li>
+<li><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Using_promises">MDN Using Promises</a></li>
+<li><a href="https://ko.javascript.info/async-await">async와 await</a></li>
+<li><a href="https://www.youtube.com/watch?v=Xs1EMmBLpn4">JavaScript Visualized - Promise Execution</a></li>
 </ul>
 </article>
         </div>
@@ -359,11 +375,16 @@
             <h5>목차</h5>
             <div class="toc-content"><nav id="TableOfContents">
   <ul>
-    <li><a href="#지도">지도</a></li>
-    <li><a href="#데이터-타입">데이터 타입</a></li>
-    <li><a href="#함수">함수</a></li>
-    <li><a href="#functor">Functor</a></li>
-    <li><a href="#ts-belt">ts-belt</a></li>
+    <li><a href="#서론">서론</a></li>
+    <li><a href="#본론">본론</a>
+      <ul>
+        <li><a href="#promise는-무엇일까">Promise는 무엇일까?</a></li>
+        <li><a href="#asyncawait">Async/Await</a></li>
+        <li><a href="#애매한-약속이-잡혔다">애매한 약속이 잡혔다</a></li>
+      </ul>
+    </li>
+    <li><a href="#결론">결론</a></li>
+    <li><a href="#참조">참조</a></li>
   </ul>
 </nav></div>
           </aside>
@@ -373,8 +394,8 @@
             <ul class="tags-ul list-unstyled list-inline">
               
               <li class="list-inline-item">
-                <a href="https://gitsunmin.github.io/tags/functionalprograming" target="_blank"
-                  >FunctionalPrograming</a
+                <a href="https://gitsunmin.github.io/tags/javascript" target="_blank"
+                  >Javascript</a
                 >
               </li>
               
@@ -388,7 +409,7 @@
                 <li class="list-inline-item text-center">
                   <a
                     target="_blank"
-                    href="https://twitter.com/share?text=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f"
+                    href="https://twitter.com/share?text=I%ec%97%ac%ec%84%9c%20Promise%ea%b0%80%20%ec%8b%ab%ec%9d%80%ec%a4%84%20%ec%95%8c%ec%95%98%eb%8a%94%eb%8d%b0...&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fpromise%2f"
                   >
                     <i class="fab fa-twitter"></i>
                   </a>
@@ -396,7 +417,7 @@
                 <li class="list-inline-item text-center">
                   <a
                     target="_blank"
-                    href="https://api.whatsapp.com/send?text=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f"
+                    href="https://api.whatsapp.com/send?text=I%ec%97%ac%ec%84%9c%20Promise%ea%b0%80%20%ec%8b%ab%ec%9d%80%ec%a4%84%20%ec%95%8c%ec%95%98%eb%8a%94%eb%8d%b0...: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fpromise%2f"
                   >
                     <i class="fab fa-whatsapp"></i>
                   </a>
@@ -404,7 +425,7 @@
                 <li class="list-inline-item text-center">
                   <a
                     target="_blank"
-                    href='mailto:?subject=Map%2c%20Functor%20%ea%b7%b8%eb%a6%ac%ea%b3%a0%20ts-belt&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fmap-and-functor%2f'
+                    href='mailto:?subject=I%ec%97%ac%ec%84%9c%20Promise%ea%b0%80%20%ec%8b%ab%ec%9d%80%ec%a4%84%20%ec%95%8c%ec%95%98%eb%8a%94%eb%8d%b0...&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fpromise%2f'
                   >
                     <i class="fa fa-envelope"></i>
                   </a>

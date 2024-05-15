@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>I여서 Promise가 싫은줄 알았는데... on Gitsunmin Blog</title>
+    <link>https://gitsunmin.github.io/blogs/promise/</link>
+    <description>Recent content in I여서 Promise가 싫은줄 알았는데... on Gitsunmin Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Wed, 15 May 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://gitsunmin.github.io/blogs/promise/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
