@@ -18,7 +18,7 @@ Javascript의 Promise 객체에 대해서 정리를 해 보았습니다.
 
 ### Promise는 무엇일까?
 
-Promise는 Javascript에서 비동기로 동작하는 액션을 관리할 때에 사용하는 class 혹은 객체입니다. 로그를 찍어보아도 아래와 같이 표시됩니다.
+Promise는 Javascript에서 비동기로 동작하는 액션을 관리할 때에 사용하는 함수 혹은 객체입니다. 로그를 찍어보아도 아래와 같이 표시됩니다.
 
 ```ts
 console.log(Promise)
