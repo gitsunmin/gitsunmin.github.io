@@ -49,7 +49,7 @@ MDN에서 이러한 상태를 도표로 정리해둔 내용이 있어 첨부를 
 
 ![alt text](image.png)
 
-이 도표에 대한 설명을 추가로 하자면, Promise의 Pending이 끝나면, 성공 시 `fulfill`, 실패 시 `reject`로 분기가 되어집니다. 이 두 상태 모두를 포괄하는 의미 즉, Promise가 어떤 상태로든 종료된 것을 `Setted`라고 이야기 합니다. 또한, 이 Promise는 성공(fulfill)하였을 때는 `.then(callback)`으로 성공 관련 로직을 실행할 수 있습니다. 실패(reject)하였을 때는 `.then(_, callback)`(then의 두 번째 파라미터), `.catch(callback)`으로 에러를 핸들링할 수 있습니다. 그리고 `.then`의 callback에서 return된 값을 채이닝을 이용하여 또 Promise 객체를 반환하고, 다시 `.then`을 사용할 수 있습니다.
+이 도표에 대한 설명을 추가로 하자면, Promise의 Pending이 끝나면, 성공 시 `fulfill`, 실패 시 `reject`로 분기가 되어집니다. 이 두 상태 모두를 포괄하는 의미 즉, Promise가 어떤 상태로든 종료된 것을 `Settled`라고 이야기 합니다. 또한, 이 Promise는 성공(fulfill)하였을 때는 `.then(callback)`으로 성공 관련 로직을 실행할 수 있습니다. 실패(reject)하였을 때는 `.then(_, callback)`(then의 두 번째 파라미터), `.catch(callback)`으로 에러를 핸들링할 수 있습니다. 그리고 `.then`의 callback에서 return된 값을 채이닝을 이용하여 또 Promise 객체를 반환하고, 다시 `.then`을 사용할 수 있습니다.
 
 ### Async/Await
 
@@ -84,7 +84,7 @@ async function b() {
     return aa;
 }
 ```
-async 키워드가 포함된 함수 즉, async function은 함수 내부에서 await 키워드를 사용할 수 있도록 합니다. 이 await 키워드는 a함수가 setted된 상태까지 함수의 실행을 멈추어줍니다. 즉, b함수는 a함수가 setted 되기 전까지는 return 되어지지 않고, pending 상태를 유지합니다.
+async 키워드가 포함된 함수 즉, async function은 함수 내부에서 await 키워드를 사용할 수 있도록 합니다. 이 await 키워드는 a함수가 settled된 상태까지 함수의 실행을 멈추어줍니다. 즉, b함수는 a함수가 settled 되기 전까지는 return 되어지지 않고, pending 상태를 유지합니다.
 
 
 ### 애매한 약속이 잡혔다
@@ -103,7 +103,7 @@ new Promise((resolve) => {
 
 console.log('[가장 밑에 있는 log]:', '출발이 늦어도 괜찮아');
 ```
-위 코드에 있는 `console.log`가 실행되는 순서를 한 번 생각해 보겠습니다. `Promise.resolve`는 사실상 Setted된 Promise 이기 때문에 바로 로그가 출력이 될 것을 기대하게 됩니다. 중간 로그는 물론 1초 뒤에 실행이 될거고요. 마지막에 그냥 찍은 로그는 그냥 바로 실행이 될 것 같습니다. 결과는 아래와 같이 출력 됩니다.
+위 코드에 있는 `console.log`가 실행되는 순서를 한 번 생각해 보겠습니다. `Promise.resolve`는 사실상 Settled된 Promise 이기 때문에 바로 로그가 출력이 될 것을 기대하게 됩니다. 중간 로그는 물론 1초 뒤에 실행이 될거고요. 마지막에 그냥 찍은 로그는 그냥 바로 실행이 될 것 같습니다. 결과는 아래와 같이 출력 됩니다.
 
 ```shell
 [가장 밑에 있는 log]: 출발이 늦어도 괜찮아
@@ -130,7 +130,7 @@ console.log('[가장 밑에 있는 log]:', '출발이 늦어도 괜찮아');
 8. 1000ms가 지나면, Web API 영역에서 실행되어진 resolve가 Task Queue로 이동합니다.
 9. Call Stack이 버있기 때문에, Task Queue의 내용은 Call Stack으로 이동합니다.
 10. Call Stack에 있던 `resolve('나는 느림의 미학을 추구해')` 가 실행되어집니다.
-11. resolve는 setted가 되는 시점에 다시 Microtask Queue로 이동합니다.
+11. resolve는 settled가 되는 시점에 다시 Microtask Queue로 이동합니다.
 12. Call Stack이 버있기 때문에, Microtask Queue에 있는 내용은 Call Stack으로 이동합니다.
 13. then에 있던 내용인 `console.log('[중간에 있는 log]:', '나는 느림의 미학을 추구해');`가 실행됩니다.
 
