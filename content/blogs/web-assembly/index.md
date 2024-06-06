@@ -1,7 +1,6 @@
 ---
 title: Web Assembly
 image: /images/blogs/default_thumbnail.webp
-draft: false
 summary: web assembly에 대한 내용을 정리하였습니다.
 description: web assembly에 대한 내용을 정리하였습니다.
 author: Gitsunmin
@@ -11,109 +10,167 @@ draft: false
 ---
 
 ## 서론
-웹어셈블리에 대해서 학습한 내용을 정리하였습니다.
+웹어셈블리는 v8 엔진에서 실행할 수 있는 Javascript 외의 포맷입니다. 이 포맷은 Javascript 보다 더 저수준 언어에 가깝고 평균적으로 더 나은 성능으로 실행될 수 있습니다. 그렇다면, 어떠한 차이 때문에 이러한 결과가 도출되었는지 알아보고, 사용 방법도 알아보겠습니다.
 
 ## 본론
-### 웹어셈블리는 무엇인가요?
-웹어셈블리는 웹 브라우저에서 실행할 수 있는 비교적 새로운 포맷입니다. 이 포맷은 Javascript 보다 더 저수준 언어에 가깝고 평균적으로 더 나은 성능으로 실행될 수 있습니다. 그렇다면, 어떠한 차이 때문에 이러한 결과가 도출되었는지 한 번 알아보겠습니다.
 
-#### 웹 브라우저에서의 Javascript
-웹 브라우저는 JavaScript를 어떻게 실행할까요? 대부분의 프로그래밍 언어를 실행하기 위해서는 더 저수준 언어로 작성된 실행기인 엔진이 필요합니다. 크롬 웹 브라우저에서는 `V8`이라는 엔진을 사용해서 JavaScript를 실행하고 있습니다.
+### V8 엔진은 무엇인가?
+서론에서 이야기 하였듯이 웹 어셈블리는 V8엔진에서 실행되는 저수준 포맷의 무엇인가 입니다. 그렇다면, 웹 어셈블리를 알기 전에 V8 엔진은 무엇일까요? 간단하게라도 조사하고 넘어가야겠다는 생각이 들어서 찾아보았습니다.
 
-V8 엔진이 Javascript 코드를 실행하는 단계는 아래의 Flow 차트와 같습니다. 다만, 이해를 돕기 위해서 간단한 배경 지식을 설명하겠습니다.
+V8 엔진은 Google에서 만든 오픈소스 프로젝트이며 Javascript와 웹 어셈블리를 실행할 수 있는 엔진입니다. Javascript를 예로 들면, Javascript를 분석하여 Machine Code로 변환하여 컴퓨터의 CPU를 동작시킬 수 있도록 해주는 장치입니다.
 
-- Ignition
-	•	정의: Ignition은 V8 엔진의 인터프리터로, JavaScript 코드를 바이트코드로 컴파일하고 이를 실행하는 역할을 합니다.
-	•	역할: Ignition은 JavaScript 코드를 빠르게 실행할 수 있도록 하며, 초기 실행 시점에서의 성능을 최적화합니다. 바이트코드를 실행하면서 성능 데이터를 수집하고 프로파일링을 수행합니다.
-- Turbofan
-	•	정의: Turbofan은 V8 엔진의 최적화 컴파일러로, 자주 실행되는 코드(핫스팟)를 최적화된 머신 코드로 변환합니다.
-	•	역할: Turbofan은 Ignition에 의해 감지된 핫스팟을 더 효율적으로 실행할 수 있도록 최적화된 머신 코드로 컴파일하여 성능을 극대화합니다.
-- AST (추상 구문 트리)
-	•	정의: AST는 Abstract Syntax Tree의 약자로, 소스 코드의 구조를 트리 형태로 표현한 데이터 구조입니다.
-	•	역할: JavaScript 소스 코드를 파싱하여 AST로 변환합니다. 이는 컴파일러가 소스 코드를 이해하고 변환하는 데 사용됩니다.
-- 프로파일링
-	•	정의: 프로파일링은 코드 실행 중에 성능 데이터를 수집하여 어떤 부분의 코드가 자주 실행되고, 시간이 많이 소요되는지를 분석하는 과정입니다.
-	•	역할: V8 엔진은 Ignition 인터프리터가 바이트코드를 실행하는 동안 프로파일링을 수행하여 핫스팟을 감지합니다. 이 데이터는 Turbofan이 코드를 최적화하는 데 사용됩니다.
-- 바이트코드
-	•	정의: 바이트코드는 AST를 바탕으로 생성된 중간 표현 형태로, 컴파일된 코드가 아닌 해석(인터프리트)되어 실행되는 코드입니다.
-	•	역할: Ignition 인터프리터는 JavaScript 소스 코드를 바이트코드로 변환하고, 이를 실행합니다.
-- 머신 코드
-	•	정의: 머신 코드는 CPU가 직접 실행할 수 있는 저수준의 기계어 코드입니다.
-	•	역할: Turbofan 컴파일러는 바이트코드에서 핫스팟을 감지하여 이를 최적화된 머신 코드로 변환합니다. 최적화된 머신 코드는 성능이 뛰어납니다.
-- 핫스팟
-	•	정의: 핫스팟은 코드 실행 중 자주 실행되거나 시간이 많이 소요되는 부분을 의미합니다.
-	•	역할: V8 엔진은 프로파일링을 통해 핫스팟을 감지합니다. Turbofan 컴파일러는 이러한 핫스팟을 최적화된 머신 코드로 변환하여 성능을 향상시킵니다.
+더 자세한 내용이 궁금하시다면, 아래의 링크에서 좀 더 찾아보면 도움이 될 것 같습니다.
+[Link](https://v8.dev/)
 
----
-##### Javascript 코드가 실행되는 과정
+### V8엔진에서의 Javascript
+이 글의 주제는 웹 어셈블리이지만, 웹 어셈블리의 동작 방식을 알기 전에 Javascript가 V8엔진에서 어떻게 동작하는지 간단히 알아보고, 웹 어셈블리의 동작을 살펴보도록 하겠습니다.
 
-![Javascript_코드가_실행되는_과정](./1.webp)
-- JavaScript 코드는 파싱되어 AST로 변환됩니다.
-- Ignition 컴파일러는 AST를 바이트코드로 변환합니다.
-- Ignition 인터프리터는 바이트코드를 실행하면서 동시에 프로파일링 데이터를 수집합니다.
-- 핫스팟 감지 단계에서 자주 실행되는 코드(핫스팟)가 있는지 확인합니다.
-- 핫스팟이 감지되면: Turbofan 컴파일러가 이를 최적화된 머신 코드로 컴파일합니다.
-- 핫스팟이 감지되지 않으면: Ignition이 커파일 및 실행을 진행합니다. 혹은 프로그램을 종료합니다.
-- 최적화된 머신 코드가 실행된 후, 프로그램이 종료됩니다.
-- Ignition 인터프리터는 바이트코드를 반복적으로 실행하며, 핫스팟이 감지될 때마다 Turbofan에 의해 최적화된 코드로 대체됩니다.
+아래의 이미지는 [Link](https://medium.com/dailyjs/understanding-v8s-bytecode-317d46c94775)에서 가지고온 V8엔진에서의 Javascript의 동작 순서를 그려낸 것입니다.
+![v8_engine_pipeline](v8-engine-pipeline.webp)
 
-#### 웹 브라우저에서의 웹어셈블리
+자바스크립트 소스 코드는 구체적인 문법 규칙을 따르는 텍스트 형태로 존재합니다. 이러한 텍스트는 문법적 분석을 통해 기계가 이해할 수 있는 형태로 번역될 수 있습니다. 이 번역 과정을 효율적으로 수행하기 위해, 소스 코드는 먼저 구조화된 데이터 형태인 추상 구문 트리(Abstract Syntax Tree, AST)로 변환됩니다.
 
-위에서 Javascript가 웹 브라우저에서 실행되는 것을 알아보았습니다. 이제 웹어셈블리가 웹 브라우저에서 어떻게 실행되는지 알아보고, 왜 더 성능이 좋다고 이야기 하는지 알아보겠습니다.
+Google의 V8 엔진은 자바스크립트 코드를 처리하기 위해 파서(Parser)를 사용하여 이러한 AST를 생성합니다. AST는 소스 코드의 구문적 구조를 반영하며, 각 노드는 개별 코드 구성 요소(예: 변수 선언, 함수 호출 등)를 나타냅니다. 생성된 AST는 코드의 의미를 분석하고 실행 계획을 세우는 기반으로 사용됩니다.
 
-우선, 웹어셈블리는 V8엔진의 `Lifroff`라고 불리는 컴파일러로 변환 및 실행이 되어집니다. Liftoff는 아래와 같이 설명할 수 있습니다.
+V8 엔진에 내장된 Ignition이라는 인터프리터는 이 AST를 해석하여 바이트코드로 변환하는 역할을 수행합니다. 바이트코드는 V8 엔진의 저수준 언어로, 더 빠른 실행을 가능하게 하는 중간 표현 형태입니다. 이 바이트코드는 TurboFan이라고 불리는 고급 최적화 컴파일러에 의해 처리됩니다.
 
-Liftoff
-- 정의: Liftoff는 V8 엔진의 WebAssembly 전용 빠른 컴파일러입니다.
-- 역할: Liftoff는 WebAssembly 코드를 빠르게 기계어로 컴파일하여 초기 실행 시간을 최소화합니다.
-- 작동 원리:
-    - 웹어셈블리 모듈이 로드되면, Liftoff가 이를 빠르게 기계어로 컴파일합니다.
-    - 초기 실행 동안 코드를 빠르게 실행하여 사용자 경험을 향상시킵니다.
-    - 이후, Turbofan이 자주 실행되는 코드(핫스팟)를 최적화된 머신 코드로 재컴파일하여 성능을 최적화합니다.
+TurboFan은 실행 중에 수집된 성능 데이터를 분석하고, 바이트코드를 최적화된 기계어 코드로 변환합니다. 이 과정은 코드의 실행 속도를 크게 향상시킬 수 있으며, 자바스크립트 애플리케이션의 전반적인 성능을 최적화하는 데 중요한 역할을 합니다.
 
-그렇다면 이 Liftoff가 웹 브라우저에서 어떠한 과정으로 실행이되어 웹어셈블리를 실행하는지 알아보겠습니다.
+단, 빨간색 화살표의 내용이 다시 Bytecode로 변환되어지는 것이라고 오해할 수 있지만, 그런 의미가 아니라, 다음 동작을 하기 위해서 다시 Ignition으로 돌아간다고 이해하면 좋을 것 같습니다. 컴파일의 최종 결과물의 형태는 기계가 해석할 수 있는 기계어(Machin Code)가 맞습니다.
 
----
+### v8엔진에서의 웹 어셈블리
+V8 엔진에서 Javascript는 소스 코드를 분석하고, AST(Abstract Syntax Tree) 변환을 거쳐, Ignition 인터프리터를 통해 바이트 코드로 변환됩니다. 반면, 웹어셈블리는 이진 코드 형태로 브라우저에 전달되며, 간단하고 빠른 파싱 후에 바로 기계어로 컴파일이 가능한 상태가 됩니다. 이 과정을 담당하는 V8 엔진의 컴파일러는 Liftoff라고 불립니다. Liftoff는 웹어셈블리를 바로 실행 가능한 기계어로 빠르게 변환할 수 있습니다. 성능 최적화가 필요한 경우, 추가적인 최적화를 위해 TurboFan 컴파일러가 사용됩니다.
 
-##### 웹어셈블리가 코드가 실행되는 과정
-
-![웹어셈블리가_코드가_실행되는_과정](./2.webp)
-
-1.	로딩 및 검증 (Loading and Validation):
-    - 웹어셈블리 모듈(.wasm 파일)이 로드되고, 유효성과 안전성이 검증됩니다.
-2.	빠른 컴파일 (Compilation with Liftoff):
-    - Liftoff 컴파일러가 웹어셈블리 바이너리를 빠르게 기계어(머신 코드)로 컴파일합니다. 이는 초기 실행 시간을 최소화하기 위해 사용됩니다.
-3.	초기 실행 (Initial Execution):
-    - Liftoff에 의해 컴파일된 머신 코드가 초기 실행됩니다.
-4.	프로파일링 및 핫스팟 감지 (Profiling and Hotspot Detection):
-    - 초기 실행 중에 V8 엔진은 성능 데이터를 수집하여 자주 실행되는 코드(핫스팟)를 감지합니다.
-5.	최적화 컴파일 (Optimization with Turbofan):
-    - 핫스팟이 감지되면, Turbofan 컴파일러가 해당 코드를 최적화된 머신 코드로 재컴파일합니다.
-6.	최적화된 머신 코드 실행 (Optimized Machine Code Execution):
-    - Turbofan에 의해 최적화된 머신 코드는 더 높은 성능으로 실행됩니다.
-7.	프로그램 종료 (Program End):
-    - 최적화된 머신 코드가 실행된 후, 프로그램이 종료됩니다.
-
-얼핏 보면 Javascript가 실행되었을 떄의 과정과 유사해 보입니다. 하지만, 아래와 같은 이유로 Javascript 보다 좀 더 나은 성능을 가질 수 있습니다.
-
-1.	바이너리 포맷:
-    - 웹 어셈블리는 바이너리 포맷으로 작성되어 전송 및 로딩 속도가 빠릅니다. 이는 텍스트 기반의 JavaScript 코드보다 더 작고, 빠르게 전송될 수 있습니다.
-2.	성능 최적화:
-    - 웹 어셈블리는 네이티브 코드에 가까운 성능을 제공합니다. 이는 복잡한 계산이나 그래픽 처리와 같은 CPU 집약적인 작업에 적합합니다.
-
--> Turbofan을 사용한다는 점에서 Javascript의 사용 과정과 유사해 보일 수 있지만, 기본적인 포맷부터 차이가 있기때문에, 성능에 큰 영향을 줄 수 있습니다. 다만, `Liftoff`가 항상 Inigtion 보다 나은 성능을 갖지 않을 수 있습니다. 그렇기 때문에, 항상 웹어셈블리의 성능이 더 좋다고 말하지 않고, 때로는 더 좋다고 표현하는 것이 현재로서는 최선입니다.
+Liftoff는 웹어셈블리의 빠른 컴파일을 책임지며, 최적화가 필요한 경우 TurboFan으로 코드를 넘겨 더 깊은 최적화를 수행합니다. 이 두 컴파일러의 협력을 통해 V8 엔진은 WebAssembly 코드를 효율적으로 처리하며, 빠른 시작과 고성능 유지를 동시에 달성할 수 있습니다.
 
 ### 웹어셈블리를 사용해 보기
 
-#### React의 웹어셈블리 사용
-1. React(next) 프로젝트 생성
+#### Next에서 웹어셈블리 사용해보기
+1. Next에서 제공하는 example을 방문한다. [HERE](https://github.com/vercel/next.js/tree/canary/examples/with-webassembly)
+
+2. 제공하는 프로젝트 생성 방법을 따라해본다. (하지만, 나는 Bun으로 함.)
+```shell
+bunx create-next-app --example with-webassembly with-webassembly-app
+```
+
+3. 생성된 프로젝트에서 pakage.json의 script를 확인하여 컴파일 명령어를 실행한다.
+```shell
+bun build-rust
+```
+
+4. 프로젝트를 확인한다.
+
+- root에 `add.wasm` 파일이 생성된 것을 확인할 수 있다.
+- root에 `add.wasm.d.ts` 파일이 생성된 것을 확인할 수 있다.
+- `src/` 폴더에 .rs 확장자인 Rust 소스 파일이 있는 것을 확인할 수 있다.
+- `components/RustServerComponent.tsx`를 확인해본다.
+
+위 파일들을 확인하면 간단하게라도 흐름을 파악할 수 있습니다.
+
+`components/RustServerComponent.tsx`에서 import한 .wasm 파일에서 함수를 추출하여 바로 사용할 수 있는 점이 조금 신기하네요.
+
+#### 간단한 성능 테스트해보기
+간단하게라도 성능을 한 번 테스트 해보기 위해서 ts(js)와 rust로 피보나치수열을 계산해주는 함수를 각각 만들어 비교를 해 보았습니다.
+
+위에서 생성하였던 프로젝트에서 조금 수정을 해보았습니다.
+
+1. `src/fibonacci.rs`을 추가
+2. `src/fibonacci.rs`파일의 내용을 아래와 같이 수정
+```rs
+#[no_mangle]
+pub extern "C" fn fibonacci(n: usize) -> u64 {
+    if n == 0 {
+        return 0;
+    }
+
+    let mut a = 0;
+    let mut b = 1;
+    for _ in 1..n {
+        let temp = a + b;
+        a = b;
+        b = temp;
+    }
+
+    a
+}
+```
+3. `package.json`파일의 script 수정
+```shell
+- "build-rust": "rustc --target wasm32-unknown-unknown -O --crate-type=cdylib src/fibonacci.rs -o fibonacci.wasm",
+```
+4. root에 `fibonacci.wasm.d.ts`파일 추가
+```ts
+export function fibonacci(number: number): number;
+```
+5. 3번에서 추가하였던 script를 실행
+```shell
+bun build-rust
+```
+- root에 `fibonacci.wasm` 파일이 생성되어짐.
+6. `components/RustServerComponent.tsx`을 수정.
+```tsx
+
+const TS = {
+  ibonacci(n: number): number {
+    let a = 0;
+    let b = 1;
+  
+    for (let i = 1; i < n; i++) {
+      let temp = a + b;
+      a = b;
+      b = temp;
+    }
+  
+    return a;
+  }
+}
+
+export async function RustServerComponent({ number }: { number: number }) {
+  const Rust = await import("../fibonacci.wasm");
+
+  console.log('fibonacci number:', number);
+
+  console.group('Typescript Calculate');
+  console.time('ts');
+  const tsResult = TS.ibonacci(number).toString();
+  console.timeEnd('ts');
+  console.log('tsResult:', tsResult);
+  console.groupEnd();
+  console.group('Rust Calculate');
+  console.time('rs');
+  const rsResult = Rust.fibonacci(number).toString();
+  console.timeEnd('rs');
+  console.log('rsResult:', rsResult);
+  console.groupEnd();
 
 
+  return <>
+    <p>
+      <h2>Typescript vs Rust(Wasm)</h2>
+      <h3>결과는 Server Console 창을 확인해주세요. 서버 컴포넌트니깐</h3>
+    </p>
+  </>;
+}
+```
+4번 연속으로 실행을 해서 아래와 같은 데이터를 얻을 수 있었습니다.
 
-
+| 언어      | 실행 시간 (ms) |
+|-----------|----------------|
+| Typescript | 3.792          |
+| Rust       | 0.060          |
+| Typescript | 0.007          |
+| Rust       | 0.023          |
+| Typescript | 0.004          |
+| Rust       | 0.006          |
+| Typescript | 0.007          |
+| Rust       | 0.029          |
 
 ## 결론
+위에서 설명한 것처럼 Javascript와 웹어셈블리는 각각 다른 목적과 특성을 가지고 있습니다. 웹어셈블리는 특정 고성능 로직을 최적화된 형태로 실행하기 위해 개발된 기술로, 크롬 브라우저 뿐만 아니라 V8 엔진을 사용하는 모든 곳에서 바이너리 코드로 실행됩니다. 초기 실험에서 보았듯, 웹어셈블리는 처음 실행 시 빠른 성능을 보여주지만, 반복 실행에서는 자바스크립트(여기서는 Typescript)가 JIT 최적화를 통해 성능이 향상되며, 경우에 따라 웹어셈블리보다 빠르게 실행될 수 있습니다. 이는 웹어셈블리가 모든 상황에서 최선의 선택은 아님을 시사합니다. 초기 로딩 속도가 중요하거나, 고성능이 필수적인 작업에서 웹어셈블리의 사용을 고려할 수 있으며, 일반적인 웹 애플리케이션 개발에서는 자바스크립트의 유연성과 성능 최적화가 더 적합할 수 있습니다.
 
 ## 참조
 - [웹어셈블리](https://tecoble.techcourse.co.kr/post/2021-11-24-web-assembly/)
 - [카툰으로 소개하는 웹어셈블리](https://dongwoo.blog/2017/06/06/%eb%b2%88%ec%97%ad-%ec%b9%b4%ed%88%b0%ec%9c%bc%eb%a1%9c-%ec%86%8c%ea%b0%9c%ed%95%98%eb%8a%94-%ec%9b%b9%ec%96%b4%ec%85%88%eb%b8%94%eb%a6%ac/)
+- [v8 docs](https://v8.dev/docs)
+- [Ignition: V8 Interpreter](https://docs.google.com/document/d/11T2CRex9hXxoJwbYqVQ32yIPMh0uouUZLdyrtmMoL44/edit)
+- [WebAssembly compilation pipeline](https://v8.dev/docs/wasm-compilation-pipeline)
