@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="Accept-CH" content="DPR, Viewport-Width, Width">
+<link rel="icon" href=/images/favicon.png type="image/gif">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Alata&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alata&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      media="print" onload="this.media='all'" />
+<noscript>
+  <link
+          href="https://fonts.googleapis.com/css2?family=Alata&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+</noscript>
+
+
+<link rel="stylesheet" href="/css/font.css" media="all">
+
+
+
+<meta property="og:title" content="Web Assembly" />
+<meta property="og:description" content="web assembly에 대한 내용을 정리하였습니다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gitsunmin.github.io/blogs/web-assembly/" /><meta property="article:section" content="blogs" />
+<meta property="article:published_time" content="2024-05-21T12:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-21T12:00:00+00:00" /><meta property="og:site_name" content="Gitsunmin Blog" />
+
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Web Assembly"/>
+<meta name="twitter:description" content="web assembly에 대한 내용을 정리하였습니다."/>
+
+
+<link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
+<link rel="stylesheet" href="/css/footer.css" media="all">
+
+
+<link rel="stylesheet" href="/css/theme.css" media="all">
+
+
+
+
+<style>
+    :root {
+        --text-color: #343a40;
+        --text-secondary-color: #6c757d;
+        --background-color: #eaedf0;
+        --secondary-background-color: #64ffda1a;
+        --primary-color: #007bff;
+        --secondary-color: #f8f9fa;
+
+         
+        --text-color-dark: #e4e6eb;
+        --text-secondary-color-dark: #b0b3b8;
+        --background-color-dark: #18191a;
+        --secondary-background-color-dark: #212529;
+        --primary-color-dark: #ffffff;
+        --secondary-color-dark: #212529;
+    }
+    body {
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: left;
+    }
+
+    html {
+        background-color: var(--background-color) !important;
+    }
+
+    body::-webkit-scrollbar {
+        width: .5em;
+        height: .5em;
+        background-color: var(--background-color);
+    }
+    
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px var(--background-color);
+        border-radius: 1rem;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border-radius: 1rem;
+        background-color: var(--secondary-color);
+        outline: 1px solid var(--background-color);
+    }
+
+    #search-content::-webkit-scrollbar {
+        width: .5em;
+        height: .1em;
+        background-color: var(--background-color);
+    }
+</style>
+
+<meta name="description" content="web assembly에 대한 내용을 정리하였습니다." />
+<link rel="stylesheet" href="/css/single.css" />
+
+
+<script
+  defer
+  src="/fontawesome-6/all-6.4.2.js"
+></script>
+
+  <title> Web Assembly | Gitsunmin Blog 
+  </title>
+</head>
+
+<body class="light">
+  
+  
+<script>
+    let localStorageValue = localStorage.getItem("pref-theme");
+    let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.add('dark');
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</script>
+
+
+
+
+<script>
+    var prevScrollPos = window.pageYOffset;
+    window.addEventListener("scroll", function showHeaderOnScroll() {
+        let profileHeaderElem = document.getElementById("profileHeader");
+        let currentScrollPos = window.pageYOffset;
+        let resetHeaderStyle = false;
+        let showNavBarOnScrollUp =  true ;
+        let showNavBar = showNavBarOnScrollUp ? prevScrollPos > currentScrollPos : currentScrollPos > 0;
+        if (showNavBar) {
+            profileHeaderElem.classList.add("showHeaderOnTop");
+        } else {
+            resetHeaderStyle = true;
+        }
+        if(currentScrollPos === 0) {
+            resetHeaderStyle = true;
+        }
+        if(resetHeaderStyle) {
+            profileHeaderElem.classList.remove("showHeaderOnTop");
+        }
+        prevScrollPos = currentScrollPos;        
+    });
+</script>
+
+
+
+<header id="profileHeader">
+    <nav class="pt-3 navbar navbar-expand-lg animate">
+        <div class="container-fluid mx-xs-2 mx-sm-5 mx-md-5 mx-lg-5">
+            
+            <a class="navbar-brand primary-font text-wrap" href="/">
+                
+                <img src="/images/favicon.png" width="30" height="30"
+                    class="d-inline-block align-top">
+                Gitsunmin Blog
+                
+            </a>
+
+            
+                <div>
+                    <input id="search" autocomplete="off" class="form-control mr-sm-2 d-none d-md-block" placeholder='제목으로 검색'
+                        aria-label="Search" oninput="searchOnChange(event)">
+                </div>
+            
+
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <svg aria-hidden="true" height="24" viewBox="0 0 16 16" version="1.1" width="24" data-view-component="true">
+                    <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z"></path>
+                </svg>
+            </button>
+
+            
+            <div class="collapse navbar-collapse text-wrap primary-font" id="navbarContent">
+                <ul class="navbar-nav ms-auto text-center">
+                    
+                        <li class="nav-item navbar-text d-block d-md-none">
+                            <div class="nav-link">
+                                <input id="search" autocomplete="off" class="form-control mr-sm-2" placeholder='제목으로 검색' aria-label="Search" oninput="searchOnChange(event)">
+                            </div>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                    
+                    
+                    
+                    <li class="nav-item navbar-text">
+                        <a class="nav-link" href="/blogs" title="Blog posts">
+                            
+                            Blog
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+                    
+                    
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>
+<div id="content">
+<section id="single">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-12 col-lg-9">
+        <div class="pr-lg-4">
+          <div class="title mb-5">
+            <h1 class="text-center mb-4">Web Assembly</h1>
+            <div class="text-center">
+              Gitsunmin
+              <small>|</small>
+              2024.05.21 
+              <span id="readingTime">
+                min read
+              </span>
+              
+            </div>
+          </div>
+          
+          <div class="featured-image">
+            <img
+              class="img-fluid mx-auto d-block"
+              src="/images/blogs/default_thumbnail.webp"
+              alt="Web Assembly"
+            />
+          </div>
+          
+          <article class="page-content p-2"><h2 id="서론">서론</h2>
+<p>웹어셈블리는 v8 엔진에서 실행할 수 있는 Javascript 외의 포맷입니다. 이 포맷은 Javascript 보다 더 저수준 언어에 가깝고 평균적으로 더 나은 성능으로 실행될 수 있습니다. 그렇다면, 어떠한 차이 때문에 이러한 결과가 도출되었는지 알아보고, 사용 방법도 알아보겠습니다.</p>
+<h2 id="본론">본론</h2>
+<h3 id="v8-엔진은-무엇인가">V8 엔진은 무엇인가?</h3>
+<p>서론에서 이야기 하였듯이 웹 어셈블리는 V8엔진에서 실행되는 저수준 포맷의 무엇인가 입니다. 그렇다면, 웹 어셈블리를 알기 전에 V8 엔진은 무엇일까요? 간단하게라도 조사하고 넘어가야겠다는 생각이 들어서 찾아보았습니다.</p>
+<p>V8 엔진은 Google에서 만든 오픈소스 프로젝트이며 Javascript와 웹 어셈블리를 실행할 수 있는 엔진입니다. Javascript를 예로 들면, Javascript를 분석하여 Machine Code로 변환하여 컴퓨터의 CPU를 동작시킬 수 있도록 해주는 장치입니다.</p>
+<p>더 자세한 내용이 궁금하시다면, 아래의 링크에서 좀 더 찾아보면 도움이 될 것 같습니다.
+<a href="https://v8.dev/">Link</a></p>
+<h3 id="v8엔진에서의-javascript">V8엔진에서의 Javascript</h3>
+<p>이 글의 주제는 웹 어셈블리이지만, 웹 어셈블리의 동작 방식을 알기 전에 Javascript가 V8엔진에서 어떻게 동작하는지 간단히 알아보고, 웹 어셈블리의 동작을 살펴보도록 하겠습니다.</p>
+<p>아래의 이미지는 <a href="https://medium.com/dailyjs/understanding-v8s-bytecode-317d46c94775">Link</a>에서 가지고온 V8엔진에서의 Javascript의 동작 순서를 그려낸 것입니다.
+<img src="v8-engine-pipeline.webp" alt="v8_engine_pipeline"></p>
+<p>자바스크립트 소스 코드는 구체적인 문법 규칙을 따르는 텍스트 형태로 존재합니다. 이러한 텍스트는 문법적 분석을 통해 기계가 이해할 수 있는 형태로 번역될 수 있습니다. 이 번역 과정을 효율적으로 수행하기 위해, 소스 코드는 먼저 구조화된 데이터 형태인 추상 구문 트리(Abstract Syntax Tree, AST)로 변환됩니다.</p>
+<p>Google의 V8 엔진은 자바스크립트 코드를 처리하기 위해 파서(Parser)를 사용하여 이러한 AST를 생성합니다. AST는 소스 코드의 구문적 구조를 반영하며, 각 노드는 개별 코드 구성 요소(예: 변수 선언, 함수 호출 등)를 나타냅니다. 생성된 AST는 코드의 의미를 분석하고 실행 계획을 세우는 기반으로 사용됩니다.</p>
+<p>V8 엔진에 내장된 Ignition이라는 인터프리터는 이 AST를 해석하여 바이트코드로 변환하는 역할을 수행합니다. 바이트코드는 V8 엔진의 저수준 언어로, 더 빠른 실행을 가능하게 하는 중간 표현 형태입니다. 이 바이트코드는 TurboFan이라고 불리는 고급 최적화 컴파일러에 의해 처리됩니다.</p>
+<p>TurboFan은 실행 중에 수집된 성능 데이터를 분석하고, 바이트코드를 최적화된 기계어 코드로 변환합니다. 이 과정은 코드의 실행 속도를 크게 향상시킬 수 있으며, 자바스크립트 애플리케이션의 전반적인 성능을 최적화하는 데 중요한 역할을 합니다.</p>
+<p>단, 빨간색 화살표의 내용이 다시 Bytecode로 변환되어지는 것이라고 오해할 수 있지만, 그런 의미가 아니라, 다음 동작을 하기 위해서 다시 Ignition으로 돌아간다고 이해하면 좋을 것 같습니다. 컴파일의 최종 결과물의 형태는 기계가 해석할 수 있는 기계어(Machin Code)가 맞습니다.</p>
+<h3 id="v8엔진에서의-웹-어셈블리">v8엔진에서의 웹 어셈블리</h3>
+<p>V8 엔진에서 Javascript는 소스 코드를 분석하고, AST(Abstract Syntax Tree) 변환을 거쳐, Ignition 인터프리터를 통해 바이트 코드로 변환됩니다. 반면, 웹어셈블리는 이진 코드 형태로 브라우저에 전달되며, 간단하고 빠른 파싱 후에 바로 기계어로 컴파일이 가능한 상태가 됩니다. 이 과정을 담당하는 V8 엔진의 컴파일러는 Liftoff라고 불립니다. Liftoff는 웹어셈블리를 바로 실행 가능한 기계어로 빠르게 변환할 수 있습니다. 성능 최적화가 필요한 경우, 추가적인 최적화를 위해 TurboFan 컴파일러가 사용됩니다.</p>
+<p>Liftoff는 웹어셈블리의 빠른 컴파일을 책임지며, 최적화가 필요한 경우 TurboFan으로 코드를 넘겨 더 깊은 최적화를 수행합니다. 이 두 컴파일러의 협력을 통해 V8 엔진은 WebAssembly 코드를 효율적으로 처리하며, 빠른 시작과 고성능 유지를 동시에 달성할 수 있습니다.</p>
+<h3 id="웹어셈블리를-사용해-보기">웹어셈블리를 사용해 보기</h3>
+<h4 id="next에서-웹어셈블리-사용해보기">Next에서 웹어셈블리 사용해보기</h4>
+<ol>
+<li>
+<p>Next에서 제공하는 example을 방문한다. <a href="https://github.com/vercel/next.js/tree/canary/examples/with-webassembly">HERE</a></p>
+</li>
+<li>
+<p>제공하는 프로젝트 생성 방법을 따라해본다. (하지만, 나는 Bun으로 함.)</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>bunx create-next-app --example with-webassembly with-webassembly-app
+</span></span></code></pre></div><ol start="3">
+<li>생성된 프로젝트에서 pakage.json의 script를 확인하여 컴파일 명령어를 실행한다.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>bun build-rust
+</span></span></code></pre></div><ol start="4">
+<li>프로젝트를 확인한다.</li>
+</ol>
+<ul>
+<li>root에 <code>add.wasm</code> 파일이 생성된 것을 확인할 수 있다.</li>
+<li>root에 <code>add.wasm.d.ts</code> 파일이 생성된 것을 확인할 수 있다.</li>
+<li><code>src/</code> 폴더에 .rs 확장자인 Rust 소스 파일이 있는 것을 확인할 수 있다.</li>
+<li><code>components/RustServerComponent.tsx</code>를 확인해본다.</li>
+</ul>
+<p>위 파일들을 확인하면 간단하게라도 흐름을 파악할 수 있습니다.</p>
+<p><code>components/RustServerComponent.tsx</code>에서 import한 .wasm 파일에서 함수를 추출하여 바로 사용할 수 있는 점이 조금 신기하네요.</p>
+<h4 id="간단한-성능-테스트해보기">간단한 성능 테스트해보기</h4>
+<p>간단하게라도 성능을 한 번 테스트 해보기 위해서 ts(js)와 rust로 피보나치수열을 계산해주는 함수를 각각 만들어 비교를 해 보았습니다.</p>
+<p>위에서 생성하였던 프로젝트에서 조금 수정을 해보았습니다.</p>
+<ol>
+<li><code>src/fibonacci.rs</code>을 추가</li>
+<li><code>src/fibonacci.rs</code>파일의 내용을 아래와 같이 수정</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rs" data-lang="rs"><span style="display:flex;"><span><span style="color:#75715e">#[no_mangle]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fibonacci</span>(n: <span style="color:#66d9ef">usize</span>) -&gt; <span style="color:#66d9ef">u64</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> b <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _ <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">..</span>n {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">let</span> temp <span style="color:#f92672">=</span> a <span style="color:#f92672">+</span> b;
+</span></span><span style="display:flex;"><span>        a <span style="color:#f92672">=</span> b;
+</span></span><span style="display:flex;"><span>        b <span style="color:#f92672">=</span> temp;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    a
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
+<li><code>package.json</code>파일의 script 수정</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>- <span style="color:#e6db74">&#34;build-rust&#34;</span>: <span style="color:#e6db74">&#34;rustc --target wasm32-unknown-unknown -O --crate-type=cdylib src/fibonacci.rs -o fibonacci.wasm&#34;</span>,
+</span></span></code></pre></div><ol start="4">
+<li>root에 <code>fibonacci.wasm.d.ts</code>파일 추가</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">fibonacci</span>(<span style="color:#66d9ef">number</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">number</span>)<span style="color:#f92672">:</span> <span style="color:#66d9ef">number</span>;
+</span></span></code></pre></div><ol start="5">
+<li>3번에서 추가하였던 script를 실행</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>bun build-rust
+</span></span></code></pre></div><ul>
+<li>root에 <code>fibonacci.wasm</code> 파일이 생성되어짐.</li>
+</ul>
+<ol start="6">
+<li><code>components/RustServerComponent.tsx</code>을 수정.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-tsx" data-lang="tsx"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">TS</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">ibonacci</span>(<span style="color:#a6e22e">n</span>: <span style="color:#66d9ef">number</span>)<span style="color:#f92672">:</span> <span style="color:#66d9ef">number</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">let</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">temp</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">b</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">temp</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">export</span> <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">RustServerComponent</span>({ <span style="color:#66d9ef">number</span> }<span style="color:#f92672">:</span> { <span style="color:#66d9ef">number</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">number</span> }) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">Rust</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#66d9ef">import</span>(<span style="color:#e6db74">&#34;../fibonacci.wasm&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;fibonacci number:&#39;</span>, <span style="color:#66d9ef">number</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">group</span>(<span style="color:#e6db74">&#39;Typescript Calculate&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">time</span>(<span style="color:#e6db74">&#39;ts&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">tsResult</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">TS</span>.<span style="color:#a6e22e">ibonacci</span>(<span style="color:#66d9ef">number</span>).<span style="color:#a6e22e">toString</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">timeEnd</span>(<span style="color:#e6db74">&#39;ts&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;tsResult:&#39;</span>, <span style="color:#a6e22e">tsResult</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">groupEnd</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">group</span>(<span style="color:#e6db74">&#39;Rust Calculate&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">time</span>(<span style="color:#e6db74">&#39;rs&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">rsResult</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">Rust</span>.<span style="color:#a6e22e">fibonacci</span>(<span style="color:#66d9ef">number</span>).<span style="color:#a6e22e">toString</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">timeEnd</span>(<span style="color:#e6db74">&#39;rs&#39;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;rsResult:&#39;</span>, <span style="color:#a6e22e">rsResult</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">groupEnd</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> &lt;&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">h2</span>&gt;<span style="color:#a6e22e">Typescript</span> <span style="color:#a6e22e">vs</span> <span style="color:#a6e22e">Rust</span>(<span style="color:#a6e22e">Wasm</span>)&lt;/<span style="color:#f92672">h2</span>&gt;
+</span></span><span style="display:flex;"><span>      &lt;<span style="color:#f92672">h3</span>&gt;<span style="color:#960050;background-color:#1e0010">결과는</span> <span style="color:#a6e22e">Server</span> <span style="color:#a6e22e">Console</span> <span style="color:#960050;background-color:#1e0010">창을</span> <span style="color:#960050;background-color:#1e0010">확인해주세요</span>. <span style="color:#960050;background-color:#1e0010">서버</span> <span style="color:#960050;background-color:#1e0010">컴포넌트니깐</span>&lt;/<span style="color:#f92672">h3</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">p</span>&gt;
+</span></span><span style="display:flex;"><span>  &lt;/&gt;;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>4번 연속으로 실행을 해서 아래와 같은 데이터를 얻을 수 있었습니다.</p>
+<table>
+<thead>
+<tr>
+<th>언어</th>
+<th>실행 시간 (ms)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Typescript</td>
+<td>3.792</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>0.060</td>
+</tr>
+<tr>
+<td>Typescript</td>
+<td>0.007</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>0.023</td>
+</tr>
+<tr>
+<td>Typescript</td>
+<td>0.004</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>0.006</td>
+</tr>
+<tr>
+<td>Typescript</td>
+<td>0.007</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td>0.029</td>
+</tr>
+</tbody>
+</table>
+<h2 id="결론">결론</h2>
+<p>위에서 설명한 것처럼 Javascript와 웹어셈블리는 각각 다른 목적과 특성을 가지고 있습니다. 웹어셈블리는 특정 고성능 로직을 최적화된 형태로 실행하기 위해 개발된 기술로, 크롬 브라우저 뿐만 아니라 V8 엔진을 사용하는 모든 곳에서 바이너리 코드로 실행됩니다. 초기 실험에서 보았듯, 웹어셈블리는 처음 실행 시 빠른 성능을 보여주지만, 반복 실행에서는 자바스크립트(여기서는 Typescript)가 JIT 최적화를 통해 성능이 향상되며, 경우에 따라 웹어셈블리보다 빠르게 실행될 수 있습니다. 이는 웹어셈블리가 모든 상황에서 최선의 선택은 아님을 시사합니다. 초기 로딩 속도가 중요하거나, 고성능이 필수적인 작업에서 웹어셈블리의 사용을 고려할 수 있으며, 일반적인 웹 애플리케이션 개발에서는 자바스크립트의 유연성과 성능 최적화가 더 적합할 수 있습니다.</p>
+<h2 id="참조">참조</h2>
+<ul>
+<li><a href="https://tecoble.techcourse.co.kr/post/2021-11-24-web-assembly/">웹어셈블리</a></li>
+<li><a href="https://dongwoo.blog/2017/06/06/%eb%b2%88%ec%97%ad-%ec%b9%b4%ed%88%b0%ec%9c%bc%eb%a1%9c-%ec%86%8c%ea%b0%9c%ed%95%98%eb%8a%94-%ec%9b%b9%ec%96%b4%ec%85%88%eb%b8%94%eb%a6%ac/">카툰으로 소개하는 웹어셈블리</a></li>
+<li><a href="https://v8.dev/docs">v8 docs</a></li>
+<li><a href="https://docs.google.com/document/d/11T2CRex9hXxoJwbYqVQ32yIPMh0uouUZLdyrtmMoL44/edit">Ignition: V8 Interpreter</a></li>
+<li><a href="https://v8.dev/docs/wasm-compilation-pipeline">WebAssembly compilation pipeline</a></li>
+</ul>
+</article>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-3">
+        <div id="stickySideBar" class="sticky-sidebar">
+          
+          <aside class="toc">
+            <h5>목차</h5>
+            <div class="toc-content"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#서론">서론</a></li>
+    <li><a href="#본론">본론</a>
+      <ul>
+        <li><a href="#v8-엔진은-무엇인가">V8 엔진은 무엇인가?</a></li>
+        <li><a href="#v8엔진에서의-javascript">V8엔진에서의 Javascript</a></li>
+        <li><a href="#v8엔진에서의-웹-어셈블리">v8엔진에서의 웹 어셈블리</a></li>
+        <li><a href="#웹어셈블리를-사용해-보기">웹어셈블리를 사용해 보기</a></li>
+      </ul>
+    </li>
+    <li><a href="#결론">결론</a></li>
+    <li><a href="#참조">참조</a></li>
+  </ul>
+</nav></div>
+          </aside>
+            
+          <aside class="social">
+            <h5>Social</h5>
+            <div class="social-content">
+              <ul class="list-inline">
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href="https://twitter.com/share?text=Web%20Assembly&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fweb-assembly%2f"
+                  >
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href="https://api.whatsapp.com/send?text=Web%20Assembly: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fweb-assembly%2f"
+                  >
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href='mailto:?subject=Web%20Assembly&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fweb-assembly%2f'
+                  >
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </aside>
+          
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 200px">
+      <script
+        src="https://utteranc.es/client.js"
+        repo="gitsunmin/gitsunmin.github.io"
+        issue-term="pathname"
+        label="comment"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async
+      ></script>
+    </div>
+  </div>
+  <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
+    <i class="fas fa-angle-up"></i>
+  </button>
+</section>
+
+
+<div class="progress">
+  <div
+    id="scroll-progress-bar"
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
+</div>
+<script src="/js/scrollProgressBar.js"></script>
+
+
+<script>
+  var topScroll = document.getElementById("topScroll");
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      topScroll.style.display = "block";
+    } else {
+      topScroll.style.display = "none";
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  
+  let stickySideBarElem = document.getElementById("stickySideBar");
+  let stickyNavBar =  true ;
+  if(stickyNavBar) {
+    let headerElem = document.getElementById("profileHeader");
+    let headerHeight = headerElem.offsetHeight + 15;
+    stickySideBarElem.style.top = headerHeight + "px";
+  } else {
+    stickySideBarElem.style.top = "50px";
+  }
+</script>
+
+
+<script src="/js/readingTime.js"></script>
+ 
+  </div><footer>
+    
+ 
+<div class="container py-3" id="recent-posts">
+  
+  
+  <div class="h3 text-center text-secondary py-3">
+    Recent Posts
+  </div>
+  <div class="row justify-content-center">
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
+          <a href="/blogs/web-assembly/">
+            <img
+              src="/images/blogs/default_thumbnail.webp"
+              class="card-img-top"
+              alt="Web Assembly"
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/web-assembly/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="Web Assembly">
+              Web Assembly
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>web assembly에 대한 내용을 정리하였습니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2024.05.21</span
+          >
+          <a
+            href="/blogs/web-assembly/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
+          <a href="/blogs/promise/">
+            <img
+              src="/images/blogs/default_thumbnail.webp"
+              class="card-img-top"
+              alt="I여서 Promise가 싫은줄 알았는데..."
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/promise/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="I여서 Promise가 싫은줄 알았는데...">
+              I여서 Promise가 싫은줄 알았는데...
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>Javascript의 Promise 객체에 대해서 다루었습니다. I가 아니어도 Promise가 싫어질 수 있습니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2024.05.15</span
+          >
+          <a
+            href="/blogs/promise/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
+          <a href="/blogs/garden9-2023/">
+            <img
+              src="/images/blogs/default_thumbnail.webp"
+              class="card-img-top"
+              alt="정원사들 시즌9 참여 후기"
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/garden9-2023/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="정원사들 시즌9 참여 후기">
+              정원사들 시즌9 참여 후기
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2023.12.20</span
+          >
+          <a
+            href="/blogs/garden9-2023/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="text-center pt-2">
+    
+    <span class="px-1">
+        <a href="https://github.com/gitsunmin" aria-label="github">
+            <svg xmlns="http://www.w3.org/2000/svg" width="2.7em" height="2.7em" viewBox="0 0 1792 1792">
+                <path
+                    d="M522 1352q-8 9-20-3-13-11-4-19 8-9 20 3 12 11 4 19zm-42-61q9 12 0 19-8 6-17-7t0-18q9-7 17 6zm-61-60q-5 7-13 2-10-5-7-12 3-5 13-2 10 5 7 12zm31 34q-6 7-16-3-9-11-2-16 6-6 16 3 9 11 2 16zm129 112q-4 12-19 6-17-4-13-15t19-7q16 5 13 16zm63 5q0 11-16 11-17 2-17-11 0-11 16-11 17-2 17 11zm58-10q2 10-14 14t-18-8 14-15q16-2 18 9zm964-956v960q0 119-84.5 203.5t-203.5 84.5h-224q-16 0-24.5-1t-19.5-5-16-14.5-5-27.5v-239q0-97-52-142 57-6 102.5-18t94-39 81-66.5 53-105 20.5-150.5q0-121-79-206 37-91-8-204-28-9-81 11t-92 44l-38 24q-93-26-192-26t-192 26q-16-11-42.5-27t-83.5-38.5-86-13.5q-44 113-7 204-79 85-79 206 0 85 20.5 150t52.5 105 80.5 67 94 39 102.5 18q-40 36-49 103-21 10-45 15t-57 5-65.5-21.5-55.5-62.5q-19-32-48.5-52t-49.5-24l-20-3q-21 0-29 4.5t-5 11.5 9 14 13 12l7 5q22 10 43.5 38t31.5 51l10 23q13 38 44 61.5t67 30 69.5 7 55.5-3.5l23-4q0 38 .5 103t.5 68q0 22-11 33.5t-22 13-33 1.5h-224q-119 0-203.5-84.5t-84.5-203.5v-960q0-119 84.5-203.5t203.5-84.5h960q119 0 203.5 84.5t84.5 203.5z" />
+
+                <metadata>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                        <rdf:Description about="https://iconscout.com/legal#licenses"
+                            dc:title="Github, Online, Project, Hosting, Square"
+                            dc:description="Github, Online, Project, Hosting, Square" dc:publisher="Iconscout"
+                            dc:date="2016-12-14" dc:format="image/svg+xml" dc:language="en">
+                            <dc:creator>
+                                <rdf:Bag>
+                                    <rdf:li>Font Awesome</rdf:li>
+                                </rdf:Bag>
+                            </dc:creator>
+                        </rdf:Description>
+                    </rdf:RDF>
+                </metadata>
+            </svg>
+        </a>
+    </span>
+    
+
+    
+    <span class="px-1">
+        <a href="https://www.linkedin.com/in/gitsunmin" aria-label="linkedin">
+            <svg xmlns="http://www.w3.org/2000/svg" width='2.4em' height='2.4em' fill="#fff" aria-label="LinkedIn"
+                viewBox="0 0 512 512">
+                <rect width="512" height="512" fill="#0077b5" rx="15%" />
+                <circle cx="142" cy="138" r="37" />
+                <path stroke="#fff" stroke-width="66" d="M244 194v198M142 194v198" />
+                <path d="M276 282c0-20 13-40 36-40 24 0 33 18 33 45v105h66V279c0-61-32-89-76-89-34 0-51 19-59 32" />
+            </svg>
+        </a>
+    </span>
+    
+
+    
+
+    
+
+    
+</div><div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-4 text-center">
+            <div class="pb-2">
+                <a href="https://gitsunmin.github.io/" title="Gitsunmin Blog">
+                    <img alt="Footer logo" src="/images/favicon.png"
+                        height="40px" width="40px">
+                </a>
+            </div>
+            &copy; 2024  All rights reserved
+            <div class="text-secondary">
+                Made with
+                <span class="text-danger">
+                    &#10084;
+                </span>
+                and
+                <a href="https://github.com/gurusabarish/hugo-profile" target="_blank"
+                    title="Designed and developed by gurusabarish">
+                    Hugo Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div></footer><script src="/bootstrap-5/js/bootstrap.bundle.min.js"></script>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+</script>
+
+
+    <script src="/js/search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+  <section id="search-content" class="py-2">
+    <div class="container" id="search-results"></div>
+  </section>
+</body>
+
+</html>

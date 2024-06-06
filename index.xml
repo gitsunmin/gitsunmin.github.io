@@ -6,8 +6,15 @@
     <description>Recent content on Gitsunmin Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Wed, 15 May 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 21 May 2024 12:00:00 +0000</lastBuildDate>
     <atom:link href="https://gitsunmin.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Web Assembly</title>
+      <link>https://gitsunmin.github.io/blogs/web-assembly/</link>
+      <pubDate>Tue, 21 May 2024 12:00:00 +0000</pubDate>
+      <guid>https://gitsunmin.github.io/blogs/web-assembly/</guid>
+      <description>web assembly에 대한 내용을 정리하였습니다.</description>
+    </item>
     <item>
       <title>I여서 Promise가 싫은줄 알았는데...</title>
       <link>https://gitsunmin.github.io/blogs/promise/</link>
