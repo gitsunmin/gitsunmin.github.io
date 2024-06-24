@@ -336,8 +336,11 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#960050;background-color:#1e0010">어떠한</span><span style="color:#a6e22e">_것</span>(<span style="color:#a6e22e">fn</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">value</span>));
 </span></span><span style="display:flex;"><span>  };
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>그런데, 우리 이 <code>어떠한_것</code>을 왜 만들었을까요?</p>
-<p>이 어떠한_것은 사실 함수형프로그래밍에서 사용하는 “Functor”라고 하는 개념입니다. Functor끼리는 합성이 가능하고, 원본 데이터를 변경하지 않기 때문에, 함수형 프로그래밍에서 필수 개념중에 하나 입니다. (다음 포스트에서 더욱 자세히 다루어 보겠습니다.)</p>
+</span></span></code></pre></div><p>이 <code>어떠한_것</code>은 위에서 이야기 했듯이, Javascript의 Array와 같이 map을 사용할 수 있는 Mappable한 Class입니다. 함수형프로그래밍에서는 이 Class를 <code>Functor</code>라고 부릅니다.</p>
+<blockquote>
+<p>Functor는 원본 값을 가질 수 있으며, 함수를 입력 받아서 원본 값을 변형하고 새로운 Functor를 반환하는 구조를 의미합니다. 중요한 것은 Functor의 구조가 변하지 않으면서 내부의 값이 함수에 의해 변형된다는 점입니다.</p>
+</blockquote>
+<p>다음에는 Functor라는 개념을 더 학습해서 블로그 글을 작성해보려고 합니다. 정리가 되면 개시하겠습니다. 다만, 아래에 Functor와 함수형 프로그래밍을 사용할 수 있도록 도와주는 간단한 라이브러리인 ts-belt를 소개합니다.</p>
 <h2 id="ts-belt">ts-belt</h2>
 <p>typescript 영역에서 <a href="https://gcanti.github.io/fp-ts/">fp-ts</a>라는 라이브러리를 이용하여 함수형 프로그래밍을 구현하고 있지만, 사실 어려운 개념들이 많이 있어서 도입하기가 쉽지는 않습니다. 이의 대안으로서 좀 더 쉬고 간편한 라이브러리인 <a href="https://mobily.github.io/ts-belt/">ts-belt</a>를 소개합니다. 이 ts-belt는 pipe와 flow함수를 제공하여, 사용하다 보면 자연스럽게 함수형 프로그래밍을 하게 되는 라이브러리이며, 복잡한 기능 없이 필수적인 간편한 Functor만을 제공합니다. 비교적 러닝커브가 낮고, 함수형 프로그래밍을 처음 도입하는 분들께 적합한 라이브러리라고 생각합니다.</p>
 <h1 id="결론">결론</h1>
@@ -494,6 +497,42 @@
       <div class="card h-100">
         
         <div class="card-header">
+          <a href="/blogs/how-to-work-browser/">
+            <img
+              src="/images/blogs/default_thumbnail.webp"
+              class="card-img-top"
+              alt="웹 브라우저의 동작 원리"
+            />
+          </a>
+        </div>
+        
+        <div class="card-body bg-transparent p-3 shadow-sm">
+          <a href="/blogs/how-to-work-browser/" class="primary-font card-title">
+            <h5 class="card-title bg-transparent" title="웹 브라우저의 동작 원리">
+              웹 브라우저의 동작 원리
+            </h5>
+          </a>
+          <div class="card-text secondary-font">
+            <p>브라우저의 동작에 대해서 작성하였습니다.</p>
+          </div>
+        </div>
+        <div class="mt-auto card-footer">
+          <span class="float-start"
+            >2024.05.29</span
+          >
+          <a
+            href="/blogs/how-to-work-browser/"
+            class="float-end btn btn-outline-info btn-sm"
+            >Read</a
+          >
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 col-md-6 pt-2">
+      <div class="card h-100">
+        
+        <div class="card-header">
           <a href="/blogs/web-assembly/">
             <img
               src="/images/blogs/default_thumbnail.webp"
@@ -555,42 +594,6 @@
           >
           <a
             href="/blogs/promise/"
-            class="float-end btn btn-outline-info btn-sm"
-            >Read</a
-          >
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-lg-4 col-md-6 pt-2">
-      <div class="card h-100">
-        
-        <div class="card-header">
-          <a href="/blogs/garden9-2023/">
-            <img
-              src="/images/blogs/default_thumbnail.webp"
-              class="card-img-top"
-              alt="정원사들 시즌9 참여 후기"
-            />
-          </a>
-        </div>
-        
-        <div class="card-body bg-transparent p-3 shadow-sm">
-          <a href="/blogs/garden9-2023/" class="primary-font card-title">
-            <h5 class="card-title bg-transparent" title="정원사들 시즌9 참여 후기">
-              정원사들 시즌9 참여 후기
-            </h5>
-          </a>
-          <div class="card-text secondary-font">
-            <p>정원사들 시즌9에 참여한 이유와 후기를 작성하였습니다.</p>
-          </div>
-        </div>
-        <div class="mt-auto card-footer">
-          <span class="float-start"
-            >2023.12.20</span
-          >
-          <a
-            href="/blogs/garden9-2023/"
             class="float-end btn btn-outline-info btn-sm"
             >Read</a
           >

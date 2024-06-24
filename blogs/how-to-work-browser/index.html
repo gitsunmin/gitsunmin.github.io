@@ -28,14 +28,16 @@
 
 
 
-<meta property="og:title" content="Javascript" />
-<meta property="og:description" content="Gitsunmin Blog" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://gitsunmin.github.io/tags/javascript/" /><meta property="og:site_name" content="Gitsunmin Blog" />
+<meta property="og:title" content="웹 브라우저의 동작 원리" />
+<meta property="og:description" content="브라우저의 동작에 대해서 작성하였습니다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://gitsunmin.github.io/blogs/how-to-work-browser/" /><meta property="article:section" content="blogs" />
+<meta property="article:published_time" content="2024-05-29T12:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-29T12:00:00+00:00" /><meta property="og:site_name" content="Gitsunmin Blog" />
 
 
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Javascript"/>
-<meta name="twitter:description" content="Gitsunmin Blog"/>
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="웹 브라우저의 동작 원리"/>
+<meta name="twitter:description" content="브라우저의 동작에 대해서 작성하였습니다."/>
 
 
 <link rel="stylesheet" href="/bootstrap-5/css/bootstrap.min.css" media="all"><link rel="stylesheet" href="/css/header.css" media="all">
@@ -99,14 +101,16 @@
     }
 </style>
 
-<meta name="description" content="Javascript of Gitsunmin Blog" />
-<link
-  rel="stylesheet"
-  href="/css/list.css"
-  media="all"
-/>
+<meta name="description" content="브라우저의 동작에 대해서 작성하였습니다." />
+<link rel="stylesheet" href="/css/single.css" />
 
-  <title> Javascript | Gitsunmin Blog 
+
+<script
+  defer
+  src="/fontawesome-6/all-6.4.2.js"
+></script>
+
+  <title> 웹 브라우저의 동작 원리 | Gitsunmin Blog 
   </title>
 </head>
 
@@ -234,94 +238,198 @@
     </nav>
 </header>
 <div id="content">
-<div class="container pt-5" id="list-page">
-  <h2 class="text-center pb-2">Javascript</h2>
-  <div class="row">
-    
-    <div class="col-lg-4 col-md-6 my-3">
-      <div class="card-columns">
-        <div class="card h-100">
-          
-          <div class="card-header">
-            <a href="/blogs/promise/">
-              <img
-                src="/images/blogs/default_thumbnail.webp"
-                class="card-img-top"
-                alt="I여서 Promise가 싫은줄 알았는데..."
-              />
-            </a>
-          </div>
-          
-          <div class="card-body bg-transparent p-4 shadow-sm">
-            <a href="/blogs/promise/" class="primary-font card-title">
-              <h5 class="card-title bg-transparent" title="I여서 Promise가 싫은줄 알았는데...">
-                I여서 Promise가 싫은줄 알았는데...
-              </h5>
-            </a>
-            <div class="card-text secondary-font">
-              <p>Javascript의 Promise 객체에 대해서 다루었습니다. I가 아니어도 Promise가 싫어질 수 있습니다.</p>
-            </div>
-          </div>
-          <div class="mt-auto post-footer bg-transparent py-3">
-            <span class="float-start bg-transparent"
-              >2024.05.15</span
-            >
-            <a
-              href="/blogs/promise/"
-              class="float-end btn btn-outline-info btn-sm"
-              >Read</a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-lg-4 col-md-6 my-3">
-      <div class="card-columns">
-        <div class="card h-100">
-          
-          <div class="card-header">
-            <a href="/blogs/2021-js-trend/">
-              <img
-                src="/images/blogs/default_thumbnail.webp"
-                class="card-img-top"
-                alt="2021년 Javascript 최신 동향"
-              />
-            </a>
-          </div>
-          
-          <div class="card-body bg-transparent p-4 shadow-sm">
-            <a href="/blogs/2021-js-trend/" class="primary-font card-title">
-              <h5 class="card-title bg-transparent" title="2021년 Javascript 최신 동향">
-                2021년 Javascript 최신 동향
-              </h5>
-            </a>
-            <div class="card-text secondary-font">
-              <p>2021년 Javascript 최신 동향을 정리 해두었습니다.</p>
-            </div>
-          </div>
-          <div class="mt-auto post-footer bg-transparent py-3">
-            <span class="float-start bg-transparent"
-              >2021.11.02</span
-            >
-            <a
-              href="/blogs/2021-js-trend/"
-              class="float-end btn btn-outline-info btn-sm"
-              >Read</a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-    
+<section id="single">
+  <div class="container">
     <div class="row justify-content-center">
-      <div class="col-auto m-3">
-        
+      <div class="col-sm-12 col-md-12 col-lg-9">
+        <div class="pr-lg-4">
+          <div class="title mb-5">
+            <h1 class="text-center mb-4">웹 브라우저의 동작 원리</h1>
+            <div class="text-center">
+              Gitsunmin
+              <small>|</small>
+              2024.05.29 
+              <span id="readingTime">
+                min read
+              </span>
+              
+            </div>
+          </div>
+          
+          <div class="featured-image">
+            <img
+              class="img-fluid mx-auto d-block"
+              src="/images/blogs/default_thumbnail.webp"
+              alt="웹 브라우저의 동작 원리"
+            />
+          </div>
+          
+          <article class="page-content p-2"><h2 id="서론">서론</h2>
+<p>웹 브라우저는 현대 디지털 시대에서 가장 중요한 소프트웨어 중 하나로, 사용자와 인터넷 사이의 인터페이스 역할을 합니다. 대부분의 사용자들은 브라우저를 통해 웹 사이트에 접근하고 정보를 얻으며, 온라인 상호작용을 수행합니다. 하지만, 많은 사람들은 브라우저가 어떻게 작동하는지에 대해 잘 알지 못합니다. 본 문서에서는 웹 브라우저의 동작 원리에 대해 자세히 설명하고, 이를 이해하는 데 필요한 주요 개념들을 다룰 것입니다.</p>
+<h2 id="본론">본론</h2>
+<h3 id="1-웹-브라우저의-구조">1. 웹 브라우저의 구조</h3>
+<p>웹 브라우저는 여러 가지 구성 요소로 이루어져 있으며, 각 구성 요소는 특정한 역할을 수행합니다. 주요 구성 요소는 다음과 같습니다:</p>
+<ul>
+<li><strong>사용자 인터페이스(User Interface):</strong> 브라우저 창에 표시되는 모든 부분을 포함합니다. 주소 표시줄, 이전/다음 버튼, 북마크 메뉴 등이 여기에 포함됩니다.</li>
+<li><strong>브라우저 엔진(Browser Engine):</strong> 사용자 인터페이스와 렌더링 엔진 사이의 동작을 제어합니다.</li>
+<li><strong>렌더링 엔진(Rendering Engine):</strong> HTML과 CSS를 파싱하고, 이를 통해 웹 페이지를 표시합니다. 대표적인 렌더링 엔진으로는 Gecko(Firefox), WebKit(Safari), Blink(Chrome/Edge)가 있습니다.</li>
+<li><strong>네트워킹(Networking):</strong> HTTP 요청을 처리하고 서버와의 통신을 담당합니다.</li>
+<li><strong>자바스크립트 해석기(JavaScript Interpreter):</strong> 자바스크립트 코드를 해석하고 실행합니다. 각 브라우저는 V8(Chrome), SpiderMonkey(Firefox), Nitro(Safari) 등 다양한 자바스크립트 엔진을 사용합니다.</li>
+<li><strong>UI 백엔드(UI Backend):</strong> UI 요소를 그리는 데 사용됩니다. 일반적으로 운영 체제의 UI 라이브러리를 사용합니다.</li>
+<li><strong>데이터 저장소(Data Storage):</strong> 쿠키, 로컬 스토리지, 인덱스드 DB와 같은 데이터를 저장합니다.</li>
+</ul>
+<h3 id="2-브라우저의-동작-과정">2. 브라우저의 동작 과정</h3>
+<p>웹 브라우저가 웹 페이지를 로드하고 표시하는 과정은 다음과 같은 단계로 이루어집니다:</p>
+<h4 id="21-url-입력-및-요청">2.1. URL 입력 및 요청</h4>
+<p>사용자가 주소 표시줄에 URL을 입력하고 엔터 키를 누르면, 브라우저는 이 URL을 분석하여 HTTP 요청을 생성합니다. 이 요청은 DNS(Domain Name System)를 통해 도메인 이름을 IP 주소로 변환한 후, 해당 서버로 전송됩니다.</p>
+<h4 id="22-서버-응답-및-데이터-수신">2.2. 서버 응답 및 데이터 수신</h4>
+<p>서버는 브라우저의 요청을 처리하고, 요청된 리소스(HTML, CSS, 자바스크립트 파일 등)를 응답으로 보냅니다. 브라우저는 이 데이터를 수신하여 렌더링 엔진에 전달합니다.</p>
+<h4 id="23-html-파싱-및-dom-트리-구축">2.3. HTML 파싱 및 DOM 트리 구축</h4>
+<p>렌더링 엔진은 수신한 HTML 파일을 파싱하여 DOM(Document Object Model) 트리를 구축합니다. DOM 트리는 웹 페이지의 구조와 내용을 나타내는 계층적 표현입니다.</p>
+<h4 id="24-css-파싱-및-스타일-규칙-적용">2.4. CSS 파싱 및 스타일 규칙 적용</h4>
+<p>브라우저는 HTML과 함께 수신한 CSS 파일을 파싱하여 CSSOM(CSS Object Model) 트리를 생성합니다. 그런 다음, DOM 트리와 CSSOM 트리를 결합하여 렌더 트리(Render Tree)를 생성합니다. 이 렌더 트리는 웹 페이지의 시각적 표현을 나타냅니다.</p>
+<h4 id="25-자바스크립트-실행">2.5. 자바스크립트 실행</h4>
+<p>브라우저는 HTML 파싱 도중 발견된 자바스크립트 코드를 자바스크립트 엔진을 통해 실행합니다. 자바스크립트는 DOM 트리와 CSSOM 트리를 동적으로 변경할 수 있습니다.</p>
+<h4 id="26-레이아웃-및-페인트">2.6. 레이아웃 및 페인트</h4>
+<p>렌더 트리가 생성되면, 브라우저는 각 요소의 정확한 위치와 크기를 계산하는 레이아웃(Layout) 과정을 거칩니다. 이후, 계산된 정보를 바탕으로 각 요소를 화면에 그리는 페인트(Paint) 과정을 수행합니다.</p>
+<h3 id="3-렌더링-최적화">3. 렌더링 최적화</h3>
+<p>브라우저는 웹 페이지의 렌더링 성능을 최적화하기 위해 여러 가지 기술을 사용합니다. 대표적인 최적화 기술은 다음과 같습니다:</p>
+<ul>
+<li><strong>비동기 자바스크립트 로딩:</strong> <code>async</code> 및 <code>defer</code> 속성을 사용하여 자바스크립트 파일을 비동기적으로 로드하여 HTML 파싱을 차단하지 않도록 합니다.</li>
+<li><strong>레이아웃 및 페인트 최적화:</strong> 변경된 요소만을 다시 레이아웃하고 페인트하는 최적화 기법을 사용하여 불필요한 작업을 줄입니다.</li>
+<li><strong>캐싱:</strong> 자주 사용하는 리소스를 캐시에 저장하여 네트워크 요청을 줄이고 로딩 속도를 향상시킵니다.</li>
+</ul>
+<h2 id="결론">결론</h2>
+<p>웹 브라우저는 복잡한 소프트웨어로, 사용자가 입력한 URL을 기반으로 웹 페이지를 로드하고 화면에 표시하기까지 여러 단계의 과정을 거칩니다. 이 과정에는 HTML, CSS, 자바스크립트 파싱, DOM 및 렌더 트리 생성, 레이아웃 및 페인트 등의 다양한 작업이 포함됩니다. 브라우저는 또한 최적화를 통해 웹 페이지의 렌더링 성능을 향상시키기 위해 노력합니다. 웹 브라우저의 동작 원리를 이해함으로써, 개발자들은 보다 효율적이고 사용자 친화적인 웹 애플리케이션을 설계할 수 있습니다.</p>
+<h2 id="참조">참조</h2>
+<ul>
+<li>MDN Web Docs: <a href="https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work">How browsers work</a></li>
+<li>Google Developers: <a href="https://developers.google.com/web/updates/2018/09/inside-browser-part1">Inside look at modern web browser</a></li>
+<li>Mozilla Developer Network: <a href="https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work#the_rendering_engine">Rendering Engine</a></li>
+<li>Chrome V8 Engine: <a href="https://v8.dev/">V8 JavaScript Engine</a></li>
+</ul>
+</article>
+        </div>
       </div>
+      <div class="col-sm-12 col-md-12 col-lg-3">
+        <div id="stickySideBar" class="sticky-sidebar">
+          
+          <aside class="toc">
+            <h5>목차</h5>
+            <div class="toc-content"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#서론">서론</a></li>
+    <li><a href="#본론">본론</a>
+      <ul>
+        <li><a href="#1-웹-브라우저의-구조">1. 웹 브라우저의 구조</a></li>
+        <li><a href="#2-브라우저의-동작-과정">2. 브라우저의 동작 과정</a></li>
+        <li><a href="#3-렌더링-최적화">3. 렌더링 최적화</a></li>
+      </ul>
+    </li>
+    <li><a href="#결론">결론</a></li>
+    <li><a href="#참조">참조</a></li>
+  </ul>
+</nav></div>
+          </aside>
+            
+          <aside class="social">
+            <h5>Social</h5>
+            <div class="social-content">
+              <ul class="list-inline">
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href="https://twitter.com/share?text=%ec%9b%b9%20%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80%ec%9d%98%20%eb%8f%99%ec%9e%91%20%ec%9b%90%eb%a6%ac&url=https%3a%2f%2fgitsunmin.github.io%2fblogs%2fhow-to-work-browser%2f"
+                  >
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href="https://api.whatsapp.com/send?text=%ec%9b%b9%20%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80%ec%9d%98%20%eb%8f%99%ec%9e%91%20%ec%9b%90%eb%a6%ac: https%3a%2f%2fgitsunmin.github.io%2fblogs%2fhow-to-work-browser%2f"
+                  >
+                    <i class="fab fa-whatsapp"></i>
+                  </a>
+                </li>
+                <li class="list-inline-item text-center">
+                  <a
+                    target="_blank"
+                    href='mailto:?subject=%ec%9b%b9%20%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80%ec%9d%98%20%eb%8f%99%ec%9e%91%20%ec%9b%90%eb%a6%ac&amp;body=Check%20out%20this%20site https%3a%2f%2fgitsunmin.github.io%2fblogs%2fhow-to-work-browser%2f'
+                  >
+                    <i class="fa fa-envelope"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </aside>
+          
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 200px">
+      <script
+        src="https://utteranc.es/client.js"
+        repo="gitsunmin/gitsunmin.github.io"
+        issue-term="pathname"
+        label="comment"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async
+      ></script>
     </div>
   </div>
-</div>
+  <button class="p-2 px-3" onclick="topFunction()" id="topScroll">
+    <i class="fas fa-angle-up"></i>
+  </button>
+</section>
 
+
+<div class="progress">
+  <div
+    id="scroll-progress-bar"
+    class="progress-bar"
+    role="progressbar"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  ></div>
+</div>
+<script src="/js/scrollProgressBar.js"></script>
+
+
+<script>
+  var topScroll = document.getElementById("topScroll");
+  window.onscroll = function() {scrollFunction()};
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      topScroll.style.display = "block";
+    } else {
+      topScroll.style.display = "none";
+    }
+  }
+
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  
+  let stickySideBarElem = document.getElementById("stickySideBar");
+  let stickyNavBar =  true ;
+  if(stickyNavBar) {
+    let headerElem = document.getElementById("profileHeader");
+    let headerHeight = headerElem.offsetHeight + 15;
+    stickySideBarElem.style.top = headerHeight + "px";
+  } else {
+    stickySideBarElem.style.top = "50px";
+  }
+</script>
+
+
+<script src="/js/readingTime.js"></script>
+ 
   </div><footer>
     
  
