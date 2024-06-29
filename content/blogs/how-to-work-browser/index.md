@@ -7,7 +7,7 @@ description: 브라우저의 동작에 대해서 작성하였습니다.
 author: Gitsunmin
 date: 2024-05-29 12:00:00
 math: true
-draft: false
+draft: true
 ---
 
 ## 서론
