@@ -1,5 +1,6 @@
 export const 기술_key_목록 = [
     'react',
+    'next',
     'vue',
 ] as const;
 
@@ -18,6 +19,11 @@ export const Map_기술: 기술 = {
         이름: 'React',
         아이콘_링크: 'https://simpleicons.org/icons/react.svg',
         설명: 'React를 주로 사용합니다.',
+    },
+    next: {
+        이름: 'Next',
+        아이콘_링크: 'https://simpleicons.org/icons/nextdotjs.svg',
+        설명: 'Next.js를 사용하여 E-commerce 사이트를 개발한 경험이 있습니다.',
     },
     vue: {
         이름: 'Vue',

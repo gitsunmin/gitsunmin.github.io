@@ -1,7 +1,14 @@
 import { 프로젝트 } from './프로젝트';
 
+const 회사_key_목록 = [
+  'marketboro',
+  'korens',
+] as const;
+
+export type 회사_key = typeof 회사_key_목록[number];
+
 type 회사 = {
-  id: string;
+  id: 회사_key;
   이름: string;
   소개: string;
   주의?: string;
@@ -10,7 +17,7 @@ type 회사 = {
   프로젝트들?: 프로젝트[];
 };
 
-export const 경력들: 회사[] = [
+export const 경력: 회사[] = [
   {
     id: 'marketboro',
     이름: '(주) 마켓보로',
