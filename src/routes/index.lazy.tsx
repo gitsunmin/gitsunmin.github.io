@@ -15,6 +15,11 @@ function Index() {
             인터뷰
           </Link>
         </li>
+        <li>
+          <Link to="/careers" className="[&.active]:font-bold">
+            경력
+          </Link>
+        </li>
       </ul>
     </div>
   );

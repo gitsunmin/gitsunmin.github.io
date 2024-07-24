@@ -1,10 +1,10 @@
-type Script = {
+type 채팅 = {
     name: 'James' | 'Sunmin';
-    text: React.ReactNode;
+    text: string;
     linkList?: string[];
 }
 
-export const script: Script[] = [
+export const 인터뷰: 채팅[] = [
     {
         name: 'James',
         text: '안녕하세요! 프론트엔드 개발자 김선민님의 페이지에 오신 것을 환영합니다.',

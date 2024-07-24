@@ -13,18 +13,24 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as InterviewImport } from './routes/interview'
 
 // Create Virtual Routes
 
+const InterviewLazyImport = createFileRoute('/interview')()
+const CareersLazyImport = createFileRoute('/careers')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
-const InterviewRoute = InterviewImport.update({
+const InterviewLazyRoute = InterviewLazyImport.update({
   path: '/interview',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/interview.lazy').then((d) => d.Route))
+
+const CareersLazyRoute = CareersLazyImport.update({
+  path: '/careers',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/careers.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -42,11 +48,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/interview': {
       id: '/interview'
       path: '/interview'
       fullPath: '/interview'
-      preLoaderRoute: typeof InterviewImport
+      preLoaderRoute: typeof InterviewLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -56,7 +69,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  InterviewRoute,
+  CareersLazyRoute,
+  InterviewLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,14 +82,18 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/careers",
         "/interview"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/careers": {
+      "filePath": "careers.lazy.tsx"
+    },
     "/interview": {
-      "filePath": "interview.tsx"
+      "filePath": "interview.lazy.tsx"
     }
   }
 }
