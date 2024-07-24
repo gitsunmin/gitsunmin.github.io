@@ -1,6 +1,7 @@
 type Script = {
     name: 'James' | 'Sunmin';
     text: React.ReactNode;
+    linkList?: string[];
 }
 
 export const script: Script[] = [
@@ -91,5 +92,46 @@ export const script: Script[] = [
     {
         name: 'Sunmin',
         text: '물론, 그것들을 모두 알기는 어렵겠지만, 협업을 하면서, 다양한 분야의 사람들과 소통하면서, 더 많은 것을 배우고 싶어요.',
-    }
+    },
+    {
+        name: 'James',
+        text: '아하, 기본적으로 프론트엔드 개발 지식 뿐만 아니라, 협업을 통해서 소프트웨어 개발이라는 것에 대해서 더 깊이 이해하고 활용할 줄 아는 개발자가 되고 싶으신 거군요.',
+    },
+    {
+        name: 'Sunmin',
+        text: '헐 네 맞아요. 정리를 잘 하시네요.',
+    },
+    {
+        name: 'James',
+        text: '감사합니다. (뭐지... )',
+    },
+    {
+        name: 'James',
+        text: '지금까지 선민님의 개발자를 시작하게 된 이유와 앞으로의 목표에 대해서 이야기를 나누어 봤습니다. 감사합니다.',
+    },
+    {
+        name: 'James',
+        text: '더 자세한 내용들은 다른 메뉴에서 확인할 수 있는거겠죠?',
+    },
+    {
+        name: 'Sunmin',
+        text: '네 맞아요. 여기를 눌러보세요.',
+        linkList: ['/project', '/skill'],
+    },
+    // {
+    //     name: 'James',
+    //     text: '지금까지 선민님의 개발자를 시작하게 된 이유와 앞으로의 목표에 대해서 이야기를 나누어 봤습니다.',
+    // },
+    // {
+    //     name: 'James',
+    //     text: '그렇다면, 이제 개발자로서 선민님이 어떤 경험을 가지고 왔는지, 간략하게 소개해주시겠어요?',
+    // },
+    // {
+    //     name: 'Sunmin',
+    //     text: '아 넵, 간단하게 소개해드리겠습니다.',
+    // },
+    // {
+    //     name: 'Sunmin',
+    //     text: '저는 지금까지 두 개의 회사에서 일을 경험하고 있고요.',
+    // }
 ];
