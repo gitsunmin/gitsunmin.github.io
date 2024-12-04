@@ -13,6 +13,8 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TilImport } from './routes/til'
+import { Route as PortfolioImport } from './routes/portfolio'
 
 // Create Virtual Routes
 
@@ -32,6 +34,16 @@ const CareersLazyRoute = CareersLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/careers.lazy').then((d) => d.Route))
 
+const TilRoute = TilImport.update({
+  path: '/til',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PortfolioRoute = PortfolioImport.update({
+  path: '/portfolio',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -46,6 +58,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioImport
+      parentRoute: typeof rootRoute
+    }
+    '/til': {
+      id: '/til'
+      path: '/til'
+      fullPath: '/til'
+      preLoaderRoute: typeof TilImport
       parentRoute: typeof rootRoute
     }
     '/careers': {
@@ -69,6 +95,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  PortfolioRoute,
+  TilRoute,
   CareersLazyRoute,
   InterviewLazyRoute,
 })
@@ -82,12 +110,20 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/portfolio",
+        "/til",
         "/careers",
         "/interview"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/portfolio": {
+      "filePath": "portfolio.tsx"
+    },
+    "/til": {
+      "filePath": "til.tsx"
     },
     "/careers": {
       "filePath": "careers.lazy.tsx"
