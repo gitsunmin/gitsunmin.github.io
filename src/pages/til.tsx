@@ -1,37 +1,54 @@
-// import { useEffect } from 'react';
-import '@gitsunmin/ui/css';
-import { Button, Text } from '@gitsunmin/ui';
-// const URL = `https://api.github.com/repos/gitsunmin/til/readme`;
+import { useQueryTIL } from '@/hooks/useQueryTIL';
+import { Text } from '@gitsunmin/ui';
+import Markdown from 'react-markdown';
 
 export const TilPage = () => {
-  // useEffect(() => {
-  //   fetch(URL)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log('data:', data.download_url);
+  const { data: readme, isLoading, isError } = useQueryTIL('/readme');
 
-  //       fetch(data.download_url)
-  //         .then((res) => res.text())
-  //         .then(console.log);
-  //     });
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) throw new Error('Error fetching TIL');
 
-  //   fetch(
-  //     'https://api.github.com/repos/gitsunmin/til/contents/flutter/assert.md'
-  //   )
-  //     .then((res) => res.json())
-  //     .then((json) => {
-  //       console.log('text:', json);
-  //       fetch(json.download_url)
-  //         .then((res) => res.text())
-  //         .then((text) => {
-  //           console.log('text:', text);
-  //         });
-  //     });
-  // }, []);
   return (
-    <div>
-      <Button>Hello</Button>
-      <Text token="heading-5">daijsojdio</Text>
-    </div>
+    <main className="mx-auto">
+      <Markdown
+        skipHtml
+        components={{
+          h1: ({ children }) => (
+            <Text token="heading-1" variant="bright">
+              {children}
+            </Text>
+          ),
+          h2: ({ children }) => <Text token="heading-2">{children}</Text>,
+          h3: ({ children }) => <Text token="heading-3">{children}</Text>,
+          h4: ({ children }) => <Text token="heading-4">{children}</Text>,
+          h5: ({ children }) => <Text token="heading-5">{children}</Text>,
+          h6: ({ children }) => <Text token="heading-6">{children}</Text>,
+          ul: ({ children }) => {
+            return <ul className="list-disc ml-4">{children}</ul>;
+          },
+          li: ({ children }) => {
+            return (
+              <li style={{ listStyleType: 'disc' }} className="ml-4">
+                {children}
+              </li>
+            );
+          },
+          a: ({ children, href }) => {
+            return (
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {children}
+              </a>
+            );
+          },
+        }}
+      >
+        {readme ?? ''}
+      </Markdown>
+    </main>
   );
 };
