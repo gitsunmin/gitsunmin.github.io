@@ -20,6 +20,11 @@ function Index() {
             경력
           </Link>
         </li>
+        <li>
+          <Link to="/til" className="[&.active]:font-bold">
+            TIL
+          </Link>
+        </li>
       </ul>
     </div>
   );
