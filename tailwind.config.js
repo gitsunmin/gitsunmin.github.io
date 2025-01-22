@@ -78,7 +78,6 @@ export default {
     ({ addUtilities }) => {
       return addUtilities({
         '.scrollbar-hide': {
-          // TODO: remove IE and Edge support
           /* IE and Edge */
           '-ms-overflow-style': 'none',
 
@@ -92,7 +91,6 @@ export default {
         },
 
         '.scrollbar-default': {
-          // TODO: remove IE and Edge support
           /* IE and Edge */
           '-ms-overflow-style': 'auto',
 

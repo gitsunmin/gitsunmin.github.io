@@ -9,9 +9,11 @@ export default defineConfig({
     TanStackRouterVite(),
     react()
   ],
+  assetsInclude: ['**/*.md'],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@til": path.resolve(__dirname, "./modules/til"),
     },
   },
 })

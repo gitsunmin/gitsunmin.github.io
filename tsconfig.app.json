@@ -22,13 +22,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@til/*": ["./modules/til/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "modules"]
 }
