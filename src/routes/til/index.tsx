@@ -19,7 +19,7 @@ function RouteComponent() {
 
   return (
     <main className="mx-auto flex justify-center">
-      <section className="">
+      <section>
         <Readme content={content} />
       </section>
     </main>

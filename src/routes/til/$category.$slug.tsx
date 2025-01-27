@@ -28,8 +28,10 @@ export const Route = createFileRoute('/til/$category/$slug')({
 function RouteComponent() {
   const { content } = getRouteApi('/til/$category/$slug').useLoaderData();
   return (
-    <main>
-      <Post content={content} />
+    <main className="mx-auto flex justify-center">
+      <section className="rounded-2xl px-4 w-full break-all sm:max-w-screen-md">
+        <Post content={content} />
+      </section>
     </main>
   );
 }

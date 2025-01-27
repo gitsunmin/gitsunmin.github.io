@@ -10,6 +10,12 @@ export default defineConfig({
     react()
   ],
   assetsInclude: ['**/*.md'],
+  server: {
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
