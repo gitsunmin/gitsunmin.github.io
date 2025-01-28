@@ -1,5 +1,8 @@
 import { Text } from '@gitsunmin/ui';
 import Markdown from 'react-markdown';
+import { CodeBlock } from '../Codeblock';
+import { BundledLanguage } from 'shiki/bundle/web';
+import React from 'react';
 
 type Props = {
   content: string;
@@ -29,6 +32,26 @@ export const Post = (props: Props) => {
         h4: ({ children }) => <Text token="heading-4">{children}</Text>,
         h5: ({ children }) => <Text token="heading-5">{children}</Text>,
         h6: ({ children }) => <Text token="heading-6">{children}</Text>,
+        pre: (el) => {
+          const preComponent = el.children as unknown as {
+            props: {
+              className: string;
+              children: React.ReactNode;
+            };
+          };
+          const { className, children } = preComponent.props;
+
+          return (
+            <CodeBlock
+              languege={
+                (className?.split('-').slice(1).join('') as BundledLanguage) ??
+                'javascript'
+              }
+            >
+              {children}
+            </CodeBlock>
+          );
+        },
       }}
     >
       {content}
