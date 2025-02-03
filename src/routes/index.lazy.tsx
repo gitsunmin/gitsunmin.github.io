@@ -6,13 +6,13 @@ import ProjectsIcon from '@/assets/icons/menu_projects.webp';
 import InterviewIcon from '@/assets/icons/menu_interview.webp';
 
 export const Route = createLazyFileRoute('/')({
-  component: Index,
+  component: RouteComponent,
   errorComponent: undefined,
   notFoundComponent: undefined,
   pendingComponent: undefined,
 });
 
-function Index() {
+function RouteComponent() {
   const links = [
     {
       id: 'careers',
