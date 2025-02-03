@@ -11,7 +11,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const queryClient = new QueryClient();
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  basepath: '/i/',
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
