@@ -44,12 +44,12 @@ function Index() {
     <main className="mx-auto px-4 py-6 w-full h-screen break-all pb-10 bg-gradient-to-tr from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
         {links.map(({ id, label, iconSrc, to }) => (
-          <li key={id}>
+          <li key={id} className="flex flex-col justify-center items-center">
             <Link
               to={to}
-              className="flex min-w-16 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90"
+              className="flex w-16 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90"
             >
-              <div className="size-16 bg-slate-400 rounded-xl">
+              <div className="size-16 bg-slate-400 rounded-xl shadow-md">
                 <img
                   src={iconSrc}
                   alt={`${label}-icon`}
