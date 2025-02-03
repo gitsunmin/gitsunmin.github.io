@@ -13,9 +13,9 @@ function RouteComponent() {
           {경력.map((회사) => {
             return (
               <li className="flex flex-col gap-2">
-                <h5 className="flex justify-between">
+                <h5 className="flex justify-between items-center">
                   <span className="font-bold">{회사.이름} </span>
-                  <span className="max-w-14 max-h-14 text-sm">
+                  <span className="max-w-14 max-h-14 text-sm flex items-center justify-center">
                     <img src={회사.로고} alt={`${회사.이름} 로고`} />
                   </span>
                 </h5>
