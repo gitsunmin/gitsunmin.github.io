@@ -13,9 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as InterviewImport } from './routes/interview'
 import { Route as CareersImport } from './routes/careers'
 import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutInterviewImport } from './routes/_layout/interview'
 import { Route as LayoutTilIndexImport } from './routes/_layout/til/index'
 import { Route as LayoutTilCategorySlugImport } from './routes/_layout/til/$category.$slug'
 
@@ -24,12 +24,6 @@ import { Route as LayoutTilCategorySlugImport } from './routes/_layout/til/$cate
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
-
-const InterviewRoute = InterviewImport.update({
-  id: '/interview',
-  path: '/interview',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const CareersRoute = CareersImport.update({
   id: '/careers',
@@ -47,6 +41,12 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const LayoutInterviewRoute = LayoutInterviewImport.update({
+  id: '/interview',
+  path: '/interview',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 const LayoutTilIndexRoute = LayoutTilIndexImport.update({
   id: '/til/',
@@ -85,12 +85,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareersImport
       parentRoute: typeof rootRoute
     }
-    '/interview': {
-      id: '/interview'
+    '/_layout/interview': {
+      id: '/_layout/interview'
       path: '/interview'
       fullPath: '/interview'
-      preLoaderRoute: typeof InterviewImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutInterviewImport
+      parentRoute: typeof LayoutImport
     }
     '/_layout/til/': {
       id: '/_layout/til/'
@@ -112,11 +112,13 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LayoutRouteChildren {
+  LayoutInterviewRoute: typeof LayoutInterviewRoute
   LayoutTilIndexRoute: typeof LayoutTilIndexRoute
   LayoutTilCategorySlugRoute: typeof LayoutTilCategorySlugRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutInterviewRoute: LayoutInterviewRoute,
   LayoutTilIndexRoute: LayoutTilIndexRoute,
   LayoutTilCategorySlugRoute: LayoutTilCategorySlugRoute,
 }
@@ -128,7 +130,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '': typeof LayoutRouteWithChildren
   '/careers': typeof CareersRoute
-  '/interview': typeof InterviewRoute
+  '/interview': typeof LayoutInterviewRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -137,7 +139,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '': typeof LayoutRouteWithChildren
   '/careers': typeof CareersRoute
-  '/interview': typeof InterviewRoute
+  '/interview': typeof LayoutInterviewRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -147,7 +149,7 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/careers': typeof CareersRoute
-  '/interview': typeof InterviewRoute
+  '/_layout/interview': typeof LayoutInterviewRoute
   '/_layout/til/': typeof LayoutTilIndexRoute
   '/_layout/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -168,7 +170,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_layout'
     | '/careers'
-    | '/interview'
+    | '/_layout/interview'
     | '/_layout/til/'
     | '/_layout/til/$category/$slug'
   fileRoutesById: FileRoutesById
@@ -178,14 +180,12 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   LayoutRoute: typeof LayoutRouteWithChildren
   CareersRoute: typeof CareersRoute
-  InterviewRoute: typeof InterviewRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   LayoutRoute: LayoutRouteWithChildren,
   CareersRoute: CareersRoute,
-  InterviewRoute: InterviewRoute,
 }
 
 export const routeTree = rootRoute
@@ -200,8 +200,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_layout",
-        "/careers",
-        "/interview"
+        "/careers"
       ]
     },
     "/": {
@@ -210,6 +209,7 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
+        "/_layout/interview",
         "/_layout/til/",
         "/_layout/til/$category/$slug"
       ]
@@ -217,8 +217,9 @@ export const routeTree = rootRoute
     "/careers": {
       "filePath": "careers.tsx"
     },
-    "/interview": {
-      "filePath": "interview.tsx"
+    "/_layout/interview": {
+      "filePath": "_layout/interview.tsx",
+      "parent": "/_layout"
     },
     "/_layout/til/": {
       "filePath": "_layout/til/index.tsx",

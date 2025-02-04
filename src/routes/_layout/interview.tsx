@@ -1,10 +1,20 @@
-import { 인터뷰 } from '@/data/인터뷰';
-import { cn } from '@/lib/utils';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import defaultMan from '@/assets/default_man.webp';
+// import { Article_인터뷰 } from '@/components/Article_인터뷰';
 import { Card_채팅 } from '@/components/Card_채팅';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { 인터뷰 } from '@/data/인터뷰';
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Article_인터뷰 = () => {
+import defaultMan from '@/assets/default_man.webp';
+import { cn } from '@/lib/utils';
+
+export const Route = createFileRoute('/_layout/interview')({
+  component: RouteComponent,
+  errorComponent: undefined,
+  notFoundComponent: undefined,
+  pendingComponent: undefined,
+});
+
+function RouteComponent() {
   return (
     <article className="flex flex-wrap gap-y-[10px] px-[10px] max-w-[430px] mx-auto">
       {인터뷰.map((채팅, index, list) => {
@@ -57,4 +67,4 @@ export const Article_인터뷰 = () => {
       })}
     </article>
   );
-};
+}

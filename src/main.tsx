@@ -32,8 +32,11 @@ if (!rootElement.innerHTML) {
         <RouterProvider
           router={router}
           defaultErrorComponent={() => <>err</>}
+          defaultNotFoundComponent={() => <>404</>}
+          defaultPendingComponent={() => <>loading</>}
+          defaultPreload={'render'}
         />
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={true} client={queryClient} />
       </QueryClientProvider>
     </StrictMode>
   );
