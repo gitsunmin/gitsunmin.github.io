@@ -21,11 +21,17 @@ export default {
         header: 100,
       },
       colors: {
+        background: {
+          DEFAULT: 'hsl(var(--background))',
+          footer: '#1E1E1E',
+        },
+        foreground: {
+          DEFAULT: 'hsl(var(--foreground))',
+          footer: '#F2F2F2',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
