@@ -1,7 +1,6 @@
 import { Text } from '@gitsunmin/ui';
 import Markdown from 'react-markdown';
 import { CodeBlock } from '../Codeblock';
-import { BundledLanguage } from 'shiki/bundle/web';
 import React from 'react';
 
 type Props = {
@@ -44,7 +43,7 @@ export const Post = (props: Props) => {
           return (
             <CodeBlock
               languege={
-                (className?.split('-').slice(1).join('') as BundledLanguage) ??
+                (className?.split('-').slice(1).join('')) ??
                 'javascript'
               }
             >

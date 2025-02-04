@@ -15,8 +15,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as InterviewImport } from './routes/interview'
 import { Route as CareersImport } from './routes/careers'
-import { Route as TilIndexImport } from './routes/til/index'
-import { Route as TilCategorySlugImport } from './routes/til/$category.$slug'
+import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutTilIndexImport } from './routes/_layout/til/index'
+import { Route as LayoutTilCategorySlugImport } from './routes/_layout/til/$category.$slug'
 
 // Create Virtual Routes
 
@@ -36,22 +37,27 @@ const CareersRoute = CareersImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const TilIndexRoute = TilIndexImport.update({
+const LayoutTilIndexRoute = LayoutTilIndexImport.update({
   id: '/til/',
   path: '/til/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
-const TilCategorySlugRoute = TilCategorySlugImport.update({
+const LayoutTilCategorySlugRoute = LayoutTilCategorySlugImport.update({
   id: '/til/$category/$slug',
   path: '/til/$category/$slug',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -63,6 +69,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
     '/careers': {
@@ -79,79 +92,100 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InterviewImport
       parentRoute: typeof rootRoute
     }
-    '/til/': {
-      id: '/til/'
+    '/_layout/til/': {
+      id: '/_layout/til/'
       path: '/til'
       fullPath: '/til'
-      preLoaderRoute: typeof TilIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutTilIndexImport
+      parentRoute: typeof LayoutImport
     }
-    '/til/$category/$slug': {
-      id: '/til/$category/$slug'
+    '/_layout/til/$category/$slug': {
+      id: '/_layout/til/$category/$slug'
       path: '/til/$category/$slug'
       fullPath: '/til/$category/$slug'
-      preLoaderRoute: typeof TilCategorySlugImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutTilCategorySlugImport
+      parentRoute: typeof LayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface LayoutRouteChildren {
+  LayoutTilIndexRoute: typeof LayoutTilIndexRoute
+  LayoutTilCategorySlugRoute: typeof LayoutTilCategorySlugRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutTilIndexRoute: LayoutTilIndexRoute,
+  LayoutTilCategorySlugRoute: LayoutTilCategorySlugRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '': typeof LayoutRouteWithChildren
   '/careers': typeof CareersRoute
   '/interview': typeof InterviewRoute
-  '/til': typeof TilIndexRoute
-  '/til/$category/$slug': typeof TilCategorySlugRoute
+  '/til': typeof LayoutTilIndexRoute
+  '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '': typeof LayoutRouteWithChildren
   '/careers': typeof CareersRoute
   '/interview': typeof InterviewRoute
-  '/til': typeof TilIndexRoute
-  '/til/$category/$slug': typeof TilCategorySlugRoute
+  '/til': typeof LayoutTilIndexRoute
+  '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/_layout': typeof LayoutRouteWithChildren
   '/careers': typeof CareersRoute
   '/interview': typeof InterviewRoute
-  '/til/': typeof TilIndexRoute
-  '/til/$category/$slug': typeof TilCategorySlugRoute
+  '/_layout/til/': typeof LayoutTilIndexRoute
+  '/_layout/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/careers' | '/interview' | '/til' | '/til/$category/$slug'
+  fullPaths:
+    | '/'
+    | ''
+    | '/careers'
+    | '/interview'
+    | '/til'
+    | '/til/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/careers' | '/interview' | '/til' | '/til/$category/$slug'
+  to: '/' | '' | '/careers' | '/interview' | '/til' | '/til/$category/$slug'
   id:
     | '__root__'
     | '/'
+    | '/_layout'
     | '/careers'
     | '/interview'
-    | '/til/'
-    | '/til/$category/$slug'
+    | '/_layout/til/'
+    | '/_layout/til/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
   CareersRoute: typeof CareersRoute
   InterviewRoute: typeof InterviewRoute
-  TilIndexRoute: typeof TilIndexRoute
-  TilCategorySlugRoute: typeof TilCategorySlugRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  LayoutRoute: LayoutRouteWithChildren,
   CareersRoute: CareersRoute,
   InterviewRoute: InterviewRoute,
-  TilIndexRoute: TilIndexRoute,
-  TilCategorySlugRoute: TilCategorySlugRoute,
 }
 
 export const routeTree = rootRoute
@@ -165,14 +199,20 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_layout",
         "/careers",
-        "/interview",
-        "/til/",
-        "/til/$category/$slug"
+        "/interview"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/_layout": {
+      "filePath": "_layout.tsx",
+      "children": [
+        "/_layout/til/",
+        "/_layout/til/$category/$slug"
+      ]
     },
     "/careers": {
       "filePath": "careers.tsx"
@@ -180,11 +220,13 @@ export const routeTree = rootRoute
     "/interview": {
       "filePath": "interview.tsx"
     },
-    "/til/": {
-      "filePath": "til/index.tsx"
+    "/_layout/til/": {
+      "filePath": "_layout/til/index.tsx",
+      "parent": "/_layout"
     },
-    "/til/$category/$slug": {
-      "filePath": "til/$category.$slug.tsx"
+    "/_layout/til/$category/$slug": {
+      "filePath": "_layout/til/$category.$slug.tsx",
+      "parent": "/_layout"
     }
   }
 }

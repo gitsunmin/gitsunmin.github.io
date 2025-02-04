@@ -1,5 +1,4 @@
 import Markdown from 'react-markdown';
-import { Text } from '@gitsunmin/ui';
 import { Link } from '@tanstack/react-router';
 
 type Props = {
@@ -11,23 +10,12 @@ export const Readme = ({ content }: Props) => {
     <Markdown
       skipHtml
       components={{
-        h1: ({ children }) => (
-          <Text token="heading-1" variant="bold">
+        h1: ({ children }) => <h1 className='text-4xl pb-4'>
             {children}
-          </Text>
-        ),
-        h2: ({ children }) => (
-          <Text
-            token="heading-2"
-            className="overflow-x-auto scroll-x scroll-smooth scrollbar-hide"
-          >
+          </h1>,
+        h2: ({ children }) => <h2 className='text-3xl py-2'>
             {children}
-          </Text>
-        ),
-        h3: ({ children }) => <Text token="heading-3">{children}</Text>,
-        h4: ({ children }) => <Text token="heading-4">{children}</Text>,
-        h5: ({ children }) => <Text token="heading-5">{children}</Text>,
-        h6: ({ children }) => <Text token="heading-6">{children}</Text>,
+          </h2>,
         ul: ({ children }) => {
           return <ul className="list-disc ml-4">{children}</ul>;
         },
@@ -40,7 +28,7 @@ export const Readme = ({ content }: Props) => {
         },
         a: ({ children, href }) => {
           return (
-            <Link href={`/til/${href}`} to={'.'}>
+            <Link href={`/til/${href}`} to={'.'} className='text-blue-400 '>
               {children}
             </Link>
           );
