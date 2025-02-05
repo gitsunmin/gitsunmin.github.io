@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "bd": "bun run build && bun run deploy"
   },
   "dependencies": {
     "@gitsunmin/ui": "^0.0.0-alpha.1",
