@@ -4,6 +4,7 @@ import TILIcon from '@/assets/icons/menu_til.webp';
 import CareersIcon from '@/assets/icons/menu_careers.webp';
 import ProjectsIcon from '@/assets/icons/menu_projects.webp';
 import InterviewIcon from '@/assets/icons/menu_interview.webp';
+import { cn } from '@/lib/utils';
 
 export const Route = createLazyFileRoute('/')({
   component: RouteComponent,
@@ -41,7 +42,13 @@ function RouteComponent() {
   ];
 
   return (
-    <main className="mx-auto px-4 py-6 w-full h-[100dvh] break-all pb-10 bg-gradient-to-tr from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
+    <main
+      className={cn(
+        'fixed',
+        'mx-auto px-4 py-6 w-full h-[100dvh] break-all pb-10',
+        'bg-gradient-to-tr from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%'
+      )}
+    >
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
         {links.map(({ id, label, iconSrc, to }) => (
           <li key={id} className="flex flex-col justify-center items-center">
