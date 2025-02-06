@@ -54,9 +54,9 @@ function RouteComponent() {
           <li key={id} className="flex flex-col justify-center items-center">
             <Link
               to={to}
-              className="flex w-16 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90"
+              className="flex w-14 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90"
             >
-              <div className="size-16 bg-slate-400 rounded-xl shadow-md">
+              <div className="size-14 bg-slate-400 rounded-xl shadow-md">
                 <img
                   src={iconSrc}
                   alt={`${label}-icon`}
