@@ -16,7 +16,7 @@ export const CodeBlock = ({ children = <></>, languege }: Props) => {
   return (
     <div className="relative">
       <button
-        className="absolute right-2 top-0 text-white"
+        className="absolute right-2 top-0 text-sm text-white py-1 px-2"
         onClick={handleClick}
       >
         Copy

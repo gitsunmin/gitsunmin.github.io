@@ -21,7 +21,7 @@
     "caniuse-lite": "^1.0.30001695",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.414.0",
+    "lucide-react": "^0.474.0",
     "react-markdown": "^9.0.3",
     "react-syntax-highlighter": "^15.6.1",
     "tailwind-merge": "^2.4.0",
