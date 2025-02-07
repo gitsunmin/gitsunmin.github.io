@@ -28,7 +28,7 @@ export const Readme = ({ content }: Props) => {
         },
         a: ({ children, href }) => {
           return (
-            <Link href={`/til/${href}`} to={'.'} className='text-blue-400 '>
+            <Link href={`/til/${href}`} to={'.'} className='text-blue-400' >
               {children}
             </Link>
           );
