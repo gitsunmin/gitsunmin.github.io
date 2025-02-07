@@ -1,6 +1,4 @@
 const e=`# Table Of Contents
-## @thers
-- [here](/@thers)
 ## algorithm
 - [depth-first-search-algorithm.md](/algorithm/depth-first-search-algorithm.md)
 - [implementation-algorithm.md](/algorithm/implementation-algorithm.md)
@@ -14,7 +12,7 @@ const e=`# Table Of Contents
 - [how-to-work-browser.md](/browser/how-to-work-browser.md)
 - [page-visibility-api.md](/browser/page-visibility-api.md)
 - [reflow-and-repaint.md](/browser/reflow-and-repaint.md)
-- [service-worker](/browser/service-worker)
+- [service-worker/index.md](/browser/service-worker/index.md)
 - [view-in-html-Layer-3d.md](/browser/view-in-html-Layer-3d.md)
 
 ## cli
@@ -80,7 +78,7 @@ const e=`# Table Of Contents
 - [taxonomy-of-bloom.md](/education/taxonomy-of-bloom.md)
 
 ## experience
-- [garden9-2023](/experience/garden9-2023)
+- [garden9-2023/index.md](/experience/garden9-2023/index.md)
 
 ## firebase
 - [remote-config.md](/firebase/remote-config.md)
