@@ -5,8 +5,12 @@ import path from 'node:path'
 import { copyFileSync } from 'node:fs'
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
+export default defineConfig(({ mode }) => {
+  return {
+    define: {
+      '__MODE__': JSON.stringify(mode),
+    },
+  plugins: [  
     TanStackRouterVite({
       apiBase: '/i/',
     }),
@@ -38,4 +42,5 @@ export default defineConfig({
       "@til": path.resolve(__dirname, "./modules/til"),
     },
   },
-})
+}
+});
