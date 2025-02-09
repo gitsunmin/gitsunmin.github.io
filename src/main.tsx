@@ -8,6 +8,7 @@ import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DefaultPending } from '@/components/DefaultPending';
+import { DefaultError } from './components/DefaultError';
 
 const queryClient = new QueryClient();
 
@@ -31,9 +32,9 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <RouterProvider
           router={router}
-          defaultErrorComponent={() => <>err</>}
+          defaultErrorComponent={DefaultError}
           defaultNotFoundComponent={() => <>404</>}
-          defaultPendingComponent={() => <DefaultPending />}
+          defaultPendingComponent={DefaultPending}
         />
         <ReactQueryDevtools initialIsOpen={true} client={queryClient} />
       </QueryClientProvider>

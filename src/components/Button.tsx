@@ -15,7 +15,8 @@ export const Button = (props: Props) => {
       className={cn(
         {
           'bg-primary px-4 py-2 rounded-md': variant === 'primary',
-          'bg-inherit outline-1 outline-muted': variant === 'outline',
+          'bg-inherit outline-1 outline-primary-foreground':
+            variant === 'outline',
           'bg-transparent p-1': variant === 'ghost',
         },
         className
@@ -23,7 +24,17 @@ export const Button = (props: Props) => {
       disabled={disabled}
       onClick={onClick}
     >
-      {children}
+      <div
+        className={cn(
+          {
+            'text-primary-foreground': variant === 'primary',
+            'text-muted-foreground': variant === 'outline',
+          },
+          'text-center'
+        )}
+      >
+        {children}
+      </div>
     </button>
   );
 };
