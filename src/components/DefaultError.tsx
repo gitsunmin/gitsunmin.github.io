@@ -4,7 +4,6 @@ import { Button } from './Button';
 export const DefaultError = () => {
   const router = useRouter();
   const handleGoHome = () => {
-    console.log('handleGoHome');
     router.navigate({
       to: '/',
     });
