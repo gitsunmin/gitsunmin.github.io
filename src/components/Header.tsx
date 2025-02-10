@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from './Button';
 import { cn } from '@/lib/utils';
-import { ArrowLeft} from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export const Header = () => {
   const handleBack = () => {
@@ -16,7 +16,7 @@ export const Header = () => {
           'md:justify-start z-header md:gap-4'
         )}
       >
-        <Button variant="ghost" onClick={handleBack}>
+        <Button variant="ghost" className="lg:hidden" onClick={handleBack}>
           <ArrowLeft />
         </Button>
         <Link

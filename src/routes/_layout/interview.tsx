@@ -20,7 +20,7 @@ function RouteComponent() {
         본 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에
         대한 답변을 기반으로 작성해보았습니다.
       </p>
-      <article className="flex flex-wrap gap-y-[10px]">
+      <article className="flex flex-wrap gap-y-[10px] pt-10">
         {인터뷰.map((채팅, index, list) => {
           const { 이름 } = 채팅;
           const isContinues = list[index - 1]?.이름 === 이름;
