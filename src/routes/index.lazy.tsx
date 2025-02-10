@@ -1,58 +1,60 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 
-import TILIcon from '@/assets/icons/menu_til.webp';
-import CareersIcon from '@/assets/icons/menu_careers.webp';
-import ProjectsIcon from '@/assets/icons/menu_projects.webp';
-import InterviewIcon from '@/assets/icons/menu_interview.webp';
 import { cn } from '@/lib/utils';
+import {
+  Building2,
+  FileText,
+  MessageSquareCode,
+  MonitorSmartphone,
+} from 'lucide-react';
 
 export const Route = createLazyFileRoute('/')({
   component: RouteComponent,
 });
 
-const LINKS = [
-  {
-    id: 'careers',
-    label: 'Careers',
-    iconSrc: CareersIcon,
-    to: '/careers',
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    iconSrc: ProjectsIcon,
-    to: '/til',
-  },
-  {
-    id: 'interview',
-    label: 'Interview',
-    iconSrc: InterviewIcon,
-    to: '/interview',
-  },
-  {
-    id: 'til',
-    label: 'TIL',
-    iconSrc: TILIcon,
-    to: '/til',
-  },
-] as const;
-
 type AppLink = (typeof LINKS)[number];
 
 const AppIcon = (props: AppLink) => {
-  const { to, iconSrc, label } = props;
+  const { to, icon, label } = props;
   return (
     <Link
       to={to}
       className="flex w-14 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90"
     >
-      <div className="size-14 bg-slate-400 rounded-xl shadow-md">
-        <img src={iconSrc} alt={`${label}-icon`} className="rounded-xl" />
+      <div className="size-14 bg-background rounded-xl shadow-md flex items-center justify-center">
+        {icon}
       </div>
       <span className="text-[12px] text-foreground">{label}</span>
     </Link>
   );
 };
+
+const LINKS = [
+  {
+    id: 'careers',
+    label: 'Careers',
+    icon: <Building2 size={28} className="text-foreground" />,
+    to: '/careers',
+  },
+  {
+    id: 'projects',
+    label: 'Projects',
+    icon: <MonitorSmartphone size={28} className="text-foreground" />,
+    to: '/projects',
+  },
+  {
+    id: 'interview',
+    label: 'Interview',
+    icon: <MessageSquareCode size={28} className="text-foreground" />,
+    to: '/interview',
+  },
+  {
+    id: 'til',
+    label: 'TIL',
+    icon: <FileText size={28} className="text-foreground" />,
+    to: '/til',
+  },
+] as const;
 
 function RouteComponent() {
   return (

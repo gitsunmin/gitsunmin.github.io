@@ -15,7 +15,7 @@ export const Route = createFileRoute('/_layout/interview')({
 
 function RouteComponent() {
   return (
-    <main className="max-w-sm sm:max-w-sm md:max-w-md lg:max-w-xl mx-auto px-4 py-2 flex flex-col gap-y-8">
+    <>
       <p className="text-gray-500 border-l-2 px-4 py-2 text-sm break-words">
         본 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에
         대한 답변을 기반으로 작성해보았습니다.
@@ -70,6 +70,6 @@ function RouteComponent() {
           );
         })}
       </article>
-    </main>
+    </>
   );
 }

@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
+import { Route as LayoutProjectsImport } from './routes/_layout/projects'
 import { Route as LayoutInterviewImport } from './routes/_layout/interview'
 import { Route as LayoutCareersImport } from './routes/_layout/careers'
 import { Route as LayoutTilIndexImport } from './routes/_layout/til/index'
@@ -35,6 +36,12 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const LayoutProjectsRoute = LayoutProjectsImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => LayoutRoute,
+} as any)
 
 const LayoutInterviewRoute = LayoutInterviewImport.update({
   id: '/interview',
@@ -92,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterviewImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/projects': {
+      id: '/_layout/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof LayoutProjectsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/til/': {
       id: '/_layout/til/'
       path: '/til'
@@ -114,6 +128,7 @@ declare module '@tanstack/react-router' {
 interface LayoutRouteChildren {
   LayoutCareersRoute: typeof LayoutCareersRoute
   LayoutInterviewRoute: typeof LayoutInterviewRoute
+  LayoutProjectsRoute: typeof LayoutProjectsRoute
   LayoutTilIndexRoute: typeof LayoutTilIndexRoute
   LayoutTilCategorySlugRoute: typeof LayoutTilCategorySlugRoute
 }
@@ -121,6 +136,7 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutCareersRoute: LayoutCareersRoute,
   LayoutInterviewRoute: LayoutInterviewRoute,
+  LayoutProjectsRoute: LayoutProjectsRoute,
   LayoutTilIndexRoute: LayoutTilIndexRoute,
   LayoutTilCategorySlugRoute: LayoutTilCategorySlugRoute,
 }
@@ -133,6 +149,7 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
+  '/projects': typeof LayoutProjectsRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -142,6 +159,7 @@ export interface FileRoutesByTo {
   '': typeof LayoutRouteWithChildren
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
+  '/projects': typeof LayoutProjectsRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -152,6 +170,7 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/careers': typeof LayoutCareersRoute
   '/_layout/interview': typeof LayoutInterviewRoute
+  '/_layout/projects': typeof LayoutProjectsRoute
   '/_layout/til/': typeof LayoutTilIndexRoute
   '/_layout/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -159,22 +178,31 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | ''
-    | '/careers'
-    | '/interview'
-    | '/til'
-    | '/til/$category/$slug'
+  | '/'
+  | ''
+  | '/careers'
+  | '/interview'
+  | '/projects'
+  | '/til'
+  | '/til/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/careers' | '/interview' | '/til' | '/til/$category/$slug'
+  to:
+  | '/'
+  | ''
+  | '/careers'
+  | '/interview'
+  | '/projects'
+  | '/til'
+  | '/til/$category/$slug'
   id:
-    | '__root__'
-    | '/'
-    | '/_layout'
-    | '/_layout/careers'
-    | '/_layout/interview'
-    | '/_layout/til/'
-    | '/_layout/til/$category/$slug'
+  | '__root__'
+  | '/'
+  | '/_layout'
+  | '/_layout/careers'
+  | '/_layout/interview'
+  | '/_layout/projects'
+  | '/_layout/til/'
+  | '/_layout/til/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 
@@ -210,6 +238,7 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/careers",
         "/_layout/interview",
+        "/_layout/projects",
         "/_layout/til/",
         "/_layout/til/$category/$slug"
       ]
@@ -220,6 +249,10 @@ export const routeTree = rootRoute
     },
     "/_layout/interview": {
       "filePath": "_layout/interview.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/projects": {
+      "filePath": "_layout/projects.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/": {
