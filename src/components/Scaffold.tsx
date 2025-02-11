@@ -8,7 +8,7 @@ export const Scaffold = ({ children, header, footer }: Props) => {
     <>
       {header}
       <main className="mx-auto flex justify-center min-h-[100dvh]">
-        <div className="max-w-sm px-4 md:max-w-md lg:max-w-screen-md">
+        <div className="max-w-sm w-full px-4 md:max-w-md lg:max-w-screen-md">
           {children}
         </div>
       </main>
