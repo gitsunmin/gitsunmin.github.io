@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
     "bd": "bun run build && bun run deploy",
-    "pull:modules": "git submodule update --remote --merge"
+    "pull:modules": "git submodule update --remote --merge",
+    "prepare": "husky"
   },
   "dependencies": {
     "@gitsunmin/ui": "^0.0.0-alpha.1",
@@ -46,6 +47,7 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
+    "husky": "^9.1.7",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.6",
     "typescript": "^5.2.2",
