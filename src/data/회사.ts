@@ -3,7 +3,7 @@ import { 프로젝트, 프로젝트들 } from './프로젝트';
 import marketboro_logo from '@/assets/logos/marketboro_logo.webp';
 import korens_logo from '@/assets/logos/korens_logo.webp';
 
-const 회사_key_목록 = [
+export const 회사_key_목록 = [
   'marketboro',
   'korens',
 ] as const;
