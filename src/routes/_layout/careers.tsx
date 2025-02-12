@@ -1,7 +1,7 @@
-import { 경력 } from '@/data/회사';
-import { createFileRoute } from '@tanstack/react-router';
+import { 경력 } from "@/data/회사";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_layout/careers')({
+export const Route = createFileRoute("/_layout/careers")({
   component: RouteComponent,
 });
 
@@ -13,8 +13,12 @@ function RouteComponent() {
           <li className="flex flex-col gap-2">
             <h5 className="flex justify-between items-center">
               <span className="font-bold">{회사.이름} </span>
-              <span className="max-w-14 max-h-14 text-sm flex items-center justify-center">
-                <img src={회사.로고} alt={`${회사.이름} 로고`} />
+              <span className="max-w-12 max-h-12 text-sm flex items-center justify-center rounded-full shadow-md">
+                <img
+                  src={회사.로고}
+                  alt={`${회사.이름} 로고`}
+                  className="rounded-full size-12"
+                />
               </span>
             </h5>
             <section>
