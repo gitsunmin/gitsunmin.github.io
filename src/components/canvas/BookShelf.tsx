@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Book, BookTextures } from "@/components/canvas/Books";
+import { Book, BookTextures } from '@/components/canvas/Books';
 
 type Props = {
   books: {

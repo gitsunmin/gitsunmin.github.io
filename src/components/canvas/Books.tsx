@@ -1,6 +1,6 @@
-import { useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { Mesh, TextureLoader } from "three";
+import { useRef } from 'react';
+import { useFrame, useLoader } from '@react-three/fiber';
+import { Mesh, TextureLoader } from 'three';
 
 export type BookTextures = {
   front: string;
@@ -74,18 +74,12 @@ export const Book = ({
       }}
     >
       <boxGeometry args={size} />
-      <meshStandardMaterial attach="material-0" map={sideTexture} />{" "}
-      {/* 왼쪽 (책등) */}
-      <meshStandardMaterial attach="material-1" map={pagesTexture} />{" "}
-      {/* 오른쪽 (페이지) */}
-      <meshStandardMaterial attach="material-2" map={topTexture} />{" "}
-      {/* 위쪽 (페이지) */}
-      <meshStandardMaterial attach="material-3" map={bottomTexture} />{" "}
-      {/* 아래쪽 (페이지) */}
-      <meshStandardMaterial attach="material-4" map={frontTexture} />{" "}
-      {/* 앞면 (표지) */}
-      <meshStandardMaterial attach="material-5" map={backTexture} />{" "}
-      {/* 뒷면 (표지) */}
+      <meshStandardMaterial attach="material-0" map={frontTexture} />{' '}
+      <meshStandardMaterial attach="material-1" map={backTexture} />{' '}
+      <meshStandardMaterial attach="material-2" map={topTexture} />{' '}
+      <meshStandardMaterial attach="material-3" map={bottomTexture} />{' '}
+      <meshStandardMaterial attach="material-4" map={sideTexture} />{' '}
+      <meshStandardMaterial attach="material-5" map={pagesTexture} />{' '}
     </mesh>
   );
 };
