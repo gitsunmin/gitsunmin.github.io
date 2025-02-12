@@ -1,6 +1,19 @@
 import type { 기술_key } from './기술';
 import type { 회사_key } from './회사';
 
+import BookFoodspringFrontCover from '@/assets/book_foodspring_front_cover.webp';
+import BookFoodspringSideCover from '@/assets/book_foodspring_side_cover.webp';
+import BookFoodspringBackCover from '@/assets/book_foodspring_back_cover.webp';
+import BookHybridAppIntegrationFrameworkWithFlutterBackCover from '@/assets/book_hybrid_app_integration_framework_with_flutter_back_cover.webp';
+import BookHybridAppIntegrationFrameworkWithFlutterFrontCover from '@/assets/book_hybrid_app_integration_framework_with_flutter_front_cover.webp';
+import BookHybridAppIntegrationFrameworkWithFlutterSideCover from '@/assets/book_hybrid_app_integration_framework_with_flutter_side_cover.webp';
+import BookMarketbomProBackCover from '@/assets/book_marketbom_pro_back_cover.webp';
+import BookMarketbomProFrontCover from '@/assets/book_marketbom_pro_front_cover.webp';
+import BookMarketbomProSideCover from '@/assets/book_marketbom_pro_side_cover.webp';
+import BookCoWorkingSolutionCnapsBackCover from '@/assets/book_co_working_solution_cnaps_back_cover.webp';
+import BookCoWorkingSolutionCnapsFrontCover from '@/assets/book_co_working_solution_cnaps_front_cover.webp';
+import BookCoWorkingSolutionCnapsSideCover from '@/assets/book_co_working_solution_cnaps_side_cover.webp';
+
 export type 프로젝트 = {
     readonly id: string;
     readonly parentId: string | null;
@@ -11,6 +24,13 @@ export type 프로젝트 = {
     readonly 기술들: 기술_key[];
     readonly 역할: string[];
     readonly 주의?: string[];
+    readonly 책: {
+        표지: {
+            앞: string;
+            뒤: string;
+            등: string;
+        }
+    };
 };
 
 export const 프로젝트들: 프로젝트[] = [
@@ -28,9 +48,16 @@ export const 프로젝트들: 프로젝트[] = [
             `Datadog을 활용하여 서버 로깅, 모니터링.`,
             `관리자용 웹 서비스 개발`,
         ],
+        책: {
+            표지: {
+                앞: BookFoodspringFrontCover,
+                등: BookFoodspringSideCover,
+                뒤: BookFoodspringBackCover,
+            }
+        }
     },
     {
-        id: 'hybrid-app-integration-framework',
+        id: 'hybrid-app-integration-framework-with-flutter',
         parentId: null,
         회사key: 'marketboro',
         이름: '하이브리드 앱 통합 프레임워크',
@@ -38,6 +65,13 @@ export const 프로젝트들: 프로젝트[] = [
         기간: '2021.01 ~ ',
         기술들: ['flutter', 'firebase', 'bitbucket_pipelines'],
         역할: ['프론트엔드 개발자'],
+        책: {
+            표지: {
+                앞: BookHybridAppIntegrationFrameworkWithFlutterFrontCover,
+                뒤: BookHybridAppIntegrationFrameworkWithFlutterBackCover,
+                등: BookHybridAppIntegrationFrameworkWithFlutterSideCover,
+            }
+        }
     },
     {
         id: 'marketbom-pro',
@@ -48,9 +82,16 @@ export const 프로젝트들: 프로젝트[] = [
         기간: '2021.01 ~ ',
         기술들: ['nuxt', 'typescript', 'vuetify', 'storybook', 'apollo_graphql', 'datadog', 'pnpm', 'yarn', 'react', 'vite', 'webpack'],
         역할: ['프론트엔드 개발자'],
+        책: {
+            표지: {
+                앞: BookMarketbomProFrontCover,
+                뒤: BookMarketbomProBackCover,
+                등: BookMarketbomProSideCover,
+            }
+        }
     },
     {
-        id: 'marketbom-pro',
+        id: 'co-working-solution-cnaps',
         parentId: null,
         회사key: 'korens',
         이름: '업무 협업 솔루션, 시냅스',
@@ -58,5 +99,12 @@ export const 프로젝트들: 프로젝트[] = [
         기간: '2021.01 ~ ',
         기술들: ['vue', 'quasar', 'graphql', 'typescript', 'aws_amplify'],
         역할: ['프론트엔드 개발자'],
+        책: {
+            표지: {
+                앞: BookCoWorkingSolutionCnapsFrontCover,
+                뒤: BookCoWorkingSolutionCnapsBackCover,
+                등: BookCoWorkingSolutionCnapsSideCover,
+            }
+        }
     },
 ];
