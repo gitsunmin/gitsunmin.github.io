@@ -12,7 +12,7 @@ function RouteComponent() {
         return (
           <li className="flex flex-col gap-2">
             <h5 className="flex justify-between items-center">
-              <span className="font-bold">{회사.이름} </span>
+              <span className="text-2xl font-bold">{회사.이름} </span>
               <span className="max-w-12 max-h-12 text-sm flex items-center justify-center rounded-full shadow-md">
                 <img
                   src={회사.로고}
