@@ -1,10 +1,16 @@
 import { useState } from "react";
 
-import BookSideTexture from "@/assets/book_side.webp";
-import DefaultBookCoverTexture from "@/assets/book_cover.webp";
-import { Book } from "@/components/canvas/Books";
+import { Book, BookTextures } from "@/components/canvas/Books";
 
-export const BookShelf = () => {
+type Props = {
+  books: {
+    id: string;
+    textures: BookTextures;
+  }[];
+};
+
+export const BookShelf = (props: Props) => {
+  const { books: books_ } = props;
   const shelves = 4; // 책꽂이 층 수 (조절 가능)
   const booksPerRow = 5; // 한 층당 책 개수 (조절 가능)
   const bookSpacing = 0.5; // 책 간격
@@ -25,7 +31,7 @@ export const BookShelf = () => {
       bottom: string;
       pages: string;
     };
-  }[] = Array.from({ length: shelves * booksPerRow }).map((_, i) => {
+  }[] = books_.map(({ textures }, i) => {
     const shelfIndex = shelves - 1 - Math.floor(i / booksPerRow); // 위에서부터 채우기
     const bookIndex = i % booksPerRow; // 왼쪽부터 채우기
 
@@ -37,14 +43,7 @@ export const BookShelf = () => {
         -0.5, // 책이 책장 안에 들어가도록 위치 조정
       ],
       size: [0.3, bookHeight, bookDepth], // 책 크기
-      textures: {
-        front: DefaultBookCoverTexture,
-        back: BookSideTexture,
-        side: DefaultBookCoverTexture,
-        top: BookSideTexture,
-        bottom: BookSideTexture,
-        pages: DefaultBookCoverTexture,
-      },
+      textures,
     };
   });
 

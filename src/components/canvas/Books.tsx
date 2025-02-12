@@ -2,18 +2,20 @@ import { useRef } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { Mesh, TextureLoader } from "three";
 
+export type BookTextures = {
+  front: string;
+  back: string;
+  side: string;
+  top: string;
+  bottom: string;
+  pages: string;
+};
+
 type Props = {
   id: string;
   position: [number, number, number]; // 초기 위치
   size: [number, number, number]; // 책 크기
-  textures: {
-    front: string;
-    back: string;
-    side: string;
-    top: string;
-    bottom: string;
-    pages: string;
-  };
+  textures: BookTextures;
   isSelected: boolean;
   onClick: () => void;
 };
@@ -67,7 +69,7 @@ export const Book = ({
       ref={bookRef}
       position={position}
       onClick={(e) => {
-        e.stopPropagation(); // 클릭 이벤트 전파 방지
+        e.stopPropagation();
         onClick();
       }}
     >
