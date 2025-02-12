@@ -45,11 +45,14 @@ const Book: React.FC<BookProps> = ({
           bookRef.current.rotation.y -= 0.04;
           setTimeout(() => {
             if (bookRef.current) {
-              bookRef.current.scale.set(1, 2, 2);
+              if (bookRef.current.scale.y < 2 || bookRef.current.scale.z < 2) {
+                bookRef.current.scale.set(1, bookRef.current.scale.y + 0.1, bookRef.current.scale.z + 0.1);
+              }
             }
-          }, 400);
+          }, 300);
         }
       } else {
+        bookRef.current.scale.set(1, 1, 1);
         bookRef.current.rotation.y = 0;
       }
     }
@@ -113,12 +116,12 @@ const BookShelf: React.FC = () => {
       ],
       size: [0.4, bookHeight, bookDepth], // 책 크기
       textures: {
-        front: `src/assets/react.svg`,
-        back: `src/assets/react.svg`,
+        front: `src/assets/book_cover.webp`,
+        back: `src/assets/book_side.webp`,
         side: `src/assets/book_cover.webp`,
-        top: `src/assets/react.svg`,
-        bottom: `src/assets/react.svg`,
-        pages: `src/assets/react.svg`,
+        top: `src/assets/book_side.webp`,
+        bottom: `src/assets/book_side.webp`,
+        pages: `src/assets/book_cover.webp`,
       },
     };
   });
@@ -128,6 +131,9 @@ const BookShelf: React.FC = () => {
   const handleBookClick = (index: number) => {
     setSelectedBook((prev) => (prev === index ? null : index));
     console.log(`📖 책 ${index + 1} 선택됨`);
+    setTimeout(() => {
+      confirm('상세 내용을 보시겠습니까?');
+    }, 400);
   };
 
   return (
@@ -149,7 +155,7 @@ const BookShelf: React.FC = () => {
               (i + 1) * shelfHeight -
               (shelves * shelfHeight) / 2 -
               bookHeight / 2,
-            -0.6,
+            -0.5,
           ]} // 📌 책보다 살짝 아래 배치
         >
           <boxGeometry args={[2.7, 0.1, shelfDepth]} />
