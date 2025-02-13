@@ -9,7 +9,6 @@ import { DefaultPending } from '@/components/DefaultPending';
 import { DefaultError } from './components/DefaultError';
 import { Default404 } from './components/Default404';
 
-
 const router = createRouter({
   routeTree,
   basepath: '/i/',
@@ -27,12 +26,12 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-        <RouterProvider
-          router={router}
-          defaultErrorComponent={DefaultError}
-          defaultNotFoundComponent={Default404}
-          defaultPendingComponent={DefaultPending}
-        />
+      <RouterProvider
+        router={router}
+        defaultErrorComponent={DefaultError}
+        defaultNotFoundComponent={Default404}
+        defaultPendingComponent={DefaultPending}
+      />
     </StrictMode>
   );
 }

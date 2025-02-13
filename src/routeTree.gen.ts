@@ -14,10 +14,11 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
-import { Route as LayoutProjectsImport } from './routes/_layout/projects'
 import { Route as LayoutInterviewImport } from './routes/_layout/interview'
 import { Route as LayoutCareersImport } from './routes/_layout/careers'
 import { Route as LayoutTilIndexImport } from './routes/_layout/til/index'
+import { Route as LayoutProjectsIndexImport } from './routes/_layout/projects/index'
+import { Route as LayoutProjectsFoodspringImport } from './routes/_layout/projects/foodspring'
 import { Route as LayoutTilCategorySlugImport } from './routes/_layout/til/$category.$slug'
 
 // Create Virtual Routes
@@ -37,12 +38,6 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const LayoutProjectsRoute = LayoutProjectsImport.update({
-  id: '/projects',
-  path: '/projects',
-  getParentRoute: () => LayoutRoute,
-} as any)
-
 const LayoutInterviewRoute = LayoutInterviewImport.update({
   id: '/interview',
   path: '/interview',
@@ -58,6 +53,18 @@ const LayoutCareersRoute = LayoutCareersImport.update({
 const LayoutTilIndexRoute = LayoutTilIndexImport.update({
   id: '/til/',
   path: '/til/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutProjectsIndexRoute = LayoutProjectsIndexImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutProjectsFoodspringRoute = LayoutProjectsFoodspringImport.update({
+  id: '/projects/foodspring',
+  path: '/projects/foodspring',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -99,11 +106,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterviewImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/projects': {
-      id: '/_layout/projects'
+    '/_layout/projects/foodspring': {
+      id: '/_layout/projects/foodspring'
+      path: '/projects/foodspring'
+      fullPath: '/projects/foodspring'
+      preLoaderRoute: typeof LayoutProjectsFoodspringImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/projects/': {
+      id: '/_layout/projects/'
       path: '/projects'
       fullPath: '/projects'
-      preLoaderRoute: typeof LayoutProjectsImport
+      preLoaderRoute: typeof LayoutProjectsIndexImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/til/': {
@@ -128,7 +142,8 @@ declare module '@tanstack/react-router' {
 interface LayoutRouteChildren {
   LayoutCareersRoute: typeof LayoutCareersRoute
   LayoutInterviewRoute: typeof LayoutInterviewRoute
-  LayoutProjectsRoute: typeof LayoutProjectsRoute
+  LayoutProjectsFoodspringRoute: typeof LayoutProjectsFoodspringRoute
+  LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute
   LayoutTilIndexRoute: typeof LayoutTilIndexRoute
   LayoutTilCategorySlugRoute: typeof LayoutTilCategorySlugRoute
 }
@@ -136,7 +151,8 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutCareersRoute: LayoutCareersRoute,
   LayoutInterviewRoute: LayoutInterviewRoute,
-  LayoutProjectsRoute: LayoutProjectsRoute,
+  LayoutProjectsFoodspringRoute: LayoutProjectsFoodspringRoute,
+  LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
   LayoutTilIndexRoute: LayoutTilIndexRoute,
   LayoutTilCategorySlugRoute: LayoutTilCategorySlugRoute,
 }
@@ -149,7 +165,8 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
-  '/projects': typeof LayoutProjectsRoute
+  '/projects/foodspring': typeof LayoutProjectsFoodspringRoute
+  '/projects': typeof LayoutProjectsIndexRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -159,7 +176,8 @@ export interface FileRoutesByTo {
   '': typeof LayoutRouteWithChildren
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
-  '/projects': typeof LayoutProjectsRoute
+  '/projects/foodspring': typeof LayoutProjectsFoodspringRoute
+  '/projects': typeof LayoutProjectsIndexRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -170,7 +188,8 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/careers': typeof LayoutCareersRoute
   '/_layout/interview': typeof LayoutInterviewRoute
-  '/_layout/projects': typeof LayoutProjectsRoute
+  '/_layout/projects/foodspring': typeof LayoutProjectsFoodspringRoute
+  '/_layout/projects/': typeof LayoutProjectsIndexRoute
   '/_layout/til/': typeof LayoutTilIndexRoute
   '/_layout/til/$category/$slug': typeof LayoutTilCategorySlugRoute
 }
@@ -178,31 +197,34 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-  | '/'
-  | ''
-  | '/careers'
-  | '/interview'
-  | '/projects'
-  | '/til'
-  | '/til/$category/$slug'
+    | '/'
+    | ''
+    | '/careers'
+    | '/interview'
+    | '/projects/foodspring'
+    | '/projects'
+    | '/til'
+    | '/til/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
-  | '/'
-  | ''
-  | '/careers'
-  | '/interview'
-  | '/projects'
-  | '/til'
-  | '/til/$category/$slug'
+    | '/'
+    | ''
+    | '/careers'
+    | '/interview'
+    | '/projects/foodspring'
+    | '/projects'
+    | '/til'
+    | '/til/$category/$slug'
   id:
-  | '__root__'
-  | '/'
-  | '/_layout'
-  | '/_layout/careers'
-  | '/_layout/interview'
-  | '/_layout/projects'
-  | '/_layout/til/'
-  | '/_layout/til/$category/$slug'
+    | '__root__'
+    | '/'
+    | '/_layout'
+    | '/_layout/careers'
+    | '/_layout/interview'
+    | '/_layout/projects/foodspring'
+    | '/_layout/projects/'
+    | '/_layout/til/'
+    | '/_layout/til/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 
@@ -238,7 +260,8 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/careers",
         "/_layout/interview",
-        "/_layout/projects",
+        "/_layout/projects/foodspring",
+        "/_layout/projects/",
         "/_layout/til/",
         "/_layout/til/$category/$slug"
       ]
@@ -251,8 +274,12 @@ export const routeTree = rootRoute
       "filePath": "_layout/interview.tsx",
       "parent": "/_layout"
     },
-    "/_layout/projects": {
-      "filePath": "_layout/projects.tsx",
+    "/_layout/projects/foodspring": {
+      "filePath": "_layout/projects/foodspring.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/projects/": {
+      "filePath": "_layout/projects/index.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/": {

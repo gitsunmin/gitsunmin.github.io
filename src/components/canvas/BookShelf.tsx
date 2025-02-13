@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { Book, BookTextures } from '@/components/canvas/Books';
 
 type Props = {
@@ -7,10 +5,12 @@ type Props = {
     id: string;
     textures: BookTextures;
   }[];
+  selectedBookId: string | null;
+  onBookClick: (id: string) => void;
 };
 
 export const BookShelf = (props: Props) => {
-  const { books: books_ } = props;
+  const { books: books_, selectedBookId, onBookClick } = props;
   const shelves = 4; // 책꽂이 층 수 (조절 가능)
   const booksPerRow = 5; // 한 층당 책 개수 (조절 가능)
   const bookSpacing = 0.5; // 책 간격
@@ -23,20 +23,13 @@ export const BookShelf = (props: Props) => {
     id: string;
     position: [number, number, number];
     size: [number, number, number];
-    textures: {
-      front: string;
-      back: string;
-      side: string;
-      top: string;
-      bottom: string;
-      pages: string;
-    };
-  }[] = books_.map(({ textures }, i) => {
+    textures: BookTextures;
+  }[] = books_.map(({ id, textures }, i) => {
     const shelfIndex = shelves - 1 - Math.floor(i / booksPerRow); // 위에서부터 채우기
     const bookIndex = i % booksPerRow; // 왼쪽부터 채우기
 
     return {
-      id: `book-${shelfIndex}-${bookIndex}`,
+      id,
       position: [
         (-2.5 + bookIndex) * bookSpacing, // 왼쪽부터 채움
         shelfIndex * shelfHeight - (shelves * shelfHeight) / 2 + bookHeight / 2, // 📌 책이 구분판 위에 정확히 위치
@@ -46,13 +39,6 @@ export const BookShelf = (props: Props) => {
       textures,
     };
   });
-
-  const [selectedBook, setSelectedBook] = useState<number | null>(null);
-
-  const handleBookClick = (index: number) => {
-    setSelectedBook((prev) => (prev === index ? null : index));
-    console.log(`📖 책 ${index + 1} 선택됨`);
-  };
 
   return (
     <group>
@@ -89,8 +75,8 @@ export const BookShelf = (props: Props) => {
           position={book.position}
           size={book.size}
           textures={book.textures}
-          isSelected={selectedBook === index}
-          onClick={() => handleBookClick(index)}
+          isSelected={selectedBookId === book.id}
+          onClick={() => onBookClick(book.id)}
         />
       ))}
     </group>
