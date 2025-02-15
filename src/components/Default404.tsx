@@ -1,14 +1,8 @@
-import { useRouter } from '@tanstack/react-router';
 import { Button } from './Button';
 
 export const Default404 = () => {
-  const router = useRouter();
-
   const handleGoHome = () => {
-    console.log('handleGoHome');
-    router.navigate({
-      to: '/',
-    });
+    window.location.href = '/i';
   };
 
   return (

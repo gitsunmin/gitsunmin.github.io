@@ -1,12 +1,8 @@
-import { useRouter } from '@tanstack/react-router';
 import { Button } from './Button';
 
 export const DefaultError = () => {
-  const router = useRouter();
   const handleGoHome = () => {
-    router.navigate({
-      to: '/',
-    });
+    window.location.href = '/i';
   };
 
   const handleGoReport = () => {
