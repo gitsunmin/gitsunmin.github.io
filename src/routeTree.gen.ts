@@ -18,7 +18,10 @@ import { Route as LayoutInterviewImport } from './routes/_layout/interview'
 import { Route as LayoutCareersImport } from './routes/_layout/careers'
 import { Route as LayoutTilIndexImport } from './routes/_layout/til/index'
 import { Route as LayoutProjectsIndexImport } from './routes/_layout/projects/index'
+import { Route as LayoutProjectsMarketbomProImport } from './routes/_layout/projects/marketbom-pro'
+import { Route as LayoutProjectsHybridAppIntegrationFrameworkWithFlutterImport } from './routes/_layout/projects/hybrid-app-integration-framework-with-flutter'
 import { Route as LayoutProjectsFoodspringImport } from './routes/_layout/projects/foodspring'
+import { Route as LayoutProjectsCoWorkingSolutionCnapsImport } from './routes/_layout/projects/co-working-solution-cnaps'
 import { Route as LayoutTilCategorySlugImport } from './routes/_layout/til/$category.$slug'
 
 // Create Virtual Routes
@@ -62,11 +65,33 @@ const LayoutProjectsIndexRoute = LayoutProjectsIndexImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutProjectsMarketbomProRoute = LayoutProjectsMarketbomProImport.update(
+  {
+    id: '/projects/marketbom-pro',
+    path: '/projects/marketbom-pro',
+    getParentRoute: () => LayoutRoute,
+  } as any,
+)
+
+const LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute =
+  LayoutProjectsHybridAppIntegrationFrameworkWithFlutterImport.update({
+    id: '/projects/hybrid-app-integration-framework-with-flutter',
+    path: '/projects/hybrid-app-integration-framework-with-flutter',
+    getParentRoute: () => LayoutRoute,
+  } as any)
+
 const LayoutProjectsFoodspringRoute = LayoutProjectsFoodspringImport.update({
   id: '/projects/foodspring',
   path: '/projects/foodspring',
   getParentRoute: () => LayoutRoute,
 } as any)
+
+const LayoutProjectsCoWorkingSolutionCnapsRoute =
+  LayoutProjectsCoWorkingSolutionCnapsImport.update({
+    id: '/projects/co-working-solution-cnaps',
+    path: '/projects/co-working-solution-cnaps',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 const LayoutTilCategorySlugRoute = LayoutTilCategorySlugImport.update({
   id: '/til/$category/$slug',
@@ -106,11 +131,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterviewImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/projects/co-working-solution-cnaps': {
+      id: '/_layout/projects/co-working-solution-cnaps'
+      path: '/projects/co-working-solution-cnaps'
+      fullPath: '/projects/co-working-solution-cnaps'
+      preLoaderRoute: typeof LayoutProjectsCoWorkingSolutionCnapsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/projects/foodspring': {
       id: '/_layout/projects/foodspring'
       path: '/projects/foodspring'
       fullPath: '/projects/foodspring'
       preLoaderRoute: typeof LayoutProjectsFoodspringImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/projects/hybrid-app-integration-framework-with-flutter': {
+      id: '/_layout/projects/hybrid-app-integration-framework-with-flutter'
+      path: '/projects/hybrid-app-integration-framework-with-flutter'
+      fullPath: '/projects/hybrid-app-integration-framework-with-flutter'
+      preLoaderRoute: typeof LayoutProjectsHybridAppIntegrationFrameworkWithFlutterImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/projects/marketbom-pro': {
+      id: '/_layout/projects/marketbom-pro'
+      path: '/projects/marketbom-pro'
+      fullPath: '/projects/marketbom-pro'
+      preLoaderRoute: typeof LayoutProjectsMarketbomProImport
       parentRoute: typeof LayoutImport
     }
     '/_layout/projects/': {
@@ -142,7 +188,10 @@ declare module '@tanstack/react-router' {
 interface LayoutRouteChildren {
   LayoutCareersRoute: typeof LayoutCareersRoute
   LayoutInterviewRoute: typeof LayoutInterviewRoute
+  LayoutProjectsCoWorkingSolutionCnapsRoute: typeof LayoutProjectsCoWorkingSolutionCnapsRoute
   LayoutProjectsFoodspringRoute: typeof LayoutProjectsFoodspringRoute
+  LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute: typeof LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute
+  LayoutProjectsMarketbomProRoute: typeof LayoutProjectsMarketbomProRoute
   LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute
   LayoutTilIndexRoute: typeof LayoutTilIndexRoute
   LayoutTilCategorySlugRoute: typeof LayoutTilCategorySlugRoute
@@ -151,7 +200,12 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutCareersRoute: LayoutCareersRoute,
   LayoutInterviewRoute: LayoutInterviewRoute,
+  LayoutProjectsCoWorkingSolutionCnapsRoute:
+    LayoutProjectsCoWorkingSolutionCnapsRoute,
   LayoutProjectsFoodspringRoute: LayoutProjectsFoodspringRoute,
+  LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute:
+    LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute,
+  LayoutProjectsMarketbomProRoute: LayoutProjectsMarketbomProRoute,
   LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
   LayoutTilIndexRoute: LayoutTilIndexRoute,
   LayoutTilCategorySlugRoute: LayoutTilCategorySlugRoute,
@@ -165,7 +219,10 @@ export interface FileRoutesByFullPath {
   '': typeof LayoutRouteWithChildren
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
+  '/projects/co-working-solution-cnaps': typeof LayoutProjectsCoWorkingSolutionCnapsRoute
   '/projects/foodspring': typeof LayoutProjectsFoodspringRoute
+  '/projects/hybrid-app-integration-framework-with-flutter': typeof LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute
+  '/projects/marketbom-pro': typeof LayoutProjectsMarketbomProRoute
   '/projects': typeof LayoutProjectsIndexRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
@@ -176,7 +233,10 @@ export interface FileRoutesByTo {
   '': typeof LayoutRouteWithChildren
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
+  '/projects/co-working-solution-cnaps': typeof LayoutProjectsCoWorkingSolutionCnapsRoute
   '/projects/foodspring': typeof LayoutProjectsFoodspringRoute
+  '/projects/hybrid-app-integration-framework-with-flutter': typeof LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute
+  '/projects/marketbom-pro': typeof LayoutProjectsMarketbomProRoute
   '/projects': typeof LayoutProjectsIndexRoute
   '/til': typeof LayoutTilIndexRoute
   '/til/$category/$slug': typeof LayoutTilCategorySlugRoute
@@ -188,7 +248,10 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/careers': typeof LayoutCareersRoute
   '/_layout/interview': typeof LayoutInterviewRoute
+  '/_layout/projects/co-working-solution-cnaps': typeof LayoutProjectsCoWorkingSolutionCnapsRoute
   '/_layout/projects/foodspring': typeof LayoutProjectsFoodspringRoute
+  '/_layout/projects/hybrid-app-integration-framework-with-flutter': typeof LayoutProjectsHybridAppIntegrationFrameworkWithFlutterRoute
+  '/_layout/projects/marketbom-pro': typeof LayoutProjectsMarketbomProRoute
   '/_layout/projects/': typeof LayoutProjectsIndexRoute
   '/_layout/til/': typeof LayoutTilIndexRoute
   '/_layout/til/$category/$slug': typeof LayoutTilCategorySlugRoute
@@ -201,7 +264,10 @@ export interface FileRouteTypes {
     | ''
     | '/careers'
     | '/interview'
+    | '/projects/co-working-solution-cnaps'
     | '/projects/foodspring'
+    | '/projects/hybrid-app-integration-framework-with-flutter'
+    | '/projects/marketbom-pro'
     | '/projects'
     | '/til'
     | '/til/$category/$slug'
@@ -211,7 +277,10 @@ export interface FileRouteTypes {
     | ''
     | '/careers'
     | '/interview'
+    | '/projects/co-working-solution-cnaps'
     | '/projects/foodspring'
+    | '/projects/hybrid-app-integration-framework-with-flutter'
+    | '/projects/marketbom-pro'
     | '/projects'
     | '/til'
     | '/til/$category/$slug'
@@ -221,7 +290,10 @@ export interface FileRouteTypes {
     | '/_layout'
     | '/_layout/careers'
     | '/_layout/interview'
+    | '/_layout/projects/co-working-solution-cnaps'
     | '/_layout/projects/foodspring'
+    | '/_layout/projects/hybrid-app-integration-framework-with-flutter'
+    | '/_layout/projects/marketbom-pro'
     | '/_layout/projects/'
     | '/_layout/til/'
     | '/_layout/til/$category/$slug'
@@ -260,7 +332,10 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/careers",
         "/_layout/interview",
+        "/_layout/projects/co-working-solution-cnaps",
         "/_layout/projects/foodspring",
+        "/_layout/projects/hybrid-app-integration-framework-with-flutter",
+        "/_layout/projects/marketbom-pro",
         "/_layout/projects/",
         "/_layout/til/",
         "/_layout/til/$category/$slug"
@@ -274,8 +349,20 @@ export const routeTree = rootRoute
       "filePath": "_layout/interview.tsx",
       "parent": "/_layout"
     },
+    "/_layout/projects/co-working-solution-cnaps": {
+      "filePath": "_layout/projects/co-working-solution-cnaps.tsx",
+      "parent": "/_layout"
+    },
     "/_layout/projects/foodspring": {
       "filePath": "_layout/projects/foodspring.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/projects/hybrid-app-integration-framework-with-flutter": {
+      "filePath": "_layout/projects/hybrid-app-integration-framework-with-flutter.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/projects/marketbom-pro": {
+      "filePath": "_layout/projects/marketbom-pro.tsx",
       "parent": "/_layout"
     },
     "/_layout/projects/": {

@@ -1,13 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
-import FoodspringProject from '@/docs/projects/foodspring.mdx';
+import Project from '@/docs/projects/hybrid-app-integration-framework-with-flutter.mdx';
 
-export const Route = createFileRoute('/_layout/projects/foodspring')({
+export const Route = createFileRoute(
+  '/_layout/projects/hybrid-app-integration-framework-with-flutter'
+)({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
-    <FoodspringProject
+    <Project
       components={{
         h1: (props) => <h1 className="text-6xl" {...props} />,
         h2: (props) => <h2 className="text-5xl" {...props} />,
