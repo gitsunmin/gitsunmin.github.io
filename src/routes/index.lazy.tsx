@@ -16,6 +16,7 @@ type AppLink = (typeof LINKS)[number];
 
 const AppIcon = (props: AppLink) => {
   const { to, icon, label } = props;
+
   return (
     <Link
       to={to}

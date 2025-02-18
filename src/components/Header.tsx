@@ -7,13 +7,14 @@ export const Header = () => {
   const handleBack = () => {
     window.history.back();
   };
+
   return (
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-header',
-          'h-12 px-4 shadow-sm backdrop-blur-md flex items-center justify-between',
-          'md:justify-start z-header md:gap-4'
+          'h-12 px-4 shadow-sm backdrop-blur-md md:justify-start md:gap-4',
+          'flex items-center justify-between',
+          'fixed top-0 left-0 right-0 z-header'
         )}
       >
         <Button variant="ghost" className="lg:hidden" onClick={handleBack}>
@@ -36,7 +37,6 @@ export const Header = () => {
         </Link>
         <div className="size-10"></div>
       </header>
-      <div className="pb-14" />
     </>
   );
 };

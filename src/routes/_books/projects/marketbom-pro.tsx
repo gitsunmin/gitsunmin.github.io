@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router';
-import Project from '@/docs/projects/marketbom-pro.mdx';
+import { createFileRoute } from '@tanstack/react-router'
+import Project from '@/docs/projects/marketbom-pro.mdx'
 
-export const Route = createFileRoute('/_layout/projects/marketbom-pro')({
+export const Route = createFileRoute('/_books/projects/marketbom-pro')({
   component: RouteComponent,
-});
+})
 
 function RouteComponent() {
   return (
@@ -17,5 +17,5 @@ function RouteComponent() {
         h6: (props) => <h6 className="text-xl" {...props} />,
       }}
     />
-  );
+  )
 }

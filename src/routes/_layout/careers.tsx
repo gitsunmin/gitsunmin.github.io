@@ -1,7 +1,7 @@
-import { 경력 } from "@/data/회사";
-import { createFileRoute } from "@tanstack/react-router";
+import { 경력 } from '@/data/회사';
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute("/_layout/careers")({
+export const Route = createFileRoute('/_layout/careers')({
   component: RouteComponent,
 });
 

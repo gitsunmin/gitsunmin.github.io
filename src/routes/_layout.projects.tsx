@@ -10,7 +10,7 @@ import { 프로젝트들 } from '@/data/프로젝트';
 import { useState } from 'react';
 import { match } from 'ts-pattern';
 
-export const Route = createFileRoute('/_layout/projects/')({
+export const Route = createFileRoute('/_layout/projects')({
   component: RouteComponent,
 });
 

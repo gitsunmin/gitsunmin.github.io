@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
-import Project from '@/docs/projects/hybrid-app-integration-framework-with-flutter.mdx';
+import { createFileRoute } from '@tanstack/react-router'
+import Project from '@/docs/projects/co-working-solution-cnaps.mdx'
 
 export const Route = createFileRoute(
-  '/_layout/projects/hybrid-app-integration-framework-with-flutter'
+  '/_books/projects/co-working-solution-cnaps',
 )({
   component: RouteComponent,
-});
+})
 
 function RouteComponent() {
   return (
@@ -19,5 +19,5 @@ function RouteComponent() {
         h6: (props) => <h6 className="text-xl" {...props} />,
       }}
     />
-  );
+  )
 }

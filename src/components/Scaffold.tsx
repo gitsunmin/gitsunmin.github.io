@@ -1,16 +1,33 @@
+import { cn } from '@/lib/utils';
+
 type Props = React.PropsWithChildren<{
+  variant?: 'default' | 'book';
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  className?: string;
 }>;
 
-export const Scaffold = ({ children, header, footer }: Props) => {
+export const Scaffold = ({
+  children,
+  variant = 'default',
+  header,
+  footer,
+  className,
+}: Props) => {
   return (
     <>
       {header}
-      <main className="mx-auto flex justify-center min-h-[100dvh]">
-        <div className="max-w-sm w-full px-4 md:max-w-md lg:max-w-screen-md">
+      <main
+        className={cn('mx-auto flex justify-center min-h-[100dvh]', className)}
+      >
+        <article
+          className={cn('max-w-sm w-full px-4 md:max-w-md lg:max-w-screen-md', {
+            'snap-y snap-mandatory overflow-y-scroll h-[100dvh]':
+              variant === 'book',
+          })}
+        >
           {children}
-        </div>
+        </article>
       </main>
       {footer}
     </>
