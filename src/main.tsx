@@ -11,7 +11,7 @@ import { Default404 } from './components/Default404';
 
 const router = createRouter({
   routeTree,
-  basepath: '/i/',
+  basepath: '/',
 });
 
 declare module '@tanstack/react-router' {

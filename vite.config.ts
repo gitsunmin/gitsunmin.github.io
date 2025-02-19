@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       TanStackRouterVite({
-        apiBase: '/i/',
       }),
       mdx(),
       react(),
@@ -31,7 +30,7 @@ export default defineConfig(({ mode }) => {
       },
     ],
     assetsInclude: ['**/*.md'],
-    base: '/i/',
+    base: '/',
     server: {
       watch: {
         usePolling: true,
