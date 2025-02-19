@@ -29,6 +29,9 @@ function RouteComponent() {
           h5: (props) => <h5 className="text-2xl pb-1" {...props} />,
           h6: (props) => <h6 className="text-xl pb-1" {...props} />,
           p: (props) => <p className="" {...props} />,
+          ol: (props) => <ol className="list-decimal list-inside" {...props} />,
+          ul: (props) => <ul className="list-disc list-inside" {...props} />,
+          li: (props) => <li className="ml-4" {...props} />,
         }}
       />
     </>
