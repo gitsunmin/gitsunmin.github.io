@@ -1,38 +1,68 @@
-import React from 'react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { dracula as theme } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { getSingletonHighlighter } from 'shiki';
+import mermaid from 'mermaid';
+import { match } from 'ts-pattern';
 
-type Props = React.PropsWithChildren<{
+type Props = {
   languege: string;
-}>;
+  code: string;
+};
 
-export const CodeBlock = ({ children = <></>, languege }: Props) => {
+const MermaidDiagram = ({ code }: { code: string }) => {
+  useEffect(() => {
+    console.log('MermaidDiagram:', code);
+    mermaid.initialize({ startOnLoad: true });
+    mermaid.contentLoaded();
+  }, [code]);
+
+  return <div className="mermaid">{code}</div>;
+};
+
+const CodeBlock = ({ code = '', languege }: Props) => {
+  const [highlightedCode, setHighlightedCode] = useState<string>('');
+
+  useEffect(() => {
+    getSingletonHighlighter({
+      themes: ['github-dark'],
+      langs: [languege],
+    }).then((highlighter) => {
+      setHighlightedCode(
+        highlighter.codeToHtml(code ?? '', {
+          lang: languege,
+          theme: 'github-dark',
+        })
+      );
+    });
+  }, [code, languege]);
+  return (
+    <div
+      dangerouslySetInnerHTML={{ __html: highlightedCode }}
+      className="rounded-lg bg-[#24292e] p-4 overflow-auto shadow-lg shadow-gray-700"
+    />
+  );
+};
+
+export const CodeBlockWrapper = ({ code = '', languege }: Props) => {
   const handleClick = async () => {
-    navigator.clipboard.writeText(children?.toString() ?? '').then(() => {
+    navigator.clipboard.writeText(code).then(() => {
       alert('Copied!');
     });
   };
 
   return (
-    <div className="relative">
+    <div className={cn('relative py-4', `language-${languege}`)}>
       <button
-        className="absolute right-2 top-0 text-sm text-white py-1 px-2"
+        className="absolute right-2 top-4 text-sm text-white py-1 px-2"
         onClick={handleClick}
       >
         Copy
       </button>
-      <SyntaxHighlighter
-        language={languege}
-        style={theme}
-        customStyle={{
-          padding: '1rem',
-          borderRadius: '0.5rem',
-          marginTop: '0.5rem',
-          marginBottom: '0.5rem',
-        }}
-      >
-        {Array.isArray(children) ? children : [children]}
-      </SyntaxHighlighter>
+      {match(languege)
+        .with('mermaid', () => <MermaidDiagram code={code} />)
+        .otherwise(() => (
+          <CodeBlock code={code} languege={languege} />
+        ))}
     </div>
   );
 };

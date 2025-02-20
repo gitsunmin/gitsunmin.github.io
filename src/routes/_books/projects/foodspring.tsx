@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import FoodspringProject from "@/docs/projects/foodspring.mdx";
+import { createFileRoute } from '@tanstack/react-router';
+import FoodspringProject from '@/docs/projects/foodspring.mdx';
 
-import FoodspringBookCover from "@/assets/book_foodspring_front_cover.webp";
-import { Page } from "@/components/Page";
-import { CodeBlock } from "@/components/Codeblock";
+import FoodspringBookCover from '@/assets/book_foodspring_front_cover.webp';
+import { Page } from '@/components/Page';
+import { CodeBlockWrapper } from '@/components/Codeblock';
 
-export const Route = createFileRoute("/_books/projects/foodspring")({
+export const Route = createFileRoute('/_books/projects/foodspring')({
   component: RouteComponent,
 });
 
@@ -37,19 +37,18 @@ function RouteComponent() {
             const preComponent = el.children as unknown as {
               props: {
                 className: string;
-                children: React.ReactNode;
+                children: string;
               };
             };
-            const { className, children } = preComponent.props;
+            const { className, children: code } = preComponent.props;
 
             return (
-              <CodeBlock
+              <CodeBlockWrapper
                 languege={
-                  className?.split("-").slice(1).join("") ?? "javascript"
+                  className?.split('-').slice(1).join('') ?? 'javascript'
                 }
-              >
-                {children}
-              </CodeBlock>
+                code={code}
+              />
             );
           },
         }}
