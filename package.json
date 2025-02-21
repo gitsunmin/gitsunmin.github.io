@@ -47,7 +47,7 @@
     "@typescript-eslint/parser": "^8.24.0",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "autoprefixer": "^10.4.19",
-    "caniuse-lite": "^1.0.30001699",
+    "caniuse-lite": "^1.0.30001700",
     "eslint": "^9.20.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.7",
