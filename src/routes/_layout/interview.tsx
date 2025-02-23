@@ -1,4 +1,3 @@
-// import { Article_인터뷰 } from '@/components/Article_인터뷰';
 import { Card_채팅 } from '@/components/Card_채팅';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 인터뷰 } from '@/data/인터뷰';
@@ -17,7 +16,7 @@ function RouteComponent() {
   return (
     <>
       <p className="text-gray-500 border-l-2 px-4 py-2 text-sm break-words">
-        본 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에
+        이 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에
         대한 답변을 기반으로 작성해보았습니다.
       </p>
       <section className="flex flex-wrap gap-y-[10px] pt-10">
