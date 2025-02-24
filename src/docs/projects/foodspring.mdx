@@ -52,7 +52,7 @@ import { SkillsOfProject } from '@/components/project/Skills'
 </Page>
 
 <Page>
-### PHP to Next.js 전환 작업
+### PHP to Next.js 전환/개선 및 UI 작업
 식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
 전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.
 <br />
@@ -76,29 +76,58 @@ AWS의 ALB(=Application Load Balancer)를 이용하면 같은 도메인이더라
  이러한 기능을 이용하여 마치 피처플래그처럼 점진적인 전환 작업을 수행할 수 있었습니다.
 
 ```mermaid
-graph LR
-    A[페이지 전환] --> B[이동 방식 선택]
-    B --> C[페이지 전환]
-    C --> D[페이지 전환]
+graph TD;
+    Client -->|Request| CloudFront;
+    CloudFront --> ALB1["ALB"];
+    ALB1 --> ECS_PHP["ECS, NginX (PHP)"];
+    ALB1 --> ECS_Next["ECS, NginX (Next.js)"];
+    
+    subgraph AWS Cloud
+        CloudFront
+        ALB1
+        ECS_PHP
+        ECS_Next
+    end
 ```
 
 <br />
-###### 배운것
+
+###### 얻은 것
+- 사용자가 서비스에 접속하는 Network 플로우를 직접 이용할 수 있게 되었고, 이는 Application 영역만 개발하였다면, 얻을 수 없는 경험이었다고 생각합니다.
+
 </Page>
 
+<Page>
+##### PHP와 Next.js 서버는 서로 어떻게 인증할 것인가?
+- 기존에 PHP에서는 cookie에 accessToken을 이용하여 회원 유저를 인증하였다.
+- 로그인/회원가입 페이지를 전환하면서 accessToken의 발급 주체가 Next.js로의 이관이 필요했다.
+
+###### 해결방법
+단순 이메일 로그인 뿐만 아니라 소셜 로그인 또한 지원을 해야했기 때문에 [Next-Auth](https://next-auth.js.org/)를 이용하여 인증 로직을 간편하게 구현할 수 있었고,
+기존 사용하던 방식을 이용하여 cookie에 accessToken을 저장을 하였습니다. 
+또한 Next.js의 Middleware를 이용하여 모든 페이지 혹은 Network 통신에 accessToken의 유효성을 검증하는 로직을 추가하여 보안성을 강화하였습니다.
+
+<br />
+###### 얻은 것
+- Cookie에 데이터를 저장하기 위해서 ExpireTime, Secure, HttpOnly 등의 속성을 설계 및 설정하는 경험을 할 수 있었습니다.
+
+</Page>
 
 <Page>
-### 브라우저 인쇄 템플릿 모듈(라이브러리) 개발
-협력사인 CJ프레시웨이와 협업을 위해서 식자재 유통 시 필요한 배송 라벨과 거래명세서라는 템플릿을 브라우저의 인쇄 API 를 사용하여 인쇄를 수행할 수 있도록 기능을 제공하기 위해서 해당 모듈(라이브러리)를 개발하였습니다.
+### 브라우저 인쇄 템플릿 라이브러리 개발
+물류센터에서 사용하게 될 택배 라벨과 사장님들이 사용하게될 거래명세서를 인쇄할 때에, 외부 업체없이 브라우저의 기능만으로 인쇄를 진행하는 것을 목표로 개발을 진행.
+또한, 당장은 PHP에서 사용이 되어지지만, 추후에는 Next.js에서도 사용할 수 있는 모듈 형태의 결과물이 필요.
+
+##### 어떻게 브라우저의 인쇄 기능만으로 택배 라벨과 거래명세서를 인쇄할 것인가?
+
 
 #### 문제와 해결방법 
-- Problem: PHP에서 사용될 기능이지만, 추후에 Next.js로 전환이 되면서, 해당 기능 또한 전환이 불가피 합니다.
-- SOlution: 
 
 </Page>
 
 <Page>
-### 모니터링
+### DataDog을 이용한 모니터링
+##### 어떻게 서버로서의 Next.js의 Health Check, 에러 추적을 할 것인가?
 - 특정 조건에 따라서 슬랙 알림으로 모니터링 하기
 #### 문제와 해결방법 
 

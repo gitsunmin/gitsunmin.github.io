@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router';
-import FoodspringProject from '@/docs/projects/foodspring.mdx';
+import { createFileRoute } from "@tanstack/react-router";
+import FoodSpringProject from "@/docs/projects/foodspring.mdx";
 
-import FoodspringBookCover from '@/assets/book_foodspring_front_cover.webp';
-import { Page } from '@/components/Page';
-import { CodeBlockWrapper } from '@/components/Codeblock';
+import FoodSpringBookCover from "@/assets/book_foodspring_front_cover.webp";
+import FoodSpringBookCoverBack from "@/assets/book_foodspring_back_cover.webp";
+import { Page } from "@/components/Page";
+import { CodeBlockWrapper } from "@/components/Codeblock";
 
-export const Route = createFileRoute('/_books/projects/foodspring')({
+export const Route = createFileRoute("/_books/projects/foodspring")({
   component: RouteComponent,
 });
 
@@ -14,12 +15,12 @@ function RouteComponent() {
     <>
       <Page variant="cover">
         <img
-          src={FoodspringBookCover}
+          src={FoodSpringBookCover}
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"
         />
       </Page>
-      <FoodspringProject
+      <FoodSpringProject
         components={{
           h1: (props) => (
             <h1 className="text-6xl pb-2 text-center" {...props} />
@@ -45,7 +46,7 @@ function RouteComponent() {
             return (
               <CodeBlockWrapper
                 languege={
-                  className?.split('-').slice(1).join('') ?? 'javascript'
+                  className?.split("-").slice(1).join("") ?? "javascript"
                 }
                 code={code}
               />
@@ -53,6 +54,14 @@ function RouteComponent() {
           },
         }}
       />
+
+      <Page variant="cover">
+        <img
+          src={FoodSpringBookCoverBack}
+          alt="식봄 프로젝트 정면 표지"
+          aria-label="식봄 프로젝트 정면 표지"
+        />
+      </Page>
     </>
   );
 }
