@@ -15,17 +15,19 @@ export const Route = createFileRoute('/_layout/projects')({
 });
 
 // 프로젝트.책.표지.앞
-const books = 프로젝트들.map((프로젝트) => ({
-  id: 프로젝트.id,
-  textures: {
-    front: 프로젝트.책.표지.앞,
-    back: 프로젝트.책.표지.뒤,
-    side: 프로젝트.책.표지.등,
-    top: BookTopTexture,
-    bottom: BookBottomTexture,
-    pages: BookPagesTexture,
-  },
-}));
+const books = 프로젝트들
+  .filter((프로젝트) => 프로젝트.parentId === null)
+  .map((프로젝트) => ({
+    id: 프로젝트.id,
+    textures: {
+      front: 프로젝트.책.표지.앞,
+      back: 프로젝트.책.표지.뒤,
+      side: 프로젝트.책.표지.등,
+      top: BookTopTexture,
+      bottom: BookBottomTexture,
+      pages: BookPagesTexture,
+    },
+  }));
 
 function RouteComponent() {
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);

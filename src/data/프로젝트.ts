@@ -57,6 +57,23 @@ export const 프로젝트들: 프로젝트[] = [
         }
     },
     {
+        id: 'foodspring-php-to-next-js-transition-and-ui',
+        parentId: 'foodspring',
+        회사key: 'marketboro',
+        이름: 'PHP to Next.js 전환/개선 및 UI 작업',
+        소개: `식봄은 (주) 마켓보로에서 운영하는 B2B 식자재 오픈마켓입니다.`,
+        기간: '2024.01 ~ ',
+        기술들: ['react', 'next', 'tailwindcss', 'relay', 'jest', 'typescript', 'bitbucket_pipelines', 'datadog', 'vite', 'bun'],
+        역할: ['프론트엔드 개발자'],
+        책: {
+            표지: {
+                앞: BookFoodspringFrontCover,
+                등: BookFoodspringSideCover,
+                뒤: BookFoodspringBackCover,
+            }
+        }
+    },
+    {
         id: 'hybrid-app-integration-framework-with-flutter',
         parentId: null,
         회사key: 'marketboro',
