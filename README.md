@@ -1,11 +1,6 @@
-# I
+# gitsunmin.github.io
 
-I have put all the information about me in this project.
+I have put all the information about me.
 
+[here](https://gitsunmin.github.io/)
 
-## TODO List
-- [ ] TIL Page
-- [ ] Main Page
-- [ ] Portfolio Page
-- [ ] Careers Page
-- [ ] Interview Page
