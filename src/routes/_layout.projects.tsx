@@ -1,13 +1,14 @@
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { BookShelf } from '@/components/canvas/BookShelf';
+import * as THREE from 'three';
 
 import BookTopTexture from '@/assets/book_top.webp';
 import BookBottomTexture from '@/assets/book_bottom.webp';
 import BookPagesTexture from '@/assets/book_pages.webp';
 import { 프로젝트들 } from '@/data/프로젝트';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { match } from 'ts-pattern';
 
 export const Route = createFileRoute('/_layout/projects')({
@@ -29,6 +30,29 @@ const books = 프로젝트들
     },
   }));
 
+function CameraController({
+  selectedBookId,
+}: {
+  selectedBookId: string | null;
+}) {
+  const { camera } = useThree();
+  const targetPosition = useRef(new THREE.Vector3(5, 5, 10));
+
+  useFrame(() => {
+    camera.position.lerp(targetPosition.current, 0.05); // 부드럽게 보간
+    camera.lookAt(0, 0, 0);
+  });
+
+  // 선택된 책에 따라 목표 위치 변경
+  if (selectedBookId) {
+    targetPosition.current.set(0, 5, 10); // 정면
+  } else {
+    targetPosition.current.set(5, 5, 10); // 원래 위치
+  }
+
+  return null;
+}
+
 function RouteComponent() {
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
   const router = useRouter();
@@ -47,6 +71,7 @@ function RouteComponent() {
   };
   return (
     <Canvas camera={{ position: [5, 5, 10], zoom: 2 }}>
+      <CameraController selectedBookId={selectedBookId} />
       <ambientLight />
       <directionalLight position={[2, 5, 5]} />
       <BookShelf
