@@ -15,17 +15,38 @@ export const Route = createLazyFileRoute('/')({
 type AppLink = (typeof LINKS)[number];
 
 const AppIcon = (props: AppLink) => {
-  const { to, icon, label } = props;
+  const { to, icon, label, status } = props;
+
+  const disabled = status === 'CONSTRUCTION';
 
   return (
     <Link
       to={to}
-      className="flex w-14 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90"
+      disabled={disabled}
+      className={cn('flex w-14 flex-col justify-center items-center gap-1', {
+        'cursor-not-allowed': disabled,
+        'active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90':
+          !disabled,
+      })}
     >
-      <div className="size-14 bg-background rounded-xl shadow-md flex items-center justify-center">
+      <div
+        className={cn(
+          'size-14 bg-background rounded-xl shadow-md flex items-center justify-center',
+          {
+            'bg-gray-200 opacity-50': disabled,
+          }
+        )}
+      >
         {icon}
       </div>
-      <span className="text-[12px] text-foreground">{label}</span>
+      {status === 'CONSTRUCTION' && <div className="absolute text-5xl">🚧</div>}
+      <span
+        className={cn('text-[12px] text-foreground', {
+          'line-through': disabled,
+        })}
+      >
+        {label}
+      </span>
     </Link>
   );
 };
@@ -35,24 +56,28 @@ const LINKS = [
     id: 'careers',
     label: 'Careers',
     icon: <Building2 size={28} className="text-foreground" />,
+    status: 'ENABLED',
     to: '/careers',
   },
   {
     id: 'projects',
     label: 'Projects',
     icon: <MonitorSmartphone size={28} className="text-foreground" />,
+    status: 'CONSTRUCTION',
     to: '/projects',
   },
   {
     id: 'interview',
     label: 'Interview',
     icon: <MessageSquareCode size={28} className="text-foreground" />,
+    status: 'ENABLED',
     to: '/interview',
   },
   {
     id: 'til',
     label: 'TIL',
     icon: <FileText size={28} className="text-foreground" />,
+    status: 'ENABLED',
     to: '/til',
   },
 ] as const;
