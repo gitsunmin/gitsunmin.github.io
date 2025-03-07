@@ -7,14 +7,13 @@ import {
   MessageSquareCode,
   MonitorSmartphone,
 } from 'lucide-react';
-import { match } from 'ts-pattern';
 
 export const Route = createLazyFileRoute('/')({
   component: RouteComponent,
 });
 
-const InnerLink = (props: InnerLink) => {
-  const { to, icon, label, status } = props;
+const AppLink = (props: AppLinkSchema) => {
+  const { to, icon, label, target, status } = props;
 
   const disabled = status === 'CONSTRUCTION';
 
@@ -22,6 +21,9 @@ const InnerLink = (props: InnerLink) => {
     <Link
       to={to}
       disabled={disabled}
+      target={target}
+      from={'/'}
+      rel={target === '_blank' ? 'noopener noreferrer' : undefined}
       className={cn('flex w-14 flex-col justify-center items-center gap-1', {
         'cursor-not-allowed': disabled,
         'active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90':
@@ -50,72 +52,24 @@ const InnerLink = (props: InnerLink) => {
   );
 };
 
-const OuterLink = (props: OuterLink) => {
-  const { href, icon, label, status } = props;
-
-  const disabled = status === 'CONSTRUCTION';
-
-  return (
-    <Link
-      to={href}
-      disabled={disabled}
-      from="/"
-      target="_blank"
-      className={cn('flex w-14 flex-col justify-center items-center gap-1', {
-        'cursor-not-allowed': disabled,
-        'active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90':
-          !disabled,
-      })}
-    >
-      <div
-        className={cn(
-          'size-14 bg-background rounded-xl shadow-md flex items-center justify-center',
-          {
-            'bg-gray-200 opacity-50': disabled,
-          }
-        )}
-      >
-        {icon}
-      </div>
-      {status === 'CONSTRUCTION' && <div className="absolute text-5xl">🚧</div>}
-      <span
-        className={cn('text-[12px] text-foreground', {
-          'line-through': disabled,
-        })}
-      >
-        {label}
-      </span>
-    </Link>
-  );
-};
-
-type InnerLink = {
-  __type: 'INNER';
+type AppLinkSchema = {
+  __type: 'INNER' | 'OUTER';
   id: string;
   label: string;
   to: string;
+  target: '_blank' | '_self' | '_parent' | '_top';
   status: 'ENABLED' | 'CONSTRUCTION';
   icon: React.ReactNode;
 };
 
-type OuterLink = {
-  __type: 'OUTER';
-  id: string;
-  href: string;
-  status: 'ENABLED' | 'CONSTRUCTION';
-  label: string;
-  icon: React.ReactNode;
-};
-
-type Link = InnerLink | OuterLink;
-
-const LINKS: Link[] = [
+const LINKS: AppLinkSchema[] = [
   {
     __type: 'INNER',
     id: 'careers',
     label: 'Careers',
     icon: <Building2 size={28} className="text-foreground" />,
     status: 'ENABLED',
+    target: '_self',
     to: '/careers',
   },
   {
@@ -124,6 +78,7 @@ const LINKS: Link[] = [
     label: 'Projects',
     icon: <MonitorSmartphone size={28} className="text-foreground" />,
     status: 'CONSTRUCTION',
+    target: '_self',
     to: '/projects',
   },
   {
@@ -132,6 +87,7 @@ const LINKS: Link[] = [
     label: 'Interview',
     icon: <MessageSquareCode size={28} className="text-foreground" />,
     status: 'ENABLED',
+    target: '_self',
     to: '/interview',
   },
   {
@@ -140,6 +96,7 @@ const LINKS: Link[] = [
     label: 'TIL',
     icon: <FileText size={28} className="text-foreground" />,
     status: 'ENABLED',
+    target: '_self',
     to: '/til',
   },
   {
@@ -154,8 +111,9 @@ const LINKS: Link[] = [
         height={28}
       />
     ),
+    target: '_blank',
     status: 'ENABLED',
-    href: 'https://github.com/gitsunmin',
+    to: 'https://github.com/gitsunmin',
   },
 ] as const;
 
@@ -174,10 +132,7 @@ function RouteComponent() {
             key={link.id}
             className="flex flex-col justify-center items-center"
           >
-            {match(link)
-              .with({ __type: 'INNER' }, (link) => <InnerLink {...link} />)
-              .with({ __type: 'OUTER' }, (link) => <OuterLink {...link} />)
-              .exhaustive()}
+            <AppLink {...link} />
           </li>
         ))}
       </ul>
