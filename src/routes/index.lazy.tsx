@@ -115,6 +115,15 @@ const LINKS: AppLinkSchema[] = [
     status: 'ENABLED',
     to: 'https://github.com/gitsunmin',
   },
+  {
+    __type: 'OUTER',
+    id: 'linkedin',
+    label: 'linkedin',
+    icon: <div className="text-foreground font-bold text-3xl">In</div>,
+    target: '_blank',
+    status: 'ENABLED',
+    to: 'https://www.linkedin.com/in/gitsunmin/',
+  },
 ] as const;
 
 function RouteComponent() {
