@@ -8,9 +8,9 @@ type Props = React.PropsWithChildren<{
 export const Page = ({ variant = 'default', className, children }: Props) => (
   <section
     className={cn(
-      'snap-always snap-start min-h-[100dvh] py-14',
+      'max-w-sm md:max-w-screen-md lg:max-w-screen-lg mx-auto px-4 snap-always snap-start min-h-[100dvh] py-12 break-words',
       {
-        'max-w-lg mx-auto': variant === 'cover',
+        'flex items-center justify-center': variant === 'cover',
       },
       className
     )}

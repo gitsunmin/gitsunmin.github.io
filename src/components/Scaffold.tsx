@@ -22,7 +22,7 @@ export const Scaffold = ({
       >
         <article
           className={cn('max-w-sm w-full px-4 md:max-w-md lg:max-w-screen-md', {
-            'snap-y snap-mandatory overflow-y-scroll h-[100dvh]':
+            'snap-y snap-mandatory h-[100dvh] overflow-y-scroll':
               variant === 'book',
           })}
         >

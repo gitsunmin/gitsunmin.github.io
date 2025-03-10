@@ -4,7 +4,7 @@ import BookFoodspringSideCover from '@/assets/book_foodspring_side_cover.webp';
 import BookFoodspringBackCover from '@/assets/book_foodspring_back_cover.webp';
 import { 프로젝트 } from '@/data/프로젝트';
 
-export const 삭봄: 프로젝트 = {
+export const 식봄: 프로젝트 = {
     id: 'foodspring',
     parentId: null,
     회사key: 'marketboro',
@@ -24,5 +24,15 @@ export const 삭봄: 프로젝트 = {
             등: BookFoodspringSideCover,
             뒤: BookFoodspringBackCover,
         }
-    }
+    },
+    업적: [
+        {
+            id: 'php-to-next-js-transition',
+            제목: 'PHP to Next.js 전환/개선 및 UI 작업',
+            기술: ['react', 'next', 'tailwindcss', 'relay', 'jest', 'typescript', 'bitbucket_pipelines', 'datadog', 'vite', 'bun'],
+            소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
+                    전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
+            성과: '',
+        }
+    ],
 };

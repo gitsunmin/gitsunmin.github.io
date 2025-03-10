@@ -1,15 +1,27 @@
-import { Header } from '@/components/Header';
-import { Scaffold } from '@/components/Scaffold';
+// import { Header } from '@/components/Header';
+// import { Scaffold } from '@/components/Scaffold';
+import { Button } from '@/components/Button';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { ArrowLeft } from 'lucide-react';
 
 export const Route = createFileRoute('/_books')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const handleBack = () => {
+    window.history.back();
+  };
   return (
-    <Scaffold header={<Header />} variant="book">
+    <>
+      <Button
+        variant="ghost"
+        className="shadow-lg rounded-full absolute top-2 left-4 bg-background"
+        onClick={handleBack}
+      >
+        <ArrowLeft />
+      </Button>
       <Outlet />
-    </Scaffold>
+    </>
   );
 }
