@@ -14,7 +14,7 @@ export const Skill = ({ skill }: Props) => {
           loading="lazy"
         />
       </div>
-      <div className="peer-hover:flex hidden justify-center text-sm">
+      <div className="peer-hover:flex peer-hover:visible invisible justify-center text-sm text-center">
         {skill.이름}
       </div>
     </div>
