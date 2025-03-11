@@ -1,39 +1,61 @@
 import { Page } from '@/components/project/Page';
-import React from 'react';
+import { 프로젝트 } from '@/data/프로젝트';
+import { Skills } from '@/components/project/Skills';
 
 type Props = {
-  title: string;
-  cover: {
-    front: string;
-    back: string;
-  };
-  description: React.ReactNode;
-  achievements: React.ReactNode[];
+  프로젝트: 프로젝트;
 };
 
-export const BookTemplate = ({ title, cover, description }: Props) => {
+export const BookTemplate = ({ 프로젝트 }: Props) => {
+  const { 이름, 소개, 책, 업적 } = 프로젝트;
   return (
     <article className="snap-y snap-mandatory h-[100dvh] overflow-y-scroll">
       <Page variant="cover">
         <img
-          src={cover.front}
+          src={책.표지.앞}
           loading="lazy"
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"
         />
       </Page>
 
-      <Page className="text-5xl flex items-center justify-center">{title}</Page>
-
-      <Page>
-        <h2 className="text-5xl">목차</h2>
+      <Page className="flex items-center justify-center">
+        <h1 className="text-5xl">{이름}</h1>
       </Page>
 
-      <Page>{description}</Page>
+      <Page>
+        <h2 className="text-4xl">목차</h2>
+      </Page>
+
+      <Page>
+        <h2 className="text-4xl pb-4">{이름} 소개</h2>
+        {소개}
+      </Page>
+
+      {업적?.map((work) => {
+        return (
+          <div key={work.id}>
+            <Page>
+              <h2 className="text-4xl pb-4">{work.제목}</h2>
+              <br />
+              <p>{work.소개}</p>
+              <br />
+              <Skills list={work.기술} />
+            </Page>
+
+            <Page>
+              <h2 className="text-4xl pb-4">성과</h2>
+              <br />
+              <p>{work.성과}</p>
+              <br />
+            </Page>
+          </div>
+        );
+      })}
 
       <Page variant="cover">
         <img
-          src={cover.back}
+          src={책.표지.뒤}
           loading="lazy"
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"

@@ -1,19 +1,16 @@
-import { 프로젝트들 } from '@/data/프로젝트';
-import { Skill } from '../Skill';
-import { Map_기술 } from '@/data/기술';
+import { Skill } from '@/components/Skill';
+import { 기술_key, Map_기술 } from '@/data/기술';
 
 type Props = {
-  id: (typeof 프로젝트들)[number]['id'];
+  list: 기술_key[];
 };
 
-export const SkillsOfProject = (props: Props) => {
-  const { id } = props;
-  const project = 프로젝트들.find((project) => project.id === id);
-  if (!project) return null;
+export const Skills = (props: Props) => {
+  const { list } = props;
   return (
     <div className="flex flex-wrap gap-x-6 gap-y-2">
-      {project.기술들.map((name) => (
-        <Skill skill={Map_기술[name]} />
+      {list.map((key) => (
+        <Skill key={key} skill={Map_기술[key]} />
       ))}
     </div>
   );

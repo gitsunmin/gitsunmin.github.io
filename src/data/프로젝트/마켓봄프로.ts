@@ -13,7 +13,6 @@ export const 마켓봄프로: 프로젝트 =
     소개: ``,
     기간: '2021.01 ~ ',
     기술들: ['nuxt', 'typescript', 'vuetify', 'storybook', 'apollo_graphql', 'datadog', 'pnpm', 'yarn', 'react', 'vite', 'webpack'],
-    역할: ['프론트엔드 개발자'],
     책: {
         표지: {
             앞: BookMarketbomProFrontCover,

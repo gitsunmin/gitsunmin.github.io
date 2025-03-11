@@ -6,7 +6,7 @@ type Props = {
 export const Skill = ({ skill }: Props) => {
   return (
     <div className="max-w-12 lg:max-w-16 flex flex-col gap-y-2">
-      <div>
+      <div className="peer">
         <img
           src={skill.아이콘_링크}
           alt={skill.이름}
@@ -14,7 +14,9 @@ export const Skill = ({ skill }: Props) => {
           loading="lazy"
         />
       </div>
-      <div className="text-center text-sm">{skill.이름}</div>
+      <div className="peer-hover:flex hidden justify-center text-sm">
+        {skill.이름}
+      </div>
     </div>
   );
 };

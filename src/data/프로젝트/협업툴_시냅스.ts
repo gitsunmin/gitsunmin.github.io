@@ -13,7 +13,6 @@ export const 협업툴_시냅스: 프로젝트 =
     소개: ``,
     기간: '2021.01 ~ ',
     기술들: ['vue', 'quasar', 'graphql', 'typescript', 'aws_amplify'],
-    역할: ['프론트엔드 개발자'],
     책: {
         표지: {
             앞: BookCoWorkingSolutionCnapsFrontCover,

@@ -14,7 +14,6 @@ export type 프로젝트 = {
     readonly 소개: React.ReactNode;
     readonly 기간: string;
     readonly 기술들: 기술_key[];
-    readonly 역할: string[];
     readonly 주의?: string[];
     readonly 책: {
         표지: {

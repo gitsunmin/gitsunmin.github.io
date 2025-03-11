@@ -1,5 +1,3 @@
-// import { Header } from '@/components/Header';
-// import { Scaffold } from '@/components/Scaffold';
 import { Button } from '@/components/Button';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
