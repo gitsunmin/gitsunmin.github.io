@@ -2,7 +2,7 @@ import { Button } from './Button';
 
 export const DefaultError = () => {
   const handleGoHome = () => {
-    window.location.href = '/i';
+    window.location.href = '/';
   };
 
   const handleGoReport = () => {

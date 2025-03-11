@@ -2,7 +2,7 @@ import { Button } from './Button';
 
 export const Default404 = () => {
   const handleGoHome = () => {
-    window.location.href = '/i';
+    window.location.href = '/';
   };
 
   return (
