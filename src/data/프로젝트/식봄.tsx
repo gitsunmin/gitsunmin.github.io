@@ -59,7 +59,59 @@ export const 식봄: 프로젝트 = {
   업적: [
     {
       id: 'php-to-next-js-transition',
-      제목: 'PHP to Next.js 전환/개선 및 UI 작업',
+      제목: 'PHP to Next.js 전환 및 UI 작업',
+      기술: [
+        'react',
+        'next',
+        'tailwindcss',
+        'relay',
+        'jest',
+        'typescript',
+        'bitbucket_pipelines',
+        'datadog',
+        'vite',
+        'bun',
+      ],
+      소개: (
+        <>
+          식봄은 기존에 <strong>Code Igniter</strong>라는 PHP 프레임워크를
+          사용하고 있었으며, 프론트엔드는 <strong>Next.js</strong>, 백엔드는
+          <strong>Kotlin Spring Boot</strong>로 전환하는 프로젝트입니다. 저는
+          프론트엔드를 담당하여 전환 작업을 진행하면서 새로운 기능도 함께
+          개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다.
+        </>
+      ),
+      경험: [
+        {
+          id: 'php-to-next-js-transition-outcome-1',
+          제목: 'SSR에 대한 경험',
+          내용: <>ㅁㅁ</>,
+        },
+        {
+          id: 'php-to-next-js-transition-outcome-2',
+          제목: 'SSR에 대한 경험',
+          내용: <>ㅁㅁ</>,
+        },
+      ],
+    },
+    {
+      id: 'prowser-printing-template-library-development',
+      제목: '브라우저 인쇄 템플릿 라이브러리 개발',
+      기술: [
+        'react',
+        'tailwindcss',
+        'typescript',
+        'bitbucket_pipelines',
+        'vite',
+        'bun',
+      ],
+      소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
+                    전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
+      경험: [],
+    },
+    {
+      id: 'datadog-monitoring-for-server-side-next-js',
+      제목: 'DataDog을 이용한 모니터링',
       기술: [
         'react',
         'next',
@@ -74,7 +126,7 @@ export const 식봄: 프로젝트 = {
       ],
       소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
                     전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
-      성과: '',
+      경험: [],
     },
   ],
 };

@@ -20,36 +20,44 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
       </Page>
 
       <Page className="flex items-center justify-center">
-        <h1 className="text-5xl">{이름}</h1>
+        <h1 className="text-3xl md:text-5xl font-bold">{이름}</h1>
       </Page>
 
       <Page>
-        <h2 className="text-4xl">목차</h2>
+        <h2 className="text-2xl md:text-4xl font-bold">목차</h2>
       </Page>
 
       <Page>
-        <h2 className="text-4xl pb-4">{이름} 소개</h2>
+        <h2 className="text-2xl md:text-4xl pb-4 font-bold">{이름} 소개</h2>
         {소개}
       </Page>
 
       {업적?.map((work) => {
         return (
-          <div key={work.id}>
+          <>
             <Page>
-              <h2 className="text-4xl pb-4">{work.제목}</h2>
+              <h2 className="text-2xl md:text-4xl pb-4 font-bold">
+                {work.제목}
+              </h2>
               <br />
               <p>{work.소개}</p>
               <br />
               <Skills list={work.기술} />
             </Page>
 
-            <Page>
-              <h2 className="text-4xl pb-4">성과</h2>
-              <br />
-              <p>{work.성과}</p>
-              <br />
-            </Page>
-          </div>
+            {work.경험.map((경험) => {
+              return (
+                <Page label={work.제목} key={경험.id}>
+                  <h2 className="text-2xl md:text-4xl mt-2 font-bold">
+                    {경험.제목}
+                  </h2>
+                  <br />
+                  <p>{경험.내용}</p>
+                  <br />
+                </Page>
+              );
+            })}
+          </>
         );
       })}
 

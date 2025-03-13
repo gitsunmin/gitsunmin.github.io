@@ -27,7 +27,11 @@ export type 프로젝트 = {
         제목: string;
         기술: 기술_key[];
         소개: React.ReactNode;
-        성과: React.ReactNode;
+        경험: {
+            id: string;
+            제목: string;
+            내용: React.ReactNode;
+        }[];
     }[];
 };
 
