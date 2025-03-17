@@ -1,9 +1,9 @@
 import { Card_채팅 } from '@/components/Card_채팅';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 인터뷰 } from '@/data/인터뷰';
 import { createFileRoute } from '@tanstack/react-router';
 
 import { cn } from '@/lib/utils';
+import { Avatar } from '@/components/Avatar';
 
 export const Route = createFileRoute('/_layout/interview')({
   component: RouteComponent,
@@ -36,19 +36,16 @@ function RouteComponent() {
                 <div className="w-10"></div>
               ) : (
                 <div className="flex items-start">
-                  <Avatar>
-                    <AvatarImage
-                      src={
-                        이름 === 'James'
-                          ? 'https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                          : 'https://github.com/gitsunmin.png'
-                      }
-                      alt={`${이름}_profile`}
-                      width={40}
-                      className="rounded-full"
-                    />
-                    <AvatarFallback>{이름}</AvatarFallback>
-                  </Avatar>
+                  <Avatar
+                    src={
+                      이름 === 'James'
+                        ? 'https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                        : 'https://github.com/gitsunmin.png'
+                    }
+                    alt={`${이름}_profile`}
+                    size={40}
+                    className="rounded-full"
+                  />
                 </div>
               )}
               <div className={'max-w-[60%] flex flex-col gap-y-1'}>
