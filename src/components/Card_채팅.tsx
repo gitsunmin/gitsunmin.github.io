@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui/card';
+// import { Card } from '@/components/ui/card';
 import { 채팅 } from '@/data/인터뷰';
 import { Link } from '@tanstack/react-router';
 import { match } from 'ts-pattern';
@@ -6,7 +6,7 @@ import { match } from 'ts-pattern';
 export const Card_채팅 = (props: 채팅) => {
   const { 컨텐츠, 확장 } = props;
   return (
-    <Card className="rounded-[10px] py-[12px] px-[10px]">
+    <div className="rounded-[10px] py-[12px] px-[10px] outline outline-gray-200">
       <p>{컨텐츠}</p>
 
       {match(확장)
@@ -20,6 +20,6 @@ export const Card_채팅 = (props: 채팅) => {
           </Link>
         ))
         .otherwise(() => null)}
-    </Card>
+    </div>
   );
 };
