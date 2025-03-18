@@ -31,7 +31,7 @@ function RouteComponent() {
   ).useLoaderData();
   return (
     <main className="mx-auto flex justify-center">
-      <section className="rounded-2xl px-4 w-full break-all sm:max-w-screen-md pb-10">
+      <section className="rounded-2xl px-4 w-full break-all sm:max-w-(--breakpoint-md) pb-10">
         <Post content={content} />
       </section>
     </main>

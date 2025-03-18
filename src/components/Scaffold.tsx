@@ -21,7 +21,7 @@ export const Scaffold = ({
         className={cn('mx-auto flex justify-center min-h-[100dvh]', className)}
       >
         <article
-          className={cn('max-w-sm w-full px-4 md:max-w-md lg:max-w-screen-md', {
+          className={cn('max-w-sm w-full px-4 md:max-w-md lg:max-w-(--breakpoint-md)', {
             'snap-y snap-mandatory h-[100dvh] overflow-y-scroll':
               variant === 'book',
           })}

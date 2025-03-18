@@ -14,7 +14,7 @@ export const Page = ({
 }: Props) => (
   <section
     className={cn(
-      'w-full md:max-w-screen-md mx-auto px-4 snap-always snap-start min-h-[100dvh] break-words',
+      'w-full md:max-w-(--breakpoint-md) mx-auto px-4 snap-always snap-start min-h-[100dvh] break-words',
       {
         'flex items-center justify-center': variant === 'cover',
       },

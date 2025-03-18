@@ -1,63 +1,127 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Thin.woff2') format('woff2');
-  font-weight: 100;
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --z-index-header: 100;
+
+  --color-background: hsl(var(--background));
+  --color-background-footer: #1e1e1e;
+
+  --color-foreground: hsl(var(--foreground));
+  --color-foreground-footer: #f2f2f2;
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-ExtraLight.woff2') format('woff2');
-  font-weight: 200;
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
 }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Light.woff2') format('woff2');
-  font-weight: 300;
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Regular.woff2') format('woff2');
-  font-weight: 400;
-}
+@layer utilities {
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Thin.woff2') format('woff2');
+    font-weight: 100;
+  }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Medium.woff2') format('woff2');
-  font-weight: 500;
-}
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-ExtraLight.woff2') format('woff2');
+    font-weight: 200;
+  }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-}
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Light.woff2') format('woff2');
+    font-weight: 300;
+  }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Bold.woff2') format('woff2');
-  font-weight: 700;
-}
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+  }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Heavy.woff2') format('woff2');
-  font-weight: 800;
-}
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Medium.woff2') format('woff2');
+    font-weight: 500;
+  }
 
-@font-face {
-  font-family: "Pretendard";
-  src: url('/src/assets/font/Pretendard-Black.woff2') format('woff2');
-  font-weight: 900;
-}
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+  }
 
-:root {
-  font-family: "Pretendard", sans-serif;
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Bold.woff2') format('woff2');
+    font-weight: 700;
+  }
+
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Heavy.woff2') format('woff2');
+    font-weight: 800;
+  }
+
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/src/assets/font/Pretendard-Black.woff2') format('woff2');
+    font-weight: 900;
+  }
+
+  :root {
+    font-family: 'Pretendard', sans-serif;
+  }
 }
 
 @layer base {
