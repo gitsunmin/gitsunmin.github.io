@@ -56,7 +56,7 @@ export const 식봄: 프로젝트 = {
       뒤: BookFoodspringBackCover,
     },
   },
-  업적: [
+  작업: [
     {
       id: 'php-to-next-js-transition',
       제목: 'PHP to Next.js 전환 및 UI 작업',
@@ -81,7 +81,7 @@ export const 식봄: 프로젝트 = {
           개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다.
         </>
       ),
-      경험: [
+      기여도: [
         {
           id: 'php-to-next-js-transition-outcome-1',
           제목: 'SSR에 대한 경험',
@@ -91,6 +91,20 @@ export const 식봄: 프로젝트 = {
           id: 'php-to-next-js-transition-outcome-2',
           제목: 'SSR에 대한 경험',
           내용: <>ㅁㅁ</>,
+        },
+      ],
+      트러블슈팅: [
+        {
+          id: 'php-to-next-js-transition-outcome-1',
+          문제점: '너가 문제임',
+          해결방법: '너가 문제임',
+          회고: '너가 문제임',
+        },
+        {
+          id: 'php-to-next-js-transition-outcome-2',
+          문제점: '너가 문제임',
+          해결방법: '너가 문제임',
+          회고: '너가 문제임',
         },
       ],
     },
@@ -107,7 +121,8 @@ export const 식봄: 프로젝트 = {
       ],
       소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
                     전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
-      경험: [],
+      기여도: [],
+      트러블슈팅: [],
     },
     {
       id: 'datadog-monitoring-for-server-side-next-js',
@@ -126,7 +141,8 @@ export const 식봄: 프로젝트 = {
       ],
       소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
                     전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
-      경험: [],
+      기여도: [],
+      트러블슈팅: [],
     },
   ],
 };

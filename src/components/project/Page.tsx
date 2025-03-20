@@ -1,18 +1,21 @@
 import { cn } from '@/lib/utils';
 
 type Props = React.PropsWithChildren<{
+  id?: string;
   className?: string;
   variant?: 'default' | 'cover';
   label?: React.ReactNode;
 }>;
 
 export const Page = ({
+  id = '',
   label = '',
   variant = 'default',
   className,
   children,
 }: Props) => (
   <section
+    id={id}
     className={cn(
       'w-full md:max-w-(--breakpoint-md) mx-auto px-4 snap-always snap-start min-h-[100dvh] break-words',
       {

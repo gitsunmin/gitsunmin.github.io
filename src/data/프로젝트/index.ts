@@ -16,22 +16,28 @@ export type 프로젝트 = {
     readonly 기술들: 기술_key[];
     readonly 주의?: string[];
     readonly 책: {
-        표지: {
-            앞: string;
-            뒤: string;
-            등: string;
+        readonly 표지: {
+            readonly 앞: string;
+            readonly 뒤: string;
+            readonly 등: string;
         }
     };
-    readonly 업적?: {
-        id: string;
-        제목: string;
-        기술: 기술_key[];
-        소개: React.ReactNode;
-        경험: {
-            id: string;
-            제목: string;
-            내용: React.ReactNode;
+    readonly 작업?: {
+        readonly id: string;
+        readonly 제목: string;
+        readonly 기술: 기술_key[];
+        readonly 소개: React.ReactNode;
+        readonly 기여도: {
+            readonly id: string;
+            readonly 제목: string;
+            readonly 내용: React.ReactNode;
         }[];
+        readonly 트러블슈팅: {
+            readonly id: string;
+            readonly 문제점: string;
+            readonly 해결방법: string;
+            readonly 회고: string;
+        }[]
     }[];
 };
 
