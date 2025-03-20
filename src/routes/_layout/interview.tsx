@@ -1,4 +1,4 @@
-import { Card_채팅 } from '@/components/Card_채팅';
+import { Chat } from '@/components/Chat';
 import { 인터뷰 } from '@/data/인터뷰';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -59,7 +59,7 @@ function RouteComponent() {
                     {이름}
                   </div>
                 )}
-                <Card_채팅 {...채팅} />
+                <Chat {...채팅} />
               </div>
             </div>
           );

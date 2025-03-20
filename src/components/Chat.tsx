@@ -3,7 +3,7 @@ import { 채팅 } from '@/data/인터뷰';
 import { Link } from '@tanstack/react-router';
 import { match } from 'ts-pattern';
 
-export const Card_채팅 = (props: 채팅) => {
+export const Chat = (props: 채팅) => {
   const { 컨텐츠, 확장 } = props;
   return (
     <div className="rounded-[10px] py-[12px] px-[10px] outline outline-gray-200">
