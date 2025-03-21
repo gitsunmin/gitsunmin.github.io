@@ -83,25 +83,30 @@ export const 식봄: 프로젝트 = {
       ),
       기여도: [
         {
-          id: 'php-to-next-js-transition-outcome-1',
-          제목: 'SSR에 대한 경험',
-          내용: <>ㅁㅁ</>,
+          id: 'php-to-next-js-transition-contribution-1',
+          제목: '인증 및 게스트 유저 관리.',
+          내용: <>로그인/회원가입 페이지를 전환하면서,</>,
         },
         {
-          id: 'php-to-next-js-transition-outcome-2',
-          제목: 'SSR에 대한 경험',
-          내용: <>ㅁㅁ</>,
+          id: 'php-to-next-js-transition-contribution-2',
+          제목: '검색 및 검색 결과 페이지 전환 작업',
+          내용: <>공통 로직을 넣음으로서 추가 전환 페이지 수 증가.</>,
+        },
+        {
+          id: 'php-to-next-js-transition-contribution-3',
+          제목: '마이크로애니메이션을 사용한 UX 개선',
+          내용: <>로그인/회원가입 페이지를 전환하면서,</>,
         },
       ],
       트러블슈팅: [
         {
-          id: 'php-to-next-js-transition-outcome-1',
-          문제점: '너가 문제임',
-          해결방법: '너가 문제임',
-          회고: '너가 문제임',
+          id: 'php-to-next-js-transition-troubleshooting-1',
+          문제점: 'SSR에서의 Javascript 동작의 변화',
+          해결방법: '해결방법을 사용하여 해결함',
+          회고: '회고해보니 이런 점을 배울 수 있었음.',
         },
         {
-          id: 'php-to-next-js-transition-outcome-2',
+          id: 'php-to-next-js-transition-troubleshooting-2',
           문제점: '너가 문제임',
           해결방법: '너가 문제임',
           회고: '너가 문제임',

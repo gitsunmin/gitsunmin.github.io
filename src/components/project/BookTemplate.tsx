@@ -1,6 +1,5 @@
 import { Page } from '@/components/project/Page';
 import { 프로젝트 } from '@/data/프로젝트';
-import { Skills } from '@/components/project/Skills';
 import { Link } from '@tanstack/react-router';
 
 type Props = {
@@ -112,7 +111,6 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
               <br />
               <p>{work.소개}</p>
               <br />
-              <Skills list={work.기술} />
             </Page>
 
             {work.기여도.map((경험) => {
