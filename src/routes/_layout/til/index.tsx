@@ -17,5 +17,9 @@ export const Route = createFileRoute('/_layout/til/')({
 function RouteComponent() {
   const { content } = getRouteApi('/_layout/til/').useLoaderData();
 
-  return <Readme content={content} />;
+  return (
+    <article className="flex flex-col pt-8">
+      <Readme content={content} />
+    </article>
+  );
 }
