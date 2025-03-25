@@ -1,6 +1,6 @@
 import { Page } from '@/components/project/Page';
 import { 프로젝트 } from '@/data/프로젝트';
-import { Link } from '@tanstack/react-router';
+import { TableOfContents } from '@/components/project/TableOfContents';
 
 type Props = {
   프로젝트: 프로젝트;
@@ -24,86 +24,20 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
         <h1 className="text-3xl md:text-5xl font-bold">{이름}</h1>
       </Page>
 
-      <Page>
+      <Page label="Table of Contents">
         <h2 className="text-2xl md:text-4xl font-bold mb-4">목차</h2>
 
-        <ol className="list-decimal pl-5 space-y-2">
-          <li className="font-semibold">
-            <Link
-              hash={`${id}-intro`}
-              to=""
-              className="font-semibold"
-              hashScrollIntoView={{
-                behavior: 'smooth',
-                block: 'start',
-                inline: 'nearest',
-              }}
-            >
-              {이름} 소개
-            </Link>
-          </li>
-
-          {작업?.map((work) => (
-            <li key={work.id} className="space-y-2">
-              <Link
-                to=""
-                hash={work.id}
-                className="font-semibold"
-                hashScrollIntoView
-              >
-                {work.제목}
-              </Link>
-              <ol className="list-disc pl-5 space-y-1">
-                <li>
-                  <Link
-                    to=""
-                    hash={`${work.id}-contribution`}
-                    className="font-medium"
-                  >
-                    기여도
-                  </Link>
-                  <ol className="list-circle pl-6 space-y-1">
-                    {work.기여도.map((경험) => (
-                      <li key={경험.id} className=" space-y-1">
-                        <Link to="" hash={경험.id}>
-                          {경험.제목}
-                        </Link>
-                      </li>
-                    ))}
-                  </ol>
-                </li>
-                <li>
-                  <Link
-                    to=""
-                    hash={`${work.id}-troubleshooting`}
-                    className="font-medium"
-                  >
-                    트러블슈팅
-                  </Link>
-                  <ol className="list-circle pl-6 space-y-1">
-                    {work.트러블슈팅.map((트러블슈팅) => (
-                      <li key={트러블슈팅.id} className=" space-y-1">
-                        <Link to="" hash={트러블슈팅.id}>
-                          {트러블슈팅.문제점}
-                        </Link>
-                      </li>
-                    ))}
-                  </ol>
-                </li>
-              </ol>
-            </li>
-          ))}
-        </ol>
+        <TableOfContents 프로젝트={프로젝트} />
       </Page>
 
-      <Page id={`${id}-intro`}>
+      <Page id={`${id}-intro`} label="Introduction">
         <h2 className="text-2xl md:text-4xl pb-4 font-bold">{이름}</h2>
         {소개}
       </Page>
 
       {작업?.map((work) => {
         return (
-          <>
+          <div key={work.id}>
             <Page>
               <h2 className="text-2xl md:text-4xl pb-4 font-bold">
                 {work.제목}
@@ -115,7 +49,7 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
 
             {work.기여도.map((경험) => {
               return (
-                <Page label={work.제목} key={경험.id}>
+                <Page label={`${work.제목} 기여도`} key={경험.id}>
                   <h2 className="text-2xl md:text-4xl mt-2 font-bold">
                     {경험.제목}
                   </h2>
@@ -125,7 +59,25 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
                 </Page>
               );
             })}
-          </>
+
+            {work.트러블슈팅.map((트러블슈팅) => {
+              return (
+                <div key={트러블슈팅.id}>
+                  <Page label={`${work.제목} 트러블슈팅`} key={트러블슈팅.id}>
+                    <h2 className="text-2xl md:text-4xl mt-2 font-bold">
+                      {트러블슈팅.문제점}
+                    </h2>
+                  </Page>
+                  <Page label={`${트러블슈팅.문제점} 해결방법`}>
+                    <p>{트러블슈팅.해결방법}</p>
+                  </Page>
+                  <Page label={`${트러블슈팅.문제점} 회고`}>
+                    <p>{트러블슈팅.회고}</p>
+                  </Page>
+                </div>
+              );
+            })}
+          </div>
         );
       })}
 

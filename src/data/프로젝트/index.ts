@@ -25,7 +25,7 @@ export type 프로젝트 = {
     readonly 작업?: {
         readonly id: string;
         readonly 제목: string;
-        readonly 기술: 기술_key[];
+        readonly 도구: 기술_key[];
         readonly 소개: React.ReactNode;
         readonly 기여도: {
             readonly id: string;

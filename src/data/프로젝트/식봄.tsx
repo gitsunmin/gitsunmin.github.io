@@ -60,7 +60,7 @@ export const 식봄: 프로젝트 = {
     {
       id: 'php-to-next-js-transition',
       제목: 'PHP to Next.js 전환 및 UI 작업',
-      기술: [
+      도구: [
         'react',
         'next',
         'tailwindcss',
@@ -75,79 +75,121 @@ export const 식봄: 프로젝트 = {
       소개: (
         <>
           식봄은 기존에 <strong>Code Igniter</strong>라는 PHP 프레임워크를
-          사용하고 있었으며, 프론트엔드는 <strong>Next.js</strong>, 백엔드는
-          <strong>Kotlin Spring Boot</strong>로 전환하는 프로젝트입니다. 저는
-          프론트엔드를 담당하여 전환 작업을 진행하면서 새로운 기능도 함께
-          개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다.
+          사용하고 있었으며, 레거시 시스템으로 인하여 유지보수에 어려웁을 격고
+          있었습니다. 이를 해결하기 위해서 현재 웹 서비스로서 프론트엔드와
+          백엔드로의 분리를 필요로하였고, 프론트엔드는 Next.js, 백엔드는 Kotlin
+          Spring으로의 전환을 계획하였습니다.
+          <br />
+          <br />
+          해당 작업은 AWS의 ALB 서비스를 이용하여 특정 URL의 Pathname을
+          Next.js와 PHP 페이지 두 분기를 하여 점진적으로 전환을 해나아가는
+          작업이었습니다. 해당 작업을 수행하며 동시에 새롭게 리뉴얼하는 페이지도
+          있었고, 공통으로 새로운 기능을 추가하는 일도 있었습니다
+          <br />
+          <br />
+          다양한 작업을 하며 기여도와 트러블슈팅을 간략하게 정리해보았습니다.
         </>
       ),
       기여도: [
         {
           id: 'php-to-next-js-transition-contribution-1',
-          제목: '인증 및 게스트 유저 관리.',
-          내용: <>로그인/회원가입 페이지를 전환하면서,</>,
+          제목: '식봄 서비스 Next.js로 전환',
+          내용: (
+            <>
+              로그인/회원가입 및 검색 관련 페이지를 전환하는 작업을 주로
+              하였으며, 신규로 생성되는 페이지에 대한 작업을 주로 하였습니다.
+              <br />
+              {/* 상세 이미지가 들어갈 자리 */}
+            </>
+          ),
         },
         {
           id: 'php-to-next-js-transition-contribution-2',
-          제목: '검색 및 검색 결과 페이지 전환 작업',
-          내용: <>공통 로직을 넣음으로서 추가 전환 페이지 수 증가.</>,
-        },
-        {
-          id: 'php-to-next-js-transition-contribution-3',
-          제목: '마이크로애니메이션을 사용한 UX 개선',
-          내용: <>로그인/회원가입 페이지를 전환하면서,</>,
+          제목: 'DataDog을 활용한 서버 모니터링',
+          내용: (
+            <>
+              DataDog을 사용하여 Next.js의 서버 모니터링을 진행하여 오류 상황에
+              대해 빠르게 대처하는 역할을 하였으며, 사용자의 동작을 녹화할 수
+              있는 Session Replay 기능을 활용하여 사용자의 행동을 분석하여
+              기능의 필요성을 측정하는 작업을 하였습니다.
+              <br />
+              {/* 상세 이미지가 들어갈 자리 */}
+            </>
+          ),
         },
       ],
       트러블슈팅: [
         {
           id: 'php-to-next-js-transition-troubleshooting-1',
-          문제점: 'SSR에서의 Javascript 동작의 변화',
-          해결방법: '해결방법을 사용하여 해결함',
-          회고: '회고해보니 이런 점을 배울 수 있었음.',
+          문제점: 'PHP와 Next.js의 동시 운영 문제',
+          해결방법: '',
+          회고: '',
         },
         {
           id: 'php-to-next-js-transition-troubleshooting-2',
-          문제점: '너가 문제임',
-          해결방법: '너가 문제임',
-          회고: '너가 문제임',
+          문제점: 'Server에서의 Date() 함수의 동작 문제',
+          해결방법: '',
+          회고: '',
+        },
+        {
+          id: 'php-to-next-js-transition-troubleshooting-3',
+          문제점: '본인인증 시 로컬 환경에서의 CORS 문제',
+          해결방법: '',
+          회고: '',
+        },
+        {
+          id: 'php-to-next-js-transition-troubleshooting-4',
+          문제점: 'Scroll 위치 복구 문제',
+          해결방법: '',
+          회고: '',
         },
       ],
     },
     {
-      id: 'prowser-printing-template-library-development',
-      제목: '브라우저 인쇄 템플릿 라이브러리 개발',
-      기술: [
-        'react',
-        'tailwindcss',
-        'typescript',
-        'bitbucket_pipelines',
-        'vite',
-        'bun',
+      id: 'print-template-library-for-foodspring',
+      제목: '식봄 인쇄 템플릿 라이브러리 개발',
+      소개: '',
+      도구: ['react', 'next', 'tailwindcss', 'relay', 'jest', 'typescript'],
+      기여도: [
+        {
+          id: 'print-template-library-for-foodspring-contribution-1',
+          제목: '인쇄 템플릿 라이브러리 설계',
+          내용: (
+            <>
+              요구사항 분석을 통해서 범용적인 인쇄 템플릿 라이브러리가
+              필요하였고, 인쇄 기능만을 담당하는 라이브러리와 각 서비스별
+              템플릿을 갖는 번들 형태로 개발 진행
+            </>
+          ),
+        },
+        {
+          id: 'print-template-library-for-foodspring-contribution-2',
+          제목: '인쇄 템플릿 라이브러리 Playground 개발',
+          내용: (
+            <>
+              빠듯한 일정 때문에 개발을 투 트랙으로 진행 하였기 때문에, 실
+              사용자에 대한 테스트가 필요하다고 판단하여 인쇄 템플릿을 미리
+              테스트해 볼 수 있는 Playground를 개발하여 배포.
+            </>
+          ),
+        },
       ],
-      소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
-                    전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
-      기여도: [],
-      트러블슈팅: [],
-    },
-    {
-      id: 'datadog-monitoring-for-server-side-next-js',
-      제목: 'DataDog을 이용한 모니터링',
-      기술: [
-        'react',
-        'next',
-        'tailwindcss',
-        'relay',
-        'jest',
-        'typescript',
-        'bitbucket_pipelines',
-        'datadog',
-        'vite',
-        'bun',
+      트러블슈팅: [
+        {
+          id: 'print-template-library-for-foodspring-troubleshooting-1',
+          문제점: '배포 파이프라인의 복잡도 증가',
+          해결방법:
+            '인쇄 기능만 담당하는 인쇄 라이브러리와 각 서비스별 인쇄 템플릿을 담당하는 번들 두 가지로 나누어 작업하였고, 앞으로는 서비스별로 템플릿이 즐가될 예정이었기 때문에, 배포에 간소화가 필요하였고, 이를 위해 각 서비스별로 번들을 나누어 배포하였습니다.',
+          회고: '프론트엔드 개발자로서 화면에 대한 이해도 중요하지만, 일의 효율과 안정성을 위해서 CLI 뿐만아니라 pipeline에 대한 수정도 필요하다.',
+        },
+        {
+          id: 'print-template-library-for-foodspring-troubleshooting-2',
+          문제점: '인쇄 결과물의 페이지 분할 문제',
+          해결방법:
+            'Javascript의 Array 타입으로 인쇄 데이터를 넘겨 받고, 각 페이지를 나누는 작업에서, 실제로 결과물의 내용이 많아서 다음 페이지로 넘어가는 케이스와 Array로 구분되어 있는 케이스를 나누어 처리하였습니다.',
+          회고: 'CSS로는 생각보다 많은 것들이 가능하다.',
+        },
       ],
-      소개: `식봄은 기존에 Code Igniter라는 PHP 프레임워크를 사용하고 있었으며, 프론트엔드는 Next.js, 백엔드는 Kotlin Spring Boot로 전환하는 프로젝트입니다.
-                    전환 작업을 진행하면서 새로운 기능도 함께 개발하였고, 그 과정에서 다양한 문제와 해결방법을 찾을 수 있었습니다. 아래에서 그 내용을 이야기 하겠습니다.`,
-      기여도: [],
-      트러블슈팅: [],
     },
   ],
 };
