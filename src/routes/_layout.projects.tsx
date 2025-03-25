@@ -45,7 +45,7 @@ function CameraController({
 
   // 선택된 책에 따라 목표 위치 변경
   if (selectedBookId) {
-    targetPosition.current.set(0, 5, 10); // 정면
+    targetPosition.current.set(0, 5, 18); // 정면
   } else {
     targetPosition.current.set(5, 5, 10); // 원래 위치
   }
@@ -70,7 +70,10 @@ function RouteComponent() {
     setSelectedBookId((prev) => (prev === id ? null : id));
   };
   return (
-    <Canvas camera={{ position: [5, 5, 10], zoom: 2 }}>
+    <Canvas
+      camera={{ position: [5, 5, 10], zoom: 2 }}
+      style={{ height: '100dvh' }}
+    >
       <CameraController selectedBookId={selectedBookId} />
       <ambientLight />
       <directionalLight position={[2, 5, 5]} />
