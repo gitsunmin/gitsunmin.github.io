@@ -2,7 +2,7 @@ import BookFoodspringFrontCover from '@/assets/book_foodspring_front_cover.webp'
 import BookFoodspringSideCover from '@/assets/book_foodspring_side_cover.webp';
 import BookFoodspringBackCover from '@/assets/book_foodspring_back_cover.webp';
 import { 프로젝트 } from '@/data/프로젝트';
-import Carousel from '@/components/Carousel';
+import { LightBox } from '@/components/LightBox';
 
 export const 식봄: 프로젝트 = {
   id: 'foodspring',
@@ -101,28 +101,24 @@ export const 식봄: 프로젝트 = {
               하였으며, 신규로 생성되는 페이지에 대한 작업을 주로 하였습니다.
               <br />
               <br />
-              <Carousel
+              <LightBox
                 slides={[
-                  <>
-                    <div className="h-[200px] bg-amber-700">테스트1</div>
-                  </>,
-                  <>
-                    <div className="h-[200px] bg-amber-950">테스트2</div>
-                  </>,
-                  <>
-                    <div className="h-[200px] bg-amber-200">테스트3</div>
-                  </>,
-                  <>
-                    <div className="h-[200px] bg-amber-400">테스트4</div>
-                  </>,
+                  {
+                    src: BookFoodspringFrontCover,
+                    alt: '테스트1',
+                  },
+                  {
+                    src: BookFoodspringSideCover,
+                    alt: '테스트2',
+                  },
+                  {
+                    src: BookFoodspringBackCover,
+                    alt: '테스트3',
+                  },
                 ]}
-                options={{
-                  loop: true,
-                  align: 'start', // 왼쪽 정렬
-                  containScroll: 'trimSnaps', // 보이는 범위 내로 제한
-                }}
-                view="wide"
-              />
+              >
+                관련 사진 모아보기
+              </LightBox>
               {/* 상세 이미지가 들어갈 자리 */}
             </>
           ),
