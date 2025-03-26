@@ -2,6 +2,7 @@ import BookFoodspringFrontCover from '@/assets/book_foodspring_front_cover.webp'
 import BookFoodspringSideCover from '@/assets/book_foodspring_side_cover.webp';
 import BookFoodspringBackCover from '@/assets/book_foodspring_back_cover.webp';
 import { 프로젝트 } from '@/data/프로젝트';
+import Carousel from '@/components/Carousel';
 
 export const 식봄: 프로젝트 = {
   id: 'foodspring',
@@ -99,6 +100,29 @@ export const 식봄: 프로젝트 = {
               로그인/회원가입 및 검색 관련 페이지를 전환하는 작업을 주로
               하였으며, 신규로 생성되는 페이지에 대한 작업을 주로 하였습니다.
               <br />
+              <br />
+              <Carousel
+                slides={[
+                  <>
+                    <div className="h-[200px] bg-amber-700">테스트1</div>
+                  </>,
+                  <>
+                    <div className="h-[200px] bg-amber-950">테스트2</div>
+                  </>,
+                  <>
+                    <div className="h-[200px] bg-amber-200">테스트3</div>
+                  </>,
+                  <>
+                    <div className="h-[200px] bg-amber-400">테스트4</div>
+                  </>,
+                ]}
+                options={{
+                  loop: true,
+                  align: 'start', // 왼쪽 정렬
+                  containScroll: 'trimSnaps', // 보이는 범위 내로 제한
+                }}
+                view="wide"
+              />
               {/* 상세 이미지가 들어갈 자리 */}
             </>
           ),
