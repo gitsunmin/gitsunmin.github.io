@@ -34,9 +34,10 @@ export type 프로젝트 = {
         }[];
         readonly 트러블슈팅: {
             readonly id: string;
-            readonly 문제점: string;
-            readonly 해결방법: string;
-            readonly 회고: string;
+            readonly 제목: string;
+            readonly 문제점: React.ReactNode;
+            readonly 해결방법: React.ReactNode;
+            readonly 회고: React.ReactNode;
         }[]
     }[];
 };

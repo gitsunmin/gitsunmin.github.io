@@ -47,6 +47,17 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
               <br />
             </Page>
 
+            <Page className="flex items-center justify-center">
+              <h2 className="text-2xl md:text-5xl font-bold text-center">
+                {work.제목}
+                <br />
+                <br />
+                <div className="text-3xl md:text-5xl animate-bounce">
+                  기여도
+                </div>
+              </h2>
+            </Page>
+
             {work.기여도.map((경험) => {
               return (
                 <Page label={`${work.제목} 기여도`} key={경험.id}>
@@ -60,18 +71,41 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
               );
             })}
 
+            <Page className="flex items-center justify-center">
+              <h2 className="text-2xl md:text-5xl font-bold text-center">
+                {work.제목}
+                <br />
+                <br />
+                <div className="text-3xl md:text-5xl animate-bounce">
+                  트러블슈팅
+                </div>
+              </h2>
+            </Page>
+
             {work.트러블슈팅.map((트러블슈팅) => {
               return (
                 <div key={트러블슈팅.id}>
-                  <Page label={`${work.제목} 트러블슈팅`} key={트러블슈팅.id}>
-                    <h2 className="text-2xl md:text-4xl mt-2 font-bold">
-                      {트러블슈팅.문제점}
+                  <Page
+                    label={work.제목}
+                    key={트러블슈팅.id}
+                    className="relative"
+                  >
+                    <h2 className="absolute top-[50%] -translate-y-[50%] left-[50%] -translate-[50%] text-2xl md:text-4xl mt-2 font-bold text-center px-4 break-words w-full">
+                      <div className="text-4xl animate-bounce">문제점</div>
+                      <br />
+                      {트러블슈팅.제목}
                     </h2>
                   </Page>
-                  <Page label={`${트러블슈팅.문제점} 해결방법`}>
+                  <Page label={트러블슈팅.제목}>
+                    <h3 className="text-xl md:text-3xl font-bold">상세</h3>
+                    <p>{트러블슈팅.문제점}</p>
+                  </Page>
+                  <Page label={트러블슈팅.제목}>
+                    <h3 className="text-xl md:text-3xl font-bold">해결방법</h3>
                     <p>{트러블슈팅.해결방법}</p>
                   </Page>
-                  <Page label={`${트러블슈팅.문제점} 회고`}>
+                  <Page label={트러블슈팅.제목}>
+                    <h3 className="text-xl md:text-3xl font-bold">회고</h3>
                     <p>{트러블슈팅.회고}</p>
                   </Page>
                 </div>

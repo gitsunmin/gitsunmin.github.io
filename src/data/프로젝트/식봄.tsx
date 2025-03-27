@@ -1,6 +1,11 @@
 import BookFoodspringFrontCover from '@/assets/book_foodspring_front_cover.webp';
 import BookFoodspringSideCover from '@/assets/book_foodspring_side_cover.webp';
 import BookFoodspringBackCover from '@/assets/book_foodspring_back_cover.webp';
+import Foodspring1 from '@/assets/foodspring/foodspring_1.webp';
+import Foodspring2 from '@/assets/foodspring/foodspring_2.webp';
+import Foodspring3 from '@/assets/foodspring/foodspring_3.webp';
+import Foodspring4 from '@/assets/foodspring/foodspring_4.webp';
+import Foodspring5 from '@/assets/foodspring/foodspring_5.webp';
 import { 프로젝트 } from '@/data/프로젝트';
 import { LightBox } from '@/components/LightBox';
 
@@ -60,7 +65,7 @@ export const 식봄: 프로젝트 = {
   작업: [
     {
       id: 'php-to-next-js-transition',
-      제목: 'PHP to Next.js 전환 및 UI 작업',
+      제목: 'PHP to Next.js 전환',
       도구: [
         'react',
         'next',
@@ -94,32 +99,46 @@ export const 식봄: 프로젝트 = {
       기여도: [
         {
           id: 'php-to-next-js-transition-contribution-1',
-          제목: '식봄 서비스 Next.js로 전환',
+          제목: '전반적인 화면설계 및 비즈니스 로직 구현',
           내용: (
             <>
-              로그인/회원가입 및 검색 관련 페이지를 전환하는 작업을 주로
-              하였으며, 신규로 생성되는 페이지에 대한 작업을 주로 하였습니다.
+              로그인/회원가입을 시작으로 전반적인 프론트엔드 개발을 하였으며
+              검색과 관련된 기능을 중점으로 개발하여 사용자의 편의성을 높이는
+              역할을 하였습니다.
+              <br />
+              <br />
+              특히, 검색 페이지에서의 API의 호출을 분할하여 성능 최적화 또는
+              다건의 검색어를 한 번에 검색할 수 있는 기능을 개발하여 식봄의 검색
+              기능을 향상시켰습니다.
               <br />
               <br />
               <LightBox
                 slides={[
                   {
-                    src: BookFoodspringFrontCover,
-                    alt: '테스트1',
+                    src: Foodspring1,
+                    alt: '식봄,모바일 로그인 화면',
                   },
                   {
-                    src: BookFoodspringSideCover,
-                    alt: '테스트2',
+                    src: Foodspring2,
+                    alt: '식봄,모바일 검색 화면',
                   },
                   {
-                    src: BookFoodspringBackCover,
-                    alt: '테스트3',
+                    src: Foodspring3,
+                    alt: '식봄,모바일 검색 결과 화면',
+                  },
+                  {
+                    src: Foodspring4,
+                    alt: '식봄,PC 검색 결과 화면',
+                  },
+                  {
+                    src: Foodspring5,
+                    alt: '식봄,모바일 한 번에 검색 결과 화면',
                   },
                 ]}
+                className="font-bold"
               >
-                관련 사진 모아보기
+                관련 자료 모아보기
               </LightBox>
-              {/* 상세 이미지가 들어갈 자리 */}
             </>
           ),
         },
@@ -128,12 +147,12 @@ export const 식봄: 프로젝트 = {
           제목: 'DataDog을 활용한 서버 모니터링',
           내용: (
             <>
-              DataDog을 사용하여 Next.js의 서버 모니터링을 진행하여 오류 상황에
-              대해 빠르게 대처하는 역할을 하였으며, 사용자의 동작을 녹화할 수
-              있는 Session Replay 기능을 활용하여 사용자의 행동을 분석하여
-              기능의 필요성을 측정하는 작업을 하였습니다.
+              모니터링 도구인 DataDog을 사용하여 Next.js의 서버 모니터링을
+              진행하여 오류 상황에 메신저로 알림이 오도록 설정하여 긴급 상황에
+              신속히 대비할 수 있었습니다. 또한 사용자의 트래킹이나 이벤트 등을
+              수집하여 단위 기능의 성과를 확인하여 개선점을 찾아내는 역할을
+              하였습니다.
               <br />
-              {/* 상세 이미지가 들어갈 자리 */}
             </>
           ),
         },
@@ -141,25 +160,37 @@ export const 식봄: 프로젝트 = {
       트러블슈팅: [
         {
           id: 'php-to-next-js-transition-troubleshooting-1',
-          문제점: 'PHP와 Next.js의 동시 운영 문제',
-          해결방법: '',
-          회고: '',
+          제목: 'Server에서의 Date() 함수의 동작 문제',
+          문제점: (
+            <>
+              Next.js의 Server Side에서 Cookie의 Expire 값을 셋팅해주기 위해서{' '}
+              <code>new Date()</code> API를 사용하여 하나의 상수로 저장을 하여
+              사용하려고 했습니다. 이는 Client Side 였다면, 사용자가 페이지를
+              진입했을 시점의 시간으로 항상 재할당 되어 사용될 코드였습니다.
+              하지만, Server Side에서는 서버가 시작되었을 때의 시간으로 고정되어
+              있어 문제가 발생하였습니다.
+            </>
+          ),
+          해결방법: (
+            <>
+              Expire에 해당하는 값을 함수로 Wrapping하여 호출할 때마다
+              재계산하여 Expire을 셋팅하도록 로직을 변경하였습니다.
+            </>
+          ),
+          회고: (
+            <>
+              물론 Client Side와 Server Side에서는 다르게 동작하는 것은 당연한
+              것이지만, 이러한 부분을 고려하지 않고 개발을 진행하다보니 발생한
+              문제였습니다. 이러한 문제를 통해, Server Side에서의 동작과 Client
+              Side에서의 동작을 명확히 구분하여 개발을 진행해야겠다는 생각을
+              하게 되었습니다.
+            </>
+          ),
         },
         {
           id: 'php-to-next-js-transition-troubleshooting-2',
-          문제점: 'Server에서의 Date() 함수의 동작 문제',
-          해결방법: '',
-          회고: '',
-        },
-        {
-          id: 'php-to-next-js-transition-troubleshooting-3',
-          문제점: '본인인증 시 로컬 환경에서의 CORS 문제',
-          해결방법: '',
-          회고: '',
-        },
-        {
-          id: 'php-to-next-js-transition-troubleshooting-4',
-          문제점: 'Scroll 위치 복구 문제',
+          제목: 'Scroll 위치 복구 문제',
+          문제점: <></>,
           해결방법: '',
           회고: '',
         },
@@ -197,6 +228,7 @@ export const 식봄: 프로젝트 = {
       트러블슈팅: [
         {
           id: 'print-template-library-for-foodspring-troubleshooting-1',
+          제목: '배포 파이프라인의 복잡도 증가',
           문제점: '배포 파이프라인의 복잡도 증가',
           해결방법:
             '인쇄 기능만 담당하는 인쇄 라이브러리와 각 서비스별 인쇄 템플릿을 담당하는 번들 두 가지로 나누어 작업하였고, 앞으로는 서비스별로 템플릿이 즐가될 예정이었기 때문에, 배포에 간소화가 필요하였고, 이를 위해 각 서비스별로 번들을 나누어 배포하였습니다.',
@@ -204,6 +236,7 @@ export const 식봄: 프로젝트 = {
         },
         {
           id: 'print-template-library-for-foodspring-troubleshooting-2',
+          제목: '인쇄 결과물의 페이지 분할 문제',
           문제점: '인쇄 결과물의 페이지 분할 문제',
           해결방법:
             'Javascript의 Array 타입으로 인쇄 데이터를 넘겨 받고, 각 페이지를 나누는 작업에서, 실제로 결과물의 내용이 많아서 다음 페이지로 넘어가는 케이스와 Array로 구분되어 있는 케이스를 나누어 처리하였습니다.',

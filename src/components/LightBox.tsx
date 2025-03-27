@@ -4,9 +4,10 @@ import 'yet-another-react-lightbox/styles.css';
 
 type Props = React.PropsWithChildren<{
   slides: Slide[];
+  className?: string;
 }>;
 
-export const LightBox = ({ slides, children }: Props) => {
+export const LightBox = ({ slides, className, children }: Props) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -19,7 +20,7 @@ export const LightBox = ({ slides, children }: Props) => {
 
   return (
     <>
-      <button type="button" onClick={handleOpen}>
+      <button type="button" onClick={handleOpen} className={className}>
         {children}
       </button>
 
