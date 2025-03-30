@@ -13,41 +13,26 @@ export const Route = createLazyFileRoute('/')({
 });
 
 const AppLink = (props: AppLinkSchema) => {
-  const { to, icon, label, target, status } = props;
-
-  const disabled = status === 'CONSTRUCTION';
+  const { to, icon, label, target } = props;
 
   return (
     <Link
       to={to}
-      disabled={disabled}
       target={target}
       from={'/'}
       rel={target === '_blank' ? 'noopener noreferrer' : undefined}
-      className={cn('flex w-14 flex-col justify-center items-center gap-1', {
-        'cursor-not-allowed': disabled,
-        'active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90':
-          !disabled,
-      })}
+      className={cn(
+        'flex w-14 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90'
+      )}
     >
       <div
         className={cn(
-          'size-14 bg-background rounded-xl shadow-md flex items-center justify-center',
-          {
-            'bg-gray-200 opacity-50': disabled,
-          }
+          'size-14 bg-background rounded-xl shadow-md flex items-center justify-center'
         )}
       >
         {icon}
       </div>
-      {status === 'CONSTRUCTION' && <div className="absolute text-xl">🚧</div>}
-      <span
-        className={cn('text-[12px] text-foreground', {
-          'line-through': disabled,
-        })}
-      >
-        {label}
-      </span>
+      <span className={cn('text-[12px] text-foreground')}>{label}</span>
     </Link>
   );
 };
@@ -136,7 +121,9 @@ function RouteComponent() {
       )}
     >
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
-        {LINKS.map((link) => (
+        {LINKS.filter(
+          (link) => link.status === 'ENABLED' || __MODE__ === 'development'
+        ).map((link) => (
           <li
             key={link.id}
             className="flex flex-col justify-center items-center"
