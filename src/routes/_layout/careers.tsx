@@ -12,7 +12,7 @@ function RouteComponent() {
         return (
           <li
             key={회사.이름}
-            className="p-6 rounded-xl border shadow-sm bg-white flex flex-col gap-4"
+            className="p-6 rounded-xl border shadow-sm bg-background text-foreground flex flex-col gap-4"
           >
             {/* 헤더: 로고 + 회사명 + 직책/기간 */}
             <div className="flex items-start justify-start gap-x-4">
@@ -23,7 +23,7 @@ function RouteComponent() {
               />
               <div>
                 <h2 className="text-xl font-bold">{회사.이름}</h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-gray-200 mt-1">
                   {회사.직책} | {회사.기간}
                 </p>
               </div>
@@ -33,13 +33,13 @@ function RouteComponent() {
             {회사.주의 && <p className="text-sm text-red-500">* {회사.주의}</p>}
 
             {/* 회사 소개 */}
-            <section className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">
+            <section className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line">
               {회사.소개}
             </section>
 
             {/* 프로젝트 섹션 */}
             <section>
-              <h6 className="mt-2 font-semibold text-sm text-gray-700">
+              <h6 className="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
                 Projects
               </h6>
               <ul className="list-disc ml-5 text-sm mt-1">
@@ -51,7 +51,7 @@ function RouteComponent() {
 
             {/* 링크 섹션 */}
             <section>
-              <h6 className="mt-2 font-semibold text-sm text-gray-700">
+              <h6 className="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
                 Links
               </h6>
               <ul className="list-disc ml-5 text-sm mt-1 space-y-1">
