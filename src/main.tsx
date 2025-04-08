@@ -1,13 +1,14 @@
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import './globals.css';
+import '@/globals.css';
 
-import { routeTree } from './routeTree.gen';
+import { routeTree } from '@/routeTree.gen';
 
 import { DefaultPending } from '@/components/DefaultPending';
-import { DefaultError } from './components/DefaultError';
-import { Default404 } from './components/Default404';
+import { DefaultError } from '@/components/DefaultError';
+import { Default404 } from '@/components/Default404';
+import { DarkModeProvider } from '@/components/DarkModeContext';
 
 const router = createRouter({
   routeTree,
@@ -26,12 +27,14 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider
-        router={router}
-        defaultErrorComponent={DefaultError}
-        defaultNotFoundComponent={Default404}
-        defaultPendingComponent={DefaultPending}
-      />
+      <DarkModeProvider>
+        <RouterProvider
+          router={router}
+          defaultErrorComponent={DefaultError}
+          defaultNotFoundComponent={Default404}
+          defaultPendingComponent={DefaultPending}
+        />
+      </DarkModeProvider>
     </StrictMode>
   );
 }
