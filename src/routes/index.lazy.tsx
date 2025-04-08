@@ -27,7 +27,7 @@ const AppLink = (props: AppLinkSchema) => {
     >
       <div
         className={cn(
-          'size-14 bg-background rounded-xl shadow-md flex items-center justify-center'
+          'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center'
         )}
       >
         {icon}
@@ -52,7 +52,7 @@ const LINKS: AppLinkSchema[] = [
     __type: 'INNER',
     id: 'careers',
     label: 'Careers',
-    icon: <Building2 size={28} className="text-foreground" />,
+    icon: <Building2 size={28} className="text-foreground bg-background" />,
     status: 'ENABLED',
     target: '_self',
     to: '/careers',
@@ -61,7 +61,9 @@ const LINKS: AppLinkSchema[] = [
     __type: 'INNER',
     id: 'projects',
     label: 'Projects',
-    icon: <MonitorSmartphone size={28} className="text-foreground" />,
+    icon: (
+      <MonitorSmartphone size={28} className="text-foreground bg-background" />
+    ),
     status: 'CONSTRUCTION',
     target: '_self',
     to: '/projects',
@@ -70,7 +72,9 @@ const LINKS: AppLinkSchema[] = [
     __type: 'INNER',
     id: 'interview',
     label: 'Interview',
-    icon: <MessageSquareCode size={28} className="text-foreground" />,
+    icon: (
+      <MessageSquareCode size={28} className="text-foreground bg-background" />
+    ),
     status: 'ENABLED',
     target: '_self',
     to: '/interview',
@@ -79,7 +83,7 @@ const LINKS: AppLinkSchema[] = [
     __type: 'INNER',
     id: 'til',
     label: 'TIL',
-    icon: <FileText size={28} className="text-foreground" />,
+    icon: <FileText size={28} className="text-foreground bg-background" />,
     status: 'ENABLED',
     target: '_self',
     to: '/til',
@@ -94,6 +98,7 @@ const LINKS: AppLinkSchema[] = [
         alt="github icon"
         width={28}
         height={28}
+        className="text-foreground dark:invert"
       />
     ),
     target: '_blank',
@@ -104,7 +109,9 @@ const LINKS: AppLinkSchema[] = [
     __type: 'OUTER',
     id: 'linkedin',
     label: 'linkedin',
-    icon: <div className="text-foreground font-bold text-3xl">In</div>,
+    icon: (
+      <div className="text-foreground bg-background font-bold text-3xl">In</div>
+    ),
     target: '_blank',
     status: 'ENABLED',
     to: 'https://www.linkedin.com/in/gitsunmin/',
