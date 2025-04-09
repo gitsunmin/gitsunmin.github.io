@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as BooksImport } from './routes/_books'
 import { Route as LayoutProjectsImport } from './routes/_layout.projects'
@@ -30,6 +31,12 @@ import { Route as LayoutTilCategorySlugImport } from './routes/_layout/til/$cate
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LayoutRoute = LayoutImport.update({
   id: '/_layout',
@@ -126,6 +133,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof LayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
     '/_layout/careers': {
@@ -236,6 +250,7 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '': typeof LayoutRouteWithChildren
+  '/settings': typeof SettingsRoute
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
   '/projects': typeof LayoutProjectsRoute
@@ -250,6 +265,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '': typeof LayoutRouteWithChildren
+  '/settings': typeof SettingsRoute
   '/careers': typeof LayoutCareersRoute
   '/interview': typeof LayoutInterviewRoute
   '/projects': typeof LayoutProjectsRoute
@@ -266,6 +282,7 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/_books': typeof BooksRouteWithChildren
   '/_layout': typeof LayoutRouteWithChildren
+  '/settings': typeof SettingsRoute
   '/_layout/careers': typeof LayoutCareersRoute
   '/_layout/interview': typeof LayoutInterviewRoute
   '/_layout/projects': typeof LayoutProjectsRoute
@@ -280,44 +297,47 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | ''
-    | '/careers'
-    | '/interview'
-    | '/projects'
-    | '/projects/co-working-solution-cnaps'
-    | '/projects/foodspring'
-    | '/projects/hybrid-app-integration-framework-with-flutter'
-    | '/projects/marketbom-pro'
-    | '/til'
-    | '/til/$category/$slug'
+  | '/'
+  | ''
+  | '/settings'
+  | '/careers'
+  | '/interview'
+  | '/projects'
+  | '/projects/co-working-solution-cnaps'
+  | '/projects/foodspring'
+  | '/projects/hybrid-app-integration-framework-with-flutter'
+  | '/projects/marketbom-pro'
+  | '/til'
+  | '/til/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | ''
-    | '/careers'
-    | '/interview'
-    | '/projects'
-    | '/projects/co-working-solution-cnaps'
-    | '/projects/foodspring'
-    | '/projects/hybrid-app-integration-framework-with-flutter'
-    | '/projects/marketbom-pro'
-    | '/til'
-    | '/til/$category/$slug'
+  | '/'
+  | ''
+  | '/settings'
+  | '/careers'
+  | '/interview'
+  | '/projects'
+  | '/projects/co-working-solution-cnaps'
+  | '/projects/foodspring'
+  | '/projects/hybrid-app-integration-framework-with-flutter'
+  | '/projects/marketbom-pro'
+  | '/til'
+  | '/til/$category/$slug'
   id:
-    | '__root__'
-    | '/'
-    | '/_books'
-    | '/_layout'
-    | '/_layout/careers'
-    | '/_layout/interview'
-    | '/_layout/projects'
-    | '/_books/projects/co-working-solution-cnaps'
-    | '/_books/projects/foodspring'
-    | '/_books/projects/hybrid-app-integration-framework-with-flutter'
-    | '/_books/projects/marketbom-pro'
-    | '/_layout/til/'
-    | '/_layout/til/$category/$slug'
+  | '__root__'
+  | '/'
+  | '/_books'
+  | '/_layout'
+  | '/settings'
+  | '/_layout/careers'
+  | '/_layout/interview'
+  | '/_layout/projects'
+  | '/_books/projects/co-working-solution-cnaps'
+  | '/_books/projects/foodspring'
+  | '/_books/projects/hybrid-app-integration-framework-with-flutter'
+  | '/_books/projects/marketbom-pro'
+  | '/_layout/til/'
+  | '/_layout/til/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 
@@ -325,12 +345,14 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   BooksRoute: typeof BooksRouteWithChildren
   LayoutRoute: typeof LayoutRouteWithChildren
+  SettingsRoute: typeof SettingsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   BooksRoute: BooksRouteWithChildren,
   LayoutRoute: LayoutRouteWithChildren,
+  SettingsRoute: SettingsRoute,
 }
 
 export const routeTree = rootRoute
@@ -345,7 +367,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_books",
-        "/_layout"
+        "/_layout",
+        "/settings"
       ]
     },
     "/": {
@@ -369,6 +392,9 @@ export const routeTree = rootRoute
         "/_layout/til/",
         "/_layout/til/$category/$slug"
       ]
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
     },
     "/_layout/careers": {
       "filePath": "_layout/careers.tsx",

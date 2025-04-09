@@ -1,9 +1,14 @@
-import { Link } from "@tanstack/react-router";
-import { Button } from "./Button";
-import { cn } from "@/lib/utils";
-import { ArrowLeft } from "lucide-react";
+import { Link } from '@tanstack/react-router';
+import { Button } from './Button';
+import { cn } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
 
-export const Header = () => {
+type Props = {
+  title?: string;
+  className?: string;
+};
+
+export const Header = ({ title = 'Gitsunmin', className }: Props) => {
   const handleBack = () => {
     window.history.back();
   };
@@ -12,9 +17,10 @@ export const Header = () => {
     <>
       <header
         className={cn(
-          "h-12 px-4 shadow-xs backdrop-blur-md md:justify-start md:gap-4",
-          "flex items-center justify-between",
-          "fixed top-0 left-0 right-0 z-header"
+          'h-12 px-4 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4',
+          'flex items-center justify-between',
+          'fixed top-0 left-0 right-0 z-header',
+          className
         )}
       >
         <Button variant="ghost" className="lg:hidden" onClick={handleBack}>
@@ -32,7 +38,7 @@ export const Header = () => {
             />
           </span>
           <span>
-            <h1 className="text-2xl font-bold">Gitsunmin</h1>
+            <h1 className="text-2xl font-bold">{title}</h1>
           </span>
         </Link>
         <div className="size-10"></div>

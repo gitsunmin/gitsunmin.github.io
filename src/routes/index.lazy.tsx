@@ -6,6 +6,7 @@ import {
   FileText,
   MessageSquareCode,
   MonitorSmartphone,
+  Settings,
 } from 'lucide-react';
 
 export const Route = createLazyFileRoute('/')({
@@ -115,6 +116,15 @@ const LINKS: AppLinkSchema[] = [
     target: '_blank',
     status: 'ENABLED',
     to: 'https://www.linkedin.com/in/gitsunmin/',
+  },
+  {
+    __type: 'INNER',
+    id: 'settings',
+    label: 'Settings',
+    icon: <Settings size={28} className="text-foreground bg-background" />,
+    status: 'ENABLED',
+    target: '_self',
+    to: '/settings',
   },
 ] as const;
 
