@@ -38,7 +38,18 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
             />
           </span>
           <span>
-            <h1 className="text-2xl font-bold">{title}</h1>
+            <h1
+              className="text-2xl font-bold hidden md:block"
+              aria-label="테크스탑용 제목"
+            >
+              Gitsunmin
+            </h1>
+            <h1
+              className="text-2xl font-bold md:hidden"
+              aria-label="모바일용 제목"
+            >
+              {title}
+            </h1>
           </span>
         </Link>
         <div className="size-10"></div>
