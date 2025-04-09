@@ -14,5 +14,5 @@ I have put all the information about me.
 - [ ] Projects Page
 - [ ] TIL Page (SEO)
 - [ ] Settings Page
-  - [ ] Dark Mode
+  - [x] Dark Mode
   - [ ] Font Size
