@@ -14,7 +14,11 @@ export const Chat = ({ 컨텐츠, 확장, 이름, className = '' }: Props) => {
     <div
       className={cn(
         'rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words',
-        isMe ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-900',
+        {
+          'bg-blue-500 text-white dark:bg-blue-600': isMe,
+          'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100':
+            !isMe,
+        },
         className
       )}
     >
@@ -26,10 +30,10 @@ export const Chat = ({ 컨텐츠, 확장, 이름, className = '' }: Props) => {
         .with({ __t: 'Link' }, ({ 경로, 라벨 }) => (
           <Link
             href={경로}
-            className={cn(
-              'mt-2 text-xs underline',
-              isMe ? 'text-blue-200' : 'text-blue-500'
-            )}
+            className={cn('mt-2 text-xs underline', {
+              'text-blue-200 dark:text-blue-100': isMe,
+              'text-blue-500 dark:text-blue-300': !isMe,
+            })}
             to={''}
           >
             {라벨}

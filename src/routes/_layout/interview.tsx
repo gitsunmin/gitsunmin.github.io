@@ -15,8 +15,8 @@ export const Route = createFileRoute('/_layout/interview')({
 function RouteComponent() {
   return (
     <>
-      <article className="flex flex-col">
-        <p className="text-gray-500 border-l-2 px-4 py-2 text-sm break-words">
+      <article className="flex flex-col text-gray-900 dark:text-gray-100">
+        <p className="text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-600 px-4 py-2 text-sm break-words bg-gray-50 dark:bg-gray-800">
           이 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과
           그에 대한 답변을 기반으로 작성해보았습니다.
         </p>
@@ -45,17 +45,20 @@ function RouteComponent() {
                       }
                       alt={`${이름}_profile`}
                       size={40}
-                      className="rounded-full"
+                      className="rounded-full border border-gray-200 dark:border-gray-700"
                     />
                   </div>
                 )}
                 <div className={'max-w-[60%] flex flex-col gap-y-1'}>
                   {isContinues ? null : (
                     <div
-                      className={cn('text-sm', {
-                        'text-left': 이름 === 'James',
-                        'text-right': 이름 === 'Sunmin',
-                      })}
+                      className={cn(
+                        'text-sm text-gray-700 dark:text-gray-300',
+                        {
+                          'text-left': 이름 === 'James',
+                          'text-right': 이름 === 'Sunmin',
+                        }
+                      )}
                     >
                       {이름}
                     </div>
