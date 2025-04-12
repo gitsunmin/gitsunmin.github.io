@@ -1,9 +1,10 @@
+import { LocalStorage } from '@/utils/LocalStorage';
 import { useState, useEffect } from 'react';
 
 export function useDarkMode() {
   // 로컬 스토리지에서 초기 상태 확인
   const [darkMode, setDarkMode] = useState<boolean>(() => {
-    const savedMode = localStorage.getItem('darkMode');
+    const savedMode = LocalStorage.get('darkMode');
     if (savedMode !== null) {
       return savedMode === 'true';
     }
@@ -19,7 +20,7 @@ export function useDarkMode() {
       document.documentElement.classList.remove('dark');
     }
     // 상태 저장
-    localStorage.setItem('darkMode', String(darkMode));
+    LocalStorage.set('darkMode', darkMode ? 'true' : 'false');
   }, [darkMode]);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export function useDarkMode() {
 
     const handleChange = (e: MediaQueryListEvent) => {
       // 사용자가 명시적으로 모드를 선택하지 않았을 때만 시스템 설정 따름
-      if (localStorage.getItem('userSelectedTheme') !== 'true') {
+      if (LocalStorage.get('darkMode') === 'false') {
         setDarkMode(e.matches);
       }
     };
