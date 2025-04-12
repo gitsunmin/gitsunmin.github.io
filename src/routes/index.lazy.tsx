@@ -1,4 +1,5 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import GithubIcon from '@/assets/icons/github.svg';
 
 import { cn } from '@/lib/utils';
 import {
@@ -95,7 +96,7 @@ const LINKS: AppLinkSchema[] = [
     label: 'Github',
     icon: (
       <img
-        src="https://simpleicons.org/icons/github.svg"
+        src={GithubIcon}
         alt="github icon"
         width={28}
         height={28}
