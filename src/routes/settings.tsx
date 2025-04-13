@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useDarkMode } from '@/hooks/useDarkMode';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Type } from 'lucide-react';
 import { Header } from '@/components/Header';
+import { useFontSize } from '@/hooks/useFontSize';
 
 export const Route = createFileRoute('/settings')({
   component: RouteComponent,
@@ -9,6 +10,8 @@ export const Route = createFileRoute('/settings')({
 
 function RouteComponent() {
   const { darkMode, setDarkMode } = useDarkMode();
+
+  const { fontSize, changeFontSize } = useFontSize();
 
   return (
     <>
@@ -47,34 +50,34 @@ function RouteComponent() {
           </div>
 
           {/* TODO 폰트 사이즈 설정 */}
-          {/* <div className="p-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Type className="h-5 w-5 text-blue-400" />
-            <span className="font-medium">폰트 크기</span>
+          <div className="p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <Type className="h-5 w-5 text-blue-400" />
+              <span className="font-medium">폰트 크기</span>
+            </div>
+            <p className="text-sm text-muted-foreground mb-3">
+              컨텐츠의 텍스트 크기를 조절합니다.
+            </p>
+            <div className="flex gap-2">
+              {(['small', 'medium', 'large'] as const).map((size) => (
+                <button
+                  key={size}
+                  onClick={() => changeFontSize(size)}
+                  className={`px-3 py-1.5 rounded-md text-sm ${
+                    fontSize === size
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                  }`}
+                >
+                  {size === 'small'
+                    ? '작게'
+                    : size === 'medium'
+                      ? '보통'
+                      : '크게'}
+                </button>
+              ))}
+            </div>
           </div>
-          <p className="text-sm text-muted-foreground mb-3">
-            컨텐츠의 텍스트 크기를 조절합니다.
-          </p>
-          <div className="flex gap-2">
-            {['small', 'medium', 'large'].map((size) => (
-              <button
-                key={size}
-                onClick={() => handleFontSizeChange(size)}
-                className={`px-3 py-1.5 rounded-md text-sm ${
-                  fontSize === size
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                }`}
-              >
-                {size === 'small'
-                  ? '작게'
-                  : size === 'medium'
-                    ? '보통'
-                    : '크게'}
-              </button>
-            ))}
-          </div>
-        </div> */}
         </div>
       </div>
     </>

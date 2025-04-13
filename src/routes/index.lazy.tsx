@@ -24,17 +24,17 @@ const AppLink = (props: AppLinkSchema) => {
       from={'/'}
       rel={target === '_blank' ? 'noopener noreferrer' : undefined}
       className={cn(
-        'flex w-14 flex-col justify-center items-center gap-1 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90'
+        'flex w-14 flex-col justify-center items-center gap-x-1 gap-y-2 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90 relative'
       )}
     >
       <div
         className={cn(
-          'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center'
+          'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center '
         )}
       >
         {icon}
       </div>
-      <span className={cn('text-[12px] text-foreground')}>{label}</span>
+      <span className={cn('text-xs text-foreground break-keep')}>{label}</span>
     </Link>
   );
 };

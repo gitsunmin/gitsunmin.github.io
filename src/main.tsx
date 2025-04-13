@@ -8,7 +8,8 @@ import { routeTree } from '@/routeTree.gen';
 import { DefaultPending } from '@/components/DefaultPending';
 import { DefaultError } from '@/components/DefaultError';
 import { Default404 } from '@/components/Default404';
-import { DarkModeProvider } from '@/components/DarkModeContext';
+import { DarkModeProvider } from '@/providers/DarkModeProvider';
+import { FontSizeProvider } from './providers/FontSizeContext';
 
 const router = createRouter({
   routeTree,
@@ -28,12 +29,14 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <DarkModeProvider>
-        <RouterProvider
-          router={router}
-          defaultErrorComponent={DefaultError}
-          defaultNotFoundComponent={Default404}
-          defaultPendingComponent={DefaultPending}
-        />
+        <FontSizeProvider>
+          <RouterProvider
+            router={router}
+            defaultErrorComponent={DefaultError}
+            defaultNotFoundComponent={Default404}
+            defaultPendingComponent={DefaultPending}
+          />
+        </FontSizeProvider>
       </DarkModeProvider>
     </StrictMode>
   );

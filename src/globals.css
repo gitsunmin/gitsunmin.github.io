@@ -65,6 +65,31 @@
   }
 }
 
+:root {
+  --font-scale: 1; /* medium */
+}
+
+.text-small {
+  --font-scale: 0.875;
+}
+
+.text-large {
+  --font-scale: 1.3;
+}
+
+/* Tailwind가 생성하는 클래스 재정의 */
+.text-xs {
+  font-size: calc(0.75rem * var(--font-scale));
+}
+
+.text-sm {
+  font-size: calc(0.875rem * var(--font-scale));
+}
+
+.text-base {
+  font-size: calc(1rem * var(--font-scale));
+}
+
 @layer utilities {
   @font-face {
     font-family: 'Pretendard';
