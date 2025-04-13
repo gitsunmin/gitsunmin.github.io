@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from 'react';
+import { createContext, ReactNode } from 'react';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 type DarkModeContextType = {
@@ -21,15 +21,4 @@ export function DarkModeProvider({ children }: { children: ReactNode }) {
       {children}
     </DarkModeContext.Provider>
   );
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useDarkModeContext() {
-  const context = useContext(DarkModeContext);
-  if (context === undefined) {
-    throw new Error(
-      'useDarkModeContext must be used within a DarkModeProvider'
-    );
-  }
-  return context;
 }
