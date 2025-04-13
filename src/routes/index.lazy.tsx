@@ -112,7 +112,9 @@ const LINKS: AppLinkSchema[] = [
     id: 'linkedin',
     label: 'linkedin',
     icon: (
-      <div className="text-foreground bg-background font-bold text-3xl">In</div>
+      <div className="text-foreground bg-background font-bold text-[30px]">
+        In
+      </div>
     ),
     target: '_blank',
     status: 'ENABLED',
