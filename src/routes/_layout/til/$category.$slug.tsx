@@ -5,7 +5,7 @@ export const Route = createFileRoute('/_layout/til/$category/$slug')({
   loader: async ({ params }) => {
     const { category, slug } = params;
     // 파일 목록을 가져오는 glob 설정
-    const modules = import.meta.glob('/modules/til/**/*.md', {
+    const modules = import.meta.glob('/modules/til/**/*.mdx', {
       query: 'raw',
     }) as Record<string, () => Promise<{ default: string }>>;
 

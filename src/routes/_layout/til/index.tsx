@@ -4,7 +4,7 @@ import { Readme } from '@/components/til/Readme';
 export const Route = createFileRoute('/_layout/til/')({
   component: RouteComponent,
   loader: async () => {
-    const content = await import('/modules/til/README.md?raw').then(
+    const content = await import('/modules/til/README.mdx?raw').then(
       (res) => res.default
     );
 
