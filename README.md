@@ -13,6 +13,6 @@ I have put all the information about me.
 - [x] Connect LinkedIn, Github
 - [ ] Projects Page
 - [ ] TIL Page (SEO)
-- [ ] Settings Page
+- [x] Settings Page
   - [x] Dark Mode
-  - [ ] Font Size
+  - [x] Font Size
