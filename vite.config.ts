@@ -4,16 +4,18 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import path from 'node:path'
 import { copyFileSync } from 'node:fs'
 import mdx from '@mdx-js/rollup';
+import { tilGenerator } from './.vite-plugin/vite-plugin-til-generator';
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
     define: {
       '__MODE__': JSON.stringify(mode),
     },
     plugins: [
-      TanStackRouterVite({
+      tilGenerator({
+        ignoreFolders: ['.husky', '.run'],
       }),
+      TanStackRouterVite({}),
       mdx(),
       react(),
       {
@@ -41,6 +43,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
         "@til": path.resolve(__dirname, "./modules/til"),
+        "@vite-plugin": path.resolve(__dirname, "./.vite-plugin"),
       },
     },
   }

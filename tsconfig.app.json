@@ -25,8 +25,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@til/*": ["./modules/til/*"]
+      "@til/*": ["./modules/til/*"],
+      "@vite-plugin/*": ["./.vite-plugin/*"]
     }
   },
-  "include": ["src", "modules"]
+  "include": [
+    "src",
+    "modules",
+    ".vite-plugin/vite-plugin-til-generator.ts",
+    "vite.config.ts"
+  ]
 }
