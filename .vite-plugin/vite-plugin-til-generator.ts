@@ -18,8 +18,7 @@ const generateTilComponents = ({ ignoreFolders }: TransformOptions) => {
   const transformRoutePath = (filePath: string) =>
     filePath.replace(/^.*\/til\//, 'til/').replace(/\/index$/, '/');
 
-  const generateComponentCode = (mdxImportPath: string, routePath: string, linkPrefix: string) => {
-
+  const generateComponentCode = (mdxImportPath: string, routePath: string, linkPrefix: string = '', imgSrcPrefix: string = '') => {
     return `
 import Content from '@${mdxImportPath}';
 import { createFileRoute } from '@tanstack/react-router';
@@ -44,7 +43,7 @@ const Component = () => (
         .otherwise(() => <a className="text-blue-400" {...props} />),
       code: (props) => <code className="bg-gray-100 text-red-600 px-1 py-0.5 rounded" {...props} />,
       blockquote: (props) => <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-600" {...props} />,
-      img: (props) => <img className="rounded-lg shadow-md my-4" {...props} />,
+      img: (props) => <img {...props} src={'${imgSrcPrefix}' + props.src?.split('/').pop()} className="rounded-lg shadow-md my-4" />,
       pre: (el) => {
         const preComponent = el.children as unknown as { props: { className: string; children: string } };
         const { className, children: code } = preComponent.props;
@@ -93,7 +92,7 @@ export const Route = createFileRoute('/_layout/${routePath}')({
       } else if (entry.isFile() && entry.name.endsWith('.mdx')) {
         const mdxImportPath = inputPath.replace(/^.*\/til\//, 'til/');
         const routePath = transformRoutePath(outputPath.replace(/\.tsx$/, ''));
-        const rawContent = generateComponentCode(mdxImportPath, routePath, '');
+        const rawContent = generateComponentCode(mdxImportPath, routePath, '', inputDir.replace(/^.*\/til\//, '/modules/til/') + '/');
 
         mkdirSync(path.dirname(outputPath), { recursive: true });
         writeFileSync(outputPath, rawContent);

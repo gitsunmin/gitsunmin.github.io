@@ -22,7 +22,7 @@ const Component = () => (
         .otherwise(() => <a className="text-blue-400" {...props} />),
       code: (props) => <code className="bg-gray-100 text-red-600 px-1 py-0.5 rounded" {...props} />,
       blockquote: (props) => <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-600" {...props} />,
-      img: (props) => <img className="rounded-lg shadow-md my-4" {...props} />,
+      img: (props) => <img {...props} src={'/modules/til/mobile/' + props.src?.split('/').pop()} className="rounded-lg shadow-md my-4" />,
       pre: (el) => {
         const preComponent = el.children as unknown as { props: { className: string; children: string } };
         const { className, children: code } = preComponent.props;
