@@ -18,7 +18,7 @@ const generateTilComponents = ({ ignoreFolders }: TransformOptions) => {
   const transformRoutePath = (filePath: string) =>
     filePath.replace(/^.*\/til\//, 'til/').replace(/\/index$/, '/');
 
-  const generateComponentCode = (mdxImportPath: string, routePath: string, linkPrefix: string = '', imgSrcPrefix: string = '') => {
+  const generateComponentCode = (mdxImportPath: string, routePath: string, linkPrefix: string = '') => {
     return `
 import Content from '@${mdxImportPath}';
 import { createFileRoute } from '@tanstack/react-router';
@@ -43,7 +43,20 @@ const Component = () => (
         .otherwise(() => <a className="text-blue-400" {...props} />),
       code: (props) => <code className="bg-gray-100 text-red-600 px-1 py-0.5 rounded" {...props} />,
       blockquote: (props) => <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-600" {...props} />,
-      img: (props) => <img {...props} src={'${imgSrcPrefix}' + props.src?.split('/').pop()} className="rounded-lg shadow-md my-4" />,
+      img: (props) => {
+        // 이미지 파일을 동적으로 가져오기 위해 import.meta.glob 사용
+        const images = import.meta.glob('/modules/til/**/*.{png,jpg,jpeg,svg}');
+        const imageName = props.src?.split('/').pop(); // 파일 이름 추출
+
+        // 이미지 경로 매핑
+        const resolvedSrc = Object.keys(images).find((key) => key.endsWith(imageName || ''));
+
+        if (!resolvedSrc) {
+          return <img {...props} className="rounded-lg shadow-md my-4" />;
+        }
+
+        return <img {...props} src={resolvedSrc} className="rounded-lg shadow-md my-4" />;
+      },
       pre: (el) => {
         const preComponent = el.children as unknown as { props: { className: string; children: string } };
         const { className, children: code } = preComponent.props;
@@ -92,7 +105,7 @@ export const Route = createFileRoute('/_layout/${routePath}')({
       } else if (entry.isFile() && entry.name.endsWith('.mdx')) {
         const mdxImportPath = inputPath.replace(/^.*\/til\//, 'til/');
         const routePath = transformRoutePath(outputPath.replace(/\.tsx$/, ''));
-        const rawContent = generateComponentCode(mdxImportPath, routePath, '', inputDir.replace(/^.*\/til\//, '/modules/til/') + '/');
+        const rawContent = generateComponentCode(mdxImportPath, routePath, '');
 
         mkdirSync(path.dirname(outputPath), { recursive: true });
         writeFileSync(outputPath, rawContent);
