@@ -26,13 +26,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@til/*": ["./modules/til/*"],
-      "@vite-plugin/*": ["./.vite-plugin/*"]
+      "@plugins/*": ["./plugins/*"]
     }
   },
-  "include": [
-    "src",
-    "modules",
-    ".vite-plugin/vite-plugin-til-generator.ts",
-    "vite.config.ts"
-  ]
+  "include": ["src", "plugins", "modules", "vite.config.ts"]
 }

@@ -10,8 +10,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@vite-plugin/*": ["./.vite-plugin/*"]
+      "@plugins/*": ["./plugins/*"]
     }
   },
-  "include": ["vite.config.ts", ".vite-plugin/**/*.ts"]
+  "include": ["vite.config.ts", "plugins/**/*.ts"]
 }
