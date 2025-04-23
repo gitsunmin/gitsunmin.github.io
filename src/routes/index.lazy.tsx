@@ -88,7 +88,7 @@ const LINKS: AppLinkSchema[] = [
     icon: <FileText size={28} className="text-foreground bg-background" />,
     status: 'ENABLED',
     target: '_self',
-    to: '/til',
+    to: '/til/README',
   },
   {
     __type: 'OUTER',

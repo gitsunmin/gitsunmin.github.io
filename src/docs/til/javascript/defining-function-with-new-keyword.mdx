@@ -1,0 +1,72 @@
+# Defining a function with the new keyword
+
+## 개요
+
+JavaScript에서는 함수를 선언하는 다양한 방법이 있으며, 그 중 `new Function()` 생성자를 사용해 런타임에 동적으로 함수를 정의할 수 있는 방식이 있다.
+
+```javascript
+const sum = new Function('x', 'y', 'return x + y');
+console.log(sum(2, 3)); // 5
+```
+
+## 사용법
+
+`Function` 생성자의 기본 문법은 다음과 같다:
+
+```javascript
+new Function([인자1[, 인자2[, ...]], 함수 본문])
+```
+
+- 각 인자는 문자열로 전달되며,
+- 마지막 인자는 함수의 본문(`return`문 포함)이다.
+
+예시:
+
+```javascript
+const multiply = new Function('a', 'b', 'return a * b');
+console.log(multiply(4, 5)); // 20
+```
+
+## 사용 시기
+
+- 사용자 입력을 코드로 실행해야 할 때
+- 템플릿 엔진이나 DSL을 직접 구현할 때
+
+## 주의사항
+
+### 1. 보안 이슈
+
+`new Function()`은 `eval()`과 유사하게 동적으로 코드를 실행하기 때문에 **보안상 매우 위험**할 수 있다. 사용자 입력을 그대로 실행하는 경우 XSS(크로스사이트스크립팅)나 코드 인젝션 등의 공격이 가능해진다.
+
+```javascript
+const dangerous = new Function('input', 'return eval(input)');
+```
+
+### 2. 성능 문제
+
+- 런타임에 파싱 및 컴파일이 이루어지므로 일반 함수 정의 방식보다 느리다.
+- 최적화가 어려워 성능 저하가 발생할 수 있다.
+
+### 3. 스코프 제한
+
+`new Function()`으로 생성된 함수는 외부 렉시컬 스코프(closure)에 접근할 수 없다. 오직 전역 변수나 함수 내부의 로컬 변수만 접근할 수 있다.
+
+```javascript
+let a = 10;
+const f = new Function('return a'); // ReferenceError: a is not defined
+```
+
+## 요약
+
+| 항목         | 설명 |
+|--------------|------|
+| 장점         | 동적으로 코드 생성 가능 |
+| 단점         | 보안 취약, 성능 저하, 외부 스코프 접근 불가 |
+| 권장 대안     | 일반 함수 또는 화살표 함수 사용 |
+| 유사 기능     | `eval()` (하지만 더 위험함) |
+
+## 참고 자료
+
+- MDN 문서: https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Function
+- OWASP JavaScript 보안 가이드
+

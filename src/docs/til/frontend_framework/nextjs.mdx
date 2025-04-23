@@ -1,0 +1,316 @@
+# Learning Next js
+
+## install nextjs
+
+```bash
+npx create-next-app@latest
+```
+
+## Routing(App Router)
+
+next의 App Router는 pages 디렉토리에 있는 파일들을 기반으로 자동으로 라우팅을 해줍니다.
+
+```shell
+├── README.md
+├── next-env.d.ts
+├── next.config.js
+├── node_modules
+├── package-lock.json
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.js
+├── public
+├── src
+    └── app
+        ├── favicon.ico # favicon
+        ├── globals.css # 글로벌 css
+        ├── loading.tsx # 로딩 화면
+        ├── error.tsx # 에러 화면
+        ├── global-error.tsx # 글로벌 에러 화면
+        ├── template.tsx # 템플릿 파일
+        ├── not-found.tsx # 404 화면
+        ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+        └── page.tsx # 페이지를 담당하는 파일
+├── tailwind.config.ts
+└── tsconfig.json
+```
+
+app 폴더의 안에 app폴더를 만들었습니다. 이 app폴더는 위에서 이야기한대로, 폴더에 있는 파일들을 기반으로 자동으로 라우팅을 해주는 역할을 합니다. 그리고 app폴더 안에는 favicon, 글로벌 css, 로딩 화면, 에러 화면, 글로벌 에러 화면, 템플릿 파일, 404 화면, UI의 레이아웃을 담당하는 파일, 페이지를 담당하는 파일이 있습니다.
+
+`loading.tsx`파일은 페이지가 로딩될 때 보여지는 화면을 담당합니다. 특이한 점은 app 하위 페이지 또는 모든 곳에 사용이 가능하며 각각 다른 loading 화면을 보여줄 수 있습니다. 그리고, 이는 우선순위에 따라서 호출과 하이드레이션을 나누어 진행하여 사용자에게 더 나은 경험을 제공할 수 있습니다.
+
+`error.tsx`, `global-error.tsx`는 error boundary를 제공하여 사용자에게 오류에 대한 메시지를 진해 또는 회복할 수 있는 방법을 제공합니다.
+
+### Dynamic Routes
+
+또 다른 path를 만들기 위해서는 app폴더 안에 새로운 폴더를 만들어 주면 됩니다. 예를 들면
+
+```shell
+└── app
+    ├── blog
+        ├── ...
+        ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+        └── page.tsx # 페이지를 담당하는 파일
+    ├── dashboard
+        ├── ...
+        ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+        └── page.tsx # 페이지를 담당하는 파일
+    ├── ...
+    ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+    └── page.tsx # 페이지를 담당하는 파일
+```
+
+이런식으로 만들어 주면 됩니다.
+
+또 특별한 형식을 이용해서 root path에 다른 경로를 만들 수도 있습니다.
+
+```shell
+└── app
+    ├── [...slug]
+        ├── ...
+        ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+        └── page.tsx # 페이지를 담당하는 파일
+    ├── ...
+    ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+    └── page.tsx # 페이지를 담당하는 파일
+```
+
+이렇게 만들어진 페이지는 다음과 같이 접근할 수 있습니다.
+
+```shell
+http://localhost:3000/1
+http://localhost:3000/2
+http://localhost:3000/3
+```
+
+또, 단순히 폴더를 분리하기 위해서는 다음과 같이 만들어 줄 수 있습니다.
+
+```shell
+└── app
+    ├── (blog)
+        ├── [...slug]
+            ├── ...
+            ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+            └── page.tsx # 페이지를 담당하는 파일
+    ├── ...
+    ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+    └── page.tsx # 페이지를 담당하는 파일
+```
+
+이렇게 구성하면 blog라는 폴더는 라우팅이 되지 않습니다.
+이 구조 또한 위와 같이
+
+```shell
+http://localhost:3000/1
+http://localhost:3000/2
+http://localhost:3000/3
+```
+
+의 접근이 가능합니다.
+
+### Parallel Routes
+
+nextjs은 같은 path에 두 개의 페이지를 랜더링 할 수 있습니다. 이는 다음과 같이 구성할 수 있습니다.
+
+```shell
+└── app
+    ├── @dashboard
+            ├── ...
+            ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+            └── page.tsx # 페이지를 담당하는 파일
+    ├── @blog
+            ├── ...
+            ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+            └── page.tsx # 페이지를 담당하는 파일
+        ├── ...
+        ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+        └── page.tsx # 페이지를 담당하는 파일
+```
+
+이렇게 구성 후에 root Layout에서 아래와 같이 사용할 수 있습니다.
+
+```tsx
+export default function Layout(props: {
+  children: React.ReactNode;
+  dashboard: React.ReactNode;
+  blog: React.ReactNode;
+}) {
+  return (
+    <>
+      {props.children}
+      {props.dashboard}
+      {props.blog}
+    </>
+  );
+}
+```
+
+### Intercepting Routes
+
+이름처럼 이 Intercepting Routes는 사용자가 접근한 경로를 가로채서, 실제 페이지의 이동이 아닌, 마치 팝업처럼 화면에 보여줄 수 있습니다.
+
+예를 들어서 `card/list`에서 이미지를 클릭하여 `photo/123`으로 route를 이동하며, 바닥에 카드 리스트가 있는 상태에서 오버레이와 함께 photo페이지의 123이라는 파람을 가진 페이지를 보여줄 수 있습니다. 또한, 새로고침을 하거나 직접 `photo/123`으로 접근을 하면, 독립적으로 photo페이지를 보여줄 수 있습니다.
+
+이 기능은 다음과 같이 구현할 수 있습니다.
+
+```shell
+└── app
+    ├── photo
+        ├── @modal
+            └── (..)photo
+                └── [id]
+                    ├── ...
+                    ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+                    └── page.tsx # 페이지를 담당하는 파일
+    ├── card
+        └── list
+            ├── ...
+            ├── layout.tsx # UI의 레이아웃을 담당하는 파일
+            └── page.tsx # 페이지를 담당하는 파일
+```
+
+또한, 이 (..)같은 표현은 조금 이질감이 느껴지지만,,, 받아드려야할 것 같네요. 아래와 같은 정의가 있습니다.
+
+- (.) 현재 디렉토리를 가리킵니다.
+- (..) 바로 상위 디렉토리를 가리킵니다.
+- (..)(..) 두 단계 상위 디렉토리를 가리킵니다.
+- (...) root 디렉토리를 가리킵니다.
+
+### Route Handlers
+
+Next에서는 page를 제공하는 route 외에도 api를 제공하는 route를 생성할 수 있습니다.
+
+```shell
+└── app
+    ├── api
+        └── route.ts # <- api route
+    ├── ...
+    ├── layout.tsx
+    └── page.tsx
+```
+
+이 API는 모든 METHOD를 지원합니다. 그리고, 이 API는 다음과 같이 정의할 수 있습니다.
+
+```tsx
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+  const res = await fetch('https://gitsunmin.dev/...', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const data = await res.json();
+
+  return NextResponse.json({ data });
+}
+```
+
+fetch api를 사용하여 다른 METHOD를 사용할 수 있으며 cashing과 다른 option의 사용이 가능합니다.
+
+또 header와 cookie를 제공하는 것도 가능합니다.
+
+- cookie
+
+```tsx
+import { cookies } from 'next/headers';
+
+export async function GET(request: Request) {
+  const cookieStore = cookies();
+  const token = cookieStore.get('token');
+
+  return new Response('Hello, Next.js!', {
+    status: 200,
+    headers: { 'Set-Cookie': `token=${token.value}` },
+  });
+}
+```
+
+- header
+
+```tsx
+import { headers } from 'next/headers';
+
+export async function GET(request: Request) {
+  const headersList = headers();
+  const referer = headersList.get('referer');
+
+  return new Response('Hello, Next.js!', {
+    status: 200,
+    headers: { referer: referer },
+  });
+}
+```
+
+redirect도 가능합니다.
+
+```tsx
+import { redirect } from 'next/navigation';
+
+export async function GET(request: Request) {
+  redirect('https://nextjs.org/');
+}
+```
+
+이 api는 아래와 route와 비슷하게 아래 처럼 사용 가능합니다.
+
+- app/items/[slug]/route.js
+  - 요청: /items/a
+  - `{ slug: 'a' }`
+- app/items/[slug]/route.js
+  - 요철: /items/b
+  - `{ slug: 'b' }`
+- app/items/[slug]/route.js
+  - 요청: /items/c
+  - `{ slug: 'c' }`
+
+```tsx
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
+  const slug = params.slug; // 'a', 'b', or 'c'
+}
+```
+
+### Middleware
+
+next에서 제공하는 미들웨어를 사용하기 위해서는 src/middleware.ts 파일을 생성해야 합니다.
+
+```tsx
+// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+// This function can be marked `async` if using `await` inside
+export function middleware(request: NextRequest) {
+  console.log('야호!');
+}
+
+// See "Matching Paths" below to learn more
+export const config = {
+  matcher: '/*',
+};
+```
+
+이렇게 정의 하면 모든 페이지에 방문할 때 마다 middleware가 실행됩니다. (야호!)
+
+이 기능을 이용하여 Redirect, Cookie 사용, Header 업데이트를 할 수 있습니다. 그리고 config의 matcher는 정규 표현식을 사용하며 array로 선언하여 다중 matcher를 사용할 수 있습니다.
+
+다만, 이 기능은 SSR에서만 사용이 가능하며, 단순 페이지 이동 api 통신 뿐만아니라 서버에서 받아오는 모든 파일에 적용이 됩니다. 그렇기 때문에, 이 기능을 사용할 때에는 불필요한 middleware를 호출을 막기 위해서 matcher를 잘 적용해두어야합니다.
+
+예시로서 다음과 같이 사용할 수 있습니다.
+
+```tsx
+// middleware.ts
+...
+
+
+export const config = {
+  matcher: [
+    '/((?!_next/static|_next/images|images|favicon.ico|application/views/pegasus/__assets/).*)',
+  ],
+};
+```
+
+위 코드는 \_next/static, \_next/images, images, favicon.ico, application/views/pegasus/\_\_assets/를 제외한 모든 경로에 middleware를 적용합니다. 이렇게 하면, 불필요한 middleware를 호출하는 것을 막을 수 있습니다.

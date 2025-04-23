@@ -25,9 +25,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@til/*": ["./modules/til/*"],
+      "@til/*": ["./src/docs/til/*"],
       "@plugins/*": ["./plugins/*"]
     }
   },
-  "include": ["src", "plugins", "modules", "vite.config.ts"]
+  "include": ["src", "plugins", "vite.config.ts"],
+  "exclude": ["node_modules", "dist", "build", "modules"]
 }

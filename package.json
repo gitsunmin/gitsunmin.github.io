@@ -41,6 +41,7 @@
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@tanstack/router-devtools": "^1.109.2",
     "@tanstack/router-plugin": "^1.109.2",
+    "@types/mdx": "^2.0.13",
     "@types/node": "^22.13.4",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
@@ -56,6 +57,7 @@
     "husky": "^9.1.7",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.0.14",
+    "ts-morph": "^25.0.1",
     "typescript": "^5.2.2",
     "vite": "^6.1.1"
   },

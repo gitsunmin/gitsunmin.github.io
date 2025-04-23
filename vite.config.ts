@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     ],
-    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.md', '**/*.mdx'],
+    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
     base: '/',
     server: {
       watch: {
@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        "@til": path.resolve(__dirname, "./modules/til"),
+        "@til": path.resolve(__dirname, "./src/docs/til"),
       },
     },
   }

@@ -1,15 +1,157 @@
 import { PluginOption } from 'vite';
+import { copyFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
+import path from 'node:path';
+import { Project, VariableDeclarationKind } from 'ts-morph';
+import { match } from 'ts-pattern';
 
-// const importTILIndex = () => {}
-// const importTILContents = () => {}
+const ROOT_DIR = process.cwd();
+const TIL_DIR = path.join(ROOT_DIR, '/modules/til');
+const DOCS_DIR = path.join(ROOT_DIR, '/src/docs/til');
+const TIL_ROUTE_DIR = path.join(ROOT_DIR, '/src/routes/_layout/til');
+
+const ALLOWED_MODULES_EXT_REGEX = /\.(png|jpg|jpeg|gif|svg|webp|mdx)$/i;
+
+const processLogger = ({
+    fn,
+    message,
+}: {
+    message: string;
+    fn: () => void;
+}) => {
+    console.time(message);
+    fn();
+    console.timeEnd(message);
+
+}
+
+const resetDocsDir = () => {
+    rmSync(DOCS_DIR, { recursive: true });
+    mkdirSync(DOCS_DIR);
+}
+
+const resetTILRouteDir = () => {
+    rmSync(TIL_ROUTE_DIR, { recursive: true });
+    mkdirSync(TIL_ROUTE_DIR);
+}
+
+const importTILContents = (inputDir: string) => {
+    const entries = readdirSync(inputDir, { withFileTypes: true, recursive: true });
+
+    entries.forEach((entry) => {
+        const relativePath = path.relative(TIL_DIR, `${entry.parentPath}/${entry.name}`);
+        const filePath = path.parse(relativePath);
+
+        if (ALLOWED_MODULES_EXT_REGEX.test(filePath.ext)) {
+            mkdirSync(path.join(DOCS_DIR, filePath.dir), { recursive: true });
+            copyFileSync(path.join(inputDir, relativePath), path.join(DOCS_DIR, relativePath));
+        }
+    });
+}
+
+const generateComponent = (relativePath: string, outputPath: string) => {
+    const project = new Project();
+    const sourceFile = project.createSourceFile(outputPath, {}, { overwrite: true });
+    const filePath = path.parse(relativePath);
+    const componentName = 'component';
+    const mdxReplacerVariableName = 'components';
+
+    sourceFile.addImportDeclaration({
+        defaultImport: 'Content',
+        moduleSpecifier: `@til/${relativePath}`,
+    });
+    sourceFile.addImportDeclaration({
+        namedImports: ['createFileRoute'],
+        moduleSpecifier: '@tanstack/react-router',
+    });
+    sourceFile.addImportDeclaration({
+        namedImports: ['MDXReplacer'],
+        moduleSpecifier: '@/docs/MDXReplacer',
+    });
+
+    const ReplaciesName = 'Replacies';
+
+    match(filePath.name)
+        .with('README', () => {
+            sourceFile.addImportDeclaration({
+                defaultImport: ReplaciesName,
+                moduleSpecifier: `@/docs/replacies/tilReadme`,
+            });
+        })
+        .otherwise(() => {
+            sourceFile.addImportDeclaration({
+                defaultImport: ReplaciesName,
+                moduleSpecifier: `@/docs/replacies/tilContents`,
+            });
+        })
+
+
+    sourceFile.addVariableStatement({
+        declarationKind: VariableDeclarationKind.Const,
+        declarations: [
+            {
+                name: mdxReplacerVariableName,
+                initializer: `MDXReplacer({ components: ${ReplaciesName} })`,
+            },
+        ],
+    });
+
+    sourceFile.addFunction({
+        name: componentName,
+        isExported: false,
+        statements: [
+            `return <Content components={${mdxReplacerVariableName}} />;`,
+        ],
+    });
+
+    sourceFile.addVariableStatement({
+        declarationKind: VariableDeclarationKind.Const,
+        isExported: true,
+        declarations: [
+            {
+                name: 'Route',
+                initializer: `createFileRoute('${path.join('/_layout/til', filePath.dir, filePath.name.replace(/index$/, '/'))}')({ component })`,
+            },
+        ],
+    });
+
+
+    sourceFile.saveSync();
+};
+
+const createTILRoute = () => {
+    const entries = readdirSync(DOCS_DIR, { withFileTypes: true, recursive: true });
+    entries.forEach((entry) => {
+        const relativePath = path.relative(DOCS_DIR, `${entry.parentPath}/${entry.name}`);
+        const filePath = path.parse(relativePath);
+
+        if (filePath.ext === '.mdx') {
+            const outputPath = path.join(TIL_ROUTE_DIR, filePath.dir, `${filePath.name}.tsx`);
+            generateComponent(relativePath, outputPath);
+        }
+    });
+};
 
 export const tilRouteGenerator = (): PluginOption => {
     return {
         name: 'til-route-generator',
         apply: () => true,
-        buildStart(a) {
-            console.log('a:', a);
-
+        buildStart() {
+            processLogger({
+                fn: () => resetDocsDir(),
+                message: '🚮 [TIL route generation] resetting docs directory completed',
+            })
+            processLogger({
+                fn: () => importTILContents(TIL_DIR),
+                message: '📄 [TIL route generation] importing TIL contents completed',
+            })
+            processLogger({
+                fn: () => resetTILRouteDir(),
+                message: '🚮 [TIL route generation] resetting TIL route directory completed',
+            })
+            processLogger({
+                fn: () => createTILRoute(),
+                message: '♻️ [TIL route generation] creating TIL route completed',
+            })
         },
     };
 };

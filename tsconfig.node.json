@@ -8,10 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@plugins/*": ["./plugins/*"]
-    }
+    "baseUrl": "."
   },
   "include": ["vite.config.ts", "plugins/**/*.ts"]
 }
