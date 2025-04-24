@@ -4,7 +4,7 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import path from 'node:path'
 import { copyFileSync } from 'node:fs'
 import mdx from '@mdx-js/rollup';
-import { tilRouteGenerator } from './plugins/vite/til-route-generator';
+// import { tilRouteGenerator } from './plugins/vite/til-route-generator';
 
 export default defineConfig(({ mode }) => {
   return {
@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
       '__MODE__': JSON.stringify(mode),
     },
     plugins: [
-      tilRouteGenerator({ silent: mode === 'development' }),
+      // tilRouteGenerator({ silent: mode === 'development' }),
       TanStackRouterVite({}),
       mdx(),
       react(),
