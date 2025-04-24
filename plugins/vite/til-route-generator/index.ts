@@ -9,6 +9,7 @@ const TIL_DIR = path.join(ROOT_DIR, '/modules/til');
 const DOCS_DIR = path.join(ROOT_DIR, '/src/docs/til');
 const TIL_ROUTE_DIR = path.join(ROOT_DIR, '/src/routes/_layout/til');
 const TIL_ASSETS_DIR = path.join(ROOT_DIR, '/src/assets/til');
+const TIL_DIST_ASSETS_DIR = path.join(ROOT_DIR, '/til');
 
 const ignore = () => undefined;
 
@@ -50,18 +51,19 @@ const resetTILAssetsDir = () => {
 const replaceImagePath = (pathes: {
     filePath: string;
     relativePath: string;
+    targetBasePath: string;
 }) => {
-    const { filePath, relativePath } = pathes;
+    const { filePath, relativePath, targetBasePath } = pathes;
     const mdxContent = readFileSync(path.join(DOCS_DIR, relativePath), 'utf-8');
     const updatedContent = mdxContent.replace(/!\[.*?\]\((.*?)\)/g, (match, imagePath) => {
         const imageFileName = path.basename(imagePath);
-        const newImagePath = path.join('/', path.relative(ROOT_DIR, path.join(TIL_ASSETS_DIR, filePath, imageFileName)));
+        const newImagePath = path.join('/', path.relative(ROOT_DIR, path.join(targetBasePath, filePath, imageFileName)));
         return match.replace(imagePath, newImagePath);
     });
     writeFileSync(path.join(DOCS_DIR, relativePath), updatedContent);
 }
 
-const importTILContents = (inputDir: string) => {
+const importTILContents = (inputDir: string, mode: string) => {
     const entries = readdirSync(inputDir, { withFileTypes: true, recursive: true });
 
     entries.forEach((entry) => {
@@ -73,7 +75,7 @@ const importTILContents = (inputDir: string) => {
                 mkdirSync(path.join(DOCS_DIR, filePath.dir), { recursive: true });
                 copyFileSync(path.join(inputDir, relativePath), path.join(DOCS_DIR, relativePath));
 
-                replaceImagePath({ relativePath, filePath: filePath.dir });
+                replaceImagePath({ relativePath, filePath: filePath.dir, targetBasePath: mode === 'development' ? TIL_ASSETS_DIR : TIL_DIST_ASSETS_DIR });
             })
             .with(P.string.regex(ALLOWED_IMAGE_EXT_REGEX), () => {
                 mkdirSync(path.join(TIL_ASSETS_DIR, filePath.dir), { recursive: true });
@@ -168,10 +170,11 @@ const createTILRoute = () => {
 
 type Options = {
     silent?: boolean;
+    mode?: string;
 }
 
-export const tilRouteGenerator = (options: Options): PluginOption => {
-    const { silent = false } = options;
+export const tilRouteGenerator = (options?: Options): PluginOption => {
+    const { silent = false, mode = 'development' } = options ?? {};
 
     return {
         name: 'til-route-generator',
@@ -188,7 +191,7 @@ export const tilRouteGenerator = (options: Options): PluginOption => {
                 silent,
             })
             processLogger({
-                fn: () => importTILContents(TIL_DIR),
+                fn: () => importTILContents(TIL_DIR, mode),
                 message: '📄 [TIL route generation] importing TIL contents completed',
                 silent,
             })
