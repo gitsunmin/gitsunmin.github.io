@@ -14,8 +14,7 @@ tags:
 
 ## [Service worker는 무엇일까요?](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
 
-![그림 1 from [diagrams.net](http://diagrams.net/) ](./1.png)  
-_그림 1 from [diagrams.net](http://diagrams.net/)_
+![그림 1 from](/src/assets/til/browser/service-worker/1.png)
 
 > - 네트워크 요청을 인터셉트 할 수 있고 캐싱을 쉽게 할 수 있음
 > - DOM API을 사용하는 부분과는 다른 Thread에서 동작하여 DOM API, XHR, Web Storage 등 에 접근이 불가능함.
@@ -83,12 +82,12 @@ console.log(`HI👋, I'm service-worker`);
 
 실제 실행 화면입니다. (성공적으로 등록이 되었습니다. 하이하이)
 
-![그림2](./2.png)  
+![그림2](/src/assets/til/browser/service-worker/2.png)  
 _그림2_
 
 개발자 도구의 Application 탭에서도 확인을 할 수 있습니다.
 
-![그림3](./3.png)  
+![그림3](/src/assets/til/browser/service-worker/3.png)  
 _그림3_
 
 ### 캐시 사용하기
@@ -123,7 +122,7 @@ _그림3_
 
 캐시를 사용하지 않고 이미지를 불러온 경우에는 개발자 도구의 network 탭에서
 
-![그림4](./4.png)  
+![그림4](/src/assets/til/browser/service-worker/4.png)  
 _그림4_
 
 Size 부분에 통신한 용량을 표시 해 주고 있습니다.
@@ -197,12 +196,12 @@ self.addEventListener('fetch', (event) => {
 
 캐시를 적용한 후에는 Size 열에 ServiceWorker라고 표시가 되고 있습니다. [성공]
 
-![그림5](./5.png)  
+![그림5](/src/assets/til/browser/service-worker/5.png)  
 _그림5_
 
 Application 탭에서 Cache 부분을 보면 Storage도 확인 할 수 있습니다.
 
-![그림6](./6.png)  
+![그림6](/src/assets/til/browser/service-worker/6.png)  
 _그림6_
 
 이상으로 간단하게 환경을 만들어서 테스트 해 보았습니다.

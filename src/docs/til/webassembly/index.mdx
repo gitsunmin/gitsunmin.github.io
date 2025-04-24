@@ -26,7 +26,7 @@ V8 엔진은 Google에서 만든 오픈소스 프로젝트이며 Javascript와 W
 이 글의 주제는 WebAssembly이지만, WebAssembly의 동작 방식을 알기 전에 Javascript가 V8엔진에서 어떻게 동작하는지 간단히 알아보고, WebAssembly의 동작을 살펴보도록 하겠습니다.
 
 아래의 이미지는 [Link](https://medium.com/dailyjs/understanding-v8s-bytecode-317d46c94775)에서 가지고온 V8엔진에서의 Javascript의 동작 순서를 그려낸 것입니다.
-![v8_engine_pipeline](v8-engine-pipeline.webp)
+![v8_engine_pipeline](/src/assets/til/webassembly/v8-engine-pipeline.webp)
 
 자바스크립트 소스 코드는 구체적인 문법 규칙을 따르는 텍스트 형태로 존재합니다. 이러한 텍스트는 문법적 분석을 통해 기계가 이해할 수 있는 형태로 번역될 수 있습니다. 이 번역 과정을 효율적으로 수행하기 위해, 소스 코드는 먼저 구조화된 데이터 형태인 추상 구문 트리(Abstract Syntax Tree, AST)로 변환됩니다.
 

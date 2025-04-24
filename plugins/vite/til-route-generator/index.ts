@@ -1,23 +1,31 @@
 import { PluginOption } from 'vite';
-import { copyFileSync, mkdirSync, readdirSync, rmSync } from 'node:fs'
+import { copyFileSync, mkdirSync, readdirSync, rmSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path';
 import { Project, VariableDeclarationKind } from 'ts-morph';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 
 const ROOT_DIR = process.cwd();
 const TIL_DIR = path.join(ROOT_DIR, '/modules/til');
 const DOCS_DIR = path.join(ROOT_DIR, '/src/docs/til');
 const TIL_ROUTE_DIR = path.join(ROOT_DIR, '/src/routes/_layout/til');
+const TIL_ASSETS_DIR = path.join(ROOT_DIR, '/src/assets/til');
 
-const ALLOWED_MODULES_EXT_REGEX = /\.(png|jpg|jpeg|gif|svg|webp|mdx)$/i;
+const ignore = () => undefined;
+
+const ALLOWED_DOCUMENTS_EXT_REGEX = /\.(mdx|md)$/g;
+const ALLOWED_IMAGE_EXT_REGEX = /\.(png|jpg|jpeg|gif|svg|webp)$/g;
 
 const processLogger = ({
     fn,
     message,
+    silent = false,
 }: {
     message: string;
     fn: () => void;
+    silent?: boolean;
 }) => {
+    if (silent) return fn();
+
     console.time(message);
     fn();
     console.timeEnd(message);
@@ -34,6 +42,25 @@ const resetTILRouteDir = () => {
     mkdirSync(TIL_ROUTE_DIR);
 }
 
+const resetTILAssetsDir = () => {
+    rmSync(TIL_ASSETS_DIR, { recursive: true });
+    mkdirSync(TIL_ASSETS_DIR);
+}
+
+const replaceImagePath = (pathes: {
+    filePath: string;
+    relativePath: string;
+}) => {
+    const { filePath, relativePath } = pathes;
+    const mdxContent = readFileSync(path.join(DOCS_DIR, relativePath), 'utf-8');
+    const updatedContent = mdxContent.replace(/!\[.*?\]\((.*?)\)/g, (match, imagePath) => {
+        const imageFileName = path.basename(imagePath);
+        const newImagePath = path.join('/', path.relative(ROOT_DIR, path.join(TIL_ASSETS_DIR, filePath, imageFileName)));
+        return match.replace(imagePath, newImagePath);
+    });
+    writeFileSync(path.join(DOCS_DIR, relativePath), updatedContent);
+}
+
 const importTILContents = (inputDir: string) => {
     const entries = readdirSync(inputDir, { withFileTypes: true, recursive: true });
 
@@ -41,10 +68,18 @@ const importTILContents = (inputDir: string) => {
         const relativePath = path.relative(TIL_DIR, `${entry.parentPath}/${entry.name}`);
         const filePath = path.parse(relativePath);
 
-        if (ALLOWED_MODULES_EXT_REGEX.test(filePath.ext)) {
-            mkdirSync(path.join(DOCS_DIR, filePath.dir), { recursive: true });
-            copyFileSync(path.join(inputDir, relativePath), path.join(DOCS_DIR, relativePath));
-        }
+        match(filePath.ext)
+            .with(P.string.regex(ALLOWED_DOCUMENTS_EXT_REGEX), () => {
+                mkdirSync(path.join(DOCS_DIR, filePath.dir), { recursive: true });
+                copyFileSync(path.join(inputDir, relativePath), path.join(DOCS_DIR, relativePath));
+
+                replaceImagePath({ relativePath, filePath: filePath.dir });
+            })
+            .with(P.string.regex(ALLOWED_IMAGE_EXT_REGEX), () => {
+                mkdirSync(path.join(TIL_ASSETS_DIR, filePath.dir), { recursive: true });
+                copyFileSync(path.join(inputDir, relativePath), path.join(TIL_ASSETS_DIR, relativePath));
+            })
+            .otherwise(ignore);
     });
 }
 
@@ -131,7 +166,13 @@ const createTILRoute = () => {
     });
 };
 
-export const tilRouteGenerator = (): PluginOption => {
+type Options = {
+    silent?: boolean;
+}
+
+export const tilRouteGenerator = (options: Options): PluginOption => {
+    const { silent = false } = options;
+
     return {
         name: 'til-route-generator',
         apply: () => true,
@@ -139,18 +180,27 @@ export const tilRouteGenerator = (): PluginOption => {
             processLogger({
                 fn: () => resetDocsDir(),
                 message: '🚮 [TIL route generation] resetting docs directory completed',
+                silent,
+            })
+            processLogger({
+                fn: () => resetTILAssetsDir(),
+                message: '🚮 [TIL route generation] resetting TIL assets directory completed',
+                silent,
             })
             processLogger({
                 fn: () => importTILContents(TIL_DIR),
                 message: '📄 [TIL route generation] importing TIL contents completed',
+                silent,
             })
             processLogger({
                 fn: () => resetTILRouteDir(),
                 message: '🚮 [TIL route generation] resetting TIL route directory completed',
+                silent,
             })
             processLogger({
                 fn: () => createTILRoute(),
-                message: '♻️ [TIL route generation] creating TIL route completed',
+                message: '♻️  [TIL route generation] creating TIL route completed',
+                silent,
             })
         },
     };

@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
       '__MODE__': JSON.stringify(mode),
     },
     plugins: [
-      tilRouteGenerator(),
+      tilRouteGenerator({ silent: mode === 'development' }),
       TanStackRouterVite({}),
       mdx(),
       react(),
