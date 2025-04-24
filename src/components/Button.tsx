@@ -19,7 +19,7 @@ export const Button = (props: Props) => {
             variant === 'outline',
           'bg-transparent p-1': variant === 'ghost',
         },
-        className
+        className,
       )}
       disabled={disabled}
       onClick={onClick}
@@ -30,7 +30,7 @@ export const Button = (props: Props) => {
             'text-primary-foreground': variant === 'primary',
             'text-muted-foreground': variant === 'outline',
           },
-          'text-center'
+          'text-center',
         )}
       >
         {children}

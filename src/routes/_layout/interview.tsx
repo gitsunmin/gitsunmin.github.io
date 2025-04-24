@@ -57,7 +57,7 @@ function RouteComponent() {
                         {
                           'text-left': 이름 === 'James',
                           'text-right': 이름 === 'Sunmin',
-                        }
+                        },
                       )}
                     >
                       {이름}

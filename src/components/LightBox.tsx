@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Lightbox, { Slide } from 'yet-another-react-lightbox';
+import Lightbox, { type Slide } from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 
 type Props = React.PropsWithChildren<{

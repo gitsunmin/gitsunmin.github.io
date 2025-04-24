@@ -1,5 +1,5 @@
 import { CodeBlockWrapper } from '@/components/Codeblock';
-import { MDXComponents } from 'mdx/types';
+import type { MDXComponents } from 'mdx/types';
 
 // type MDXComponents = Required<Parameters<typeof useMDXComponents>[0]>;
 

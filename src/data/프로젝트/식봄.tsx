@@ -6,7 +6,7 @@ import Foodspring2 from '@/assets/foodspring/foodspring_2.webp';
 import Foodspring3 from '@/assets/foodspring/foodspring_3.webp';
 import Foodspring4 from '@/assets/foodspring/foodspring_4.webp';
 import Foodspring5 from '@/assets/foodspring/foodspring_5.webp';
-import { 프로젝트 } from '@/data/프로젝트';
+import type { 프로젝트 } from '@/data/프로젝트';
 import { LightBox } from '@/components/LightBox';
 
 export const 식봄: 프로젝트 = {

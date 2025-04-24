@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from 'react';
+import { createContext, type ReactNode } from 'react';
 import { useDarkMode } from '@/hooks/useDarkMode';
 
 type DarkModeContextType = {
@@ -8,7 +8,7 @@ type DarkModeContextType = {
 };
 
 const DarkModeContext = createContext<DarkModeContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function DarkModeProvider({ children }: { children: ReactNode }) {

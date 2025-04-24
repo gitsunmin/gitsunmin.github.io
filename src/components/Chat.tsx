@@ -1,4 +1,4 @@
-import { 채팅 } from '@/data/인터뷰';
+import type { 채팅 } from '@/data/인터뷰';
 import { Link } from '@tanstack/react-router';
 import { match } from 'ts-pattern';
 import { cn } from '@/lib/utils';
@@ -19,7 +19,7 @@ export const Chat = ({ 컨텐츠, 확장, 이름, className = '' }: Props) => {
           'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100':
             !isMe,
         },
-        className
+        className,
       )}
     >
       <div>

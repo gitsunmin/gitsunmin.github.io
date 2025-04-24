@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { MDXComponents } from 'mdx/types';
+import type { MDXComponents } from 'mdx/types';
 import { match, P } from 'ts-pattern';
 
 const TilReadmeReplacies: MDXComponents = {

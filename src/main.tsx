@@ -38,6 +38,6 @@ if (!rootElement.innerHTML) {
           />
         </FontSizeProvider>
       </DarkModeProvider>
-    </StrictMode>
+    </StrictMode>,
   );
 }

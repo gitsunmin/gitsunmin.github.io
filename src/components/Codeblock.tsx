@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { getSingletonHighlighter } from "shiki";
-import mermaid from "mermaid";
-import { match } from "ts-pattern";
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
+import { getSingletonHighlighter } from 'shiki';
+import mermaid from 'mermaid';
+import { match } from 'ts-pattern';
 
 type Props = {
   languege: string;
@@ -18,19 +18,19 @@ const MermaidDiagram = ({ code }: { code: string }) => {
   return <div className="mermaid flex justify-center items-center">{code}</div>;
 };
 
-const CodeBlock = ({ code = "", languege }: Props) => {
-  const [highlightedCode, setHighlightedCode] = useState<string>("");
+const CodeBlock = ({ code = '', languege }: Props) => {
+  const [highlightedCode, setHighlightedCode] = useState<string>('');
 
   useEffect(() => {
     getSingletonHighlighter({
-      themes: ["github-dark"],
+      themes: ['github-dark'],
       langs: [languege],
     }).then((highlighter) => {
       setHighlightedCode(
-        highlighter.codeToHtml(code ?? "", {
+        highlighter.codeToHtml(code ?? '', {
           lang: languege,
-          theme: "github-dark",
-        })
+          theme: 'github-dark',
+        }),
       );
     });
   }, [code, languege]);
@@ -42,15 +42,15 @@ const CodeBlock = ({ code = "", languege }: Props) => {
   );
 };
 
-export const CodeBlockWrapper = ({ code = "", languege }: Props) => {
+export const CodeBlockWrapper = ({ code = '', languege }: Props) => {
   const handleClick = async () => {
     navigator.clipboard.writeText(code).then(() => {
-      alert("Copied!");
+      alert('Copied!');
     });
   };
 
   return (
-    <div className={cn("relative py-4", `language-${languege}`)}>
+    <div className={cn('relative py-4', `language-${languege}`)}>
       <button
         className="absolute right-2 top-4 text-sm text-white py-1 px-2"
         onClick={handleClick}
@@ -58,7 +58,7 @@ export const CodeBlockWrapper = ({ code = "", languege }: Props) => {
         Copy
       </button>
       {match(languege)
-        .with("mermaid", () => <MermaidDiagram code={code} />)
+        .with('mermaid', () => <MermaidDiagram code={code} />)
         .otherwise(() => (
           <CodeBlock code={code} languege={languege} />
         ))}

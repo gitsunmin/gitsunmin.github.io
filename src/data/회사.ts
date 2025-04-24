@@ -1,14 +1,11 @@
-import { 프로젝트, 프로젝트들 } from './프로젝트';
+import { type 프로젝트, 프로젝트들 } from './프로젝트';
 
 import marketboro_logo from '@/assets/logos/marketboro_logo.webp';
 import korens_logo from '@/assets/logos/korens_logo.webp';
 
-export const 회사_key_목록 = [
-  'marketboro',
-  'korens',
-] as const;
+export const 회사_key_목록 = ['marketboro', 'korens'] as const;
 
-export type 회사_key = typeof 회사_key_목록[number];
+export type 회사_key = (typeof 회사_key_목록)[number];
 
 type 회사 = {
   id: 회사_key;
@@ -37,7 +34,9 @@ export const 경력: 회사[] = [
           이러한 경험을 통해 다양한 디바이스에서의 접근성을 보장하고, 최신 기술 스택을 적극 활용하는 역량을 갖추게 되었습니다.`,
     기간: '2020.10 ~ ',
     직책: '프론트엔드 개발자',
-    프로젝트들: 프로젝트들.filter((프로젝트) => 프로젝트.회사key === 'marketboro'),
+    프로젝트들: 프로젝트들.filter(
+      (프로젝트) => 프로젝트.회사key === 'marketboro',
+    ),
     링크들: [
       {
         label: '마켓보로 웹사이트',
@@ -50,7 +49,7 @@ export const 경력: 회사[] = [
       {
         label: '마켓봄 프로',
         url: 'https://pro.marketbom.com',
-      }
+      },
     ],
   },
   {
@@ -64,9 +63,11 @@ export const 경력: 회사[] = [
     직책: '프론트엔드 개발자',
     기간: '2019.07 ~ 2020.10',
     프로젝트들: 프로젝트들.filter((프로젝트) => 프로젝트.회사key === 'korens'),
-    링크들: [{
-      label: '코렌스 웹사이트',
-      url: 'http://www.korens.com',
-    }],
-  }
+    링크들: [
+      {
+        label: '코렌스 웹사이트',
+        url: 'http://www.korens.com',
+      },
+    ],
+  },
 ];

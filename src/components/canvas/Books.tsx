@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
-import { Mesh, TextureLoader } from 'three';
+import { type Mesh, TextureLoader } from 'three';
 
 export type BookTextures = {
   front: string;
@@ -52,7 +52,7 @@ export const Book = ({
               bookRef.current.scale.set(
                 1,
                 bookRef.current.scale.y + 0.1,
-                bookRef.current.scale.z + 0.1
+                bookRef.current.scale.z + 0.1,
               );
             }
           }, 300);

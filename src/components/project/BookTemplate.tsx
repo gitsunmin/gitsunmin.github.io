@@ -1,5 +1,5 @@
 import { Page } from '@/components/project/Page';
-import { 프로젝트 } from '@/data/프로젝트';
+import type { 프로젝트 } from '@/data/프로젝트';
 import { TableOfContents } from '@/components/project/TableOfContents';
 
 type Props = {

@@ -1,4 +1,4 @@
-import { 프로젝트 } from '@/data/프로젝트';
+import type { 프로젝트 } from '@/data/프로젝트';
 import { Link } from '@tanstack/react-router';
 
 type Props = {

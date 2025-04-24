@@ -20,7 +20,7 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
           'h-12 px-4 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4',
           'flex items-center justify-between',
           'fixed top-0 left-0 right-0 z-header',
-          className
+          className,
         )}
       >
         <Button variant="ghost" className="lg:hidden" onClick={handleBack}>

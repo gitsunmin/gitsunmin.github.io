@@ -1,5 +1,5 @@
 import { Skill } from '@/components/Skill';
-import { 기술_key, Map_기술 } from '@/data/기술';
+import { type 기술_key, Map_기술 } from '@/data/기술';
 
 type Props = {
   list: 기술_key[];

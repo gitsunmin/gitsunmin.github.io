@@ -1,16 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
-import path from 'node:path'
-import { copyFileSync } from 'node:fs'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import path from 'node:path';
+import { copyFileSync } from 'node:fs';
 import mdx from '@mdx-js/rollup';
 import { tilRouteGenerator } from './plugins/vite/til-route-generator';
-import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig(({ mode }) => {
   return {
     define: {
-      '__MODE__': JSON.stringify(mode),
+      __MODE__: JSON.stringify(mode),
     },
     plugins: [
       tilRouteGenerator({ silent: mode === 'development', mode }),
@@ -33,10 +33,10 @@ export default defineConfig(({ mode }) => {
         targets: [
           {
             src: 'src/assets/til/**/*',
-            dest: 'til'
-          }
-        ]
-      })
+            dest: 'til',
+          },
+        ],
+      }),
     ],
     assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
     base: '/',
@@ -48,9 +48,9 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src"),
-        "@til": path.resolve(__dirname, "./src/docs/til"),
+        '@': path.resolve(__dirname, './src'),
+        '@til': path.resolve(__dirname, './src/docs/til'),
       },
     },
-  }
+  };
 });

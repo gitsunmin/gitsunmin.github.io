@@ -1,4 +1,4 @@
-import { Book, BookTextures } from '@/components/canvas/Books';
+import { Book, type BookTextures } from '@/components/canvas/Books';
 
 type Props = {
   books: {

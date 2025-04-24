@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useLayoutEffect } from 'react';
+import { createContext, type ReactNode, useLayoutEffect } from 'react';
 import { useFontSize } from '@/hooks/useFontSize';
 
 // Define context type
@@ -6,7 +6,7 @@ type FontSizeContextType = ReturnType<typeof useFontSize>;
 
 // Create context with a default value (will be overridden by the provider)
 const FontSizeContext = createContext<FontSizeContextType | undefined>(
-  undefined
+  undefined,
 );
 
 // Types for the provider props

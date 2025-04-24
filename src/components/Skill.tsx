@@ -1,4 +1,4 @@
-import { 기술, 기술_key } from '@/data/기술';
+import type { 기술, 기술_key } from '@/data/기술';
 
 type Props = {
   skill: 기술[기술_key];
