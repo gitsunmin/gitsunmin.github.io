@@ -33,17 +33,17 @@ const processLogger = ({
 }
 
 const resetDocsDir = () => {
-    rmSync(DOCS_DIR, { recursive: true });
+    rmSync(DOCS_DIR, { recursive: true, force: true });
     mkdirSync(DOCS_DIR);
 }
 
 const resetTILRouteDir = () => {
-    rmSync(TIL_ROUTE_DIR, { recursive: true });
+    rmSync(TIL_ROUTE_DIR, { recursive: true, force: true });
     mkdirSync(TIL_ROUTE_DIR);
 }
 
 const resetTILAssetsDir = () => {
-    rmSync(TIL_ASSETS_DIR, { recursive: true });
+    rmSync(TIL_ASSETS_DIR, { recursive: true, force: true });
     mkdirSync(TIL_ASSETS_DIR);
 }
 

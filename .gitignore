@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TIL
+
+src/routes/_layout/til/**/*
+src/docs/til/**/*
+src/assets/til/**/*
