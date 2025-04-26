@@ -9,6 +9,13 @@ const TilContentsReplacies: MDXComponents = {
         <Link {...props} href={href} to={'/'} className="text-blue-400" />
       ))
       .otherwise(() => <a className="text-blue-400" {...props} />),
+  img: (props) => (
+    <img
+      {...props}
+      alt={props.alt || 'Image'}
+      className="rounded-lg shadow-md m-auto"
+    />
+  ),
 };
 
 export default TilContentsReplacies;
