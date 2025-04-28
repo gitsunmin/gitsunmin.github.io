@@ -27,6 +27,7 @@ function RouteComponent() {
 
             return (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 key={`${이름}-${index}`}
                 className={cn('w-full flex gap-x-2.5 gap-y-1', {
                   'flex-row': 이름 === 'James',
@@ -34,7 +35,7 @@ function RouteComponent() {
                 })}
               >
                 {isContinues ? (
-                  <div className="w-10"></div>
+                  <div className="w-10" />
                 ) : (
                   <div className="flex items-start">
                     <Avatar

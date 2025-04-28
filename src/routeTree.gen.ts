@@ -79,6 +79,7 @@ import { Route as LayoutTilJavascriptProxyGrammarImport } from './routes/_layout
 import { Route as LayoutTilJavascriptPromiseAllSettledAndPromiseAllImport } from './routes/_layout/til/javascript/promise-all-settled-and-promise-all';
 import { Route as LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfImport } from './routes/_layout/til/javascript/performance-comparison-of-array-find-and-array-indexOf';
 import { Route as LayoutTilJavascriptObjectIsImport } from './routes/_layout/til/javascript/object-is';
+import { Route as LayoutTilJavascriptJavascriptTrick2Import } from './routes/_layout/til/javascript/javascript-trick-2';
 import { Route as LayoutTilJavascriptJavascriptTrick1Import } from './routes/_layout/til/javascript/javascript-trick-1';
 import { Route as LayoutTilJavascriptIterableImport } from './routes/_layout/til/javascript/iterable';
 import { Route as LayoutTilJavascriptHiddenClassImport } from './routes/_layout/til/javascript/hidden-class';
@@ -650,6 +651,13 @@ const LayoutTilJavascriptObjectIsRoute =
   LayoutTilJavascriptObjectIsImport.update({
     id: '/til/javascript/object-is',
     path: '/til/javascript/object-is',
+    getParentRoute: () => LayoutRoute,
+  } as any);
+
+const LayoutTilJavascriptJavascriptTrick2Route =
+  LayoutTilJavascriptJavascriptTrick2Import.update({
+    id: '/til/javascript/javascript-trick-2',
+    path: '/til/javascript/javascript-trick-2',
     getParentRoute: () => LayoutRoute,
   } as any);
 
@@ -2369,6 +2377,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTilJavascriptJavascriptTrick1Import;
       parentRoute: typeof LayoutImport;
     };
+    '/_layout/til/javascript/javascript-trick-2': {
+      id: '/_layout/til/javascript/javascript-trick-2';
+      path: '/til/javascript/javascript-trick-2';
+      fullPath: '/til/javascript/javascript-trick-2';
+      preLoaderRoute: typeof LayoutTilJavascriptJavascriptTrick2Import;
+      parentRoute: typeof LayoutImport;
+    };
     '/_layout/til/javascript/object-is': {
       id: '/_layout/til/javascript/object-is';
       path: '/til/javascript/object-is';
@@ -2928,6 +2943,7 @@ interface LayoutRouteChildren {
   LayoutTilJavascriptHiddenClassRoute: typeof LayoutTilJavascriptHiddenClassRoute;
   LayoutTilJavascriptIterableRoute: typeof LayoutTilJavascriptIterableRoute;
   LayoutTilJavascriptJavascriptTrick1Route: typeof LayoutTilJavascriptJavascriptTrick1Route;
+  LayoutTilJavascriptJavascriptTrick2Route: typeof LayoutTilJavascriptJavascriptTrick2Route;
   LayoutTilJavascriptObjectIsRoute: typeof LayoutTilJavascriptObjectIsRoute;
   LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute: typeof LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute;
   LayoutTilJavascriptPromiseAllSettledAndPromiseAllRoute: typeof LayoutTilJavascriptPromiseAllSettledAndPromiseAllRoute;
@@ -3162,6 +3178,8 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTilJavascriptIterableRoute: LayoutTilJavascriptIterableRoute,
   LayoutTilJavascriptJavascriptTrick1Route:
     LayoutTilJavascriptJavascriptTrick1Route,
+  LayoutTilJavascriptJavascriptTrick2Route:
+    LayoutTilJavascriptJavascriptTrick2Route,
   LayoutTilJavascriptObjectIsRoute: LayoutTilJavascriptObjectIsRoute,
   LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute:
     LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute,
@@ -3385,6 +3403,7 @@ export interface FileRoutesByFullPath {
   '/til/javascript/hidden-class': typeof LayoutTilJavascriptHiddenClassRoute;
   '/til/javascript/iterable': typeof LayoutTilJavascriptIterableRoute;
   '/til/javascript/javascript-trick-1': typeof LayoutTilJavascriptJavascriptTrick1Route;
+  '/til/javascript/javascript-trick-2': typeof LayoutTilJavascriptJavascriptTrick2Route;
   '/til/javascript/object-is': typeof LayoutTilJavascriptObjectIsRoute;
   '/til/javascript/performance-comparison-of-array-find-and-array-indexOf': typeof LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute;
   '/til/javascript/promise-all-settled-and-promise-all': typeof LayoutTilJavascriptPromiseAllSettledAndPromiseAllRoute;
@@ -3575,6 +3594,7 @@ export interface FileRoutesByTo {
   '/til/javascript/hidden-class': typeof LayoutTilJavascriptHiddenClassRoute;
   '/til/javascript/iterable': typeof LayoutTilJavascriptIterableRoute;
   '/til/javascript/javascript-trick-1': typeof LayoutTilJavascriptJavascriptTrick1Route;
+  '/til/javascript/javascript-trick-2': typeof LayoutTilJavascriptJavascriptTrick2Route;
   '/til/javascript/object-is': typeof LayoutTilJavascriptObjectIsRoute;
   '/til/javascript/performance-comparison-of-array-find-and-array-indexOf': typeof LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute;
   '/til/javascript/promise-all-settled-and-promise-all': typeof LayoutTilJavascriptPromiseAllSettledAndPromiseAllRoute;
@@ -3767,6 +3787,7 @@ export interface FileRoutesById {
   '/_layout/til/javascript/hidden-class': typeof LayoutTilJavascriptHiddenClassRoute;
   '/_layout/til/javascript/iterable': typeof LayoutTilJavascriptIterableRoute;
   '/_layout/til/javascript/javascript-trick-1': typeof LayoutTilJavascriptJavascriptTrick1Route;
+  '/_layout/til/javascript/javascript-trick-2': typeof LayoutTilJavascriptJavascriptTrick2Route;
   '/_layout/til/javascript/object-is': typeof LayoutTilJavascriptObjectIsRoute;
   '/_layout/til/javascript/performance-comparison-of-array-find-and-array-indexOf': typeof LayoutTilJavascriptPerformanceComparisonOfArrayFindAndArrayIndexOfRoute;
   '/_layout/til/javascript/promise-all-settled-and-promise-all': typeof LayoutTilJavascriptPromiseAllSettledAndPromiseAllRoute;
@@ -3959,6 +3980,7 @@ export interface FileRouteTypes {
     | '/til/javascript/hidden-class'
     | '/til/javascript/iterable'
     | '/til/javascript/javascript-trick-1'
+    | '/til/javascript/javascript-trick-2'
     | '/til/javascript/object-is'
     | '/til/javascript/performance-comparison-of-array-find-and-array-indexOf'
     | '/til/javascript/promise-all-settled-and-promise-all'
@@ -4148,6 +4170,7 @@ export interface FileRouteTypes {
     | '/til/javascript/hidden-class'
     | '/til/javascript/iterable'
     | '/til/javascript/javascript-trick-1'
+    | '/til/javascript/javascript-trick-2'
     | '/til/javascript/object-is'
     | '/til/javascript/performance-comparison-of-array-find-and-array-indexOf'
     | '/til/javascript/promise-all-settled-and-promise-all'
@@ -4338,6 +4361,7 @@ export interface FileRouteTypes {
     | '/_layout/til/javascript/hidden-class'
     | '/_layout/til/javascript/iterable'
     | '/_layout/til/javascript/javascript-trick-1'
+    | '/_layout/til/javascript/javascript-trick-2'
     | '/_layout/til/javascript/object-is'
     | '/_layout/til/javascript/performance-comparison-of-array-find-and-array-indexOf'
     | '/_layout/til/javascript/promise-all-settled-and-promise-all'
@@ -4566,6 +4590,7 @@ export const routeTree = rootRoute
         "/_layout/til/javascript/hidden-class",
         "/_layout/til/javascript/iterable",
         "/_layout/til/javascript/javascript-trick-1",
+        "/_layout/til/javascript/javascript-trick-2",
         "/_layout/til/javascript/object-is",
         "/_layout/til/javascript/performance-comparison-of-array-find-and-array-indexOf",
         "/_layout/til/javascript/promise-all-settled-and-promise-all",
@@ -5125,6 +5150,10 @@ export const routeTree = rootRoute
     },
     "/_layout/til/javascript/javascript-trick-1": {
       "filePath": "_layout/til/javascript/javascript-trick-1.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/til/javascript/javascript-trick-2": {
+      "filePath": "_layout/til/javascript/javascript-trick-2.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/javascript/object-is": {
