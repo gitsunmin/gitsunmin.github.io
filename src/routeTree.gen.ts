@@ -16,7 +16,7 @@ import { Route as rootRoute } from './routes/__root';
 import { Route as SettingsImport } from './routes/settings';
 import { Route as LayoutImport } from './routes/_layout';
 import { Route as BooksImport } from './routes/_books';
-import { Route as LayoutProjectsImport } from './routes/_layout.projects';
+import { Route as LayoutProjectsImport } from './routes/_layout/projects';
 import { Route as LayoutInterviewImport } from './routes/_layout/interview';
 import { Route as LayoutCareersImport } from './routes/_layout/careers';
 import { Route as LayoutTilREADMEImport } from './routes/_layout/til/README';
@@ -4665,7 +4665,7 @@ export const routeTree = rootRoute
       "parent": "/_layout"
     },
     "/_layout/projects": {
-      "filePath": "_layout.projects.tsx",
+      "filePath": "_layout/projects.tsx",
       "parent": "/_layout"
     },
     "/_books/projects/foodspring": {
