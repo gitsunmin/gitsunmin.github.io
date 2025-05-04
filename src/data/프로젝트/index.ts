@@ -12,6 +12,7 @@ export type 프로젝트 = {
   readonly 회사key: 회사_key;
   readonly 이름: string;
   readonly 소개: React.ReactNode;
+  readonly 목적: React.ReactNode;
   readonly 기간: string;
   readonly 기술들: 기술_key[];
   readonly 주의?: string[];

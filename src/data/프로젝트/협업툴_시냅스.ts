@@ -9,7 +9,8 @@ export const 협업툴_시냅스: 프로젝트 = {
   parentId: null,
   회사key: 'korens',
   이름: '업무 협업 솔루션, 시냅스',
-  소개: ``,
+  소개: '',
+  목적: '',
   기간: '2021.01 ~ ',
   기술들: ['vue', 'quasar', 'graphql', 'typescript', 'aws_amplify'],
   책: {

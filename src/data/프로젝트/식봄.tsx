@@ -14,6 +14,7 @@ export const 식봄: 프로젝트 = {
   parentId: null,
   회사key: 'marketboro',
   이름: '식자재 E-Commerce, 식봄',
+  목적: '',
   소개: (
     <>
       <p>
