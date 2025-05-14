@@ -1,0 +1,402 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`data-integrity > Careers Page Snapshot Test 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <ul
+        class="flex flex-col gap-8 pt-8"
+      >
+        <li
+          class="p-6 rounded-xl border shadow-sm bg-background text-foreground flex flex-col gap-4"
+        >
+          <div
+            class="flex items-start justify-start gap-x-4"
+          >
+            <img
+              alt="(주) 마켓보로 로고"
+              class="rounded-full size-12 border"
+              src="/src/assets/logos/marketboro_logo.webp"
+            />
+            <div>
+              <h2
+                class="text-xl font-bold"
+              >
+                (주) 마켓보로
+              </h2>
+              <p
+                class="text-sm text-gray-500 dark:text-gray-200 mt-1"
+              >
+                프론트엔드 개발자
+                 | 
+                2020.10 ~ 
+              </p>
+            </div>
+          </div>
+          <section
+            class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line"
+          >
+            (주) 마켓보로는 B2B 식자재 유통 시장에서 중간 과정을 최소화하여 비용 절감과 효율 증대를 실현하는 엔터프라이즈 푸드테크 플랫폼을 제공합니다. 
+          또한 사업자 대상의 오픈 마켓인 식봄을 운영하고 있습니다. 
+          저는 프론트엔드 개발자로서 React.js와 Next.js를 활용하여 웹과 모바일 애플리케이션의 사용자 인터페이스를 개발하고 있습니다. 
+          특히, 기존 PHP로 개발된 식봄을 Next.js로 전환하는 프로젝트를 주도하며, 성능 최적화와 사용자 경험 향상을 달성하였습니다. 
+          이러한 경험을 통해 다양한 디바이스에서의 접근성을 보장하고, 최신 기술 스택을 적극 활용하는 역량을 갖추게 되었습니다.
+          </section>
+          <section>
+            <h6
+              class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+            >
+              Projects
+            </h6>
+            <ul
+              class="list-disc ml-5 text-sm mt-1"
+            />
+          </section>
+          <section>
+            <h6
+              class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+            >
+              Links
+            </h6>
+            <ul
+              class="list-disc ml-5 text-sm mt-1 space-y-1"
+            >
+              <li>
+                <a
+                  class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                  href="https://www.marketboro.com"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  마켓보로 웹사이트
+                  <span>
+                    ↗
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                  href="https://www.foodspring.co.kr"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  식봄
+                  <span>
+                    ↗
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                  href="https://pro.marketbom.com"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  마켓봄 프로
+                  <span>
+                    ↗
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </section>
+        </li>
+        <li
+          class="p-6 rounded-xl border shadow-sm bg-background text-foreground flex flex-col gap-4"
+        >
+          <div
+            class="flex items-start justify-start gap-x-4"
+          >
+            <img
+              alt="(주) 코렌스 로고"
+              class="rounded-full size-12 border"
+              src="/src/assets/logos/korens_logo.webp"
+            />
+            <div>
+              <h2
+                class="text-xl font-bold"
+              >
+                (주) 코렌스
+              </h2>
+              <p
+                class="text-sm text-gray-500 dark:text-gray-200 mt-1"
+              >
+                프론트엔드 개발자
+                 | 
+                2019.07 ~ 2020.10
+              </p>
+            </div>
+          </div>
+          <section
+            class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line"
+          >
+            (주) 코렌스는 자동차 부품 제조사로서, 소프트웨어 사업부를 신설하여 새로운 도전을 시작하였습니다. 
+          이곳에서 프론트엔드 개발자로서의 커리어를 시작하였으며, 
+          Vue.js를 활용한 프론트엔드 개발뿐만 아니라 백엔드 개발과 AWS Amplify를 통한 클라우드 서비스 구축 등 다양한 역할을 수행하였습니다. 
+          특히, 초기 개발 환경과 프로세스 구축에 참여하여, 개발 역량뿐만 아니라 문제 해결 능력과 주도적인 업무 수행 능력을 함양하였습니다.
+          </section>
+          <section>
+            <h6
+              class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+            >
+              Projects
+            </h6>
+            <ul
+              class="list-disc ml-5 text-sm mt-1"
+            />
+          </section>
+          <section>
+            <h6
+              class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+            >
+              Links
+            </h6>
+            <ul
+              class="list-disc ml-5 text-sm mt-1 space-y-1"
+            >
+              <li>
+                <a
+                  class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                  href="http://www.korens.com"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  코렌스 웹사이트
+                  <span>
+                    ↗
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </section>
+        </li>
+      </ul>
+    </div>
+  </body>,
+  "container": <div>
+    <ul
+      class="flex flex-col gap-8 pt-8"
+    >
+      <li
+        class="p-6 rounded-xl border shadow-sm bg-background text-foreground flex flex-col gap-4"
+      >
+        <div
+          class="flex items-start justify-start gap-x-4"
+        >
+          <img
+            alt="(주) 마켓보로 로고"
+            class="rounded-full size-12 border"
+            src="/src/assets/logos/marketboro_logo.webp"
+          />
+          <div>
+            <h2
+              class="text-xl font-bold"
+            >
+              (주) 마켓보로
+            </h2>
+            <p
+              class="text-sm text-gray-500 dark:text-gray-200 mt-1"
+            >
+              프론트엔드 개발자
+               | 
+              2020.10 ~ 
+            </p>
+          </div>
+        </div>
+        <section
+          class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line"
+        >
+          (주) 마켓보로는 B2B 식자재 유통 시장에서 중간 과정을 최소화하여 비용 절감과 효율 증대를 실현하는 엔터프라이즈 푸드테크 플랫폼을 제공합니다. 
+          또한 사업자 대상의 오픈 마켓인 식봄을 운영하고 있습니다. 
+          저는 프론트엔드 개발자로서 React.js와 Next.js를 활용하여 웹과 모바일 애플리케이션의 사용자 인터페이스를 개발하고 있습니다. 
+          특히, 기존 PHP로 개발된 식봄을 Next.js로 전환하는 프로젝트를 주도하며, 성능 최적화와 사용자 경험 향상을 달성하였습니다. 
+          이러한 경험을 통해 다양한 디바이스에서의 접근성을 보장하고, 최신 기술 스택을 적극 활용하는 역량을 갖추게 되었습니다.
+        </section>
+        <section>
+          <h6
+            class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+          >
+            Projects
+          </h6>
+          <ul
+            class="list-disc ml-5 text-sm mt-1"
+          />
+        </section>
+        <section>
+          <h6
+            class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+          >
+            Links
+          </h6>
+          <ul
+            class="list-disc ml-5 text-sm mt-1 space-y-1"
+          >
+            <li>
+              <a
+                class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                href="https://www.marketboro.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                마켓보로 웹사이트
+                <span>
+                  ↗
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                href="https://www.foodspring.co.kr"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                식봄
+                <span>
+                  ↗
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                href="https://pro.marketbom.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                마켓봄 프로
+                <span>
+                  ↗
+                </span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </li>
+      <li
+        class="p-6 rounded-xl border shadow-sm bg-background text-foreground flex flex-col gap-4"
+      >
+        <div
+          class="flex items-start justify-start gap-x-4"
+        >
+          <img
+            alt="(주) 코렌스 로고"
+            class="rounded-full size-12 border"
+            src="/src/assets/logos/korens_logo.webp"
+          />
+          <div>
+            <h2
+              class="text-xl font-bold"
+            >
+              (주) 코렌스
+            </h2>
+            <p
+              class="text-sm text-gray-500 dark:text-gray-200 mt-1"
+            >
+              프론트엔드 개발자
+               | 
+              2019.07 ~ 2020.10
+            </p>
+          </div>
+        </div>
+        <section
+          class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line"
+        >
+          (주) 코렌스는 자동차 부품 제조사로서, 소프트웨어 사업부를 신설하여 새로운 도전을 시작하였습니다. 
+          이곳에서 프론트엔드 개발자로서의 커리어를 시작하였으며, 
+          Vue.js를 활용한 프론트엔드 개발뿐만 아니라 백엔드 개발과 AWS Amplify를 통한 클라우드 서비스 구축 등 다양한 역할을 수행하였습니다. 
+          특히, 초기 개발 환경과 프로세스 구축에 참여하여, 개발 역량뿐만 아니라 문제 해결 능력과 주도적인 업무 수행 능력을 함양하였습니다.
+        </section>
+        <section>
+          <h6
+            class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+          >
+            Projects
+          </h6>
+          <ul
+            class="list-disc ml-5 text-sm mt-1"
+          />
+        </section>
+        <section>
+          <h6
+            class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
+          >
+            Links
+          </h6>
+          <ul
+            class="list-disc ml-5 text-sm mt-1 space-y-1"
+          >
+            <li>
+              <a
+                class="text-blue-600 hover:underline inline-flex items-center gap-1"
+                href="http://www.korens.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                코렌스 웹사이트
+                <span>
+                  ↗
+                </span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </li>
+    </ul>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

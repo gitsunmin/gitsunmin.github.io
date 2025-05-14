@@ -1,10 +1,10 @@
-import type { 회사_key } from '@/data/회사';
+import type { CareerKey } from '@/data/회사';
 import type { 기술_key } from '@/data/기술';
 
 export type 프로젝트 = {
   readonly id: string;
   readonly parentId: string | null;
-  readonly 회사key: 회사_key;
+  readonly 회사key: CareerKey;
   readonly 이름: string;
   readonly 소개: React.ReactNode;
   readonly 목적: React.ReactNode;
