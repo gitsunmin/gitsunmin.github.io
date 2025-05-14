@@ -20,7 +20,6 @@ import { Route as LayoutProjectsImport } from './routes/_layout/projects';
 import { Route as LayoutInterviewImport } from './routes/_layout/interview';
 import { Route as LayoutCareersImport } from './routes/_layout/careers';
 import { Route as LayoutTilREADMEImport } from './routes/_layout/til/README';
-import { Route as BooksProjectsFoodspringImport } from './routes/_books/projects/foodspring';
 import { Route as LayoutTilWebassemblyIndexImport } from './routes/_layout/til/webassembly/index';
 import { Route as LayoutTilReactnativeIndexImport } from './routes/_layout/til/react_native/index';
 import { Route as LayoutTilWebWebComponentImport } from './routes/_layout/til/web/web-component';
@@ -252,12 +251,6 @@ const LayoutTilREADMERoute = LayoutTilREADMEImport.update({
   id: '/til/README',
   path: '/til/README',
   getParentRoute: () => LayoutRoute,
-} as any);
-
-const BooksProjectsFoodspringRoute = BooksProjectsFoodspringImport.update({
-  id: '/projects/foodspring',
-  path: '/projects/foodspring',
-  getParentRoute: () => BooksRoute,
 } as any);
 
 const LayoutTilWebassemblyIndexRoute = LayoutTilWebassemblyIndexImport.update({
@@ -1529,13 +1522,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/projects';
       preLoaderRoute: typeof LayoutProjectsImport;
       parentRoute: typeof LayoutImport;
-    };
-    '/_books/projects/foodspring': {
-      id: '/_books/projects/foodspring';
-      path: '/projects/foodspring';
-      fullPath: '/projects/foodspring';
-      preLoaderRoute: typeof BooksProjectsFoodspringImport;
-      parentRoute: typeof BooksImport;
     };
     '/_layout/til/README': {
       id: '/_layout/til/README';
@@ -2809,16 +2795,6 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface BooksRouteChildren {
-  BooksProjectsFoodspringRoute: typeof BooksProjectsFoodspringRoute;
-}
-
-const BooksRouteChildren: BooksRouteChildren = {
-  BooksProjectsFoodspringRoute: BooksProjectsFoodspringRoute,
-};
-
-const BooksRouteWithChildren = BooksRoute._addFileChildren(BooksRouteChildren);
-
 interface LayoutRouteChildren {
   LayoutCareersRoute: typeof LayoutCareersRoute;
   LayoutInterviewRoute: typeof LayoutInterviewRoute;
@@ -3282,7 +3258,6 @@ export interface FileRoutesByFullPath {
   '/careers': typeof LayoutCareersRoute;
   '/interview': typeof LayoutInterviewRoute;
   '/projects': typeof LayoutProjectsRoute;
-  '/projects/foodspring': typeof BooksProjectsFoodspringRoute;
   '/til/README': typeof LayoutTilREADMERoute;
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
@@ -3473,7 +3448,6 @@ export interface FileRoutesByTo {
   '/careers': typeof LayoutCareersRoute;
   '/interview': typeof LayoutInterviewRoute;
   '/projects': typeof LayoutProjectsRoute;
-  '/projects/foodspring': typeof BooksProjectsFoodspringRoute;
   '/til/README': typeof LayoutTilREADMERoute;
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
@@ -3660,13 +3634,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute;
   '/': typeof IndexLazyRoute;
-  '/_books': typeof BooksRouteWithChildren;
+  '/_books': typeof BooksRoute;
   '/_layout': typeof LayoutRouteWithChildren;
   '/settings': typeof SettingsRoute;
   '/_layout/careers': typeof LayoutCareersRoute;
   '/_layout/interview': typeof LayoutInterviewRoute;
   '/_layout/projects': typeof LayoutProjectsRoute;
-  '/_books/projects/foodspring': typeof BooksProjectsFoodspringRoute;
   '/_layout/til/README': typeof LayoutTilREADMERoute;
   '/_layout/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/_layout/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
@@ -3859,7 +3832,6 @@ export interface FileRouteTypes {
     | '/careers'
     | '/interview'
     | '/projects'
-    | '/projects/foodspring'
     | '/til/README'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
@@ -4049,7 +4021,6 @@ export interface FileRouteTypes {
     | '/careers'
     | '/interview'
     | '/projects'
-    | '/projects/foodspring'
     | '/til/README'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
@@ -4240,7 +4211,6 @@ export interface FileRouteTypes {
     | '/_layout/careers'
     | '/_layout/interview'
     | '/_layout/projects'
-    | '/_books/projects/foodspring'
     | '/_layout/til/README'
     | '/_layout/til/algorithm/depth-first-search-algorithm'
     | '/_layout/til/algorithm/implementation-algorithm'
@@ -4427,14 +4397,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute;
-  BooksRoute: typeof BooksRouteWithChildren;
+  BooksRoute: typeof BooksRoute;
   LayoutRoute: typeof LayoutRouteWithChildren;
   SettingsRoute: typeof SettingsRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  BooksRoute: BooksRouteWithChildren,
+  BooksRoute: BooksRoute,
   LayoutRoute: LayoutRouteWithChildren,
   SettingsRoute: SettingsRoute,
 };
@@ -4459,10 +4429,7 @@ export const routeTree = rootRoute
       "filePath": "index.lazy.tsx"
     },
     "/_books": {
-      "filePath": "_books.tsx",
-      "children": [
-        "/_books/projects/foodspring"
-      ]
+      "filePath": "_books.tsx"
     },
     "/_layout": {
       "filePath": "_layout.tsx",
@@ -4667,10 +4634,6 @@ export const routeTree = rootRoute
     "/_layout/projects": {
       "filePath": "_layout/projects.tsx",
       "parent": "/_layout"
-    },
-    "/_books/projects/foodspring": {
-      "filePath": "_books/projects/foodspring.tsx",
-      "parent": "/_books"
     },
     "/_layout/til/README": {
       "filePath": "_layout/til/README.tsx",
