@@ -13,6 +13,7 @@ I have put all the information about me.
 - [x] Connect LinkedIn, Github
 - [ ] Projects Page
 - [ ] TIL Page (SEO)
+- [ ] Add Dependency vitest
 - [x] Settings Page
   - [x] Dark Mode
   - [x] Font Size
