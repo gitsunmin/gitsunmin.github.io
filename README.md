@@ -1,6 +1,6 @@
 # gitsunmin.github.io
 
-I have put all the information about me.
+This project uses the `Git Submodule` to provide the TIL(I Learned Today) project written in `MDX` as a page and provides various content such as my career and interviews.
 
 [here](https://gitsunmin.github.io/)
 
