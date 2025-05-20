@@ -52,10 +52,10 @@ export default defineConfig(({ mode }) => {
         '@til': path.resolve(__dirname, './src/docs/til'),
       },
     },
-    // test: {
-    //   environment: 'jsdom',
-    //   globals: true,
-    //   include: ['tests/**/*.test.ts'],
-    // },
+    test: {
+      environment: 'jsdom',
+      globals: true,
+      include: ['tests/**/*.test.ts'],
+    },
   };
 });
