@@ -11,19 +11,17 @@ import BookTopTexture from '@/assets/book_top.webp';
 import BookBottomTexture from '@/assets/book_bottom.webp';
 import BookPagesTexture from '@/assets/book_pages.webp';
 
-const books = PROJECT_LIST.filter((project) => project.parentId === null).map(
-  (project) => ({
-    id: project.id,
-    textures: {
-      front: project.book.cover.front,
-      back: project.book.cover.back,
-      side: project.book.cover.side,
-      top: BookTopTexture,
-      bottom: BookBottomTexture,
-      pages: BookPagesTexture,
-    },
-  }),
-);
+const books = PROJECT_LIST.map((project) => ({
+  id: project.id,
+  textures: {
+    front: project.book.cover.front,
+    back: project.book.cover.back,
+    side: project.book.cover.side,
+    top: BookTopTexture,
+    bottom: BookBottomTexture,
+    pages: BookPagesTexture,
+  },
+}));
 
 function CameraController({
   selectedBookId,
@@ -85,7 +83,7 @@ export const Content = () => {
 
 export const ProjectsPage = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <Content />
     </Suspense>
   );

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { CareersPage } from '@/components/pages/Careers';
 import { render } from '@testing-library/react';
-import { ProjectsPage } from '@/components/pages/Projects';
+import { ProjectsPage } from '@/components/pages/project';
 import { InterviewPage } from '@/components/pages/interview';
 
 describe('data-integrity', () => {

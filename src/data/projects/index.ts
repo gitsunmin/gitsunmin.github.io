@@ -1,9 +1,10 @@
 import type { CareerId } from '@/data/careers';
 import type { SkilId } from '@/data/skils';
+import { PROJECT_BOROTER } from './boronter';
 
 export type Project = {
   readonly id: string;
-  readonly parentId: string | null;
+  readonly relatedTo: string | null;
   readonly careerId: CareerId;
   readonly name: string;
   readonly introduce: React.ReactNode;
@@ -38,4 +39,4 @@ export type Project = {
   }[];
 };
 
-export const PROJECT_LIST: Project[] = [];
+export const PROJECT_LIST: Project[] = [PROJECT_BOROTER];
