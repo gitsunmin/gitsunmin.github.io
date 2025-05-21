@@ -1,19 +1,19 @@
 import { Page } from '@/components/project/Page';
-import type { 프로젝트 } from '@/data/프로젝트';
+import type { Project } from '@/data/projects';
 import { TableOfContents } from '@/components/project/TableOfContents';
 
 type Props = {
-  프로젝트: 프로젝트;
+  project: Project;
 };
 
-export const BookTemplate = ({ 프로젝트 }: Props) => {
-  const { id, 이름, 소개, 책, 작업 } = 프로젝트;
+export const BookTemplate = ({ project }: Props) => {
+  const { id, name, introduce, book, work } = project;
 
   return (
     <article className="snap-y snap-mandatory h-[100dvh] overflow-y-scroll">
       <Page variant="cover">
         <img
-          src={책.표지.앞}
+          src={book.cover.front}
           loading="lazy"
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"
@@ -21,35 +21,35 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
       </Page>
 
       <Page className="flex items-center justify-center">
-        <h1 className="text-3xl md:text-5xl font-bold">{이름}</h1>
+        <h1 className="text-3xl md:text-5xl font-bold">{name}</h1>
       </Page>
 
       <Page label="Table of Contents">
         <h2 className="text-2xl md:text-4xl font-bold mb-4">목차</h2>
 
-        <TableOfContents 프로젝트={프로젝트} />
+        <TableOfContents project={project} />
       </Page>
 
       <Page id={`${id}-intro`} label="Introduction">
-        <h2 className="text-2xl md:text-4xl pb-4 font-bold">{이름}</h2>
-        {소개}
+        <h2 className="text-2xl md:text-4xl pb-4 font-bold">{name}</h2>
+        {introduce}
       </Page>
 
-      {작업?.map((work) => {
+      {work?.map((work) => {
         return (
           <div key={work.id}>
             <Page>
               <h2 className="text-2xl md:text-4xl pb-4 font-bold">
-                {work.제목}
+                {work.title}
               </h2>
               <br />
-              <p>{work.소개}</p>
+              <p>{work.introduce}</p>
               <br />
             </Page>
 
             <Page className="flex items-center justify-center">
               <h2 className="text-2xl md:text-5xl font-bold text-center">
-                {work.제목}
+                {work.title}
                 <br />
                 <br />
                 <div className="text-3xl md:text-5xl animate-bounce">
@@ -58,14 +58,14 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
               </h2>
             </Page>
 
-            {work.기여도.map((경험) => {
+            {work.contribution.map((experience) => {
               return (
-                <Page label={`${work.제목} 기여도`} key={경험.id}>
+                <Page label={`${work.title} 기여도`} key={experience.id}>
                   <h2 className="text-2xl md:text-4xl mt-2 font-bold">
-                    {경험.제목}
+                    {experience.title}
                   </h2>
                   <br />
-                  <p>{경험.내용}</p>
+                  <p>{experience.description}</p>
                   <br />
                 </Page>
               );
@@ -73,7 +73,7 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
 
             <Page className="flex items-center justify-center">
               <h2 className="text-2xl md:text-5xl font-bold text-center">
-                {work.제목}
+                {work.title}
                 <br />
                 <br />
                 <div className="text-3xl md:text-5xl animate-bounce">
@@ -82,31 +82,31 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
               </h2>
             </Page>
 
-            {work.트러블슈팅.map((트러블슈팅) => {
+            {work.troubleshooting.map((troubleshooting) => {
               return (
-                <div key={트러블슈팅.id}>
+                <div key={troubleshooting.id}>
                   <Page
-                    label={work.제목}
-                    key={트러블슈팅.id}
+                    label={work.title}
+                    key={troubleshooting.id}
                     className="relative"
                   >
                     <h2 className="absolute top-[50%] -translate-y-[50%] left-[50%] -translate-[50%] text-2xl md:text-4xl mt-2 font-bold text-center px-4 break-words w-full">
                       <div className="text-4xl animate-bounce">문제점</div>
                       <br />
-                      {트러블슈팅.제목}
+                      {troubleshooting.title}
                     </h2>
                   </Page>
-                  <Page label={트러블슈팅.제목}>
+                  <Page label={troubleshooting.title}>
                     <h3 className="text-xl md:text-3xl font-bold">상세</h3>
-                    <p>{트러블슈팅.문제점}</p>
+                    <p>{troubleshooting.problem}</p>
                   </Page>
-                  <Page label={트러블슈팅.제목}>
+                  <Page label={troubleshooting.title}>
                     <h3 className="text-xl md:text-3xl font-bold">해결방법</h3>
-                    <p>{트러블슈팅.해결방법}</p>
+                    <p>{troubleshooting.solution}</p>
                   </Page>
-                  <Page label={트러블슈팅.제목}>
+                  <Page label={troubleshooting.title}>
                     <h3 className="text-xl md:text-3xl font-bold">회고</h3>
-                    <p>{트러블슈팅.회고}</p>
+                    <p>{troubleshooting.retrospect}</p>
                   </Page>
                 </div>
               );
@@ -117,7 +117,7 @@ export const BookTemplate = ({ 프로젝트 }: Props) => {
 
       <Page variant="cover">
         <img
-          src={책.표지.뒤}
+          src={book.cover.back}
           loading="lazy"
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"

@@ -13,7 +13,7 @@ const MermaidDiagram = ({ code }: { code: string }) => {
   useEffect(() => {
     mermaid.initialize({ startOnLoad: true });
     mermaid.contentLoaded();
-  }, [code]);
+  }, []);
 
   return <div className="mermaid flex justify-center items-center">{code}</div>;
 };
@@ -36,6 +36,7 @@ const CodeBlock = ({ code = '', languege }: Props) => {
   }, [code, languege]);
   return (
     <div
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
       dangerouslySetInnerHTML={{ __html: highlightedCode }}
       className="rounded-lg bg-[#24292e] p-4 overflow-auto shadow-lg shadow-gray-700"
     />
@@ -52,6 +53,7 @@ export const CodeBlockWrapper = ({ code = '', languege }: Props) => {
   return (
     <div className={cn('relative py-4', `language-${languege}`)}>
       <button
+        type="button"
         className="absolute right-2 top-4 text-sm text-white py-1 px-2"
         onClick={handleClick}
       >

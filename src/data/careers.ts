@@ -1,21 +1,21 @@
-import { type 프로젝트, 프로젝트들 } from './프로젝트';
+import { PROJECT_LIST, type Project } from './projects';
 
 import marketboro_logo from '@/assets/logos/marketboro_logo.webp';
 import korens_logo from '@/assets/logos/korens_logo.webp';
 
 export const CAREER_NAME = ['marketboro', 'korens'] as const;
 
-export type CareerKey = (typeof CAREER_NAME)[number];
+export type CareerId = (typeof CAREER_NAME)[number];
 
 type Career = {
-  id: CareerKey;
+  id: CareerId;
   name: string;
   logo: string;
   introduce: string;
   caution?: string;
   positoin: string;
   range: string;
-  projects: 프로젝트[];
+  projects: Project[];
   links: {
     label: string;
     url: string;
@@ -34,7 +34,9 @@ export const Career: Career[] = [
           이러한 경험을 통해 다양한 디바이스에서의 접근성을 보장하고, 최신 기술 스택을 적극 활용하는 역량을 갖추게 되었습니다.`,
     range: '2020.10 ~ ',
     positoin: '프론트엔드 개발자',
-    projects: 프로젝트들.filter((project) => project.회사key === 'marketboro'),
+    projects: PROJECT_LIST.filter(
+      (project) => project.careerId === 'marketboro',
+    ),
     links: [
       {
         label: '마켓보로 웹사이트',
@@ -60,7 +62,7 @@ export const Career: Career[] = [
           특히, 초기 개발 환경과 프로세스 구축에 참여하여, 개발 역량뿐만 아니라 문제 해결 능력과 주도적인 업무 수행 능력을 함양하였습니다.`,
     positoin: '프론트엔드 개발자',
     range: '2019.07 ~ 2020.10',
-    projects: 프로젝트들.filter((project) => project.회사key === 'korens'),
+    projects: PROJECT_LIST.filter((project) => project.careerId === 'korens'),
     links: [
       {
         label: '코렌스 웹사이트',

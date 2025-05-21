@@ -27,7 +27,7 @@ export const Default404 = () => {
       </Button>
 
       {/* 애니메이션 효과 (흐릿한 원) */}
-      <div className="absolute bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
     </div>
   );
 };

@@ -1,12 +1,12 @@
-import type { 프로젝트 } from '@/data/프로젝트';
+import type { Project } from '@/data/projects';
 import { Link } from '@tanstack/react-router';
 
 type Props = {
-  프로젝트: 프로젝트;
+  project: Project;
 };
 
-export const TableOfContents = ({ 프로젝트 }: Props) => {
-  const { id, 이름, 작업 } = 프로젝트;
+export const TableOfContents = ({ project }: Props) => {
+  const { id, name, work } = project;
 
   return (
     <ol className="list-decimal pl-5 space-y-2">
@@ -21,11 +21,11 @@ export const TableOfContents = ({ 프로젝트 }: Props) => {
             inline: 'nearest',
           }}
         >
-          {이름} 소개
+          {name} 소개
         </Link>
       </li>
 
-      {작업?.map((work) => (
+      {work?.map((work) => (
         <li key={work.id} className="space-y-2">
           <Link
             to=""
@@ -33,7 +33,7 @@ export const TableOfContents = ({ 프로젝트 }: Props) => {
             className="font-semibold"
             hashScrollIntoView
           >
-            {work.제목}
+            {work.title}
           </Link>
           <ol className="list-disc pl-5 space-y-1">
             <li>
@@ -45,10 +45,10 @@ export const TableOfContents = ({ 프로젝트 }: Props) => {
                 기여도
               </Link>
               <ol className="list-circle pl-6 space-y-1">
-                {work.기여도.map((경험) => (
-                  <li key={경험.id} className=" space-y-1">
-                    <Link to="" hash={경험.id}>
-                      {경험.제목}
+                {work.contribution.map((experience) => (
+                  <li key={experience.id} className=" space-y-1">
+                    <Link to="" hash={experience.id}>
+                      {experience.title}
                     </Link>
                   </li>
                 ))}
@@ -63,10 +63,10 @@ export const TableOfContents = ({ 프로젝트 }: Props) => {
                 트러블슈팅
               </Link>
               <ol className="list-circle pl-6 space-y-1">
-                {work.트러블슈팅.map((트러블슈팅) => (
-                  <li key={트러블슈팅.id} className=" space-y-1">
-                    <Link to="" hash={트러블슈팅.id}>
-                      {트러블슈팅.문제점}
+                {work.troubleshooting.map((troubleshooting) => (
+                  <li key={troubleshooting.id} className=" space-y-1">
+                    <Link to="" hash={troubleshooting.id}>
+                      {troubleshooting.problem}
                     </Link>
                   </li>
                 ))}

@@ -52,6 +52,7 @@ export const BookShelf = (props: Props) => {
       {/* 📌 층별 구분판 (각 층을 나누는 바닥) */}
       {Array.from({ length: shelves - 1 }).map((_, i) => (
         <mesh
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           key={i}
           position={[
             -0.2,
@@ -71,6 +72,7 @@ export const BookShelf = (props: Props) => {
       {books.map((book, index) => (
         <Book
           id={book.id}
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           key={index}
           position={book.position}
           size={book.size}

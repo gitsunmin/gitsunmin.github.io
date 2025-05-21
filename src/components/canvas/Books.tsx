@@ -65,6 +65,7 @@ export const Book = ({
   });
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <mesh
       ref={bookRef}
       position={position}

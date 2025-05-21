@@ -9,6 +9,7 @@ const Spinner: React.FC<{
     >
       {Array.from({ length: 12 }).map((_, i) => (
         <div
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           key={i}
           className={`absolute w-[8%] h-[30%] bg-current rounded-full ${color} animate-fade`}
           style={{

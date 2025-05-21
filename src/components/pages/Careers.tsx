@@ -1,6 +1,7 @@
-import { Career } from '@/data/회사';
+import { Career } from '@/data/careers';
+import { Suspense } from 'react';
 
-export const CareersPage = () => {
+const Content = () => {
   return (
     <ul className="flex flex-col gap-8 pt-8">
       {Career.map((career) => {
@@ -9,7 +10,6 @@ export const CareersPage = () => {
             key={career.name}
             className="p-6 rounded-xl border shadow-sm bg-background text-foreground flex flex-col gap-4"
           >
-            {/* 헤더: 로고 + 회사명 + positoin/기간 */}
             <div className="flex items-start justify-start gap-x-4">
               <img
                 src={career.logo}
@@ -40,8 +40,8 @@ export const CareersPage = () => {
                 Projects
               </h6>
               <ul className="list-disc ml-5 text-sm mt-1">
-                {career.projects.map(({ id, 이름 }) => (
-                  <li key={id}>{이름}</li>
+                {career.projects.map(({ id, name }) => (
+                  <li key={id}>{name}</li>
                 ))}
               </ul>
             </section>
@@ -71,5 +71,13 @@ export const CareersPage = () => {
         );
       })}
     </ul>
+  );
+};
+
+export const CareersPage = () => {
+  return (
+    <Suspense>
+      <Content />
+    </Suspense>
   );
 };

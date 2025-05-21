@@ -400,3 +400,2005 @@ exports[`data-integrity > Careers Page Snapshot Test 1`] = `
   "unmount": [Function],
 }
 `;
+
+exports[`data-integrity > Interview Page Snapshot Test 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <article
+        class="flex flex-col text-gray-900 dark:text-gray-100"
+      >
+        <p
+          class="text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-600 px-4 py-2 text-sm break-words bg-gray-50 dark:bg-gray-800"
+        >
+          이 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에 대한 답변을 기반으로 작성해보았습니다.
+        </p>
+        <section
+          class="flex flex-wrap gap-y-[10px] pt-10"
+        >
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    안녕하세요! 개발자 김선민님의 페이지에 오신 것을 환영합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="w-10"
+            />
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    이 페이지를 통해서 선민님에 대해 더 자세한 정보를 얻을 수 있도록 도와드리겠습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="w-10"
+            />
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    자, 그럼 선민님과 채팅 인터뷰를 시작하겠습니다! 🎉
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="w-10"
+            />
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    안녕하세요, 선민님!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    네, 안녕하세요!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    선민님, 간단하게 자기소개 부탁드립니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    네, 저는 웹, 모바일/PC 플랫폼뿐만 아니라, Flutter를 활용한 앱 개발 경험도 보유한 프론트엔드 개발자입니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    프론트엔드뿐만 아니라 다양한 기술 경험을 보유하고 계시군요. 혹시 개발자로 커리어를 시작하게 된 계기가 있을까요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    사실 저는 응용물리학을 전공했습니다. 대학 시절 실험 데이터를 분석하고 그래프로 시각화하기 위해 Python을 활용했었는데요. 프로그래밍을 하면서 화면이 내 의도대로 동작하고, 기능을 추가할 수 있다는 점이 무척 흥미로웠습니다. 점점 프로그래밍 자체에 더 깊이 빠지게 되었고, 결국 개발자로 커리어를 쌓기로 결정했습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    프로그래밍을 통해 원하는 것을 쉽게 만들 수 있다는 점이 매력적이었던 거군요! 그렇다면 개발을 시작한 후 가장 뿌듯했던 프로젝트가 있을까요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    처음 만들었던 프로젝트는 숫자 야구 게임이었습니다. 프로그램에서 무작위로 3자리 숫자를 선택하면 사용자가 숫자를 입력하여 스트라이크와 볼을 판정받고 정답을 맞추는 방식이었죠. 간단한 프로젝트였지만, 제가 만든 프로그램을 다른 사람이 직접 플레이하는 모습을 보면서 큰 보람을 느꼈던 기억이 있습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    자신이 만든 프로그램을 사람들이 사용하는 모습을 보면 정말 뿌듯할 것 같아요! 그 이후에 개발자로서 사용자 경험을 개선하면서 보람을 느꼈던 순간이 있을까요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    현재 운영 중인 식자재 커머스 서비스에서 제가 개발한 기능 덕분에 장바구니에 상품을 담는 비율이 증가하거나, 검색이 더 편리해졌다는 피드백을 받았을 때 보람을 느꼈습니다. 사용자의 행동이 데이터로 직접 반영되다 보니, 개선 효과를 숫자로 확인할 수 있다는 점에서 큰 동기부여가 되었습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    실제 사용자 경험을 개선하는 일이 개발자로서 큰 보람이 되는군요! 성능 최적화 측면에서도 개선 사례가 있을까요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    네, 웹 애플리케이션의 응답 속도가 느리다는 피드백을 받아 개선 작업을 진행한 적이 있습니다. 모든 사용자 액션의 평균 응답 시간을 300ms 이하로 줄이는 것이 목표였죠. 특히, 한 액션의 백엔드 응답 시간이 3초나 걸려 사용성이 떨어졌는데, 이를 스탭퍼 UI를 활용하여 단위 액션별 응답 시간을 줄이는 방식으로 개선했고, 좋은 평가를 받았습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    UI 개선을 통해 성능 최적화를 이뤄낸 사례군요! 다양한 기술을 경험하셨는데, Flutter와 Next.js 기반의 SSR 개발을 하면서 어떤 차이점을 느끼셨나요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    Flutter 자체는 배우기 쉬웠지만, 안드로이드와 iOS라는 모바일 생태계에 적응하는 것이 더 중요한 부분이었습니다. 웹과 달리 배포 후 사용자가 직접 앱을 업데이트해야 최신 기능을 사용할 수 있기 때문에, 하위 버전과의 호환성을 고려하며 개발하는 것이 필수적이었어요.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="w-10"
+            />
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    반면, Next.js 기반 SSR 개발에서는 프론트엔드 개발자가 서버도 함께 다룬다는 점이 가장 큰 차이점이었습니다. 브라우저에서는 새로고침하면 모든 리소스가 초기화되지만, 서버는 실행 중이므로 특정 값이 유지될 수도 있다는 점을 신경 써야 했습니다. 예를 들어 \`Date()\`를 사용할 때, 브라우저에서는 새로고침할 때마다 최신 시간이 반영되지만, 서버에서는 실행된 시점의 시간이 고정될 수 있는 점이 대표적인 차이점이었습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    각 기술 스택의 특징을 잘 이해하고 고려하면서 개발하셨군요! 그렇다면 새로운 기술을 배울 때 선민님만의 학습 방법이 있을까요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    특별한 방법은 아니지만, 먼저 문서나 책을 통해 개념을 익히고, 직접 실습을 해보는 방식입니다. 실습 과정에서는 **일부러 다양한 실수를 경험하는 것**이 중요하다고 생각해요. 실패를 해결하면서 더 깊이 학습할 수 있으니까요. 또한, 커뮤니티를 통해 다른 개발자의 실패 경험을 간접적으로 배우는 것도 효과적인 학습 방법이라고 생각합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    실수를 학습의 일부로 받아들이고, 문제를 해결하는 과정에서 성장하는 방식이군요! 그렇다면 개발자로서 가장 중요하다고 생각하는 가치나 원칙이 있을까요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    제가 개발하면서 깨달은 점은 '내가 어렵게 개발해야, 사용자가 편하다.'는 것입니다. 개발자가 귀찮거나 어렵다고 대충 개발하면 결국 사용자가 불편해지고, 나중에는 동료 개발자들에게도 부담이 될 수 있어요. 그래서 최대한 꼼꼼하게 공부하고 시도하면서 개발해야 유지보수도 용이하고, 가용성이 높은 소프트웨어를 만들 수 있다고 생각합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    정말 멋진 개발 철학이네요! 마지막으로, 앞으로 개발자로서 어떤 목표를 가지고 계신가요?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    학습을 이어나가는 것은 기본이겠지만, 단순히 기술에만 몰두하는 개발자가 아니라, 주변을 살피고 필요한 기술을 적재적소에 활용할 수 있는 개발자가 되고 싶습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="James_profile"
+                  class="object-cover rounded-full"
+                  src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-left"
+              >
+                James
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    말씀하신 것처럼, 기술 자체에만 몰두하다 보면 정작 중요한 문제를 놓칠 수도 있고, 실질적인 사용자 경험을 개선하는 데 어려움을 겪을 수도 있을 것 같아요. 그래서 상황을 전체적으로 조망하면서, 필요한 기술과 해결책을 유연하게 적용하는 개발자가 되는 것이 정말 중요할 것 같습니다!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+          >
+            <div
+              class="w-10"
+            />
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+              >
+                <div>
+                  <p>
+                    오늘 인터뷰 정말 즐거웠습니다! 😊 선민님의 개발 철학과 경험을 들으면서 저도 많은 걸 배운 것 같아요. 앞으로도 계속 좋은 개발자로 성장하시길 응원하겠습니다!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+          >
+            <div
+              class="flex items-start"
+            >
+              <div
+                class="rounded-full border border-gray-200 dark:border-gray-700"
+                style="width: 40px; height: 40px;"
+              >
+                <img
+                  alt="Sunmin_profile"
+                  class="object-cover rounded-full"
+                  src="https://github.com/gitsunmin.png"
+                  style="width: 40px; height: 40px;"
+                />
+              </div>
+            </div>
+            <div
+              class="max-w-[60%] flex flex-col gap-y-1"
+            >
+              <div
+                class="text-sm text-gray-700 dark:text-gray-300 text-right"
+              >
+                Sunmin
+              </div>
+              <div
+                class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+              >
+                <div>
+                  <p>
+                    넵 저도 즐거운 시간이었습니다. 감사합니다~! 😄
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+    </div>
+  </body>,
+  "container": <div>
+    <article
+      class="flex flex-col text-gray-900 dark:text-gray-100"
+    >
+      <p
+        class="text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-600 px-4 py-2 text-sm break-words bg-gray-50 dark:bg-gray-800"
+      >
+        이 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에 대한 답변을 기반으로 작성해보았습니다.
+      </p>
+      <section
+        class="flex flex-wrap gap-y-[10px] pt-10"
+      >
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  안녕하세요! 개발자 김선민님의 페이지에 오신 것을 환영합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="w-10"
+          />
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  이 페이지를 통해서 선민님에 대해 더 자세한 정보를 얻을 수 있도록 도와드리겠습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="w-10"
+          />
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  자, 그럼 선민님과 채팅 인터뷰를 시작하겠습니다! 🎉
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="w-10"
+          />
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  안녕하세요, 선민님!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  네, 안녕하세요!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  선민님, 간단하게 자기소개 부탁드립니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  네, 저는 웹, 모바일/PC 플랫폼뿐만 아니라, Flutter를 활용한 앱 개발 경험도 보유한 프론트엔드 개발자입니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  프론트엔드뿐만 아니라 다양한 기술 경험을 보유하고 계시군요. 혹시 개발자로 커리어를 시작하게 된 계기가 있을까요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  사실 저는 응용물리학을 전공했습니다. 대학 시절 실험 데이터를 분석하고 그래프로 시각화하기 위해 Python을 활용했었는데요. 프로그래밍을 하면서 화면이 내 의도대로 동작하고, 기능을 추가할 수 있다는 점이 무척 흥미로웠습니다. 점점 프로그래밍 자체에 더 깊이 빠지게 되었고, 결국 개발자로 커리어를 쌓기로 결정했습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  프로그래밍을 통해 원하는 것을 쉽게 만들 수 있다는 점이 매력적이었던 거군요! 그렇다면 개발을 시작한 후 가장 뿌듯했던 프로젝트가 있을까요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  처음 만들었던 프로젝트는 숫자 야구 게임이었습니다. 프로그램에서 무작위로 3자리 숫자를 선택하면 사용자가 숫자를 입력하여 스트라이크와 볼을 판정받고 정답을 맞추는 방식이었죠. 간단한 프로젝트였지만, 제가 만든 프로그램을 다른 사람이 직접 플레이하는 모습을 보면서 큰 보람을 느꼈던 기억이 있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  자신이 만든 프로그램을 사람들이 사용하는 모습을 보면 정말 뿌듯할 것 같아요! 그 이후에 개발자로서 사용자 경험을 개선하면서 보람을 느꼈던 순간이 있을까요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  현재 운영 중인 식자재 커머스 서비스에서 제가 개발한 기능 덕분에 장바구니에 상품을 담는 비율이 증가하거나, 검색이 더 편리해졌다는 피드백을 받았을 때 보람을 느꼈습니다. 사용자의 행동이 데이터로 직접 반영되다 보니, 개선 효과를 숫자로 확인할 수 있다는 점에서 큰 동기부여가 되었습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  실제 사용자 경험을 개선하는 일이 개발자로서 큰 보람이 되는군요! 성능 최적화 측면에서도 개선 사례가 있을까요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  네, 웹 애플리케이션의 응답 속도가 느리다는 피드백을 받아 개선 작업을 진행한 적이 있습니다. 모든 사용자 액션의 평균 응답 시간을 300ms 이하로 줄이는 것이 목표였죠. 특히, 한 액션의 백엔드 응답 시간이 3초나 걸려 사용성이 떨어졌는데, 이를 스탭퍼 UI를 활용하여 단위 액션별 응답 시간을 줄이는 방식으로 개선했고, 좋은 평가를 받았습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  UI 개선을 통해 성능 최적화를 이뤄낸 사례군요! 다양한 기술을 경험하셨는데, Flutter와 Next.js 기반의 SSR 개발을 하면서 어떤 차이점을 느끼셨나요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  Flutter 자체는 배우기 쉬웠지만, 안드로이드와 iOS라는 모바일 생태계에 적응하는 것이 더 중요한 부분이었습니다. 웹과 달리 배포 후 사용자가 직접 앱을 업데이트해야 최신 기능을 사용할 수 있기 때문에, 하위 버전과의 호환성을 고려하며 개발하는 것이 필수적이었어요.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="w-10"
+          />
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  반면, Next.js 기반 SSR 개발에서는 프론트엔드 개발자가 서버도 함께 다룬다는 점이 가장 큰 차이점이었습니다. 브라우저에서는 새로고침하면 모든 리소스가 초기화되지만, 서버는 실행 중이므로 특정 값이 유지될 수도 있다는 점을 신경 써야 했습니다. 예를 들어 \`Date()\`를 사용할 때, 브라우저에서는 새로고침할 때마다 최신 시간이 반영되지만, 서버에서는 실행된 시점의 시간이 고정될 수 있는 점이 대표적인 차이점이었습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  각 기술 스택의 특징을 잘 이해하고 고려하면서 개발하셨군요! 그렇다면 새로운 기술을 배울 때 선민님만의 학습 방법이 있을까요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  특별한 방법은 아니지만, 먼저 문서나 책을 통해 개념을 익히고, 직접 실습을 해보는 방식입니다. 실습 과정에서는 **일부러 다양한 실수를 경험하는 것**이 중요하다고 생각해요. 실패를 해결하면서 더 깊이 학습할 수 있으니까요. 또한, 커뮤니티를 통해 다른 개발자의 실패 경험을 간접적으로 배우는 것도 효과적인 학습 방법이라고 생각합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  실수를 학습의 일부로 받아들이고, 문제를 해결하는 과정에서 성장하는 방식이군요! 그렇다면 개발자로서 가장 중요하다고 생각하는 가치나 원칙이 있을까요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  제가 개발하면서 깨달은 점은 '내가 어렵게 개발해야, 사용자가 편하다.'는 것입니다. 개발자가 귀찮거나 어렵다고 대충 개발하면 결국 사용자가 불편해지고, 나중에는 동료 개발자들에게도 부담이 될 수 있어요. 그래서 최대한 꼼꼼하게 공부하고 시도하면서 개발해야 유지보수도 용이하고, 가용성이 높은 소프트웨어를 만들 수 있다고 생각합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  정말 멋진 개발 철학이네요! 마지막으로, 앞으로 개발자로서 어떤 목표를 가지고 계신가요?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  학습을 이어나가는 것은 기본이겠지만, 단순히 기술에만 몰두하는 개발자가 아니라, 주변을 살피고 필요한 기술을 적재적소에 활용할 수 있는 개발자가 되고 싶습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="James_profile"
+                class="object-cover rounded-full"
+                src="https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-left"
+            >
+              James
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  말씀하신 것처럼, 기술 자체에만 몰두하다 보면 정작 중요한 문제를 놓칠 수도 있고, 실질적인 사용자 경험을 개선하는 데 어려움을 겪을 수도 있을 것 같아요. 그래서 상황을 전체적으로 조망하면서, 필요한 기술과 해결책을 유연하게 적용하는 개발자가 되는 것이 정말 중요할 것 같습니다!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row"
+        >
+          <div
+            class="w-10"
+          />
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <div>
+                <p>
+                  오늘 인터뷰 정말 즐거웠습니다! 😊 선민님의 개발 철학과 경험을 들으면서 저도 많은 걸 배운 것 같아요. 앞으로도 계속 좋은 개발자로 성장하시길 응원하겠습니다!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="w-full flex gap-x-2.5 gap-y-1 flex-row-reverse"
+        >
+          <div
+            class="flex items-start"
+          >
+            <div
+              class="rounded-full border border-gray-200 dark:border-gray-700"
+              style="width: 40px; height: 40px;"
+            >
+              <img
+                alt="Sunmin_profile"
+                class="object-cover rounded-full"
+                src="https://github.com/gitsunmin.png"
+                style="width: 40px; height: 40px;"
+              />
+            </div>
+          </div>
+          <div
+            class="max-w-[60%] flex flex-col gap-y-1"
+          >
+            <div
+              class="text-sm text-gray-700 dark:text-gray-300 text-right"
+            >
+              Sunmin
+            </div>
+            <div
+              class="rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <div>
+                <p>
+                  넵 저도 즐거운 시간이었습니다. 감사합니다~! 😄
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </article>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`data-integrity > Projects Page Snapshot Test 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        style="position: relative; width: 100%; height: 100dvh; overflow: hidden; pointer-events: auto;"
+      >
+        <div
+          style="width: 100%; height: 100%;"
+        >
+          <canvas
+            style="display: block;"
+          />
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      style="position: relative; width: 100%; height: 100dvh; overflow: hidden; pointer-events: auto;"
+    >
+      <div
+        style="width: 100%; height: 100%;"
+      >
+        <canvas
+          style="display: block;"
+        />
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

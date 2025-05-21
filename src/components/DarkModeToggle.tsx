@@ -6,6 +6,7 @@ export function DarkModeToggle() {
 
   return (
     <button
+      type="button"
       onClick={() => setDarkMode(!darkMode)}
       className="p-2 rounded-md bg-secondary hover:bg-secondary/80 transition-colors"
       aria-label={darkMode ? '라이트 모드로 전환' : '다크 모드로 전환'}

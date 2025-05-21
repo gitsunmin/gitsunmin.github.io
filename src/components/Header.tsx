@@ -52,7 +52,7 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
             </h1>
           </span>
         </Link>
-        <div className="size-10"></div>
+        <div className="size-10" />
       </header>
     </>
   );

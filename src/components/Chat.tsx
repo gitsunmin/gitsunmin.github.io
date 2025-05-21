@@ -1,14 +1,14 @@
-import type { 채팅 } from '@/data/인터뷰';
+import type { Chat } from '@/data/interview';
 import { Link } from '@tanstack/react-router';
 import { match } from 'ts-pattern';
 import { cn } from '@/lib/utils';
 
-type Props = 채팅 & {
+type Props = Chat & {
   className?: string;
 };
 
-export const Chat = ({ 컨텐츠, 확장, 이름, className = '' }: Props) => {
-  const isMe = 이름 === 'Sunmin';
+export const ChatCard = ({ contents, extend, name, className = '' }: Props) => {
+  const isMe = name === 'Sunmin';
 
   return (
     <div
@@ -23,20 +23,20 @@ export const Chat = ({ 컨텐츠, 확장, 이름, className = '' }: Props) => {
       )}
     >
       <div>
-        <p>{컨텐츠}</p>
+        <p>{contents}</p>
       </div>
 
-      {match(확장)
-        .with({ __t: 'Link' }, ({ 경로, 라벨 }) => (
+      {match(extend)
+        .with({ __t: 'Link' }, ({ path, label }) => (
           <Link
-            href={경로}
+            href={path}
             className={cn('mt-2 text-xs underline', {
               'text-blue-200 dark:text-blue-100': isMe,
               'text-blue-500 dark:text-blue-300': !isMe,
             })}
             to={''}
           >
-            {라벨}
+            {label}
           </Link>
         ))
         .otherwise(() => null)}

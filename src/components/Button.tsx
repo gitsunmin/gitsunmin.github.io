@@ -12,6 +12,7 @@ export const Button = (props: Props) => {
 
   return (
     <button
+      type="button"
       className={cn(
         {
           'bg-primary px-4 py-2 rounded-md': variant === 'primary',

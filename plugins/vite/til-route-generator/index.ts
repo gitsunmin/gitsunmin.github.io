@@ -84,6 +84,7 @@ const importTILContents = (inputDir: string, mode: string) => {
     recursive: true,
   });
 
+  // biome-ignore lint/complexity/noForEach: <explanation>
   entries.forEach((entry) => {
     const relativePath = path.relative(
       TIL_DIR,
@@ -147,13 +148,13 @@ const generateComponent = (relativePath: string, outputPath: string) => {
     .with('README', () => {
       sourceFile.addImportDeclaration({
         defaultImport: ReplaciesName,
-        moduleSpecifier: `@/docs/replacies/tilReadme`,
+        moduleSpecifier: '@/docs/replacies/tilReadme',
       });
     })
     .otherwise(() => {
       sourceFile.addImportDeclaration({
         defaultImport: ReplaciesName,
-        moduleSpecifier: `@/docs/replacies/tilContents`,
+        moduleSpecifier: '@/docs/replacies/tilContents',
       });
     });
 
@@ -192,6 +193,7 @@ const createTILRoute = () => {
     withFileTypes: true,
     recursive: true,
   });
+  // biome-ignore lint/complexity/noForEach: <explanation>
   entries.forEach((entry) => {
     const relativePath = path.relative(
       DOCS_DIR,
