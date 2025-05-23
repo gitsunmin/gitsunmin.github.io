@@ -37,10 +37,10 @@ const Content = () => {
             {/* 프로젝트 섹션 */}
             <section>
               <h6 className="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
-                Projects
+                Experiencies
               </h6>
               <ul className="list-disc ml-5 text-sm mt-1">
-                {career.projects.map(({ id, name }) => (
+                {career.experiencies.map(({ id, name }) => (
                   <li key={id}>{name}</li>
                 ))}
               </ul>

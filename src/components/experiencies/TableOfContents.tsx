@@ -1,12 +1,12 @@
-import type { Project } from '@/data/projects';
+import type { Experience } from '@/data/experiencies';
 import { Link } from '@tanstack/react-router';
 
 type Props = {
-  project: Project;
+  experience: Experience;
 };
 
-export const TableOfContents = ({ project }: Props) => {
-  const { id, name, work } = project;
+export const TableOfContents = ({ experience }: Props) => {
+  const { id, name, work } = experience;
 
   return (
     <ol className="list-decimal pl-5 space-y-2">

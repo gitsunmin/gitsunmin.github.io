@@ -1,10 +1,10 @@
-import type { Project } from '@/data/projects';
+import type { Experience } from '@/data/experiencies';
 import BookFrontCover from '@/assets/book_pages.webp';
 import BookBackCover from '@/assets/book_pages.webp';
 import BookSideCover from '@/assets/book_pages.webp';
 
-export const PROJECT_BOROTER: Project = {
-  id: 'project-boronter',
+export const EXPERIENCE_BOROTER: Experience = {
+  id: 'experience-boronter',
   relatedTo: null,
   careerId: 'marketboro',
   name: '인쇄 템플릿 라이브러리, Boronter',

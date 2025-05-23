@@ -61,14 +61,14 @@ const LINKS: AppLinkSchema[] = [
   },
   {
     __type: 'INNER',
-    id: 'projects',
-    label: 'Projects',
+    id: 'experiencies',
+    label: 'Experiencies',
     icon: (
       <MonitorSmartphone size={28} className="text-foreground bg-background" />
     ),
     status: 'CONSTRUCTION',
     target: '_self',
-    to: '/projects',
+    to: '/experiencies',
   },
   {
     __type: 'INNER',

@@ -1,8 +1,8 @@
 import type { CareerId } from '@/data/careers';
 import type { SkilId } from '@/data/skils';
-import { PROJECT_BOROTER } from './boronter';
+import { EXPERIENCE_BOROTER } from './boronter';
 
-export type Project = {
+export type Experience = {
   readonly id: string;
   readonly relatedTo: string | null;
   readonly careerId: CareerId;
@@ -39,4 +39,4 @@ export type Project = {
   }[];
 };
 
-export const PROJECT_LIST: Project[] = [PROJECT_BOROTER];
+export const EXPERIENCE_LIST: Experience[] = [EXPERIENCE_BOROTER];

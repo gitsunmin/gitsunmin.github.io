@@ -1,13 +1,13 @@
-import { Page } from '@/components/project/Page';
-import type { Project } from '@/data/projects';
-import { TableOfContents } from '@/components/project/TableOfContents';
+import { Page } from '@/components/experiencies/Page';
+import type { Experience } from '@/data/experiencies';
+import { TableOfContents } from '@/components/experiencies/TableOfContents';
 
 type Props = {
-  project: Project;
+  experience: Experience;
 };
 
-export const BookTemplate = ({ project }: Props) => {
-  const { id, name, introduce, book, work } = project;
+export const BookTemplate = ({ experience }: Props) => {
+  const { id, name, introduce, book, work } = experience;
 
   return (
     <article className="snap-y snap-mandatory h-[100dvh] overflow-y-scroll">
@@ -27,7 +27,7 @@ export const BookTemplate = ({ project }: Props) => {
       <Page label="Table of Contents">
         <h2 className="text-2xl md:text-4xl font-bold mb-4">목차</h2>
 
-        <TableOfContents project={project} />
+        <TableOfContents experience={experience} />
       </Page>
 
       <Page id={`${id}-intro`} label="Introduction">

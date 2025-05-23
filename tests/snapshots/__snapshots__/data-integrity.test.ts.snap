@@ -47,11 +47,15 @@ exports[`data-integrity > Careers Page Snapshot Test 1`] = `
             <h6
               class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
             >
-              Projects
+              Experiencies
             </h6>
             <ul
               class="list-disc ml-5 text-sm mt-1"
-            />
+            >
+              <li>
+                인쇄 템플릿 라이브러리, Boronter
+              </li>
+            </ul>
           </section>
           <section>
             <h6
@@ -142,7 +146,7 @@ exports[`data-integrity > Careers Page Snapshot Test 1`] = `
             <h6
               class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
             >
-              Projects
+              Experiencies
             </h6>
             <ul
               class="list-disc ml-5 text-sm mt-1"
@@ -219,11 +223,15 @@ exports[`data-integrity > Careers Page Snapshot Test 1`] = `
           <h6
             class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
           >
-            Projects
+            Experiencies
           </h6>
           <ul
             class="list-disc ml-5 text-sm mt-1"
-          />
+          >
+            <li>
+              인쇄 템플릿 라이브러리, Boronter
+            </li>
+          </ul>
         </section>
         <section>
           <h6
@@ -314,7 +322,7 @@ exports[`data-integrity > Careers Page Snapshot Test 1`] = `
           <h6
             class="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300"
           >
-            Projects
+            Experiencies
           </h6>
           <ul
             class="list-disc ml-5 text-sm mt-1"
@@ -346,6 +354,91 @@ exports[`data-integrity > Careers Page Snapshot Test 1`] = `
         </section>
       </li>
     </ul>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`data-integrity > Experiencies Page Snapshot Test 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        style="position: relative; width: 100%; height: 100dvh; overflow: hidden; pointer-events: auto;"
+      >
+        <div
+          style="width: 100%; height: 100%;"
+        >
+          <canvas
+            style="display: block;"
+          />
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      style="position: relative; width: 100%; height: 100dvh; overflow: hidden; pointer-events: auto;"
+    >
+      <div
+        style="width: 100%; height: 100%;"
+      >
+        <canvas
+          style="display: block;"
+        />
+      </div>
+    </div>
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
@@ -2263,91 +2356,6 @@ exports[`data-integrity > Interview Page Snapshot Test 1`] = `
         </div>
       </section>
     </article>
-  </div>,
-  "debug": [Function],
-  "findAllByAltText": [Function],
-  "findAllByDisplayValue": [Function],
-  "findAllByLabelText": [Function],
-  "findAllByPlaceholderText": [Function],
-  "findAllByRole": [Function],
-  "findAllByTestId": [Function],
-  "findAllByText": [Function],
-  "findAllByTitle": [Function],
-  "findByAltText": [Function],
-  "findByDisplayValue": [Function],
-  "findByLabelText": [Function],
-  "findByPlaceholderText": [Function],
-  "findByRole": [Function],
-  "findByTestId": [Function],
-  "findByText": [Function],
-  "findByTitle": [Function],
-  "getAllByAltText": [Function],
-  "getAllByDisplayValue": [Function],
-  "getAllByLabelText": [Function],
-  "getAllByPlaceholderText": [Function],
-  "getAllByRole": [Function],
-  "getAllByTestId": [Function],
-  "getAllByText": [Function],
-  "getAllByTitle": [Function],
-  "getByAltText": [Function],
-  "getByDisplayValue": [Function],
-  "getByLabelText": [Function],
-  "getByPlaceholderText": [Function],
-  "getByRole": [Function],
-  "getByTestId": [Function],
-  "getByText": [Function],
-  "getByTitle": [Function],
-  "queryAllByAltText": [Function],
-  "queryAllByDisplayValue": [Function],
-  "queryAllByLabelText": [Function],
-  "queryAllByPlaceholderText": [Function],
-  "queryAllByRole": [Function],
-  "queryAllByTestId": [Function],
-  "queryAllByText": [Function],
-  "queryAllByTitle": [Function],
-  "queryByAltText": [Function],
-  "queryByDisplayValue": [Function],
-  "queryByLabelText": [Function],
-  "queryByPlaceholderText": [Function],
-  "queryByRole": [Function],
-  "queryByTestId": [Function],
-  "queryByText": [Function],
-  "queryByTitle": [Function],
-  "rerender": [Function],
-  "unmount": [Function],
-}
-`;
-
-exports[`data-integrity > Projects Page Snapshot Test 1`] = `
-{
-  "asFragment": [Function],
-  "baseElement": <body>
-    <div>
-      <div
-        style="position: relative; width: 100%; height: 100dvh; overflow: hidden; pointer-events: auto;"
-      >
-        <div
-          style="width: 100%; height: 100%;"
-        >
-          <canvas
-            style="display: block;"
-          />
-        </div>
-      </div>
-    </div>
-  </body>,
-  "container": <div>
-    <div
-      style="position: relative; width: 100%; height: 100dvh; overflow: hidden; pointer-events: auto;"
-    >
-      <div
-        style="width: 100%; height: 100%;"
-      >
-        <canvas
-          style="display: block;"
-        />
-      </div>
-    </div>
   </div>,
   "debug": [Function],
   "findAllByAltText": [Function],

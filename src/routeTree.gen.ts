@@ -18,9 +18,9 @@ import { Route as LayoutImport } from './routes/_layout';
 import { Route as BooksImport } from './routes/_books';
 import { Route as LayoutInterviewImport } from './routes/_layout/interview';
 import { Route as LayoutCareersImport } from './routes/_layout/careers';
-import { Route as LayoutProjectsIndexImport } from './routes/_layout/projects/index';
+import { Route as LayoutExperienciesIndexImport } from './routes/_layout/experiencies/index';
 import { Route as LayoutTilREADMEImport } from './routes/_layout/til/README';
-import { Route as LayoutProjectsProjectIdImport } from './routes/_layout/projects/$projectId';
+import { Route as LayoutExperienciesExperienceIdImport } from './routes/_layout/experiencies/$experienceId';
 import { Route as LayoutTilWebassemblyIndexImport } from './routes/_layout/til/webassembly/index';
 import { Route as LayoutTilReactnativeIndexImport } from './routes/_layout/til/react_native/index';
 import { Route as LayoutTilWebWebComponentImport } from './routes/_layout/til/web/web-component';
@@ -242,9 +242,9 @@ const LayoutCareersRoute = LayoutCareersImport.update({
   getParentRoute: () => LayoutRoute,
 } as any);
 
-const LayoutProjectsIndexRoute = LayoutProjectsIndexImport.update({
-  id: '/projects/',
-  path: '/projects/',
+const LayoutExperienciesIndexRoute = LayoutExperienciesIndexImport.update({
+  id: '/experiencies/',
+  path: '/experiencies/',
   getParentRoute: () => LayoutRoute,
 } as any);
 
@@ -254,11 +254,12 @@ const LayoutTilREADMERoute = LayoutTilREADMEImport.update({
   getParentRoute: () => LayoutRoute,
 } as any);
 
-const LayoutProjectsProjectIdRoute = LayoutProjectsProjectIdImport.update({
-  id: '/projects/$projectId',
-  path: '/projects/$projectId',
-  getParentRoute: () => LayoutRoute,
-} as any);
+const LayoutExperienciesExperienceIdRoute =
+  LayoutExperienciesExperienceIdImport.update({
+    id: '/experiencies/$experienceId',
+    path: '/experiencies/$experienceId',
+    getParentRoute: () => LayoutRoute,
+  } as any);
 
 const LayoutTilWebassemblyIndexRoute = LayoutTilWebassemblyIndexImport.update({
   id: '/til/webassembly/',
@@ -1523,11 +1524,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterviewImport;
       parentRoute: typeof LayoutImport;
     };
-    '/_layout/projects/$projectId': {
-      id: '/_layout/projects/$projectId';
-      path: '/projects/$projectId';
-      fullPath: '/projects/$projectId';
-      preLoaderRoute: typeof LayoutProjectsProjectIdImport;
+    '/_layout/experiencies/$experienceId': {
+      id: '/_layout/experiencies/$experienceId';
+      path: '/experiencies/$experienceId';
+      fullPath: '/experiencies/$experienceId';
+      preLoaderRoute: typeof LayoutExperienciesExperienceIdImport;
       parentRoute: typeof LayoutImport;
     };
     '/_layout/til/README': {
@@ -1537,11 +1538,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTilREADMEImport;
       parentRoute: typeof LayoutImport;
     };
-    '/_layout/projects/': {
-      id: '/_layout/projects/';
-      path: '/projects';
-      fullPath: '/projects';
-      preLoaderRoute: typeof LayoutProjectsIndexImport;
+    '/_layout/experiencies/': {
+      id: '/_layout/experiencies/';
+      path: '/experiencies';
+      fullPath: '/experiencies';
+      preLoaderRoute: typeof LayoutExperienciesIndexImport;
       parentRoute: typeof LayoutImport;
     };
     '/_layout/til/algorithm/depth-first-search-algorithm': {
@@ -2812,9 +2813,9 @@ declare module '@tanstack/react-router' {
 interface LayoutRouteChildren {
   LayoutCareersRoute: typeof LayoutCareersRoute;
   LayoutInterviewRoute: typeof LayoutInterviewRoute;
-  LayoutProjectsProjectIdRoute: typeof LayoutProjectsProjectIdRoute;
+  LayoutExperienciesExperienceIdRoute: typeof LayoutExperienciesExperienceIdRoute;
   LayoutTilREADMERoute: typeof LayoutTilREADMERoute;
-  LayoutProjectsIndexRoute: typeof LayoutProjectsIndexRoute;
+  LayoutExperienciesIndexRoute: typeof LayoutExperienciesIndexRoute;
   LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute: typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   LayoutTilAlgorithmImplementationAlgorithmRoute: typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   LayoutTilAlgorithmPrefixSumAlgorithmRoute: typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3000,9 +3001,9 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutCareersRoute: LayoutCareersRoute,
   LayoutInterviewRoute: LayoutInterviewRoute,
-  LayoutProjectsProjectIdRoute: LayoutProjectsProjectIdRoute,
+  LayoutExperienciesExperienceIdRoute: LayoutExperienciesExperienceIdRoute,
   LayoutTilREADMERoute: LayoutTilREADMERoute,
-  LayoutProjectsIndexRoute: LayoutProjectsIndexRoute,
+  LayoutExperienciesIndexRoute: LayoutExperienciesIndexRoute,
   LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute:
     LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute,
   LayoutTilAlgorithmImplementationAlgorithmRoute:
@@ -3273,9 +3274,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute;
   '/careers': typeof LayoutCareersRoute;
   '/interview': typeof LayoutInterviewRoute;
-  '/projects/$projectId': typeof LayoutProjectsProjectIdRoute;
+  '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/til/README': typeof LayoutTilREADMERoute;
-  '/projects': typeof LayoutProjectsIndexRoute;
+  '/experiencies': typeof LayoutExperienciesIndexRoute;
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   '/til/algorithm/prefix-sum-algorithm': typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3464,9 +3465,9 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute;
   '/careers': typeof LayoutCareersRoute;
   '/interview': typeof LayoutInterviewRoute;
-  '/projects/$projectId': typeof LayoutProjectsProjectIdRoute;
+  '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/til/README': typeof LayoutTilREADMERoute;
-  '/projects': typeof LayoutProjectsIndexRoute;
+  '/experiencies': typeof LayoutExperienciesIndexRoute;
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   '/til/algorithm/prefix-sum-algorithm': typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3657,9 +3658,9 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute;
   '/_layout/careers': typeof LayoutCareersRoute;
   '/_layout/interview': typeof LayoutInterviewRoute;
-  '/_layout/projects/$projectId': typeof LayoutProjectsProjectIdRoute;
+  '/_layout/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/_layout/til/README': typeof LayoutTilREADMERoute;
-  '/_layout/projects/': typeof LayoutProjectsIndexRoute;
+  '/_layout/experiencies/': typeof LayoutExperienciesIndexRoute;
   '/_layout/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/_layout/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   '/_layout/til/algorithm/prefix-sum-algorithm': typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3850,9 +3851,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/careers'
     | '/interview'
-    | '/projects/$projectId'
+    | '/experiencies/$experienceId'
     | '/til/README'
-    | '/projects'
+    | '/experiencies'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
     | '/til/algorithm/prefix-sum-algorithm'
@@ -4040,9 +4041,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/careers'
     | '/interview'
-    | '/projects/$projectId'
+    | '/experiencies/$experienceId'
     | '/til/README'
-    | '/projects'
+    | '/experiencies'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
     | '/til/algorithm/prefix-sum-algorithm'
@@ -4231,9 +4232,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/_layout/careers'
     | '/_layout/interview'
-    | '/_layout/projects/$projectId'
+    | '/_layout/experiencies/$experienceId'
     | '/_layout/til/README'
-    | '/_layout/projects/'
+    | '/_layout/experiencies/'
     | '/_layout/til/algorithm/depth-first-search-algorithm'
     | '/_layout/til/algorithm/implementation-algorithm'
     | '/_layout/til/algorithm/prefix-sum-algorithm'
@@ -4458,9 +4459,9 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/careers",
         "/_layout/interview",
-        "/_layout/projects/$projectId",
+        "/_layout/experiencies/$experienceId",
         "/_layout/til/README",
-        "/_layout/projects/",
+        "/_layout/experiencies/",
         "/_layout/til/algorithm/depth-first-search-algorithm",
         "/_layout/til/algorithm/implementation-algorithm",
         "/_layout/til/algorithm/prefix-sum-algorithm",
@@ -4654,16 +4655,16 @@ export const routeTree = rootRoute
       "filePath": "_layout/interview.tsx",
       "parent": "/_layout"
     },
-    "/_layout/projects/$projectId": {
-      "filePath": "_layout/projects/$projectId.tsx",
+    "/_layout/experiencies/$experienceId": {
+      "filePath": "_layout/experiencies/$experienceId.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/README": {
       "filePath": "_layout/til/README.tsx",
       "parent": "/_layout"
     },
-    "/_layout/projects/": {
-      "filePath": "_layout/projects/index.tsx",
+    "/_layout/experiencies/": {
+      "filePath": "_layout/experiencies/index.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/algorithm/depth-first-search-algorithm": {

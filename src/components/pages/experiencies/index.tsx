@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { PROJECT_LIST } from '@/data/projects';
+import { EXPERIENCE_LIST } from '@/data/experiencies';
 import { useRouter } from '@tanstack/react-router';
 import { OrbitControls } from '@react-three/drei';
 import { Suspense, useRef, useState } from 'react';
@@ -11,12 +11,12 @@ import BookTopTexture from '@/assets/book_top.webp';
 import BookBottomTexture from '@/assets/book_bottom.webp';
 import BookPagesTexture from '@/assets/book_pages.webp';
 
-const books = PROJECT_LIST.map((project) => ({
-  id: project.id,
+const books = EXPERIENCE_LIST.map((experience) => ({
+  id: experience.id,
   textures: {
-    front: project.book.cover.front,
-    back: project.book.cover.back,
-    side: project.book.cover.side,
+    front: experience.book.cover.front,
+    back: experience.book.cover.back,
+    side: experience.book.cover.side,
     top: BookTopTexture,
     bottom: BookBottomTexture,
     pages: BookPagesTexture,
@@ -57,7 +57,7 @@ export const Content = () => {
 
     if (wantToSeeDetails) {
       router.navigate({
-        to: `/projects/${id}`,
+        to: `/experiencies/${id}`,
       });
     }
     setSelectedBookId((prev) => (prev === id ? null : id));
@@ -81,7 +81,7 @@ export const Content = () => {
   );
 };
 
-export const ProjectsPage = () => {
+export const ExperienciesPage = () => {
   return (
     <Suspense>
       <Content />

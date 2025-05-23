@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { CareersPage } from '@/components/pages/Careers';
 import { render } from '@testing-library/react';
-import { ProjectsPage } from '@/components/pages/project';
+import { ExperienciesPage } from '@/components/pages/experiencies';
 import { InterviewPage } from '@/components/pages/interview';
 
 describe('data-integrity', () => {
@@ -13,7 +13,7 @@ describe('data-integrity', () => {
     expect(render(InterviewPage())).toMatchSnapshot();
   });
 
-  it('Projects Page Snapshot Test', () => {
-    expect(render(ProjectsPage())).toMatchSnapshot();
+  it('Experiencies Page Snapshot Test', () => {
+    expect(render(ExperienciesPage())).toMatchSnapshot();
   });
 });
