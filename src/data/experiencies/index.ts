@@ -8,7 +8,6 @@ export type Experience = {
   readonly careerId: CareerId;
   readonly name: string;
   readonly introduce: React.ReactNode;
-  readonly purpose: React.ReactNode;
   readonly dateRange: string;
   readonly skils: SkilId[];
   readonly caution?: string[];
@@ -19,23 +18,17 @@ export type Experience = {
       readonly side: string;
     };
   };
-  readonly work?: {
+  readonly contents?: {
     readonly id: string;
     readonly title: string;
-    readonly skils: SkilId[];
-    readonly introduce: React.ReactNode;
-    readonly contribution: {
-      readonly id: string;
-      readonly title: string;
-      readonly description: React.ReactNode;
-    }[];
-    readonly troubleshooting: {
-      readonly id: string;
-      readonly title: string;
-      readonly problem: React.ReactNode;
-      readonly solution: React.ReactNode;
-      readonly retrospect: React.ReactNode;
-    }[];
+    readonly content: React.ReactNode;
+  }[];
+  readonly troubleshooting: {
+    readonly id: string;
+    readonly title: string;
+    readonly problem: React.ReactNode;
+    readonly solution: React.ReactNode;
+    readonly retrospect: React.ReactNode;
   }[];
 };
 
