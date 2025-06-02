@@ -130,6 +130,10 @@ const generateComponent = (relativePath: string, outputPath: string) => {
   const mdxReplacerVariableName = 'components';
 
   sourceFile.addImportDeclaration({
+    namedImports: ['TILPage'],
+    moduleSpecifier: '@/components/pages/TIL',
+  });
+  sourceFile.addImportDeclaration({
     defaultImport: 'Content',
     moduleSpecifier: `@til/${relativePath}`,
   });
@@ -171,7 +175,13 @@ const generateComponent = (relativePath: string, outputPath: string) => {
   sourceFile.addFunction({
     name: componentName,
     isExported: false,
-    statements: [`return <Content components={${mdxReplacerVariableName}} />;`],
+    statements: [
+      `return (
+  <TILPage>
+    <Content components={components} />
+  </TILPage>
+);`,
+    ],
   });
 
   sourceFile.addVariableStatement({
