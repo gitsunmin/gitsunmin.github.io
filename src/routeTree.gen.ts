@@ -26,6 +26,7 @@ import { Route as LayoutTilReactnativeIndexImport } from './routes/_layout/til/r
 import { Route as LayoutTilWebWebComponentImport } from './routes/_layout/til/web/web-component';
 import { Route as LayoutTilWebHowDoesTheInternetWorkImport } from './routes/_layout/til/web/how-does-the-internet-work';
 import { Route as LayoutTilWebDesignModeImport } from './routes/_layout/til/web/designMode';
+import { Route as LayoutTilWebCookieAndSessionImport } from './routes/_layout/til/web/cookie-and-session';
 import { Route as LayoutTilWebA11yImport } from './routes/_layout/til/web/a11y';
 import { Route as LayoutTilTypescriptTypescriptInferKeywordImport } from './routes/_layout/til/typescript/typescript-infer-keyword';
 import { Route as LayoutTilTypescriptTsPatternImport } from './routes/_layout/til/typescript/ts-pattern';
@@ -38,6 +39,7 @@ import { Route as LayoutTilTypescriptErrorHandlingWithTypescriptImport } from '.
 import { Route as LayoutTilTypescriptDeclarationMergingImport } from './routes/_layout/til/typescript/declaration-merging';
 import { Route as LayoutTilTypescriptCreateUtilityTypeReverseImport } from './routes/_layout/til/typescript/create-utility-type-reverse';
 import { Route as LayoutTilTestingTestCoverageImport } from './routes/_layout/til/testing/test-coverage';
+import { Route as LayoutTilTestingSnapshotTestImport } from './routes/_layout/til/testing/snapshot-test';
 import { Route as LayoutTilTestingMonkeyTestingAndGorillaTestingImport } from './routes/_layout/til/testing/monkey-testing-and-gorilla-testing';
 import { Route as LayoutTilTestingFalsePositiveAndFalseNegativeImport } from './routes/_layout/til/testing/false-positive-and-false-negative';
 import { Route as LayoutTilTauriAboutTauriImport } from './routes/_layout/til/tauri/about-tauri';
@@ -292,6 +294,13 @@ const LayoutTilWebDesignModeRoute = LayoutTilWebDesignModeImport.update({
   getParentRoute: () => LayoutRoute,
 } as any);
 
+const LayoutTilWebCookieAndSessionRoute =
+  LayoutTilWebCookieAndSessionImport.update({
+    id: '/til/web/cookie-and-session',
+    path: '/til/web/cookie-and-session',
+    getParentRoute: () => LayoutRoute,
+  } as any);
+
 const LayoutTilWebA11yRoute = LayoutTilWebA11yImport.update({
   id: '/til/web/a11y',
   path: '/til/web/a11y',
@@ -372,6 +381,13 @@ const LayoutTilTestingTestCoverageRoute =
   LayoutTilTestingTestCoverageImport.update({
     id: '/til/testing/test-coverage',
     path: '/til/testing/test-coverage',
+    getParentRoute: () => LayoutRoute,
+  } as any);
+
+const LayoutTilTestingSnapshotTestRoute =
+  LayoutTilTestingSnapshotTestImport.update({
+    id: '/til/testing/snapshot-test',
+    path: '/til/testing/snapshot-test',
     getParentRoute: () => LayoutRoute,
   } as any);
 
@@ -2672,6 +2688,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTilTestingMonkeyTestingAndGorillaTestingImport;
       parentRoute: typeof LayoutImport;
     };
+    '/_layout/til/testing/snapshot-test': {
+      id: '/_layout/til/testing/snapshot-test';
+      path: '/til/testing/snapshot-test';
+      fullPath: '/til/testing/snapshot-test';
+      preLoaderRoute: typeof LayoutTilTestingSnapshotTestImport;
+      parentRoute: typeof LayoutImport;
+    };
     '/_layout/til/testing/test-coverage': {
       id: '/_layout/til/testing/test-coverage';
       path: '/til/testing/test-coverage';
@@ -2754,6 +2777,13 @@ declare module '@tanstack/react-router' {
       path: '/til/web/a11y';
       fullPath: '/til/web/a11y';
       preLoaderRoute: typeof LayoutTilWebA11yImport;
+      parentRoute: typeof LayoutImport;
+    };
+    '/_layout/til/web/cookie-and-session': {
+      id: '/_layout/til/web/cookie-and-session';
+      path: '/til/web/cookie-and-session';
+      fullPath: '/til/web/cookie-and-session';
+      preLoaderRoute: typeof LayoutTilWebCookieAndSessionImport;
       parentRoute: typeof LayoutImport;
     };
     '/_layout/til/web/designMode': {
@@ -2977,6 +3007,7 @@ interface LayoutRouteChildren {
   LayoutTilTauriAboutTauriRoute: typeof LayoutTilTauriAboutTauriRoute;
   LayoutTilTestingFalsePositiveAndFalseNegativeRoute: typeof LayoutTilTestingFalsePositiveAndFalseNegativeRoute;
   LayoutTilTestingMonkeyTestingAndGorillaTestingRoute: typeof LayoutTilTestingMonkeyTestingAndGorillaTestingRoute;
+  LayoutTilTestingSnapshotTestRoute: typeof LayoutTilTestingSnapshotTestRoute;
   LayoutTilTestingTestCoverageRoute: typeof LayoutTilTestingTestCoverageRoute;
   LayoutTilTypescriptCreateUtilityTypeReverseRoute: typeof LayoutTilTypescriptCreateUtilityTypeReverseRoute;
   LayoutTilTypescriptDeclarationMergingRoute: typeof LayoutTilTypescriptDeclarationMergingRoute;
@@ -2989,6 +3020,7 @@ interface LayoutRouteChildren {
   LayoutTilTypescriptTsPatternRoute: typeof LayoutTilTypescriptTsPatternRoute;
   LayoutTilTypescriptTypescriptInferKeywordRoute: typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   LayoutTilWebA11yRoute: typeof LayoutTilWebA11yRoute;
+  LayoutTilWebCookieAndSessionRoute: typeof LayoutTilWebCookieAndSessionRoute;
   LayoutTilWebDesignModeRoute: typeof LayoutTilWebDesignModeRoute;
   LayoutTilWebHowDoesTheInternetWorkRoute: typeof LayoutTilWebHowDoesTheInternetWorkRoute;
   LayoutTilWebWebComponentRoute: typeof LayoutTilWebWebComponentRoute;
@@ -3232,6 +3264,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
     LayoutTilTestingFalsePositiveAndFalseNegativeRoute,
   LayoutTilTestingMonkeyTestingAndGorillaTestingRoute:
     LayoutTilTestingMonkeyTestingAndGorillaTestingRoute,
+  LayoutTilTestingSnapshotTestRoute: LayoutTilTestingSnapshotTestRoute,
   LayoutTilTestingTestCoverageRoute: LayoutTilTestingTestCoverageRoute,
   LayoutTilTypescriptCreateUtilityTypeReverseRoute:
     LayoutTilTypescriptCreateUtilityTypeReverseRoute,
@@ -3253,6 +3286,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTilTypescriptTypescriptInferKeywordRoute:
     LayoutTilTypescriptTypescriptInferKeywordRoute,
   LayoutTilWebA11yRoute: LayoutTilWebA11yRoute,
+  LayoutTilWebCookieAndSessionRoute: LayoutTilWebCookieAndSessionRoute,
   LayoutTilWebDesignModeRoute: LayoutTilWebDesignModeRoute,
   LayoutTilWebHowDoesTheInternetWorkRoute:
     LayoutTilWebHowDoesTheInternetWorkRoute,
@@ -3438,6 +3472,7 @@ export interface FileRoutesByFullPath {
   '/til/tauri/about-tauri': typeof LayoutTilTauriAboutTauriRoute;
   '/til/testing/false-positive-and-false-negative': typeof LayoutTilTestingFalsePositiveAndFalseNegativeRoute;
   '/til/testing/monkey-testing-and-gorilla-testing': typeof LayoutTilTestingMonkeyTestingAndGorillaTestingRoute;
+  '/til/testing/snapshot-test': typeof LayoutTilTestingSnapshotTestRoute;
   '/til/testing/test-coverage': typeof LayoutTilTestingTestCoverageRoute;
   '/til/typescript/create-utility-type-reverse': typeof LayoutTilTypescriptCreateUtilityTypeReverseRoute;
   '/til/typescript/declaration-merging': typeof LayoutTilTypescriptDeclarationMergingRoute;
@@ -3450,6 +3485,7 @@ export interface FileRoutesByFullPath {
   '/til/typescript/ts-pattern': typeof LayoutTilTypescriptTsPatternRoute;
   '/til/typescript/typescript-infer-keyword': typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   '/til/web/a11y': typeof LayoutTilWebA11yRoute;
+  '/til/web/cookie-and-session': typeof LayoutTilWebCookieAndSessionRoute;
   '/til/web/designMode': typeof LayoutTilWebDesignModeRoute;
   '/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute;
   '/til/web/web-component': typeof LayoutTilWebWebComponentRoute;
@@ -3629,6 +3665,7 @@ export interface FileRoutesByTo {
   '/til/tauri/about-tauri': typeof LayoutTilTauriAboutTauriRoute;
   '/til/testing/false-positive-and-false-negative': typeof LayoutTilTestingFalsePositiveAndFalseNegativeRoute;
   '/til/testing/monkey-testing-and-gorilla-testing': typeof LayoutTilTestingMonkeyTestingAndGorillaTestingRoute;
+  '/til/testing/snapshot-test': typeof LayoutTilTestingSnapshotTestRoute;
   '/til/testing/test-coverage': typeof LayoutTilTestingTestCoverageRoute;
   '/til/typescript/create-utility-type-reverse': typeof LayoutTilTypescriptCreateUtilityTypeReverseRoute;
   '/til/typescript/declaration-merging': typeof LayoutTilTypescriptDeclarationMergingRoute;
@@ -3641,6 +3678,7 @@ export interface FileRoutesByTo {
   '/til/typescript/ts-pattern': typeof LayoutTilTypescriptTsPatternRoute;
   '/til/typescript/typescript-infer-keyword': typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   '/til/web/a11y': typeof LayoutTilWebA11yRoute;
+  '/til/web/cookie-and-session': typeof LayoutTilWebCookieAndSessionRoute;
   '/til/web/designMode': typeof LayoutTilWebDesignModeRoute;
   '/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute;
   '/til/web/web-component': typeof LayoutTilWebWebComponentRoute;
@@ -3822,6 +3860,7 @@ export interface FileRoutesById {
   '/_layout/til/tauri/about-tauri': typeof LayoutTilTauriAboutTauriRoute;
   '/_layout/til/testing/false-positive-and-false-negative': typeof LayoutTilTestingFalsePositiveAndFalseNegativeRoute;
   '/_layout/til/testing/monkey-testing-and-gorilla-testing': typeof LayoutTilTestingMonkeyTestingAndGorillaTestingRoute;
+  '/_layout/til/testing/snapshot-test': typeof LayoutTilTestingSnapshotTestRoute;
   '/_layout/til/testing/test-coverage': typeof LayoutTilTestingTestCoverageRoute;
   '/_layout/til/typescript/create-utility-type-reverse': typeof LayoutTilTypescriptCreateUtilityTypeReverseRoute;
   '/_layout/til/typescript/declaration-merging': typeof LayoutTilTypescriptDeclarationMergingRoute;
@@ -3834,6 +3873,7 @@ export interface FileRoutesById {
   '/_layout/til/typescript/ts-pattern': typeof LayoutTilTypescriptTsPatternRoute;
   '/_layout/til/typescript/typescript-infer-keyword': typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   '/_layout/til/web/a11y': typeof LayoutTilWebA11yRoute;
+  '/_layout/til/web/cookie-and-session': typeof LayoutTilWebCookieAndSessionRoute;
   '/_layout/til/web/designMode': typeof LayoutTilWebDesignModeRoute;
   '/_layout/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute;
   '/_layout/til/web/web-component': typeof LayoutTilWebWebComponentRoute;
@@ -4015,6 +4055,7 @@ export interface FileRouteTypes {
     | '/til/tauri/about-tauri'
     | '/til/testing/false-positive-and-false-negative'
     | '/til/testing/monkey-testing-and-gorilla-testing'
+    | '/til/testing/snapshot-test'
     | '/til/testing/test-coverage'
     | '/til/typescript/create-utility-type-reverse'
     | '/til/typescript/declaration-merging'
@@ -4027,6 +4068,7 @@ export interface FileRouteTypes {
     | '/til/typescript/ts-pattern'
     | '/til/typescript/typescript-infer-keyword'
     | '/til/web/a11y'
+    | '/til/web/cookie-and-session'
     | '/til/web/designMode'
     | '/til/web/how-does-the-internet-work'
     | '/til/web/web-component'
@@ -4205,6 +4247,7 @@ export interface FileRouteTypes {
     | '/til/tauri/about-tauri'
     | '/til/testing/false-positive-and-false-negative'
     | '/til/testing/monkey-testing-and-gorilla-testing'
+    | '/til/testing/snapshot-test'
     | '/til/testing/test-coverage'
     | '/til/typescript/create-utility-type-reverse'
     | '/til/typescript/declaration-merging'
@@ -4217,6 +4260,7 @@ export interface FileRouteTypes {
     | '/til/typescript/ts-pattern'
     | '/til/typescript/typescript-infer-keyword'
     | '/til/web/a11y'
+    | '/til/web/cookie-and-session'
     | '/til/web/designMode'
     | '/til/web/how-does-the-internet-work'
     | '/til/web/web-component'
@@ -4396,6 +4440,7 @@ export interface FileRouteTypes {
     | '/_layout/til/tauri/about-tauri'
     | '/_layout/til/testing/false-positive-and-false-negative'
     | '/_layout/til/testing/monkey-testing-and-gorilla-testing'
+    | '/_layout/til/testing/snapshot-test'
     | '/_layout/til/testing/test-coverage'
     | '/_layout/til/typescript/create-utility-type-reverse'
     | '/_layout/til/typescript/declaration-merging'
@@ -4408,6 +4453,7 @@ export interface FileRouteTypes {
     | '/_layout/til/typescript/ts-pattern'
     | '/_layout/til/typescript/typescript-infer-keyword'
     | '/_layout/til/web/a11y'
+    | '/_layout/til/web/cookie-and-session'
     | '/_layout/til/web/designMode'
     | '/_layout/til/web/how-does-the-internet-work'
     | '/_layout/til/web/web-component'
@@ -4623,6 +4669,7 @@ export const routeTree = rootRoute
         "/_layout/til/tauri/about-tauri",
         "/_layout/til/testing/false-positive-and-false-negative",
         "/_layout/til/testing/monkey-testing-and-gorilla-testing",
+        "/_layout/til/testing/snapshot-test",
         "/_layout/til/testing/test-coverage",
         "/_layout/til/typescript/create-utility-type-reverse",
         "/_layout/til/typescript/declaration-merging",
@@ -4635,6 +4682,7 @@ export const routeTree = rootRoute
         "/_layout/til/typescript/ts-pattern",
         "/_layout/til/typescript/typescript-infer-keyword",
         "/_layout/til/web/a11y",
+        "/_layout/til/web/cookie-and-session",
         "/_layout/til/web/designMode",
         "/_layout/til/web/how-does-the-internet-work",
         "/_layout/til/web/web-component",
@@ -5311,6 +5359,10 @@ export const routeTree = rootRoute
       "filePath": "_layout/til/testing/monkey-testing-and-gorilla-testing.tsx",
       "parent": "/_layout"
     },
+    "/_layout/til/testing/snapshot-test": {
+      "filePath": "_layout/til/testing/snapshot-test.tsx",
+      "parent": "/_layout"
+    },
     "/_layout/til/testing/test-coverage": {
       "filePath": "_layout/til/testing/test-coverage.tsx",
       "parent": "/_layout"
@@ -5357,6 +5409,10 @@ export const routeTree = rootRoute
     },
     "/_layout/til/web/a11y": {
       "filePath": "_layout/til/web/a11y.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/til/web/cookie-and-session": {
+      "filePath": "_layout/til/web/cookie-and-session.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/web/designMode": {
