@@ -3,6 +3,7 @@ import GithubIcon from '@/assets/icons/github.svg';
 
 import { cn } from '@/lib/utils';
 import {
+  Blend,
   Building2,
   FileText,
   MessageSquareCode,
@@ -34,7 +35,9 @@ const AppLink = (props: AppLinkSchema) => {
       >
         {icon}
       </div>
-      <span className={cn('text-xs text-foreground break-keep')}>{label}</span>
+      <div className={cn('text-xs text-foreground break-keep text-center')}>
+        {label}
+      </div>
     </Link>
   );
 };
@@ -89,6 +92,15 @@ const LINKS: AppLinkSchema[] = [
     status: 'ENABLED',
     target: '_self',
     to: '/til/README',
+  },
+  {
+    __type: 'INNER',
+    id: 'loom',
+    label: 'Loom',
+    icon: <Blend size={28} className="text-foreground bg-background" />,
+    status: 'ENABLED',
+    target: '_self',
+    to: '/loom',
   },
   {
     __type: 'OUTER',

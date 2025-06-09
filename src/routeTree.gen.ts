@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root';
 import { Route as SettingsImport } from './routes/settings';
 import { Route as LayoutImport } from './routes/_layout';
 import { Route as BooksImport } from './routes/_books';
+import { Route as LayoutLoomImport } from './routes/_layout/loom';
 import { Route as LayoutInterviewImport } from './routes/_layout/interview';
 import { Route as LayoutCareersImport } from './routes/_layout/careers';
 import { Route as LayoutExperienciesIndexImport } from './routes/_layout/experiencies/index';
@@ -231,6 +232,12 @@ const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route));
+
+const LayoutLoomRoute = LayoutLoomImport.update({
+  id: '/loom',
+  path: '/loom',
+  getParentRoute: () => LayoutRoute,
+} as any);
 
 const LayoutInterviewRoute = LayoutInterviewImport.update({
   id: '/interview',
@@ -1540,6 +1547,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutInterviewImport;
       parentRoute: typeof LayoutImport;
     };
+    '/_layout/loom': {
+      id: '/_layout/loom';
+      path: '/loom';
+      fullPath: '/loom';
+      preLoaderRoute: typeof LayoutLoomImport;
+      parentRoute: typeof LayoutImport;
+    };
     '/_layout/experiencies/$experienceId': {
       id: '/_layout/experiencies/$experienceId';
       path: '/experiencies/$experienceId';
@@ -2843,6 +2857,7 @@ declare module '@tanstack/react-router' {
 interface LayoutRouteChildren {
   LayoutCareersRoute: typeof LayoutCareersRoute;
   LayoutInterviewRoute: typeof LayoutInterviewRoute;
+  LayoutLoomRoute: typeof LayoutLoomRoute;
   LayoutExperienciesExperienceIdRoute: typeof LayoutExperienciesExperienceIdRoute;
   LayoutTilREADMERoute: typeof LayoutTilREADMERoute;
   LayoutExperienciesIndexRoute: typeof LayoutExperienciesIndexRoute;
@@ -3033,6 +3048,7 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutCareersRoute: LayoutCareersRoute,
   LayoutInterviewRoute: LayoutInterviewRoute,
+  LayoutLoomRoute: LayoutLoomRoute,
   LayoutExperienciesExperienceIdRoute: LayoutExperienciesExperienceIdRoute,
   LayoutTilREADMERoute: LayoutTilREADMERoute,
   LayoutExperienciesIndexRoute: LayoutExperienciesIndexRoute,
@@ -3308,6 +3324,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute;
   '/careers': typeof LayoutCareersRoute;
   '/interview': typeof LayoutInterviewRoute;
+  '/loom': typeof LayoutLoomRoute;
   '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/til/README': typeof LayoutTilREADMERoute;
   '/experiencies': typeof LayoutExperienciesIndexRoute;
@@ -3501,6 +3518,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute;
   '/careers': typeof LayoutCareersRoute;
   '/interview': typeof LayoutInterviewRoute;
+  '/loom': typeof LayoutLoomRoute;
   '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/til/README': typeof LayoutTilREADMERoute;
   '/experiencies': typeof LayoutExperienciesIndexRoute;
@@ -3696,6 +3714,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute;
   '/_layout/careers': typeof LayoutCareersRoute;
   '/_layout/interview': typeof LayoutInterviewRoute;
+  '/_layout/loom': typeof LayoutLoomRoute;
   '/_layout/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/_layout/til/README': typeof LayoutTilREADMERoute;
   '/_layout/experiencies/': typeof LayoutExperienciesIndexRoute;
@@ -3891,6 +3910,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/careers'
     | '/interview'
+    | '/loom'
     | '/experiencies/$experienceId'
     | '/til/README'
     | '/experiencies'
@@ -4083,6 +4103,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/careers'
     | '/interview'
+    | '/loom'
     | '/experiencies/$experienceId'
     | '/til/README'
     | '/experiencies'
@@ -4276,6 +4297,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/_layout/careers'
     | '/_layout/interview'
+    | '/_layout/loom'
     | '/_layout/experiencies/$experienceId'
     | '/_layout/til/README'
     | '/_layout/experiencies/'
@@ -4505,6 +4527,7 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/careers",
         "/_layout/interview",
+        "/_layout/loom",
         "/_layout/experiencies/$experienceId",
         "/_layout/til/README",
         "/_layout/experiencies/",
@@ -4701,6 +4724,10 @@ export const routeTree = rootRoute
     },
     "/_layout/interview": {
       "filePath": "_layout/interview.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/loom": {
+      "filePath": "_layout/loom.tsx",
       "parent": "/_layout"
     },
     "/_layout/experiencies/$experienceId": {
