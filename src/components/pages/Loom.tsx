@@ -63,11 +63,10 @@ const Content = () => {
       >
         <input
           type="color"
-          aria-label="background color picker "
+          aria-label="background color picker"
           value={bgColor}
-          className="w-full h-40 rounded-3xl border-none p-0 cursor-pointer shadow-2xl"
+          className="w-full h-40 rounded-3xl border-2 p-0 cursor-pointer shadow-2xl [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded [&::-webkit-color-swatch-wrapper]:p-px"
           onInput={(e) => {
-            console.log('background:', e.currentTarget.value);
             setBgColor(e.currentTarget.value);
           }}
         />
@@ -78,7 +77,6 @@ const Content = () => {
           className="hidden"
           value={fgColor}
           onInput={(e) => {
-            console.log('foreground:', e.currentTarget.value);
             setFgColor(e.currentTarget.value);
           }}
         />
@@ -128,7 +126,7 @@ const Content = () => {
         </fieldset>
         <Button
           variant="outline"
-          className="w-full py-2 rounded-lg"
+          className="w-full py-2 rounded-lg cursor-pointer bg-background text-foreground shadow-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           onClick={handleApply(fixedColor)}
         >
           Is this your color ?
