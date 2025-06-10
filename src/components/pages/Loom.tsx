@@ -1,15 +1,11 @@
 import { Suspense, useRef, useState } from 'react';
 import { Button } from '../Button';
 import { cn } from '@/lib/utils';
-import { match, P } from 'ts-pattern';
-
-type FixedColorOption = 'background' | 'foreground';
 
 const Content = () => {
   const fgPickerRef = useRef<HTMLInputElement>(null);
   const [bgColor, setBgColor] = useState('#FFFFFF');
   const [fgColor, setFgColor] = useState('#000000');
-  const [fixedColor, setFixedColor] = useState<FixedColorOption>('background');
 
   function getBlackAndWhite(bgColor: string): string {
     if (!bgColor || typeof bgColor !== 'string') {
@@ -32,26 +28,11 @@ const Content = () => {
   }
 
   const handleFixedColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    match(e.currentTarget.value)
-      .with(P.union('background', 'foreground'), (value) => {
-        setFixedColor(value);
-      })
-      .otherwise(() => {
-        console.warn('Invalid color option selected');
-      });
-  };
+    const backgroundColor = e.currentTarget.value;
+    const foregroundColor = getBlackAndWhite(backgroundColor);
 
-  const handleApply = (fixedColor: FixedColorOption) => () => {
-    match(fixedColor)
-      .with('background', () => {
-        const foregroundColor = getBlackAndWhite(bgColor);
-        setFgColor(foregroundColor);
-      })
-      .with('foreground', () => {
-        const backgroundColor = getBlackAndWhite(fgColor);
-        setBgColor(backgroundColor);
-      })
-      .exhaustive();
+    setBgColor(backgroundColor);
+    setFgColor(foregroundColor);
   };
 
   return (
@@ -66,19 +47,7 @@ const Content = () => {
           aria-label="background color picker"
           value={bgColor}
           className="w-full h-40 rounded-3xl border-2 p-0 cursor-pointer shadow-2xl [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded [&::-webkit-color-swatch-wrapper]:p-px"
-          onInput={(e) => {
-            setBgColor(e.currentTarget.value);
-          }}
-        />
-        <input
-          type="color"
-          ref={fgPickerRef}
-          aria-label="foreground color picker"
-          className="hidden"
-          value={fgColor}
-          onInput={(e) => {
-            setFgColor(e.currentTarget.value);
-          }}
+          onInput={handleFixedColorChange}
         />
         <Button
           variant="ghost"
@@ -90,46 +59,6 @@ const Content = () => {
           <span style={{ color: fgColor }}>
             Gitsunmin is <br /> The Best Programer !
           </span>
-        </Button>
-      </section>
-      <section className="flex flex-col gap-y-4 mt-8">
-        <fieldset className="space-y-2">
-          <legend className="text-lg font-medium text-gray-700">
-            Fix Color
-          </legend>
-
-          <div className="flex gap-x-4">
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="option"
-                value="background"
-                checked={fixedColor === 'background'}
-                onChange={handleFixedColorChange}
-                className="accent-blue-600"
-              />
-              <span>Background</span>
-            </label>
-
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="option"
-                value="foreground"
-                checked={fixedColor === 'foreground'}
-                onChange={handleFixedColorChange}
-                className="accent-blue-600"
-              />
-              <span>Foreground</span>
-            </label>
-          </div>
-        </fieldset>
-        <Button
-          variant="outline"
-          className="w-full py-2 rounded-lg cursor-pointer bg-background text-foreground shadow-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-          onClick={handleApply(fixedColor)}
-        >
-          Is this your color ?
         </Button>
       </section>
     </article>
