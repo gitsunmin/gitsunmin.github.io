@@ -57,7 +57,7 @@ const Content = () => {
           onClick={() => fgPickerRef.current?.click()}
         >
           <span style={{ color: fgColor }}>
-            Gitsunmin is <br /> The Best Programer !
+            Gitsunmin is <br /> The Best Programer!
           </span>
         </Button>
       </section>
