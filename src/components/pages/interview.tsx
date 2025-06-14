@@ -4,6 +4,10 @@ import { INTERVIEW } from '@/data/interview';
 
 import { cn } from '@/lib/utils';
 import { Avatar } from '@/components/Avatar';
+import { Gitsunmin, James } from '@/data/user';
+
+const INTERVIEWER = James;
+const INTERVIEWEE = Gitsunmin;
 
 const Content = () => {
   return (
@@ -14,16 +18,15 @@ const Content = () => {
       </p>
       <section className="flex flex-wrap gap-y-[10px] pt-10">
         {INTERVIEW.map((chat, index, list) => {
-          const { name } = chat;
-          const isContinues = list[index - 1]?.name === name;
+          const { user } = chat;
+          const isContinues = list[index - 1]?.user.id === user.id;
 
           return (
             <div
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-              key={`${name}-${index}`}
+              key={`${user.id}-${index}`}
               className={cn('w-full flex gap-x-2.5 gap-y-1', {
-                'flex-row': name === 'James',
-                'flex-row-reverse': name === 'Sunmin',
+                'flex-row': user.id === INTERVIEWER.id,
+                'flex-row-reverse': user.id === INTERVIEWEE.id,
               })}
             >
               {isContinues ? (
@@ -32,7 +35,7 @@ const Content = () => {
                 <div className="flex items-start">
                   <Avatar
                     src={
-                      name === 'James'
+                      user.id === INTERVIEWER.id
                         ? 'https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                         : 'https://github.com/gitsunmin.png'
                     }
@@ -46,14 +49,14 @@ const Content = () => {
                 {isContinues ? null : (
                   <div
                     className={cn('text-sm text-gray-700 dark:text-gray-300', {
-                      'text-left': name === 'James',
-                      'text-right': name === 'Sunmin',
+                      'text-left': user.id === INTERVIEWER.id,
+                      'text-right': user.id === INTERVIEWEE.id,
                     })}
                   >
-                    {name}
+                    {user.name.first}
                   </div>
                 )}
-                <ChatCard {...chat} />
+                <ChatCard {...chat} active={user.id === INTERVIEWEE.id} />
               </div>
             </div>
           );

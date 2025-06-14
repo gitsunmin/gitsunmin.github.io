@@ -5,19 +5,23 @@ import { cn } from '@/lib/utils';
 
 type Props = Chat & {
   className?: string;
+  active?: boolean;
 };
 
-export const ChatCard = ({ contents, extend, name, className = '' }: Props) => {
-  const isMe = name === 'Sunmin';
-
+export const ChatCard = ({
+  contents,
+  extend,
+  active = false,
+  className = '',
+}: Props) => {
   return (
     <div
       className={cn(
         'rounded-xl px-4 py-2 max-w-full shadow text-sm whitespace-pre-wrap break-words',
         {
-          'bg-blue-500 text-white dark:bg-blue-600': isMe,
+          'bg-blue-500 text-white dark:bg-blue-600': active,
           'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100':
-            !isMe,
+            !active,
         },
         className,
       )}
@@ -31,8 +35,8 @@ export const ChatCard = ({ contents, extend, name, className = '' }: Props) => {
           <Link
             href={path}
             className={cn('mt-2 text-xs underline', {
-              'text-blue-200 dark:text-blue-100': isMe,
-              'text-blue-500 dark:text-blue-300': !isMe,
+              'text-blue-200 dark:text-blue-100': active,
+              'text-blue-500 dark:text-blue-300': !active,
             })}
             to={''}
           >
