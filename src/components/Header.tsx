@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { Button } from './Button';
 import { cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
+import GitsunminProfile from '@/assets/avatar/gitsunmin.webp';
 
 type Props = {
   title?: string;
@@ -32,7 +33,7 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
         >
           <span className="hidden md:block">
             <img
-              src="https://github.com/gitsunmin.png"
+              src={GitsunminProfile}
               alt="logo"
               className="h-10 w-10 rounded-full"
             />
