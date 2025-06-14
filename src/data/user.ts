@@ -18,7 +18,7 @@ export const James: User = {
     last: 'Kim',
   },
   avatar: JamesAvatar,
-  description: 'Interview page에서 인터뷰를 진행하는 담당자입니다.',
+  description: 'Interview page에서 인터뷰를 진행하는 담당자 입니다.',
 };
 
 export const Gitsunmin: User = {
@@ -28,5 +28,5 @@ export const Gitsunmin: User = {
     last: 'Kim',
   },
   avatar: GitsunminAvatar,
-  description: 'Gitsunmin 페이지의 개발자 김선민입니다.',
+  description: 'Gitsunmin 페이지의 개발자 김선민 입니다.',
 };

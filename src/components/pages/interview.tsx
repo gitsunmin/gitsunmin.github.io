@@ -4,20 +4,33 @@ import { INTERVIEW } from '@/data/interview';
 
 import { cn } from '@/lib/utils';
 import { Avatar } from '@/components/Avatar';
-import { Gitsunmin, James } from '@/data/user';
+import { Gitsunmin, James, type User } from '@/data/user';
+import { twMerge } from 'tailwind-merge';
 
-const INTERVIEWER = James;
-const INTERVIEWEE = Gitsunmin;
+type Props = {
+  interviewer: User;
+  interviewee: User;
+};
 
-const Content = () => {
+const Content = ({ interviewer, interviewee }: Props) => {
   return (
-    <article className="flex flex-col text-gray-900 dark:text-gray-100">
-      <p className="text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-600 px-4 py-2 text-sm break-words bg-gray-50 dark:bg-gray-800">
-        이 페이지는 제가 지금까지 면접이나 주변 사람들에게 들었던 질문들과 그에
-        대한 답변을 기반으로 작성해보았습니다.
-      </p>
-      <section className="flex flex-wrap gap-y-[10px] pt-10">
-        {INTERVIEW.map((chat, index, list) => {
+    <article className="flex flex-col text-gray-900 dark:text-gray-100 px-4">
+      {INTERVIEW.banner ? (
+        <p
+          className={twMerge(
+            'text-sm break-words',
+            'text-gray-500 dark:text-gray-400 border-l-2',
+            'border-gray-300 dark:border-gray-600 px-4 py-2 bg-gray-50 dark:bg-gray-800',
+            'mt-4 rounded-lg ',
+          )}
+        >
+          {INTERVIEW.banner}
+        </p>
+      ) : (
+        <></>
+      )}
+      <section className="flex flex-wrap gap-y-[10px] pt-12">
+        {INTERVIEW.chatList.map((chat, index, list) => {
           const { user } = chat;
           const isContinues = list[index - 1]?.user.id === user.id;
 
@@ -25,8 +38,8 @@ const Content = () => {
             <div
               key={`${user.id}-${index}`}
               className={cn('w-full flex gap-x-2.5 gap-y-1', {
-                'flex-row': user.id === INTERVIEWER.id,
-                'flex-row-reverse': user.id === INTERVIEWEE.id,
+                'flex-row': user.id === interviewer.id,
+                'flex-row-reverse': user.id === interviewee.id,
               })}
             >
               {isContinues ? (
@@ -34,12 +47,8 @@ const Content = () => {
               ) : (
                 <div className="flex items-start">
                   <Avatar
-                    src={
-                      user.id === INTERVIEWER.id
-                        ? 'https://images.unsplash.com/photo-1736033302187-64b6be9e4652?q=80&w=3474&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                        : 'https://github.com/gitsunmin.png'
-                    }
-                    alt={`${name}_profile`}
+                    src={user.avatar}
+                    alt={`${name} profile`}
                     size={40}
                     className="rounded-full border border-gray-200 dark:border-gray-700"
                   />
@@ -49,14 +58,14 @@ const Content = () => {
                 {isContinues ? null : (
                   <div
                     className={cn('text-sm text-gray-700 dark:text-gray-300', {
-                      'text-left': user.id === INTERVIEWER.id,
-                      'text-right': user.id === INTERVIEWEE.id,
+                      'text-left': user.id === interviewer.id,
+                      'text-right': user.id === interviewee.id,
                     })}
                   >
                     {user.name.first}
                   </div>
                 )}
-                <ChatCard {...chat} active={user.id === INTERVIEWEE.id} />
+                <ChatCard {...chat} active={user.id === interviewee.id} />
               </div>
             </div>
           );
@@ -69,7 +78,7 @@ const Content = () => {
 export const InterviewPage = () => {
   return (
     <Suspense>
-      <Content />
+      <Content interviewer={James} interviewee={Gitsunmin} />
     </Suspense>
   );
 };

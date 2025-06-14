@@ -9,8 +9,7 @@ type Props = Chat & {
 };
 
 export const ChatCard = ({
-  contents,
-  extend,
+  content,
   active = false,
   className = '',
 }: Props) => {
@@ -26,23 +25,25 @@ export const ChatCard = ({
         className,
       )}
     >
-      <div>
-        <p>{contents}</p>
-      </div>
-
-      {match(extend)
-        .with({ __t: 'Link' }, ({ path, label }) => (
+      {match(content)
+        .with({ __t: 'text' }, ({ text }) => (
+          <div>
+            <p>{text}</p>
+          </div>
+        ))
+        .with({ __t: 'link' }, ({ label, url }) => (
           <Link
-            href={path}
+            href={url}
             className={cn('mt-2 text-xs underline', {
               'text-blue-200 dark:text-blue-100': active,
               'text-blue-500 dark:text-blue-300': !active,
             })}
-            to={''}
+            to={url}
           >
             {label}
           </Link>
         ))
+        .with({ __t: 'image' }, () => <>image</>)
         .otherwise(() => null)}
     </div>
   );

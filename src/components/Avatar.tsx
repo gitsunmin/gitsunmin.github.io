@@ -19,6 +19,7 @@ export const Avatar = ({ src, alt, size, className }: Props) => {
         alt={alt}
         className="object-cover rounded-full"
         style={{ width: size, height: size }}
+        loading="lazy"
         onError={(e) => {
           e.currentTarget.onerror = null;
           e.currentTarget.src = 'https://github.com/gitsunmin.png?raw=true';

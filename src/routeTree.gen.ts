@@ -28,6 +28,7 @@ import { Route as LayoutTilWebWebComponentImport } from './routes/_layout/til/we
 import { Route as LayoutTilWebHowDoesTheInternetWorkImport } from './routes/_layout/til/web/how-does-the-internet-work';
 import { Route as LayoutTilWebDesignModeImport } from './routes/_layout/til/web/designMode';
 import { Route as LayoutTilWebCookieAndSessionImport } from './routes/_layout/til/web/cookie-and-session';
+import { Route as LayoutTilWebActivityPubImport } from './routes/_layout/til/web/activityPub';
 import { Route as LayoutTilWebA11yImport } from './routes/_layout/til/web/a11y';
 import { Route as LayoutTilTypescriptTypescriptInferKeywordImport } from './routes/_layout/til/typescript/typescript-infer-keyword';
 import { Route as LayoutTilTypescriptTsPatternImport } from './routes/_layout/til/typescript/ts-pattern';
@@ -202,6 +203,7 @@ import { Route as LayoutTilAlgorithmTortoiseAndHareAlgorithmImport } from './rou
 import { Route as LayoutTilAlgorithmPrefixSumAlgorithmImport } from './routes/_layout/til/algorithm/prefix-sum-algorithm';
 import { Route as LayoutTilAlgorithmImplementationAlgorithmImport } from './routes/_layout/til/algorithm/implementation-algorithm';
 import { Route as LayoutTilAlgorithmDepthFirstSearchAlgorithmImport } from './routes/_layout/til/algorithm/depth-first-search-algorithm';
+import { Route as LayoutTilAccessibilityOptimalTextContrastCalculationImport } from './routes/_layout/til/accessibility/optimal-text-contrast-calculation';
 import { Route as LayoutTilExperienceGarden92023IndexImport } from './routes/_layout/til/experience/garden9-2023/index';
 import { Route as LayoutTilBrowserServiceWorkerIndexImport } from './routes/_layout/til/browser/service-worker/index';
 
@@ -307,6 +309,12 @@ const LayoutTilWebCookieAndSessionRoute =
     path: '/til/web/cookie-and-session',
     getParentRoute: () => LayoutRoute,
   } as any);
+
+const LayoutTilWebActivityPubRoute = LayoutTilWebActivityPubImport.update({
+  id: '/til/web/activityPub',
+  path: '/til/web/activityPub',
+  getParentRoute: () => LayoutRoute,
+} as any);
 
 const LayoutTilWebA11yRoute = LayoutTilWebA11yImport.update({
   id: '/til/web/a11y',
@@ -1487,6 +1495,13 @@ const LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute =
     getParentRoute: () => LayoutRoute,
   } as any);
 
+const LayoutTilAccessibilityOptimalTextContrastCalculationRoute =
+  LayoutTilAccessibilityOptimalTextContrastCalculationImport.update({
+    id: '/til/accessibility/optimal-text-contrast-calculation',
+    path: '/til/accessibility/optimal-text-contrast-calculation',
+    getParentRoute: () => LayoutRoute,
+  } as any);
+
 const LayoutTilExperienceGarden92023IndexRoute =
   LayoutTilExperienceGarden92023IndexImport.update({
     id: '/til/experience/garden9-2023/',
@@ -1573,6 +1588,13 @@ declare module '@tanstack/react-router' {
       path: '/experiencies';
       fullPath: '/experiencies';
       preLoaderRoute: typeof LayoutExperienciesIndexImport;
+      parentRoute: typeof LayoutImport;
+    };
+    '/_layout/til/accessibility/optimal-text-contrast-calculation': {
+      id: '/_layout/til/accessibility/optimal-text-contrast-calculation';
+      path: '/til/accessibility/optimal-text-contrast-calculation';
+      fullPath: '/til/accessibility/optimal-text-contrast-calculation';
+      preLoaderRoute: typeof LayoutTilAccessibilityOptimalTextContrastCalculationImport;
       parentRoute: typeof LayoutImport;
     };
     '/_layout/til/algorithm/depth-first-search-algorithm': {
@@ -2793,6 +2815,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTilWebA11yImport;
       parentRoute: typeof LayoutImport;
     };
+    '/_layout/til/web/activityPub': {
+      id: '/_layout/til/web/activityPub';
+      path: '/til/web/activityPub';
+      fullPath: '/til/web/activityPub';
+      preLoaderRoute: typeof LayoutTilWebActivityPubImport;
+      parentRoute: typeof LayoutImport;
+    };
     '/_layout/til/web/cookie-and-session': {
       id: '/_layout/til/web/cookie-and-session';
       path: '/til/web/cookie-and-session';
@@ -2861,6 +2890,7 @@ interface LayoutRouteChildren {
   LayoutExperienciesExperienceIdRoute: typeof LayoutExperienciesExperienceIdRoute;
   LayoutTilREADMERoute: typeof LayoutTilREADMERoute;
   LayoutExperienciesIndexRoute: typeof LayoutExperienciesIndexRoute;
+  LayoutTilAccessibilityOptimalTextContrastCalculationRoute: typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute;
   LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute: typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   LayoutTilAlgorithmImplementationAlgorithmRoute: typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   LayoutTilAlgorithmPrefixSumAlgorithmRoute: typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3035,6 +3065,7 @@ interface LayoutRouteChildren {
   LayoutTilTypescriptTsPatternRoute: typeof LayoutTilTypescriptTsPatternRoute;
   LayoutTilTypescriptTypescriptInferKeywordRoute: typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   LayoutTilWebA11yRoute: typeof LayoutTilWebA11yRoute;
+  LayoutTilWebActivityPubRoute: typeof LayoutTilWebActivityPubRoute;
   LayoutTilWebCookieAndSessionRoute: typeof LayoutTilWebCookieAndSessionRoute;
   LayoutTilWebDesignModeRoute: typeof LayoutTilWebDesignModeRoute;
   LayoutTilWebHowDoesTheInternetWorkRoute: typeof LayoutTilWebHowDoesTheInternetWorkRoute;
@@ -3052,6 +3083,8 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutExperienciesExperienceIdRoute: LayoutExperienciesExperienceIdRoute,
   LayoutTilREADMERoute: LayoutTilREADMERoute,
   LayoutExperienciesIndexRoute: LayoutExperienciesIndexRoute,
+  LayoutTilAccessibilityOptimalTextContrastCalculationRoute:
+    LayoutTilAccessibilityOptimalTextContrastCalculationRoute,
   LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute:
     LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute,
   LayoutTilAlgorithmImplementationAlgorithmRoute:
@@ -3302,6 +3335,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTilTypescriptTypescriptInferKeywordRoute:
     LayoutTilTypescriptTypescriptInferKeywordRoute,
   LayoutTilWebA11yRoute: LayoutTilWebA11yRoute,
+  LayoutTilWebActivityPubRoute: LayoutTilWebActivityPubRoute,
   LayoutTilWebCookieAndSessionRoute: LayoutTilWebCookieAndSessionRoute,
   LayoutTilWebDesignModeRoute: LayoutTilWebDesignModeRoute,
   LayoutTilWebHowDoesTheInternetWorkRoute:
@@ -3328,6 +3362,7 @@ export interface FileRoutesByFullPath {
   '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/til/README': typeof LayoutTilREADMERoute;
   '/experiencies': typeof LayoutExperienciesIndexRoute;
+  '/til/accessibility/optimal-text-contrast-calculation': typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute;
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   '/til/algorithm/prefix-sum-algorithm': typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3502,6 +3537,7 @@ export interface FileRoutesByFullPath {
   '/til/typescript/ts-pattern': typeof LayoutTilTypescriptTsPatternRoute;
   '/til/typescript/typescript-infer-keyword': typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   '/til/web/a11y': typeof LayoutTilWebA11yRoute;
+  '/til/web/activityPub': typeof LayoutTilWebActivityPubRoute;
   '/til/web/cookie-and-session': typeof LayoutTilWebCookieAndSessionRoute;
   '/til/web/designMode': typeof LayoutTilWebDesignModeRoute;
   '/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute;
@@ -3522,6 +3558,7 @@ export interface FileRoutesByTo {
   '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/til/README': typeof LayoutTilREADMERoute;
   '/experiencies': typeof LayoutExperienciesIndexRoute;
+  '/til/accessibility/optimal-text-contrast-calculation': typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute;
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   '/til/algorithm/prefix-sum-algorithm': typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3696,6 +3733,7 @@ export interface FileRoutesByTo {
   '/til/typescript/ts-pattern': typeof LayoutTilTypescriptTsPatternRoute;
   '/til/typescript/typescript-infer-keyword': typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   '/til/web/a11y': typeof LayoutTilWebA11yRoute;
+  '/til/web/activityPub': typeof LayoutTilWebActivityPubRoute;
   '/til/web/cookie-and-session': typeof LayoutTilWebCookieAndSessionRoute;
   '/til/web/designMode': typeof LayoutTilWebDesignModeRoute;
   '/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute;
@@ -3718,6 +3756,7 @@ export interface FileRoutesById {
   '/_layout/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute;
   '/_layout/til/README': typeof LayoutTilREADMERoute;
   '/_layout/experiencies/': typeof LayoutExperienciesIndexRoute;
+  '/_layout/til/accessibility/optimal-text-contrast-calculation': typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute;
   '/_layout/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute;
   '/_layout/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute;
   '/_layout/til/algorithm/prefix-sum-algorithm': typeof LayoutTilAlgorithmPrefixSumAlgorithmRoute;
@@ -3892,6 +3931,7 @@ export interface FileRoutesById {
   '/_layout/til/typescript/ts-pattern': typeof LayoutTilTypescriptTsPatternRoute;
   '/_layout/til/typescript/typescript-infer-keyword': typeof LayoutTilTypescriptTypescriptInferKeywordRoute;
   '/_layout/til/web/a11y': typeof LayoutTilWebA11yRoute;
+  '/_layout/til/web/activityPub': typeof LayoutTilWebActivityPubRoute;
   '/_layout/til/web/cookie-and-session': typeof LayoutTilWebCookieAndSessionRoute;
   '/_layout/til/web/designMode': typeof LayoutTilWebDesignModeRoute;
   '/_layout/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute;
@@ -3914,6 +3954,7 @@ export interface FileRouteTypes {
     | '/experiencies/$experienceId'
     | '/til/README'
     | '/experiencies'
+    | '/til/accessibility/optimal-text-contrast-calculation'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
     | '/til/algorithm/prefix-sum-algorithm'
@@ -4088,6 +4129,7 @@ export interface FileRouteTypes {
     | '/til/typescript/ts-pattern'
     | '/til/typescript/typescript-infer-keyword'
     | '/til/web/a11y'
+    | '/til/web/activityPub'
     | '/til/web/cookie-and-session'
     | '/til/web/designMode'
     | '/til/web/how-does-the-internet-work'
@@ -4107,6 +4149,7 @@ export interface FileRouteTypes {
     | '/experiencies/$experienceId'
     | '/til/README'
     | '/experiencies'
+    | '/til/accessibility/optimal-text-contrast-calculation'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
     | '/til/algorithm/prefix-sum-algorithm'
@@ -4281,6 +4324,7 @@ export interface FileRouteTypes {
     | '/til/typescript/ts-pattern'
     | '/til/typescript/typescript-infer-keyword'
     | '/til/web/a11y'
+    | '/til/web/activityPub'
     | '/til/web/cookie-and-session'
     | '/til/web/designMode'
     | '/til/web/how-does-the-internet-work'
@@ -4301,6 +4345,7 @@ export interface FileRouteTypes {
     | '/_layout/experiencies/$experienceId'
     | '/_layout/til/README'
     | '/_layout/experiencies/'
+    | '/_layout/til/accessibility/optimal-text-contrast-calculation'
     | '/_layout/til/algorithm/depth-first-search-algorithm'
     | '/_layout/til/algorithm/implementation-algorithm'
     | '/_layout/til/algorithm/prefix-sum-algorithm'
@@ -4475,6 +4520,7 @@ export interface FileRouteTypes {
     | '/_layout/til/typescript/ts-pattern'
     | '/_layout/til/typescript/typescript-infer-keyword'
     | '/_layout/til/web/a11y'
+    | '/_layout/til/web/activityPub'
     | '/_layout/til/web/cookie-and-session'
     | '/_layout/til/web/designMode'
     | '/_layout/til/web/how-does-the-internet-work'
@@ -4531,6 +4577,7 @@ export const routeTree = rootRoute
         "/_layout/experiencies/$experienceId",
         "/_layout/til/README",
         "/_layout/experiencies/",
+        "/_layout/til/accessibility/optimal-text-contrast-calculation",
         "/_layout/til/algorithm/depth-first-search-algorithm",
         "/_layout/til/algorithm/implementation-algorithm",
         "/_layout/til/algorithm/prefix-sum-algorithm",
@@ -4705,6 +4752,7 @@ export const routeTree = rootRoute
         "/_layout/til/typescript/ts-pattern",
         "/_layout/til/typescript/typescript-infer-keyword",
         "/_layout/til/web/a11y",
+        "/_layout/til/web/activityPub",
         "/_layout/til/web/cookie-and-session",
         "/_layout/til/web/designMode",
         "/_layout/til/web/how-does-the-internet-work",
@@ -4740,6 +4788,10 @@ export const routeTree = rootRoute
     },
     "/_layout/experiencies/": {
       "filePath": "_layout/experiencies/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/til/accessibility/optimal-text-contrast-calculation": {
+      "filePath": "_layout/til/accessibility/optimal-text-contrast-calculation.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/algorithm/depth-first-search-algorithm": {
@@ -5436,6 +5488,10 @@ export const routeTree = rootRoute
     },
     "/_layout/til/web/a11y": {
       "filePath": "_layout/til/web/a11y.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/til/web/activityPub": {
+      "filePath": "_layout/til/web/activityPub.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/web/cookie-and-session": {
