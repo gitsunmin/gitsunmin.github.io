@@ -6,7 +6,6 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { HeadContent } from '@tanstack/react-router';
 import { Spinner } from '@/components/Spinner';
-import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const RouterSpinner = () => {
@@ -15,14 +14,7 @@ const RouterSpinner = () => {
 };
 
 export function HeadPortal() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  return mounted ? createPortal(<HeadContent />, document.head) : null;
+  return createPortal(<HeadContent />, document.head);
 }
 
 export const Route = createRootRoute({
