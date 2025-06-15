@@ -66,7 +66,8 @@ export const Content = () => {
   return (
     <Canvas
       camera={{ position: [5, 5, 10], zoom: 2 }}
-      style={{ height: '100dvh' }}
+      className="h-[calc(100vh-64px)] w-full"
+      style={{ height: window.innerHeight - 64 }}
     >
       <CameraController selectedBookId={selectedBookId} />
       <ambientLight />
