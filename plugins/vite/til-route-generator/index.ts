@@ -118,6 +118,15 @@ const importTILContents = (inputDir: string, mode: string) => {
   });
 };
 
+const getTitleFromParsedPath = (filePath: path.ParsedPath): string => {
+  const filename = match(filePath)
+    .with({ name: 'index' }, () => filePath.dir.split(path.sep).pop() || '')
+    .with({ name: P.string }, () => filePath.name)
+    .otherwise(() => '');
+
+  return filename.replace(/-/g, ' ').replace(/_/g, ' ');
+};
+
 const generateComponent = (relativePath: string, outputPath: string) => {
   const project = new Project();
   const sourceFile = project.createSourceFile(
@@ -126,6 +135,7 @@ const generateComponent = (relativePath: string, outputPath: string) => {
     { overwrite: true },
   );
   const filePath = path.parse(relativePath);
+  const title = getTitleFromParsedPath(filePath);
   const componentName = 'component';
   const mdxReplacerVariableName = 'components';
 
@@ -190,7 +200,20 @@ const generateComponent = (relativePath: string, outputPath: string) => {
     declarations: [
       {
         name: 'Route',
-        initializer: `createFileRoute('${path.join('/_layout/til', filePath.dir, filePath.name.replace(/index$/, '/'))}')({ component })`,
+        initializer: (writer) => {
+          writer.writeLine(
+            `createFileRoute('${path.join('/_layout/til', filePath.dir, filePath.name.replace(/index$/, '/'))}')(`,
+          );
+          writer.block(() => {
+            writer.writeLine(`component: ${componentName},`);
+            writer.writeLine('head: () => (');
+            writer.block(() => {
+              writer.writeLine(`  meta: [{ title: '${title}' }],`);
+            });
+            writer.writeLine('),');
+          });
+          writer.writeLine(')');
+        },
       },
     ],
   });
@@ -217,6 +240,7 @@ const createTILRoute = () => {
         filePath.dir,
         `${filePath.name}.tsx`,
       );
+
       generateComponent(relativePath, outputPath);
     }
   });
