@@ -1,6 +1,16 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import {
+  createRootRoute,
+  Outlet,
+  useRouterState,
+} from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { HeadContent } from '@tanstack/react-router';
+import { Spinner } from '@/components/Spinner';
+
+const RouterSpinner = () => {
+  const isLoading = useRouterState({ select: (s) => s.status === 'pending' });
+  return <Spinner show={isLoading} />;
+};
 
 export const Route = createRootRoute({
   head: () => ({
@@ -14,6 +24,7 @@ export const Route = createRootRoute({
       },
     ],
   }),
+  pendingComponent: () => <RouterSpinner />,
   component: () => {
     return (
       <>

@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 const Content = () => {
   return (
-    <ul className="flex flex-col gap-8 pt-8">
+    <ul className="flex flex-col gap-8 pt-8 px-4 md:px-0">
       {Career.map((career) => {
         return (
           <li
