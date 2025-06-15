@@ -29,7 +29,7 @@ This project uses the `Git Submodule` to provide the TIL(I Learned Today) projec
 - [x] Connect LinkedIn, Github
 - [ ] Experiencies Page
 - [ ] TIL Page (SEO)
-- [ ] Add Dependency vitest
+- [x] Add Dependency vitest
 - [x] Settings Page
   - [x] Dark Mode
   - [x] Font Size
