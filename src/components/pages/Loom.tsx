@@ -1,13 +1,11 @@
-import { Suspense, useRef, useState } from 'react';
-import { Button } from '../Button';
+import { Suspense, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const Content = () => {
-  const fgPickerRef = useRef<HTMLInputElement>(null);
   const [bgColor, setBgColor] = useState('#FFFFFF');
   const [fgColor, setFgColor] = useState('#000000');
 
-  function getBlackAndWhite(bgColor: string): string {
+  const getBlackAndWhite = (bgColor: string): string => {
     if (!bgColor || typeof bgColor !== 'string') {
       return '#000000';
     }
@@ -25,7 +23,7 @@ const Content = () => {
     const yiq = (r * 299 + g * 587 + b * 114) / 1000;
 
     return yiq >= 128 ? '#000000' : '#FFFFFF';
-  }
+  };
 
   const handleFixedColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const backgroundColor = e.currentTarget.value;
@@ -39,27 +37,25 @@ const Content = () => {
     <article className="px-4 mt-12 pt-4">
       <section
         aria-label="color picker"
-        className="relative"
+        className="relative rounded-lg"
         content="max-h-40"
       >
         <input
           type="color"
           aria-label="background color picker"
           value={bgColor}
-          className="w-full h-40 rounded-3xl border-2 p-0 cursor-pointer shadow-2xl [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded [&::-webkit-color-swatch-wrapper]:p-px"
+          className="w-full h-40 rounded-lg border-2 p-0 cursor-pointer shadow-2xl [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded [&::-webkit-color-swatch-wrapper]:p-px"
           onInput={handleFixedColorChange}
         />
-        <Button
-          variant="ghost"
+        <div
+          style={{ color: fgColor, borderColor: fgColor }}
           className={cn(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border px-4 py-2 shadow-2xl rounded-lg',
+            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+            'border px-4 py-2 shadow-2xl rounded-lg text-center',
           )}
-          onClick={() => fgPickerRef.current?.click()}
         >
-          <span style={{ color: fgColor }}>
-            Gitsunmin is <br /> The Best Programer!
-          </span>
-        </Button>
+          Gitsunmin is <br /> The Best Programer!
+        </div>
       </section>
     </article>
   );
