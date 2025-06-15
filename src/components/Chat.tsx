@@ -44,7 +44,8 @@ export const ChatCard = ({
           </Link>
         ))
         .with({ __t: 'image' }, () => <>image</>)
-        .otherwise(() => null)}
+        .with({ __t: 'headline' }, () => <>headline</>)
+        .exhaustive()}
     </div>
   );
 };

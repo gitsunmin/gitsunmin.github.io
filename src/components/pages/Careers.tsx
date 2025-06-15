@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 
 const Content = () => {
   return (
-    <ul className="flex flex-col gap-8 pt-8 px-4 md:px-0">
+    <ul className="flex flex-col gap-8 pt-8 px-4 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto">
       {Career.map((career) => {
         return (
           <li
@@ -23,11 +23,6 @@ const Content = () => {
                 </p>
               </div>
             </div>
-
-            {/* 주의사항 */}
-            {career.caution && (
-              <p className="text-sm text-red-500">* {career.caution}</p>
-            )}
 
             {/* 회사 소개 */}
             <section className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line">

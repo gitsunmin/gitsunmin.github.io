@@ -1,28 +1,9 @@
 import { Gitsunmin, James, type User } from '@/data/user';
-
-type Text = {
-  __t: 'text';
-  text: string;
-};
-
-type Link = {
-  __t: 'link';
-  label: string;
-  url: string;
-};
-
-type Image = {
-  __t: 'image';
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  caption?: string;
-};
+import type { Content } from '@/data/contentTypes';
 
 export type Chat = {
   user: User;
-  content: Text | Link | Image;
+  content: Content;
 };
 
 type Interview = {

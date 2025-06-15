@@ -14,7 +14,7 @@ type Props = {
 
 const Content = ({ interviewer, interviewee }: Props) => {
   return (
-    <article className="flex flex-col text-gray-900 dark:text-gray-100 px-4">
+    <article className="flex flex-col text-gray-900 dark:text-gray-100 px-4 w-full md:max-w-(--breakpoint-md) mx-auto">
       {INTERVIEW.banner ? (
         <p
           className={twMerge(

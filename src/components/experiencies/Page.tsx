@@ -17,22 +17,28 @@ export const Page = ({
   <section
     id={id}
     className={cn(
-      'w-full md:max-w-(--breakpoint-md) mx-auto px-4 snap-always snap-start min-h-[100dvh] break-words',
+      'w-full md:max-w-(--breakpoint-md) mx-auto snap-always p-4 snap-start min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] break-words',
       {
         'flex items-center justify-center': variant === 'cover',
       },
       className,
     )}
   >
-    <div
-      className={cn('h-12', {
-        'px-4 py-1 rounded-xl flex items-center ml-8 md:ml-0 md:px-0 text-md md:text-2xl font-bold':
-          variant === 'default' && label !== '',
-      })}
-    >
-      {label}
-    </div>
+    {label && (
+      <div
+        className={cn('h-12', {
+          'py-1 rounded-xl flex items-center text-3xl md:text-5xl font-bold':
+            variant === 'default' && label !== '',
+        })}
+      >
+        {label}
+      </div>
+    )}
 
-    {children}
+    {children && (
+      <div className="flex flex-col gap-y-4 justify-center items-center">
+        {children}
+      </div>
+    )}
   </section>
 );

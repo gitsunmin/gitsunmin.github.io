@@ -1,5 +1,6 @@
 import type { Experience } from '@/data/experiencies';
 import { Link } from '@tanstack/react-router';
+import { match, P } from 'ts-pattern';
 
 type Props = {
   experience: Experience;
@@ -25,13 +26,30 @@ export const TableOfContents = ({ experience }: Props) => {
         </Link>
       </li>
 
-      {contents?.map(({ id, title }) => (
-        <li key={id} className="space-y-2">
-          <Link to="" hash={id} className="font-semibold" hashScrollIntoView>
-            {title}
-          </Link>
-        </li>
-      ))}
+      {match(contents)
+        .with(P.nonNullable, (contents) => {
+          return contents
+            .filter((content) => content.__t === 'headline')
+            .map(({ text }, index) => (
+              <li
+                key={`${id}-content-${
+                  // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                  index
+                }`}
+                className="space-y-2"
+              >
+                <Link
+                  to=""
+                  hash={id}
+                  className="font-semibold"
+                  hashScrollIntoView
+                >
+                  {text}
+                </Link>
+              </li>
+            ));
+        })
+        .otherwise(() => null)}
     </ol>
   );
 };

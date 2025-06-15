@@ -34,7 +34,7 @@ const Content = () => {
   };
 
   return (
-    <article className="px-4 mt-12 pt-4">
+    <article className="px-4 mt-12 pt-4 w-full md:max-w-(--breakpoint-md) mx-auto">
       <section
         aria-label="color picker"
         className="relative rounded-lg"

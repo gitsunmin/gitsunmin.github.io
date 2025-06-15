@@ -1,16 +1,12 @@
 import type { CareerId } from '@/data/careers';
-import type { SkilId } from '@/data/skils';
-import { EXPERIENCE_BOROTER } from './boronter';
+import { EXPERIENCE_LIBRARY } from '@/data/experiencies/library';
+import type { Content } from '@/data/contentTypes';
 
 export type Experience = {
   readonly id: string;
-  readonly relatedTo: string | null;
-  readonly careerId: CareerId;
+  readonly careers: CareerId[];
   readonly name: string;
-  readonly introduce: React.ReactNode;
-  readonly dateRange: string;
-  readonly skils: SkilId[];
-  readonly caution?: string[];
+  readonly introduce: Content[];
   readonly book: {
     readonly cover: {
       readonly front: string;
@@ -18,18 +14,7 @@ export type Experience = {
       readonly side: string;
     };
   };
-  readonly contents?: {
-    readonly id: string;
-    readonly title: string;
-    readonly content: React.ReactNode;
-  }[];
-  readonly troubleshooting: {
-    readonly id: string;
-    readonly title: string;
-    readonly problem: React.ReactNode;
-    readonly solution: React.ReactNode;
-    readonly retrospect: React.ReactNode;
-  }[];
+  readonly contents?: Content[];
 };
 
-export const EXPERIENCE_LIST: Experience[] = [EXPERIENCE_BOROTER];
+export const EXPERIENCE_LIST: Experience[] = [EXPERIENCE_LIBRARY];

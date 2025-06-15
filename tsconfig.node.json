@@ -11,5 +11,5 @@
     "baseUrl": "."
   },
   "include": ["vite.config.ts", "plugins/**/*.ts"],
-  "exclude": ["modules"]
+  "exclude": ["modules", "node_modules", "dist", "build"]
 }

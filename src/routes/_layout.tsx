@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_layout')({
 
 function RouteComponent() {
   return (
-    <Scaffold header={<Header />} className="pt-12">
+    <Scaffold header={<Header />} className="pt-12 md:pt-16">
       <Outlet />
     </Scaffold>
   );

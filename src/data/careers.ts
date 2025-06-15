@@ -34,8 +34,8 @@ export const Career: Career[] = [
           이러한 경험을 통해 다양한 디바이스에서의 접근성을 보장하고, 최신 기술 스택을 적극 활용하는 역량을 갖추게 되었습니다.`,
     range: '2020.10 ~ ',
     positoin: '프론트엔드 개발자',
-    experiencies: EXPERIENCE_LIST.filter(
-      (experience) => experience.careerId === 'marketboro',
+    experiencies: EXPERIENCE_LIST.filter((experience) =>
+      experience.careers.includes('marketboro'),
     ),
     links: [
       {
@@ -62,8 +62,8 @@ export const Career: Career[] = [
           특히, 초기 개발 환경과 프로세스 구축에 참여하여, 개발 역량뿐만 아니라 문제 해결 능력과 주도적인 업무 수행 능력을 함양하였습니다.`,
     positoin: '프론트엔드 개발자',
     range: '2019.07 ~ 2020.10',
-    experiencies: EXPERIENCE_LIST.filter(
-      (project) => project.careerId === 'korens',
+    experiencies: EXPERIENCE_LIST.filter((experience) =>
+      experience.careers.includes('marketboro'),
     ),
     links: [
       {

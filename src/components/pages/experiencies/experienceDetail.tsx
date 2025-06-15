@@ -1,5 +1,5 @@
 import { Default404 } from '@/components/Default404';
-import { BookTemplate } from '@/components/experiencies/BookTemplate';
+import { ExperienceTemplate } from '@/components/experiencies/ExperienceTemplate';
 import { EXPERIENCE_LIST } from '@/data/experiencies';
 import { useParams } from '@tanstack/react-router';
 import { Suspense } from 'react';
@@ -15,7 +15,7 @@ const Contetnt = () => {
 
   return match(experience)
     .with(P.nonNullable, (experience) => (
-      <BookTemplate experience={experience} />
+      <ExperienceTemplate experience={experience} />
     ))
     .otherwise(() => <Default404 />);
 };
