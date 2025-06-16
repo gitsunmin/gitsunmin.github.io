@@ -36,7 +36,7 @@ export const Page = ({
     )}
 
     {children && (
-      <div className="flex flex-col gap-y-4 justify-center items-center">
+      <div className="flex flex-col gap-y-4 w-full justify-start items-center mt-8">
         {children}
       </div>
     )}

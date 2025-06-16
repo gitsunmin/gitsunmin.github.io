@@ -10,7 +10,7 @@ export const TableOfContents = ({ experience }: Props) => {
   const { id, name, contents } = experience;
 
   return (
-    <ol className="list-decimal pl-5 space-y-2">
+    <ol className="list-decimal pl-5 space-y-2 w-full text-left">
       <li className="font-semibold">
         <Link
           hash={`${id}-intro`}
@@ -40,9 +40,13 @@ export const TableOfContents = ({ experience }: Props) => {
               >
                 <Link
                   to=""
-                  hash={id}
+                  hash={text.toLowerCase().replace(/\s+/g, '-')}
                   className="font-semibold"
-                  hashScrollIntoView
+                  hashScrollIntoView={{
+                    behavior: 'smooth',
+                    block: 'start',
+                    inline: 'nearest',
+                  }}
                 >
                   {text}
                 </Link>

@@ -1,22 +1,25 @@
-type Headline = {
+export type Headline = {
   __t: 'headline';
   level: 1 | 2 | 3 | 4 | 5 | 6;
   text: string;
+  className?: string;
 };
 
-type Text = {
+export type Text = {
   __t: 'text';
   text: string;
+  className?: string;
 };
 
-type Link = {
+export type Link = {
   __t: 'link';
   label: string;
   url: string;
   target?: '_blank' | '_self';
+  className?: string;
 };
 
-type Image = {
+export type Image = {
   __t: 'image';
   src: string;
   alt: string;
@@ -24,6 +27,7 @@ type Image = {
   height?: number;
   caption?: string;
   loading?: 'lazy' | 'eager';
+  className?: string;
 };
 
 export type Content = Headline | Text | Link | Image;

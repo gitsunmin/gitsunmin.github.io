@@ -10,7 +10,7 @@ export const EXPERIENCE_LIBRARY: Experience = {
   introduce: [
     {
       __t: 'text',
-      text: '개발자로서 업무를 진행하며 필요한 도구들 혹은 구현해보고 싶은 내용들을 모듈화하여 라이브러리 형태로 배포한 경험을 가지고 있습니다. 이 경험에 대해서 공유하고자 합니다.',
+      text: '업무 혹은 개인적으로 필요한 도구를 모듈화하여 라이브러리 형태로 배포한 경험을 가지고 있습니다. 이 경험에 대해서 공유하고자 합니다.',
     },
     {
       __t: 'text',
@@ -24,8 +24,48 @@ export const EXPERIENCE_LIBRARY: Experience = {
   contents: [
     {
       __t: 'headline',
+      level: 1,
+      text: 'Troubleshooting1',
+    },
+    {
+      __t: 'headline',
       level: 2,
-      text: 'Troubleshooting',
+      text: 'Troubleshooting2',
+    },
+    {
+      __t: 'headline',
+      level: 3,
+      text: 'Troubleshooting3',
+    },
+    {
+      __t: 'headline',
+      level: 4,
+      text: 'Troubleshooting4',
+    },
+    {
+      __t: 'headline',
+      level: 5,
+      text: 'Troubleshooting5',
+    },
+    {
+      __t: 'headline',
+      level: 6,
+      text: 'Troubleshooting6',
+    },
+    {
+      __t: 'headline',
+      level: 1,
+      text: 'Troubleshooting11',
+    },
+    {
+      __t: 'headline',
+      level: 2,
+      text: 'Troubleshooting22',
+    },
+    {
+      __t: 'headline',
+      level: 3,
+      text: 'Troubleshooting33',
     },
     {
       __t: 'text',
