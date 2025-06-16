@@ -1,4 +1,3 @@
 User-agent: *
-Disallow: /experiencies
-Disallow: /experiencies/*
+Disallow: /experiencies/
 Allow: /
