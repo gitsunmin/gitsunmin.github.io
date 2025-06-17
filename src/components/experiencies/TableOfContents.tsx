@@ -22,7 +22,7 @@ export const TableOfContents = ({ experience }: Props) => {
             inline: 'nearest',
           }}
         >
-          {name} 소개
+          {name}
         </Link>
       </li>
 
@@ -30,7 +30,7 @@ export const TableOfContents = ({ experience }: Props) => {
         .with(P.nonNullable, (contents) => {
           return contents
             .filter((content) => content.__t === 'headline')
-            .map(({ text }, index) => (
+            .map(({ __t, level, text }, index) => (
               <li
                 key={`${id}-content-${
                   // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -40,7 +40,7 @@ export const TableOfContents = ({ experience }: Props) => {
               >
                 <Link
                   to=""
-                  hash={text.toLowerCase().replace(/\s+/g, '-')}
+                  hash={`${__t}-${level}-${text.toLowerCase().replace(/\s+/g, '-')}`}
                   className="font-semibold"
                   hashScrollIntoView={{
                     behavior: 'smooth',

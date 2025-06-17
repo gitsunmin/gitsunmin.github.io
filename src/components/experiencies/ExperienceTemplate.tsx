@@ -24,14 +24,14 @@ export const ExperienceTemplate = ({ experience }: Props) => {
       </Page>
 
       <Page className="flex items-center justify-center">
-        <h1 className="text-3xl md:text-5xl font-bold">{name}</h1>
+        <h1 className="text-3xl md:text-6xl font-bold my-6">{name}</h1>
       </Page>
 
       <Page label="Table of Contents">
         <TableOfContents experience={experience} />
       </Page>
 
-      <Page label={`${name} 소개`}>
+      <Page label={name} id={`${experience.id}-intro`}>
         <ExperienceContents contents={introduce} />
       </Page>
 

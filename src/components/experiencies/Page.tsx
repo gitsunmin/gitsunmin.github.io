@@ -17,7 +17,7 @@ export const Page = ({
   <section
     id={id}
     className={cn(
-      'w-full md:max-w-(--breakpoint-md) mx-auto snap-always p-4 snap-start min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] break-words',
+      'w-full md:max-w-(--breakpoint-md) mx-auto snap-always p-4 snap-start min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] break-words text-left',
       {
         'flex items-center justify-center': variant === 'cover',
       },

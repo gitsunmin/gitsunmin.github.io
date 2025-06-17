@@ -10,7 +10,7 @@ export const EXPERIENCE_LIBRARY: Experience = {
   introduce: [
     {
       __t: 'text',
-      text: '업무 혹은 개인적으로 필요한 도구를 모듈화하여 라이브러리 형태로 배포한 경험을 가지고 있습니다. 이 경험에 대해서 공유하고자 합니다.',
+      text: '업무 혹은 개인적으로 필요한 도구를 모듈화하여 라이브러리 형태로 배포한 경험들을 가지고 있습니다. 이 경험들에 대해서 공유하고자 합니다.',
     },
     {
       __t: 'text',
@@ -25,51 +25,28 @@ export const EXPERIENCE_LIBRARY: Experience = {
     {
       __t: 'headline',
       level: 1,
-      text: 'Troubleshooting1',
+      text: 'troubleshooting',
     },
     {
       __t: 'headline',
       level: 2,
-      text: 'Troubleshooting2',
-    },
-    {
-      __t: 'headline',
-      level: 3,
-      text: 'Troubleshooting3',
-    },
-    {
-      __t: 'headline',
-      level: 4,
-      text: 'Troubleshooting4',
-    },
-    {
-      __t: 'headline',
-      level: 5,
-      text: 'Troubleshooting5',
-    },
-    {
-      __t: 'headline',
-      level: 6,
-      text: 'Troubleshooting6',
-    },
-    {
-      __t: 'headline',
-      level: 1,
-      text: 'Troubleshooting11',
-    },
-    {
-      __t: 'headline',
-      level: 2,
-      text: 'Troubleshooting22',
-    },
-    {
-      __t: 'headline',
-      level: 3,
-      text: 'Troubleshooting33',
+      text: 'Problem: 공개할 수 없는 라이브러리',
     },
     {
       __t: 'text',
-      text: 'Library는 마켓보로의 사내 개발자 커뮤니티입니다. 개발자들이 자유롭게 기술을 공유하고, 서로의 경험을 나누는 공간으로, 다양한 기술 스택과 프로젝트에 대한 토론이 이루어집니다. 이 커뮤니티를 통해 개발자들은 최신 기술 동향을 파악하고, 서로의 지식을 확장할 수 있습니다.',
+      text: '회사의 코드가 외부에 공개될 수 없는 상황이었습니다. 하지만, 요구사항을 분석하였을 때, 재사용성과 유지보수하기에 좋은 라이브러리 형태가 적합하다고 판단하였습니다.',
+    },
+    {
+      __t: 'text',
+      text: '외부에 공개하지 않더라도, 라이브러리 형태로 관리하는 것이 가능한 방법 2 가지가 있었습니다.',
+    },
+    {
+      __t: 'text',
+      text: '1. 패키지 레지스트리에서 제공하는 Private Registry를 이용하는 방법',
+    },
+    {
+      __t: 'text',
+      text: '2. Nexus Repository와 같은 패키지 레지스트리 서버를 구축하는 방법',
     },
   ],
   book: {

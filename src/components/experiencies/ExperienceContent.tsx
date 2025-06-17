@@ -14,59 +14,44 @@ export const ExperienceContents = ({ contents }: Props) => {
           // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           index
         }`}
+        className="w-full"
       >
         {match(content)
           .with(
             {
               __t: 'headline',
             },
-            ({ text, level, className }) => {
+            ({ __t, text, level, className }) => {
+              const id = `${__t}-${level}-${text.toLowerCase().replace(/\s+/g, '-')}`;
+
               return match(level)
                 .with(1, () => (
-                  <h1
-                    id={text.toLowerCase().replace(/\s+/g, '-')}
-                    className={cn('text-3xl md:text-6xl font-bold')}
-                  >
+                  <h1 id={id} className={cn('text-heading-1')}>
                     {text}
                   </h1>
                 ))
                 .with(2, () => (
-                  <h2
-                    id={text.toLowerCase().replace(/\s+/g, '-')}
-                    className={cn('text-2xl md:text-5xl font-bold', className)}
-                  >
+                  <h2 id={id} className={cn('text-heading-2', className)}>
                     {text}
                   </h2>
                 ))
                 .with(3, () => (
-                  <h3
-                    id={text.toLowerCase().replace(/\s+/g, '-')}
-                    className={cn('text-xl md:text-4xl font-bold', className)}
-                  >
+                  <h3 id={id} className={cn('text-heading-3', className)}>
                     {text}
                   </h3>
                 ))
                 .with(4, () => (
-                  <h4
-                    id={text.toLowerCase().replace(/\s+/g, '-')}
-                    className={cn('text-lg md:text-3xl font-bold', className)}
-                  >
+                  <h4 id={id} className={cn('text-heading-4', className)}>
                     {text}
                   </h4>
                 ))
                 .with(5, () => (
-                  <h5
-                    id={text.toLowerCase().replace(/\s+/g, '-')}
-                    className={cn('text-md md:text-2xl font-bold', className)}
-                  >
+                  <h5 id={id} className={cn('text-heading-5', className)}>
                     {text}
                   </h5>
                 ))
                 .with(6, () => (
-                  <h6
-                    id={text.toLowerCase().replace(/\s+/g, '-')}
-                    className={cn('text-xs md:text-xl font-bold', className)}
-                  >
+                  <h6 id={id} className={cn('text-heading-6', className)}>
                     {text}
                   </h6>
                 ))
@@ -79,14 +64,16 @@ export const ExperienceContents = ({ contents }: Props) => {
             },
             ({ text, className }) => {
               return (
-                <p
+                <div
                   className={cn(
                     'text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line',
+                    'min-w-full text-left',
+                    'text-body-1',
                     className,
                   )}
                 >
                   {text}
-                </p>
+                </div>
               );
             },
           )
