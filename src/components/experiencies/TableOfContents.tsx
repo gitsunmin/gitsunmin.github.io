@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const TableOfContents = ({ experience }: Props) => {
-  const { id, name, contents } = experience;
+  const { id, contents } = experience;
 
   return (
     <ol className="list-decimal pl-5 space-y-2 w-full text-left">
@@ -22,7 +22,7 @@ export const TableOfContents = ({ experience }: Props) => {
             inline: 'nearest',
           }}
         >
-          {name}
+          introduce
         </Link>
       </li>
 

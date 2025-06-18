@@ -96,11 +96,11 @@ export const ExperienceContents = ({ contents }: Props) => {
             {
               __t: 'link',
             },
-            ({ label, url, className }) => {
+            ({ label, url, className, target }) => {
               return (
                 <a
                   href={url}
-                  target="_blank"
+                  target={target ?? '_blank'}
                   rel="noopener noreferrer"
                   className={cn(
                     'text-blue-600 hover:underline inline-flex items-center gap-1',

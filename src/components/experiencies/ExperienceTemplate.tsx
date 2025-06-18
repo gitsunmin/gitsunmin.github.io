@@ -31,7 +31,7 @@ export const ExperienceTemplate = ({ experience }: Props) => {
         <TableOfContents experience={experience} />
       </Page>
 
-      <Page label={name} id={`${experience.id}-intro`}>
+      <Page label={'introduce'} id={`${experience.id}-intro`}>
         <ExperienceContents contents={introduce} />
       </Page>
 

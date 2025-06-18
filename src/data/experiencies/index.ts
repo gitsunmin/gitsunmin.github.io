@@ -1,5 +1,5 @@
 import type { CareerId } from '@/data/careers';
-import { EXPERIENCE_LIBRARY } from '@/data/experiencies/library';
+import { EXPERIENCE_LIBRARY } from '@/data/experiencies/library-development';
 import type { Content } from '@/data/contentTypes';
 
 export type Experience = {

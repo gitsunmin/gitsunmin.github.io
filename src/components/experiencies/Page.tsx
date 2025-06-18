@@ -27,7 +27,7 @@ export const Page = ({
     {label && (
       <div
         className={cn('h-12', {
-          'py-1 rounded-xl flex items-center text-3xl md:text-5xl font-bold':
+          'py-1 rounded-xl flex items-center text-3xl md:text-5xl font-bold mb-4 md:mb-8':
             variant === 'default' && label !== '',
         })}
       >
@@ -36,7 +36,7 @@ export const Page = ({
     )}
 
     {children && (
-      <div className="flex flex-col gap-y-4 w-full justify-start items-center mt-8">
+      <div className="flex flex-col gap-y-4 w-full justify-start items-center">
         {children}
       </div>
     )}

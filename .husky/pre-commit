@@ -1,7 +1,8 @@
+git stash push -k --include-untracked
+
 bun run format
 bun run build
 bun run lint
 
-git stash push -k --include-untracked
 git add .
 git stash pop
