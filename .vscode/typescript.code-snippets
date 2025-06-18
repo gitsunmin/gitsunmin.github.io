@@ -1,0 +1,47 @@
+{
+    "text content snippet": {
+        "prefix": "cts",
+        "body": [
+            "{",
+            "  __t: 'text',",
+            "  text: '${1:content}',",
+            "},"
+        ],
+        "description": "text content snippet",
+    },
+    "heading content snippet": {
+        "prefix": "chs",
+        "body": [
+            "{",
+            "  __t: 'headline',",
+            "  level: ${1:1},",
+            "  text: '${2:content}',",
+            "},"
+        ],
+        "description": "heading content snippet",
+    },
+    "image content snippet": {
+        "prefix": "cis",
+        "body": [
+            "{",
+            "  __t: 'image',",
+            "  src: '${1:image-url}',",
+            "  alt: '${2:alt-text}',",
+            "  caption: '${3:caption}',",
+            "},"
+        ],
+        "description": "image content snippet",
+    },
+    "link content snippet": {
+        "prefix": "cls",
+        "body": [
+            "{",
+            "  __t: 'link',",
+            "  href: '${1:url}',",
+            "  text: '${2:link text}',",
+            "  title: '${3:title}',",
+            "},"
+        ],
+        "description": "link content snippet",
+    },
+}

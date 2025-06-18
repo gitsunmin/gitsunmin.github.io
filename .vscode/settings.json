@@ -1,0 +1,3 @@
+{
+	"files.readonlyInclude": ["src/routes/_layout/til/**"]
+}
