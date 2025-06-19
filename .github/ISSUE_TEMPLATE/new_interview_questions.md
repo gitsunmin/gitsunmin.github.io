@@ -10,5 +10,5 @@ assignees: 'gitsunmin'
 *[If you want to keep it private, please send it to my email.]*
 *[tjsals116@gmail.com](tjsals116@gmail.com)*
 
-[아래 질문을 작성해주세요.]
+[질문을 작성해주세요.]
 [Please write down the questions.]

@@ -21,7 +21,7 @@ const Content = ({ interviewer, interviewee }: Props) => {
             'text-sm break-words',
             'text-gray-500 dark:text-gray-400 border-l-2',
             'border-gray-300 dark:border-gray-600 px-4 py-2 bg-gray-50 dark:bg-gray-800',
-            'mt-4 rounded-lg'
+            'mt-4 rounded-lg',
           )}
         >
           {INTERVIEW.banner}
