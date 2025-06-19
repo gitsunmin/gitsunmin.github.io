@@ -1,8 +1,8 @@
 ---
 name: interview questions
 about: write interview questions for gitsunmin
-title: '[INTERVIEW] '
-labels: interview
+title: '[INTERVIEW QUESTION] '
+labels: 'interview question'
 assignees: 'gitsunmin'
 ---
 
