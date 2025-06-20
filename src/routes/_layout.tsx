@@ -3,7 +3,7 @@ import { Scaffold } from '@/components/Scaffold';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_layout')({
-  component: RouteComponent
+  component: RouteComponent,
 });
 
 function RouteComponent() {

@@ -6,5 +6,5 @@ export const Route = createFileRoute('/_layout/interview')({
   component: InterviewPage,
   errorComponent: undefined,
   notFoundComponent: undefined,
-  pendingComponent: undefined
+  pendingComponent: undefined,
 });

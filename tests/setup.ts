@@ -18,6 +18,6 @@ global.DOMRect = {
     width: 0,
     height: 0,
     x: 0,
-    y: 0
-  })
+    y: 0,
+  }),
 } as unknown as typeof DOMRect;

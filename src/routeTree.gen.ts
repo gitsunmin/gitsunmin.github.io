@@ -72,6 +72,7 @@ import { Route as LayoutTilNetworkAbortControllerImport } from './routes/_layout
 import { Route as LayoutTilNetworkDNSDomainNameSystemImport } from './routes/_layout/til/network/DNS-domain-name-system'
 import { Route as LayoutTilMobileAndroidIconNameImport } from './routes/_layout/til/mobile/android-icon-name'
 import { Route as LayoutTilMcpWhatIsMcpImport } from './routes/_layout/til/mcp/what-is-mcp'
+import { Route as LayoutTilMachineLearningPerceptronImport } from './routes/_layout/til/machine-learning/perceptron'
 import { Route as LayoutTilLibraryTurborepoImport } from './routes/_layout/til/library/turborepo'
 import { Route as LayoutTilLibraryStyleDictionaryImport } from './routes/_layout/til/library/style-dictionary'
 import { Route as LayoutTilLibraryNuqsImport } from './routes/_layout/til/library/nuqs'
@@ -610,6 +611,13 @@ const LayoutTilMcpWhatIsMcpRoute = LayoutTilMcpWhatIsMcpImport.update({
   path: '/til/mcp/what-is-mcp',
   getParentRoute: () => LayoutRoute,
 } as any)
+
+const LayoutTilMachineLearningPerceptronRoute =
+  LayoutTilMachineLearningPerceptronImport.update({
+    id: '/til/machine-learning/perceptron',
+    path: '/til/machine-learning/perceptron',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 const LayoutTilLibraryTurborepoRoute = LayoutTilLibraryTurborepoImport.update({
   id: '/til/library/turborepo',
@@ -2549,6 +2557,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTilLibraryTurborepoImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/til/machine-learning/perceptron': {
+      id: '/_layout/til/machine-learning/perceptron'
+      path: '/til/machine-learning/perceptron'
+      fullPath: '/til/machine-learning/perceptron'
+      preLoaderRoute: typeof LayoutTilMachineLearningPerceptronImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/til/mcp/what-is-mcp': {
       id: '/_layout/til/mcp/what-is-mcp'
       path: '/til/mcp/what-is-mcp'
@@ -3053,6 +3068,7 @@ interface LayoutRouteChildren {
   LayoutTilLibraryNuqsRoute: typeof LayoutTilLibraryNuqsRoute
   LayoutTilLibraryStyleDictionaryRoute: typeof LayoutTilLibraryStyleDictionaryRoute
   LayoutTilLibraryTurborepoRoute: typeof LayoutTilLibraryTurborepoRoute
+  LayoutTilMachineLearningPerceptronRoute: typeof LayoutTilMachineLearningPerceptronRoute
   LayoutTilMcpWhatIsMcpRoute: typeof LayoutTilMcpWhatIsMcpRoute
   LayoutTilMobileAndroidIconNameRoute: typeof LayoutTilMobileAndroidIconNameRoute
   LayoutTilNetworkDNSDomainNameSystemRoute: typeof LayoutTilNetworkDNSDomainNameSystemRoute
@@ -3303,6 +3319,8 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTilLibraryNuqsRoute: LayoutTilLibraryNuqsRoute,
   LayoutTilLibraryStyleDictionaryRoute: LayoutTilLibraryStyleDictionaryRoute,
   LayoutTilLibraryTurborepoRoute: LayoutTilLibraryTurborepoRoute,
+  LayoutTilMachineLearningPerceptronRoute:
+    LayoutTilMachineLearningPerceptronRoute,
   LayoutTilMcpWhatIsMcpRoute: LayoutTilMcpWhatIsMcpRoute,
   LayoutTilMobileAndroidIconNameRoute: LayoutTilMobileAndroidIconNameRoute,
   LayoutTilNetworkDNSDomainNameSystemRoute:
@@ -3529,6 +3547,7 @@ export interface FileRoutesByFullPath {
   '/til/library/nuqs': typeof LayoutTilLibraryNuqsRoute
   '/til/library/style-dictionary': typeof LayoutTilLibraryStyleDictionaryRoute
   '/til/library/turborepo': typeof LayoutTilLibraryTurborepoRoute
+  '/til/machine-learning/perceptron': typeof LayoutTilMachineLearningPerceptronRoute
   '/til/mcp/what-is-mcp': typeof LayoutTilMcpWhatIsMcpRoute
   '/til/mobile/android-icon-name': typeof LayoutTilMobileAndroidIconNameRoute
   '/til/network/DNS-domain-name-system': typeof LayoutTilNetworkDNSDomainNameSystemRoute
@@ -3727,6 +3746,7 @@ export interface FileRoutesByTo {
   '/til/library/nuqs': typeof LayoutTilLibraryNuqsRoute
   '/til/library/style-dictionary': typeof LayoutTilLibraryStyleDictionaryRoute
   '/til/library/turborepo': typeof LayoutTilLibraryTurborepoRoute
+  '/til/machine-learning/perceptron': typeof LayoutTilMachineLearningPerceptronRoute
   '/til/mcp/what-is-mcp': typeof LayoutTilMcpWhatIsMcpRoute
   '/til/mobile/android-icon-name': typeof LayoutTilMobileAndroidIconNameRoute
   '/til/network/DNS-domain-name-system': typeof LayoutTilNetworkDNSDomainNameSystemRoute
@@ -3927,6 +3947,7 @@ export interface FileRoutesById {
   '/_layout/til/library/nuqs': typeof LayoutTilLibraryNuqsRoute
   '/_layout/til/library/style-dictionary': typeof LayoutTilLibraryStyleDictionaryRoute
   '/_layout/til/library/turborepo': typeof LayoutTilLibraryTurborepoRoute
+  '/_layout/til/machine-learning/perceptron': typeof LayoutTilMachineLearningPerceptronRoute
   '/_layout/til/mcp/what-is-mcp': typeof LayoutTilMcpWhatIsMcpRoute
   '/_layout/til/mobile/android-icon-name': typeof LayoutTilMobileAndroidIconNameRoute
   '/_layout/til/network/DNS-domain-name-system': typeof LayoutTilNetworkDNSDomainNameSystemRoute
@@ -4127,6 +4148,7 @@ export interface FileRouteTypes {
     | '/til/library/nuqs'
     | '/til/library/style-dictionary'
     | '/til/library/turborepo'
+    | '/til/machine-learning/perceptron'
     | '/til/mcp/what-is-mcp'
     | '/til/mobile/android-icon-name'
     | '/til/network/DNS-domain-name-system'
@@ -4324,6 +4346,7 @@ export interface FileRouteTypes {
     | '/til/library/nuqs'
     | '/til/library/style-dictionary'
     | '/til/library/turborepo'
+    | '/til/machine-learning/perceptron'
     | '/til/mcp/what-is-mcp'
     | '/til/mobile/android-icon-name'
     | '/til/network/DNS-domain-name-system'
@@ -4522,6 +4545,7 @@ export interface FileRouteTypes {
     | '/_layout/til/library/nuqs'
     | '/_layout/til/library/style-dictionary'
     | '/_layout/til/library/turborepo'
+    | '/_layout/til/machine-learning/perceptron'
     | '/_layout/til/mcp/what-is-mcp'
     | '/_layout/til/mobile/android-icon-name'
     | '/_layout/til/network/DNS-domain-name-system'
@@ -4756,6 +4780,7 @@ export const routeTree = rootRoute
         "/_layout/til/library/nuqs",
         "/_layout/til/library/style-dictionary",
         "/_layout/til/library/turborepo",
+        "/_layout/til/machine-learning/perceptron",
         "/_layout/til/mcp/what-is-mcp",
         "/_layout/til/mobile/android-icon-name",
         "/_layout/til/network/DNS-domain-name-system",
@@ -5374,6 +5399,10 @@ export const routeTree = rootRoute
     },
     "/_layout/til/library/turborepo": {
       "filePath": "_layout/til/library/turborepo.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/til/machine-learning/perceptron": {
+      "filePath": "_layout/til/machine-learning/perceptron.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/mcp/what-is-mcp": {

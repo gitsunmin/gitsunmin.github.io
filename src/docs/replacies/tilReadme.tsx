@@ -13,7 +13,7 @@ const TilReadmeReplacies: MDXComponents = {
           className="text-blue-400"
         />
       ))
-      .otherwise(() => <a className="text-blue-400" {...props} />)
+      .otherwise(() => <a className="text-blue-400" {...props} />),
 };
 
 export default TilReadmeReplacies;

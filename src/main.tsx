@@ -13,7 +13,7 @@ import { FontSizeProvider } from './providers/FontSizeContext';
 
 const router = createRouter({
   routeTree,
-  basepath: '/'
+  basepath: '/',
 });
 
 declare module '@tanstack/react-router' {
@@ -39,6 +39,6 @@ if (!rootElement.innerHTML) {
           />
         </FontSizeProvider>
       </DarkModeProvider>
-    </StrictMode>
+    </StrictMode>,
   );
 }

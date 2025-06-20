@@ -3,7 +3,7 @@ import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 
 export const Route = createFileRoute('/_books')({
-  component: RouteComponent
+  component: RouteComponent,
 });
 
 function RouteComponent() {

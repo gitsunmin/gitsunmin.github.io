@@ -88,7 +88,7 @@ function RouteComponent() {
             {
               'border-red-500 scale-110 opacity-70': isRecording,
               'border-transparent scale-100 opacity-0': !isRecording,
-            }
+            },
           )}
         />
         {/* 두 번째 테두리 (약간 시간차 효과) */}
@@ -98,7 +98,7 @@ function RouteComponent() {
             {
               'border-red-400 scale-125 opacity-50': isRecording,
               'border-transparent scale-100 opacity-0': !isRecording,
-            }
+            },
           )}
         />
         <Button
@@ -109,7 +109,7 @@ function RouteComponent() {
               'hover:bg-red-500 hover:text-primary-foreground': isRecording,
               'hover:bg-primary hover:text-primary-foreground': !isRecording,
             },
-            isRecording ? 'bg-red-100 text-red-500' : ''
+            isRecording ? 'bg-red-100 text-red-500' : '',
           )}
           onClick={isRecording ? stopRecording : startRecording}
         >

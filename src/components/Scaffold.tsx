@@ -13,7 +13,7 @@ export const Scaffold = ({ children, header, footer, className }: Props) => {
       <main
         className={cn(
           'flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full',
-          className
+          className,
         )}
       >
         {children}

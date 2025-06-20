@@ -18,7 +18,7 @@ async function downloadImage({ url, outputPath, defaultImagePath }: Target) {
         result: 'error' as const,
         url,
         outputPath,
-        error: `Failed to fetch image: ${response.status} ${response.statusText}`
+        error: `Failed to fetch image: ${response.status} ${response.statusText}`,
       };
     }
 
@@ -31,7 +31,7 @@ async function downloadImage({ url, outputPath, defaultImagePath }: Target) {
     return {
       result: 'success' as const,
       url,
-      outputPath
+      outputPath,
     };
   } catch (error) {
     fs.writeFileSync(outputPath, fs.readFileSync(defaultImagePath));
@@ -39,7 +39,7 @@ async function downloadImage({ url, outputPath, defaultImagePath }: Target) {
       result: 'error' as const,
       url,
       outputPath,
-      error: error instanceof Error ? error.message : String(error)
+      error: error instanceof Error ? error.message : String(error),
     };
   }
 }
@@ -62,6 +62,6 @@ export const imageDownloader = (options?: Options): PluginOption => {
       }
 
       Promise.allSettled(targets.map(downloadImage));
-    }
+    },
   };
 };

@@ -5,7 +5,7 @@ import { Header } from '@/components/Header';
 import { useFontSize } from '@/hooks/useFontSize';
 
 export const Route = createFileRoute('/settings')({
-  component: RouteComponent
+  component: RouteComponent,
 });
 
 function RouteComponent() {

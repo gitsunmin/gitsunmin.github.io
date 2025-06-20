@@ -15,7 +15,7 @@ const Spinner: React.FC<{
           style={{
             transform: `rotate(${i * 30}deg) translateY(-50%)`,
             transformOrigin: '50% 100%',
-            animationDelay: `${i * 0.1}s`
+            animationDelay: `${i * 0.1}s`,
           }}
         />
       ))}

@@ -5,7 +5,7 @@ import {
   readdirSync,
   rmSync,
   readFileSync,
-  writeFileSync
+  writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
 import { Project, VariableDeclarationKind } from 'ts-morph';
@@ -26,7 +26,7 @@ const ALLOWED_IMAGE_EXT_REGEX = /\.(png|jpg|jpeg|gif|svg|webp)$/g;
 const processLogger = ({
   fn,
   message,
-  silent = false
+  silent = false,
 }: {
   message: string;
   fn: () => void;
@@ -69,11 +69,11 @@ const replaceImagePath = (pathes: {
         '/',
         path.relative(
           ROOT_DIR,
-          path.join(targetBasePath, filePath, imageFileName)
-        )
+          path.join(targetBasePath, filePath, imageFileName),
+        ),
       );
       return match.replace(imagePath, newImagePath);
-    }
+    },
   );
   writeFileSync(path.join(DOCS_DIR, relativePath), updatedContent);
 };
@@ -81,14 +81,14 @@ const replaceImagePath = (pathes: {
 const importTILContents = (inputDir: string, mode: string) => {
   const entries = readdirSync(inputDir, {
     withFileTypes: true,
-    recursive: true
+    recursive: true,
   });
 
   // biome-ignore lint/complexity/noForEach: <explanation>
   entries.forEach((entry) => {
     const relativePath = path.relative(
       TIL_DIR,
-      `${entry.parentPath}/${entry.name}`
+      `${entry.parentPath}/${entry.name}`,
     );
     const filePath = path.parse(relativePath);
 
@@ -97,21 +97,21 @@ const importTILContents = (inputDir: string, mode: string) => {
         mkdirSync(path.join(DOCS_DIR, filePath.dir), { recursive: true });
         copyFileSync(
           path.join(inputDir, relativePath),
-          path.join(DOCS_DIR, relativePath)
+          path.join(DOCS_DIR, relativePath),
         );
 
         replaceImagePath({
           relativePath,
           filePath: filePath.dir,
           targetBasePath:
-            mode === 'development' ? TIL_ASSETS_DIR : TIL_DIST_ASSETS_DIR
+            mode === 'development' ? TIL_ASSETS_DIR : TIL_DIST_ASSETS_DIR,
         });
       })
       .with(P.string.regex(ALLOWED_IMAGE_EXT_REGEX), () => {
         mkdirSync(path.join(TIL_ASSETS_DIR, filePath.dir), { recursive: true });
         copyFileSync(
           path.join(inputDir, relativePath),
-          path.join(TIL_ASSETS_DIR, relativePath)
+          path.join(TIL_ASSETS_DIR, relativePath),
         );
       })
       .otherwise(ignore);
@@ -132,7 +132,7 @@ const generateComponent = (relativePath: string, outputPath: string) => {
   const sourceFile = project.createSourceFile(
     outputPath,
     {},
-    { overwrite: true }
+    { overwrite: true },
   );
   const filePath = path.parse(relativePath);
   const title = getTitleFromParsedPath(filePath);
@@ -141,19 +141,19 @@ const generateComponent = (relativePath: string, outputPath: string) => {
 
   sourceFile.addImportDeclaration({
     namedImports: ['TILPage'],
-    moduleSpecifier: '@/components/pages/TIL'
+    moduleSpecifier: '@/components/pages/TIL',
   });
   sourceFile.addImportDeclaration({
     defaultImport: 'Content',
-    moduleSpecifier: `@til/${relativePath}`
+    moduleSpecifier: `@til/${relativePath}`,
   });
   sourceFile.addImportDeclaration({
     namedImports: ['createFileRoute'],
-    moduleSpecifier: '@tanstack/react-router'
+    moduleSpecifier: '@tanstack/react-router',
   });
   sourceFile.addImportDeclaration({
     namedImports: ['MDXReplacer'],
-    moduleSpecifier: '@/docs/MDXReplacer'
+    moduleSpecifier: '@/docs/MDXReplacer',
   });
 
   const ReplaciesName = 'Replacies';
@@ -162,13 +162,13 @@ const generateComponent = (relativePath: string, outputPath: string) => {
     .with('README', () => {
       sourceFile.addImportDeclaration({
         defaultImport: ReplaciesName,
-        moduleSpecifier: '@/docs/replacies/tilReadme'
+        moduleSpecifier: '@/docs/replacies/tilReadme',
       });
     })
     .otherwise(() => {
       sourceFile.addImportDeclaration({
         defaultImport: ReplaciesName,
-        moduleSpecifier: '@/docs/replacies/tilContents'
+        moduleSpecifier: '@/docs/replacies/tilContents',
       });
     });
 
@@ -177,9 +177,9 @@ const generateComponent = (relativePath: string, outputPath: string) => {
     declarations: [
       {
         name: mdxReplacerVariableName,
-        initializer: `MDXReplacer({ components: ${ReplaciesName} })`
-      }
-    ]
+        initializer: `MDXReplacer({ components: ${ReplaciesName} })`,
+      },
+    ],
   });
 
   sourceFile.addFunction({
@@ -190,8 +190,8 @@ const generateComponent = (relativePath: string, outputPath: string) => {
   <TILPage>
     <Content components={components} />
   </TILPage>
-);`
-    ]
+);`,
+    ],
   });
 
   sourceFile.addVariableStatement({
@@ -202,7 +202,7 @@ const generateComponent = (relativePath: string, outputPath: string) => {
         name: 'Route',
         initializer: (writer) => {
           writer.writeLine(
-            `createFileRoute('${path.join('/_layout/til', filePath.dir, filePath.name.replace(/index$/, '/'))}')(`
+            `createFileRoute('${path.join('/_layout/til', filePath.dir, filePath.name.replace(/index$/, '/'))}')(`,
           );
           writer.block(() => {
             writer.writeLine(`component: ${componentName},`);
@@ -213,9 +213,9 @@ const generateComponent = (relativePath: string, outputPath: string) => {
             writer.writeLine('),');
           });
           writer.writeLine(')');
-        }
-      }
-    ]
+        },
+      },
+    ],
   });
 
   sourceFile.saveSync();
@@ -224,13 +224,13 @@ const generateComponent = (relativePath: string, outputPath: string) => {
 const createTILRoute = () => {
   const entries = readdirSync(DOCS_DIR, {
     withFileTypes: true,
-    recursive: true
+    recursive: true,
   });
   // biome-ignore lint/complexity/noForEach: <explanation>
   entries.forEach((entry) => {
     const relativePath = path.relative(
       DOCS_DIR,
-      `${entry.parentPath}/${entry.name}`
+      `${entry.parentPath}/${entry.name}`,
     );
     const filePath = path.parse(relativePath);
 
@@ -238,7 +238,7 @@ const createTILRoute = () => {
       const outputPath = path.join(
         TIL_ROUTE_DIR,
         filePath.dir,
-        `${filePath.name}.tsx`
+        `${filePath.name}.tsx`,
       );
 
       generateComponent(relativePath, outputPath);
@@ -261,30 +261,30 @@ export const tilRouteGenerator = (options?: Options): PluginOption => {
       processLogger({
         fn: () => resetDocsDir(),
         message: '🚮 [TIL route generation] resetting docs directory completed',
-        silent
+        silent,
       });
       processLogger({
         fn: () => resetTILAssetsDir(),
         message:
           '🚮 [TIL route generation] resetting TIL assets directory completed',
-        silent
+        silent,
       });
       processLogger({
         fn: () => importTILContents(TIL_DIR, mode),
         message: '📄 [TIL route generation] importing TIL contents completed',
-        silent
+        silent,
       });
       processLogger({
         fn: () => resetTILRouteDir(),
         message:
           '🚮 [TIL route generation] resetting TIL route directory completed',
-        silent
+        silent,
       });
       processLogger({
         fn: () => createTILRoute(),
         message: '♻️  [TIL route generation] creating TIL route completed',
-        silent
+        silent,
       });
-    }
+    },
   };
 };

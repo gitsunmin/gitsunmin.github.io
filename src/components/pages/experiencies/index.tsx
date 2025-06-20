@@ -19,12 +19,12 @@ const books = EXPERIENCE_LIST.map((experience) => ({
     side: experience.book.cover.side,
     top: BookTopTexture,
     bottom: BookBottomTexture,
-    pages: BookPagesTexture
-  }
+    pages: BookPagesTexture,
+  },
 }));
 
 function CameraController({
-  selectedBookId
+  selectedBookId,
 }: {
   selectedBookId: string | null;
 }) {
@@ -57,7 +57,7 @@ export const Content = () => {
 
     if (wantToSeeDetails) {
       router.navigate({
-        to: `/experiencies/${id}`
+        to: `/experiencies/${id}`,
       });
     }
     setSelectedBookId((prev) => (prev === id ? null : id));

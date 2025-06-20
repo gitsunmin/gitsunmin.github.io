@@ -37,7 +37,7 @@
       "enabled": true,
       "quoteStyle": "single",
       "semicolons": "always",
-      "trailingCommas": "none",
+      "trailingCommas": "all",
       "indentWidth": 2
     }
   }

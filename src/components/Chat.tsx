@@ -11,7 +11,7 @@ type Props = Chat & {
 export const ChatCard = ({
   content,
   active = false,
-  className = ''
+  className = '',
 }: Props) => {
   return (
     <div
@@ -20,9 +20,9 @@ export const ChatCard = ({
         {
           'bg-blue-500 text-white dark:bg-blue-600': active,
           'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100':
-            !active
+            !active,
         },
-        className
+        className,
       )}
     >
       {match(content)
@@ -36,7 +36,7 @@ export const ChatCard = ({
             href={url}
             className={cn('mt-2 text-xs underline', {
               'text-blue-200 dark:text-blue-100': active,
-              'text-blue-500 dark:text-blue-300': !active
+              'text-blue-500 dark:text-blue-300': !active,
             })}
             to={url}
           >

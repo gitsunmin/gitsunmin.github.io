@@ -1,5 +1,5 @@
 const LOCAL_STORAGE_TYPES = {
-  darkMode: ['false', 'true'] as const
+  darkMode: ['false', 'true'] as const,
 };
 
 type LocalStorageInUse = {
@@ -7,7 +7,7 @@ type LocalStorageInUse = {
 };
 
 const DefaultLocalStorage: LocalStorageInUse = {
-  darkMode: 'false'
+  darkMode: 'false',
 };
 
 export const LocalStorage = {
@@ -17,20 +17,20 @@ export const LocalStorage = {
     if (value === null) return DefaultLocalStorage[key];
     else {
       console.warn(
-        `Invalid value for ${key}: ${value}. Expected one of ${LOCAL_STORAGE_TYPES[key].join(', ')}`
+        `Invalid value for ${key}: ${value}. Expected one of ${LOCAL_STORAGE_TYPES[key].join(', ')}`,
       );
       return value;
     }
   },
   set: (
     key: keyof LocalStorageInUse,
-    value: LocalStorageInUse[keyof LocalStorageInUse]
+    value: LocalStorageInUse[keyof LocalStorageInUse],
   ) => {
     if (LOCAL_STORAGE_TYPES[key].includes(value)) {
       localStorage.setItem(key, value);
     } else
       console.warn(
-        `Invalid value for ${key}: ${value}. Expected one of ${LOCAL_STORAGE_TYPES[key].join(', ')}`
+        `Invalid value for ${key}: ${value}. Expected one of ${LOCAL_STORAGE_TYPES[key].join(', ')}`,
       );
-  }
+  },
 };

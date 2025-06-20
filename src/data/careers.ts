@@ -35,22 +35,22 @@ export const Career: Career[] = [
     range: '2020.10 ~ ',
     positoin: '프론트엔드 개발자',
     experiencies: EXPERIENCE_LIST.filter((experience) =>
-      experience.careers.includes('marketboro')
+      experience.careers.includes('marketboro'),
     ),
     links: [
       {
         label: '마켓보로 웹사이트',
-        url: 'https://www.marketboro.com'
+        url: 'https://www.marketboro.com',
       },
       {
         label: '식봄',
-        url: 'https://www.foodspring.co.kr'
+        url: 'https://www.foodspring.co.kr',
       },
       {
         label: '마켓봄 프로',
-        url: 'https://pro.marketbom.com'
-      }
-    ]
+        url: 'https://pro.marketbom.com',
+      },
+    ],
   },
   {
     id: 'korens',
@@ -63,13 +63,13 @@ export const Career: Career[] = [
     positoin: '프론트엔드 개발자',
     range: '2019.07 ~ 2020.10',
     experiencies: EXPERIENCE_LIST.filter((experience) =>
-      experience.careers.includes('marketboro')
+      experience.careers.includes('marketboro'),
     ),
     links: [
       {
         label: '코렌스 웹사이트',
-        url: 'http://www.korens.com'
-      }
-    ]
-  }
+        url: 'http://www.korens.com',
+      },
+    ],
+  },
 ];

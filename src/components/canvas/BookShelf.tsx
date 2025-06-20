@@ -33,10 +33,10 @@ export const BookShelf = (props: Props) => {
       position: [
         (-2.5 + bookIndex) * bookSpacing, // 왼쪽부터 채움
         shelfIndex * shelfHeight - (shelves * shelfHeight) / 2 + bookHeight / 2, // 📌 책이 구분판 위에 정확히 위치
-        -0.5 // 책이 책장 안에 들어가도록 위치 조정
+        -0.5, // 책이 책장 안에 들어가도록 위치 조정
       ],
       size: [0.3, bookHeight, bookDepth], // 책 크기
-      textures
+      textures,
     };
   });
 
@@ -60,7 +60,7 @@ export const BookShelf = (props: Props) => {
               (i + 1) * shelfHeight -
               (shelves * shelfHeight) / 2 -
               bookHeight / 2,
-            -0.5
+            -0.5,
           ]} // 📌 책보다 살짝 아래 배치
         >
           <boxGeometry args={[2.7, 0.1, shelfDepth]} />

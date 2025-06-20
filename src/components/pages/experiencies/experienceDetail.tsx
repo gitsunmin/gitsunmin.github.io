@@ -7,10 +7,10 @@ import { match, P } from 'ts-pattern';
 
 const Contetnt = () => {
   const { experienceId } = useParams({
-    from: '/_layout/experiencies/$experienceId'
+    from: '/_layout/experiencies/$experienceId',
   });
   const experience = EXPERIENCE_LIST.find(
-    (experience) => experience.id === experienceId
+    (experience) => experience.id === experienceId,
   );
 
   return match(experience)
