@@ -1,6 +1,6 @@
 export function Spinner({
   show,
-  wait,
+  wait
 }: {
   show?: boolean;
   wait?: `delay-${number}`;

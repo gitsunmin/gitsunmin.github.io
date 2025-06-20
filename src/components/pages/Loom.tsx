@@ -51,7 +51,7 @@ const Content = () => {
           style={{ color: fgColor, borderColor: fgColor }}
           className={cn(
             'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-            'border px-4 py-2 shadow-2xl rounded-lg text-center',
+            'border px-4 py-2 shadow-2xl rounded-lg text-center'
           )}
         >
           Gitsunmin is <br /> The Best Programer!

@@ -24,13 +24,13 @@ const CodeBlock = ({ code = '', languege }: Props) => {
   useEffect(() => {
     getSingletonHighlighter({
       themes: ['github-dark'],
-      langs: [languege],
+      langs: [languege]
     }).then((highlighter) => {
       setHighlightedCode(
         highlighter.codeToHtml(code ?? '', {
           lang: languege,
-          theme: 'github-dark',
-        }),
+          theme: 'github-dark'
+        })
       );
     });
   }, [code, languege]);

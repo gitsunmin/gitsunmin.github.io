@@ -1,7 +1,7 @@
 import {
   createRootRoute,
   Outlet,
-  useRouterState,
+  useRouterState
 } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { HeadContent } from '@tanstack/react-router';
@@ -22,12 +22,12 @@ export const Route = createRootRoute({
     meta: [
       {
         name: 'description',
-        content: "Gitsunmin's website | 김선민의 웹사이트",
+        content: "Gitsunmin's website | 김선민의 웹사이트"
       },
       {
-        title: 'Gitsunmin',
-      },
-    ],
+        title: 'Gitsunmin'
+      }
+    ]
   }),
   pendingComponent: () => <RouterSpinner />,
   component: () => {
@@ -38,5 +38,5 @@ export const Route = createRootRoute({
         {__MODE__ === 'development' && <TanStackRouterDevtools />}
       </>
     );
-  },
+  }
 });

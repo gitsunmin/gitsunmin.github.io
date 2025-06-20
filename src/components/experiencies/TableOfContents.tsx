@@ -19,7 +19,7 @@ export const TableOfContents = ({ experience }: Props) => {
           hashScrollIntoView={{
             behavior: 'smooth',
             block: 'start',
-            inline: 'nearest',
+            inline: 'nearest'
           }}
         >
           introduce
@@ -45,7 +45,7 @@ export const TableOfContents = ({ experience }: Props) => {
                   hashScrollIntoView={{
                     behavior: 'smooth',
                     block: 'start',
-                    inline: 'nearest',
+                    inline: 'nearest'
                   }}
                 >
                   {text}

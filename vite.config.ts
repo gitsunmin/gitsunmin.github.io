@@ -11,7 +11,7 @@ import { imageDownloader } from './plugins/vite/image-downloader';
 export default defineConfig(({ mode }) => {
   return {
     define: {
-      __MODE__: JSON.stringify(mode),
+      __MODE__: JSON.stringify(mode)
     },
     plugins: [
       imageDownloader({
@@ -21,14 +21,14 @@ export default defineConfig(({ mode }) => {
             url: 'https://avatars.githubusercontent.com/u/41544175?v=4',
             defaultImagePath: path.resolve(
               __dirname,
-              'src/assets/avatar/default.webp',
+              'src/assets/avatar/default.webp'
             ),
             outputPath: path.resolve(
               __dirname,
-              'src/assets/avatar/gitsunmin.webp',
-            ),
-          },
-        ],
+              'src/assets/avatar/gitsunmin.webp'
+            )
+          }
+        ]
       }),
       tilRouteGenerator({ silent: mode === 'development', mode }),
       TanStackRouterVite({}),
@@ -44,36 +44,36 @@ export default defineConfig(({ mode }) => {
           } catch (error) {
             console.error('❌ Failed to create 404.html:', error);
           }
-        },
+        }
       },
       viteStaticCopy({
         targets: [
           {
             src: 'src/assets/til/**/*',
-            dest: 'til',
-          },
-        ],
-      }),
+            dest: 'til'
+          }
+        ]
+      })
     ],
     assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
     base: '/',
     server: {
       watch: {
         usePolling: true,
-        interval: 100,
-      },
+        interval: 100
+      }
     },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        '@til': path.resolve(__dirname, './src/docs/til'),
-      },
+        '@til': path.resolve(__dirname, './src/docs/til')
+      }
     },
     test: {
       environment: 'jsdom',
       globals: true,
       include: ['tests/**/*.test.ts'],
-      setupFiles: ['./tests/setup.ts'],
-    },
+      setupFiles: ['./tests/setup.ts']
+    }
   };
 });

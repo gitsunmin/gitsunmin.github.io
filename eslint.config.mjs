@@ -12,40 +12,40 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
+  allConfig: js.configs.all
 });
 
 export default [
   {
-    ignores: ['**/dist', '**/.eslintrc.cjs'],
+    ignores: ['**/dist', '**/.eslintrc.cjs']
   },
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
-      'plugin:react-hooks/recommended',
-    ),
+      'plugin:react-hooks/recommended'
+    )
   ),
   {
     plugins: {
-      'react-refresh': reactRefresh,
+      'react-refresh': reactRefresh
     },
 
     languageOptions: {
       globals: {
-        ...globals.browser,
+        ...globals.browser
       },
 
-      parser: tsParser,
+      parser: tsParser
     },
 
     rules: {
       'react-refresh/only-export-components': [
         'warn',
         {
-          allowConstantExport: true,
-        },
-      ],
-    },
-  },
+          allowConstantExport: true
+        }
+      ]
+    }
+  }
 ];

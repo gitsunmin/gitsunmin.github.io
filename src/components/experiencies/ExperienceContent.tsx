@@ -19,7 +19,7 @@ export const ExperienceContents = ({ contents }: Props) => {
         {match(content)
           .with(
             {
-              __t: 'headline',
+              __t: 'headline'
             },
             ({ __t, text, level, className }) => {
               const id = `${__t}-${level}-${text.toLowerCase().replace(/\s+/g, '-')}`;
@@ -56,11 +56,11 @@ export const ExperienceContents = ({ contents }: Props) => {
                   </h6>
                 ))
                 .exhaustive();
-            },
+            }
           )
           .with(
             {
-              __t: 'text',
+              __t: 'text'
             },
             ({ text, className }) => {
               return (
@@ -69,17 +69,17 @@ export const ExperienceContents = ({ contents }: Props) => {
                     'text-gray-700 dark:text-gray-300 leading-relaxed text-sm whitespace-pre-line',
                     'min-w-full text-left',
                     'text-body-1',
-                    className,
+                    className
                   )}
                 >
                   {text}
                 </div>
               );
-            },
+            }
           )
           .with(
             {
-              __t: 'image',
+              __t: 'image'
             },
             ({ src, alt, className }) => {
               return (
@@ -90,11 +90,11 @@ export const ExperienceContents = ({ contents }: Props) => {
                   loading="lazy"
                 />
               );
-            },
+            }
           )
           .with(
             {
-              __t: 'link',
+              __t: 'link'
             },
             ({ label, url, className, target }) => {
               return (
@@ -104,14 +104,14 @@ export const ExperienceContents = ({ contents }: Props) => {
                   rel="noopener noreferrer"
                   className={cn(
                     'text-blue-600 hover:underline inline-flex items-center gap-1',
-                    className,
+                    className
                   )}
                 >
                   {label}
                   <span>↗</span>
                 </a>
               );
-            },
+            }
           )
           .exhaustive()}
       </div>

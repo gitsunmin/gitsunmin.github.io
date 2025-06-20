@@ -21,7 +21,7 @@ const Content = ({ interviewer, interviewee }: Props) => {
             'text-sm break-words',
             'text-gray-500 dark:text-gray-400 border-l-2',
             'border-gray-300 dark:border-gray-600 px-4 py-2 bg-gray-50 dark:bg-gray-800',
-            'mt-4 rounded-lg',
+            'mt-4 rounded-lg'
           )}
         >
           {INTERVIEW.banner}
@@ -39,7 +39,7 @@ const Content = ({ interviewer, interviewee }: Props) => {
               key={`${user.id}-${index}`}
               className={cn('w-full flex gap-x-2.5 gap-y-1', {
                 'flex-row': user.id === interviewer.id,
-                'flex-row-reverse': user.id === interviewee.id,
+                'flex-row-reverse': user.id === interviewee.id
               })}
             >
               {isContinues ? (
@@ -59,7 +59,7 @@ const Content = ({ interviewer, interviewee }: Props) => {
                   <div
                     className={cn('text-sm text-gray-700 dark:text-gray-300', {
                       'text-left': user.id === interviewer.id,
-                      'text-right': user.id === interviewee.id,
+                      'text-right': user.id === interviewee.id
                     })}
                   >
                     {user.name.first}

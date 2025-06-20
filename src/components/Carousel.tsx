@@ -19,7 +19,7 @@ const Carousel: React.FC<Props> = ({
   view = 'full',
   onNextClick,
   onPrevClick,
-  onSelect,
+  onSelect
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -42,7 +42,7 @@ const Carousel: React.FC<Props> = ({
       if (!emblaApi) return;
       emblaApi.scrollTo(index);
     },
-    [emblaApi],
+    [emblaApi]
   );
 
   const onSelectHandler = useCallback(() => {
@@ -69,7 +69,7 @@ const Carousel: React.FC<Props> = ({
               className={cn('flex-[0_0_80%] px-2', {
                 'flex-[0_0_100%]': view === 'full',
                 'flex-[0_0_80%]': view === 'wide',
-                'flex-[0_0_60%]': view === 'narrow',
+                'flex-[0_0_60%]': view === 'narrow'
               })}
               // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
               key={index}

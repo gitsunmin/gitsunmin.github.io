@@ -54,6 +54,6 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
         />
       );
     },
-    ...components,
+    ...components
   };
 };

@@ -25,7 +25,7 @@ export const Book = ({
   size,
   textures,
   isSelected,
-  onClick,
+  onClick
 }: Props) => {
   const bookRef = useRef<Mesh>(null);
   const frontTexture = useLoader(TextureLoader, textures.front);
@@ -52,7 +52,7 @@ export const Book = ({
               bookRef.current.scale.set(
                 1,
                 bookRef.current.scale.y + 0.1,
-                bookRef.current.scale.z + 0.1,
+                bookRef.current.scale.z + 0.1
               );
             }
           }, 300);
