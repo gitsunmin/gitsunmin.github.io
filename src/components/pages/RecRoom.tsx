@@ -290,48 +290,52 @@ export const RecRoom = () => {
         </Button>
       </div>
 
-      {audioURL && (
-        <div className="mt-6 w-full flex flex-col items-center">
-          {/* 오디오 요소는 화면에 표시하지 않음 */}
-          <audio ref={audioRef} src={audioURL} className="hidden">
-            <track kind="captions" srcLang="ko" label="Korean captions" />
-          </audio>
+      <div className="mt-6 w-full flex flex-col items-center">
+        {/* 오디오 요소는 화면에 표시하지 않음 */}
+        <audio ref={audioRef} src={audioURL} className="hidden">
+          <track kind="captions" srcLang="ko" label="Korean captions" />
+        </audio>
 
-          {/* 커스텀 재생 버튼 */}
-          <section className="flex items-center justify-center gap-2">
-            <Button
-              variant="outline"
-              className="rounded-full p-2 w-12 h-12 flex items-center justify-center"
-              onClick={handleAudioEnded}
-            >
-              <Square size={24} />
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-full p-2 w-12 h-12 flex items-center justify-center"
-              onClick={handleAudioPause}
-            >
-              <Pause size={24} />
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-full p-2 w-12 h-12 flex items-center justify-center"
-              onClick={handleAudioPlay}
-              disabled={audioStatus === 'PLAYING' || !audioURL}
-            >
-              <Play size={24} />
-            </Button>
-          </section>
+        {/* 커스텀 재생 버튼 */}
+        <section className="flex items-center justify-center gap-2">
+          <Button
+            variant="outline"
+            className="rounded-full p-2 w-12 h-12 flex items-center justify-center"
+            onClick={handleAudioEnded}
+          >
+            <Square size={24} />
+          </Button>
+          {match(audioStatus)
+            .with(P.union('ENDED', 'PAUSED'), () => (
+              <Button
+                variant="outline"
+                className="rounded-full p-2 w-12 h-12 flex items-center justify-center"
+                onClick={handleAudioPlay}
+                disabled={audioStatus === 'PLAYING' || !audioURL}
+              >
+                <Play size={24} />
+              </Button>
+            ))
+            .with('PLAYING', () => (
+              <Button
+                variant="outline"
+                className="rounded-full p-2 w-12 h-12 flex items-center justify-center"
+                onClick={handleAudioPause}
+              >
+                <Pause size={24} />
+              </Button>
+            ))
+            .exhaustive()}
+        </section>
 
-          <p className="text-sm text-gray-500 mt-2">
-            {match(audioStatus)
-              .with('ENDED', () => '오디오 재생이 끝났습니다.')
-              .with('PLAYING', () => '오디오가 재생 중입니다.')
-              .with('PAUSED', () => '오디오가 일시 정지되었습니다.')
-              .otherwise(() => '')}
-          </p>
-        </div>
-      )}
+        <p className="text-sm text-gray-500 mt-2">
+          {match(audioStatus)
+            .with('ENDED', () => '오디오 재생이 끝났습니다.')
+            .with('PLAYING', () => '오디오가 재생 중입니다.')
+            .with('PAUSED', () => '오디오가 일시 정지되었습니다.')
+            .otherwise(() => '')}
+        </p>
+      </div>
     </article>
   );
 };
