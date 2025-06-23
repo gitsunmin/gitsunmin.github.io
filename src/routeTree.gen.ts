@@ -26,6 +26,7 @@ import { Route as LayoutExperienciesExperienceIdImport } from './routes/_layout/
 import { Route as LayoutTilWebassemblyIndexImport } from './routes/_layout/til/webassembly/index'
 import { Route as LayoutTilReactnativeIndexImport } from './routes/_layout/til/react_native/index'
 import { Route as LayoutTilWebWebComponentImport } from './routes/_layout/til/web/web-component'
+import { Route as LayoutTilWebSoundsAndRecordingOnWebImport } from './routes/_layout/til/web/sounds-and-recording-on-web'
 import { Route as LayoutTilWebSitemapImport } from './routes/_layout/til/web/sitemap'
 import { Route as LayoutTilWebHowDoesTheInternetWorkImport } from './routes/_layout/til/web/how-does-the-internet-work'
 import { Route as LayoutTilWebDesignModeImport } from './routes/_layout/til/web/designMode'
@@ -298,6 +299,13 @@ const LayoutTilWebWebComponentRoute = LayoutTilWebWebComponentImport.update({
   path: '/til/web/web-component',
   getParentRoute: () => LayoutRoute,
 } as any)
+
+const LayoutTilWebSoundsAndRecordingOnWebRoute =
+  LayoutTilWebSoundsAndRecordingOnWebImport.update({
+    id: '/til/web/sounds-and-recording-on-web',
+    path: '/til/web/sounds-and-recording-on-web',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 
 const LayoutTilWebSitemapRoute = LayoutTilWebSitemapImport.update({
   id: '/til/web/sitemap',
@@ -2886,6 +2894,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutTilWebSitemapImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/til/web/sounds-and-recording-on-web': {
+      id: '/_layout/til/web/sounds-and-recording-on-web'
+      path: '/til/web/sounds-and-recording-on-web'
+      fullPath: '/til/web/sounds-and-recording-on-web'
+      preLoaderRoute: typeof LayoutTilWebSoundsAndRecordingOnWebImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/til/web/web-component': {
       id: '/_layout/til/web/web-component'
       path: '/til/web/web-component'
@@ -3115,6 +3130,7 @@ interface LayoutRouteChildren {
   LayoutTilWebDesignModeRoute: typeof LayoutTilWebDesignModeRoute
   LayoutTilWebHowDoesTheInternetWorkRoute: typeof LayoutTilWebHowDoesTheInternetWorkRoute
   LayoutTilWebSitemapRoute: typeof LayoutTilWebSitemapRoute
+  LayoutTilWebSoundsAndRecordingOnWebRoute: typeof LayoutTilWebSoundsAndRecordingOnWebRoute
   LayoutTilWebWebComponentRoute: typeof LayoutTilWebWebComponentRoute
   LayoutTilReactnativeIndexRoute: typeof LayoutTilReactnativeIndexRoute
   LayoutTilWebassemblyIndexRoute: typeof LayoutTilWebassemblyIndexRoute
@@ -3390,6 +3406,8 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutTilWebHowDoesTheInternetWorkRoute:
     LayoutTilWebHowDoesTheInternetWorkRoute,
   LayoutTilWebSitemapRoute: LayoutTilWebSitemapRoute,
+  LayoutTilWebSoundsAndRecordingOnWebRoute:
+    LayoutTilWebSoundsAndRecordingOnWebRoute,
   LayoutTilWebWebComponentRoute: LayoutTilWebWebComponentRoute,
   LayoutTilReactnativeIndexRoute: LayoutTilReactnativeIndexRoute,
   LayoutTilWebassemblyIndexRoute: LayoutTilWebassemblyIndexRoute,
@@ -3594,6 +3612,7 @@ export interface FileRoutesByFullPath {
   '/til/web/designMode': typeof LayoutTilWebDesignModeRoute
   '/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute
   '/til/web/sitemap': typeof LayoutTilWebSitemapRoute
+  '/til/web/sounds-and-recording-on-web': typeof LayoutTilWebSoundsAndRecordingOnWebRoute
   '/til/web/web-component': typeof LayoutTilWebWebComponentRoute
   '/til/react_native': typeof LayoutTilReactnativeIndexRoute
   '/til/webassembly': typeof LayoutTilWebassemblyIndexRoute
@@ -3793,6 +3812,7 @@ export interface FileRoutesByTo {
   '/til/web/designMode': typeof LayoutTilWebDesignModeRoute
   '/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute
   '/til/web/sitemap': typeof LayoutTilWebSitemapRoute
+  '/til/web/sounds-and-recording-on-web': typeof LayoutTilWebSoundsAndRecordingOnWebRoute
   '/til/web/web-component': typeof LayoutTilWebWebComponentRoute
   '/til/react_native': typeof LayoutTilReactnativeIndexRoute
   '/til/webassembly': typeof LayoutTilWebassemblyIndexRoute
@@ -3994,6 +4014,7 @@ export interface FileRoutesById {
   '/_layout/til/web/designMode': typeof LayoutTilWebDesignModeRoute
   '/_layout/til/web/how-does-the-internet-work': typeof LayoutTilWebHowDoesTheInternetWorkRoute
   '/_layout/til/web/sitemap': typeof LayoutTilWebSitemapRoute
+  '/_layout/til/web/sounds-and-recording-on-web': typeof LayoutTilWebSoundsAndRecordingOnWebRoute
   '/_layout/til/web/web-component': typeof LayoutTilWebWebComponentRoute
   '/_layout/til/react_native/': typeof LayoutTilReactnativeIndexRoute
   '/_layout/til/webassembly/': typeof LayoutTilWebassemblyIndexRoute
@@ -4195,6 +4216,7 @@ export interface FileRouteTypes {
     | '/til/web/designMode'
     | '/til/web/how-does-the-internet-work'
     | '/til/web/sitemap'
+    | '/til/web/sounds-and-recording-on-web'
     | '/til/web/web-component'
     | '/til/react_native'
     | '/til/webassembly'
@@ -4393,6 +4415,7 @@ export interface FileRouteTypes {
     | '/til/web/designMode'
     | '/til/web/how-does-the-internet-work'
     | '/til/web/sitemap'
+    | '/til/web/sounds-and-recording-on-web'
     | '/til/web/web-component'
     | '/til/react_native'
     | '/til/webassembly'
@@ -4592,6 +4615,7 @@ export interface FileRouteTypes {
     | '/_layout/til/web/designMode'
     | '/_layout/til/web/how-does-the-internet-work'
     | '/_layout/til/web/sitemap'
+    | '/_layout/til/web/sounds-and-recording-on-web'
     | '/_layout/til/web/web-component'
     | '/_layout/til/react_native/'
     | '/_layout/til/webassembly/'
@@ -4827,6 +4851,7 @@ export const routeTree = rootRoute
         "/_layout/til/web/designMode",
         "/_layout/til/web/how-does-the-internet-work",
         "/_layout/til/web/sitemap",
+        "/_layout/til/web/sounds-and-recording-on-web",
         "/_layout/til/web/web-component",
         "/_layout/til/react_native/",
         "/_layout/til/webassembly/",
@@ -5587,6 +5612,10 @@ export const routeTree = rootRoute
     },
     "/_layout/til/web/sitemap": {
       "filePath": "_layout/til/web/sitemap.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/til/web/sounds-and-recording-on-web": {
+      "filePath": "_layout/til/web/sounds-and-recording-on-web.tsx",
       "parent": "/_layout"
     },
     "/_layout/til/web/web-component": {
