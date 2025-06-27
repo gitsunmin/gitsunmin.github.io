@@ -36,11 +36,19 @@ export function useFontSize() {
     document.documentElement.classList.remove(
       'text-small',
       'text-medium',
-      'text-large',
+      'text-large'
     );
 
     // Add the current font size class
     document.documentElement.classList.add(`text-${fontSize}`);
+
+    // Also set a CSS custom property for more flexible usage
+    const fontSizeScale =
+      fontSize === 'small' ? '0.875' : fontSize === 'large' ? '1.125' : '1';
+    document.documentElement.style.setProperty(
+      '--font-size-scale',
+      fontSizeScale
+    );
   }, [fontSize]);
 
   // Method to change font size
@@ -74,7 +82,7 @@ export function useFontSize() {
           return '';
       }
     },
-    [fontSize],
+    [fontSize]
   );
 
   return {

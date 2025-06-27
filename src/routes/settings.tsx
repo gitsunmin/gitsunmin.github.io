@@ -31,6 +31,7 @@ function RouteComponent() {
               </div>
 
               <button
+                type="button"
                 onClick={() => setDarkMode(!darkMode)}
                 className="flex items-center justify-center h-6 w-12 rounded-full relative bg-secondary"
                 aria-label={
@@ -39,7 +40,7 @@ function RouteComponent() {
               >
                 <div
                   className={`absolute h-5 w-5 rounded-full bg-primary transition-transform ${darkMode ? 'translate-x-3' : '-translate-x-3'}`}
-                ></div>
+                />
               </button>
             </div>
             <p className="text-sm text-muted-foreground mt-1">
@@ -62,6 +63,7 @@ function RouteComponent() {
               {(['small', 'medium', 'large'] as const).map((size) => (
                 <button
                   key={size}
+                  type="button"
                   onClick={() => changeFontSize(size)}
                   className={`px-3 py-1.5 rounded-md text-sm ${
                     fontSize === size
