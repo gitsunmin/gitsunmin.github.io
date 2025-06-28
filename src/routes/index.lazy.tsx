@@ -36,7 +36,11 @@ const AppLink = (props: AppLinkSchema) => {
       >
         {icon}
       </div>
-      <div className={cn('text-xs text-foreground break-keep text-center')}>
+      <div
+        className={cn(
+          'text-xs text-foreground break-keep text-center line-clamp-1'
+        )}
+      >
         {label}
       </div>
     </Link>
