@@ -8,7 +8,7 @@ const TilReadmeReplacies: MDXComponents = {
       .with(P.string.startsWith('/'), (href) => (
         <Link
           {...props}
-          href={'/til' + href.replace('.mdx', '').replace(/\/index$/, '')}
+          href={`/til${href.replace('.mdx', '').replace(/\/index$/, '')}`}
           to={'/'}
           className="text-blue-400"
         />

@@ -1,5 +1,5 @@
 import type { CareerId } from '@/data/careers';
-import { EXPERIENCE_LIBRARY } from '@/data/experiencies/library-development';
+import { EXPERIENCE_LIBRARY } from '@/data/experiencies/about-the-library';
 import type { Content } from '@/data/contentTypes';
 
 export type Experience = {
@@ -14,7 +14,7 @@ export type Experience = {
       readonly side: string;
     };
   };
-  readonly contents?: Content[];
+  readonly content: JSX.Element;
 };
 
 export const EXPERIENCE_LIST: Experience[] = [EXPERIENCE_LIBRARY];

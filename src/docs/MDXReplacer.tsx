@@ -10,17 +10,44 @@ type Props = {
 export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
   return {
     h1: (props) => (
-      <h1 className="text-4xl font-bold text-foreground mb-4" {...props} />
+      <h1
+        id={`h1-${props.children}`}
+        className="text-4xl font-bold text-foreground mb-4"
+        {...props}
+      />
     ),
     h2: (props) => (
       <h2
+        id={`h2-${props.children}`}
         className="text-3xl font-semibold text-foreground mt-8 mb-4"
         {...props}
       />
     ),
     h3: (props) => (
       <h3
+        id={`h3-${props.children}`}
         className="text-2xl font-medium text-foreground mt-6 mb-3"
+        {...props}
+      />
+    ),
+    h4: (props) => (
+      <h4
+        id={`h4-${props.children}`}
+        className="text-xl font-medium text-foreground mt-5 mb-2"
+        {...props}
+      />
+    ),
+    h5: (props) => (
+      <h5
+        id={`h5-${props.children}`}
+        className="text-lg font-medium text-foreground mt-4 mb-1"
+        {...props}
+      />
+    ),
+    h6: (props) => (
+      <h6
+        id={`h6-${props.children}`}
+        className="text-base font-medium text-foreground mt-3 mb-1"
         {...props}
       />
     ),
