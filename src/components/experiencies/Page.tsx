@@ -21,7 +21,7 @@ export const Page = ({
       {
         'flex items-center justify-center': variant === 'cover',
       },
-      className,
+      className
     )}
   >
     {label && (
@@ -36,7 +36,7 @@ export const Page = ({
     )}
 
     {children && (
-      <div className="flex flex-col gap-y-4 w-full justify-start items-center">
+      <div className="flex flex-col w-full justify-start items-center">
         {children}
       </div>
     )}

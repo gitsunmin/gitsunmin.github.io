@@ -2,8 +2,8 @@ import type { Experience } from '@/data/experiencies/';
 import BookFrontCover from '@/assets/book_pages.webp';
 import BookBackCover from '@/assets/book_pages.webp';
 import BookSideCover from '@/assets/book_pages.webp';
-import Content from '@/docs/experiencies/about-the-library.mdx';
-import { MDXReplacer } from '@/docs/MDXReplacer';
+import Content from '@/docs/experiencies/about-the-library/index.mdx';
+import { MDXReplacer } from '@/components/MDXReplacer';
 
 export const EXPERIENCE_LIBRARY: Experience = {
   id: 'experience-library-development',

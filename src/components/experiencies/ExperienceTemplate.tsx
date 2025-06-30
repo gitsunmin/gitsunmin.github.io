@@ -15,7 +15,7 @@ export const ExperienceTemplate = ({ experience }: Props) => {
         <img
           src={book.cover.front}
           loading="lazy"
-          className="w-full max-h-[80dvh]"
+          className="w-full max-h-[80dvh] object-contain"
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"
         />
@@ -29,13 +29,13 @@ export const ExperienceTemplate = ({ experience }: Props) => {
         <TableOfContents experience={experience} />
       </Page>
 
-      <Page className="flex items-center justify-center">{content}</Page>
+      <Page className="flex justify-start">{content}</Page>
 
       <Page variant="cover">
         <img
           src={book.cover.back}
           loading="lazy"
-          className="w-full max-h-[80dvh]"
+          className="w-full max-h-[80dvh] object-contain"
           alt="식봄 프로젝트 정면 표지"
           aria-label="식봄 프로젝트 정면 표지"
         />

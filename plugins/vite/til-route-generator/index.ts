@@ -61,7 +61,7 @@ const replaceImagePath = (pathes: {
 }) => {
   const { filePath, relativePath, targetBasePath } = pathes;
   const mdxContent = readFileSync(path.join(DOCS_DIR, relativePath), 'utf-8');
-  const updatedContent = mdxContent.replace(
+  const updatedImageContent = mdxContent.replace(
     /!\[.*?\]\((.*?)\)/g,
     (match, imagePath) => {
       const imageFileName = path.basename(imagePath);
@@ -75,7 +75,60 @@ const replaceImagePath = (pathes: {
       return match.replace(imagePath, newImagePath);
     },
   );
-  writeFileSync(path.join(DOCS_DIR, relativePath), updatedContent);
+  writeFileSync(path.join(DOCS_DIR, relativePath), updatedImageContent);
+};
+
+const replaceLinkPath = (pathes: {
+  relativePath: string;
+}) => {
+  const { relativePath } = pathes;
+  let mdxContent = readFileSync(path.join(DOCS_DIR, relativePath), 'utf-8');
+
+  // 코드 블록과 인라인 코드를 임시로 치환
+  const codeBlocks: string[] = [];
+  const inlineCodes: string[] = [];
+
+  // 코드 블록 (```) 임시 치환
+  mdxContent = mdxContent.replace(/```[\s\S]*?```/g, (match) => {
+    const index = codeBlocks.length;
+    codeBlocks.push(match);
+    return `__CODE_BLOCK_${index}__`;
+  });
+
+  // 인라인 코드 (`) 임시 치환
+  mdxContent = mdxContent.replace(/`[^`]+`/g, (match) => {
+    const index = inlineCodes.length;
+    inlineCodes.push(match);
+    return `__INLINE_CODE_${index}__`;
+  });
+
+  // 링크 교체
+  const updatedLinkContent = mdxContent.replace(
+    /(?<!!)\[(?!\^)[^\]]*\]\((?![a-zA-Z][a-zA-Z0-9+.-]*:\/\/)([^)]+)\)/g,
+    (match, linkPath) => {
+      const newLinkPath = path.join(
+        '/',
+        path.relative(
+          ROOT_DIR,
+          path.join('til', linkPath),
+        ),
+      ).replace(/\.mdx$/, '').replace(/\/index$/, '/');
+      return match.replace(linkPath, newLinkPath);
+    },
+  );
+
+  // 코드 블록 복원
+  let finalContent = updatedLinkContent;
+  codeBlocks.forEach((code, index) => {
+    finalContent = finalContent.replace(`__CODE_BLOCK_${index}__`, code);
+  });
+
+  // 인라인 코드 복원
+  inlineCodes.forEach((code, index) => {
+    finalContent = finalContent.replace(`__INLINE_CODE_${index}__`, code);
+  });
+
+  writeFileSync(path.join(DOCS_DIR, relativePath), finalContent);
 };
 
 const importTILContents = (inputDir: string, mode: string) => {
@@ -99,6 +152,10 @@ const importTILContents = (inputDir: string, mode: string) => {
           path.join(inputDir, relativePath),
           path.join(DOCS_DIR, relativePath),
         );
+
+        replaceLinkPath({
+          relativePath,
+        })
 
         replaceImagePath({
           relativePath,
@@ -153,31 +210,15 @@ const generateComponent = (relativePath: string, outputPath: string) => {
   });
   sourceFile.addImportDeclaration({
     namedImports: ['MDXReplacer'],
-    moduleSpecifier: '@/docs/MDXReplacer',
+    moduleSpecifier: '@/components/MDXReplacer',
   });
-
-  const ReplaciesName = 'Replacies';
-
-  match(filePath.name)
-    .with('README', () => {
-      sourceFile.addImportDeclaration({
-        defaultImport: ReplaciesName,
-        moduleSpecifier: '@/docs/replacies/tilReadme',
-      });
-    })
-    .otherwise(() => {
-      sourceFile.addImportDeclaration({
-        defaultImport: ReplaciesName,
-        moduleSpecifier: '@/docs/replacies/tilContents',
-      });
-    });
 
   sourceFile.addVariableStatement({
     declarationKind: VariableDeclarationKind.Const,
     declarations: [
       {
         name: mdxReplacerVariableName,
-        initializer: `MDXReplacer({ components: ${ReplaciesName} })`,
+        initializer: 'MDXReplacer({})',
       },
     ],
   });

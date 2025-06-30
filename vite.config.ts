@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
         ],
       }),
     ],
-    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
+    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.webp', '**/*.svg'],
     base: '/',
     server: {
       watch: {

@@ -1,7 +1,7 @@
 import { CodeBlockWrapper } from '@/components/Codeblock';
+import { Link } from '@tanstack/react-router';
 import type { MDXComponents } from 'mdx/types';
-
-// type MDXComponents = Required<Parameters<typeof useMDXComponents>[0]>;
+import { match, P } from 'ts-pattern';
 
 type Props = {
   components?: MDXComponents;
@@ -52,7 +52,7 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
       />
     ),
     p: (props) => (
-      <p className="text-foreground leading-relaxed mb-4" {...props} />
+      <p className="text-foreground leading-relaxed mb-4 w-full" {...props} />
     ),
     ul: (props) => <ul className="list-disc list-inside mb-4" {...props} />,
     ol: (props) => <ol className="list-decimal list-inside mb-4" {...props} />,
@@ -81,6 +81,21 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
         />
       );
     },
+    a: (props) =>
+      match(props.href)
+        .with(P.string.startsWith('/'), (href) => (
+          <Link {...props} href={href} to={'/'} className="text-blue-400" />
+        ))
+        .otherwise(() => (
+          <a className="text-blue-400" target="_blank" {...props} />
+        )),
+    img: (props) => (
+      <img
+        {...props}
+        alt={props.alt || 'Image'}
+        className="rounded-lg shadow-md m-auto"
+      />
+    ),
     ...components,
   };
 };
