@@ -63,7 +63,7 @@ export const Career: Career[] = [
     positoin: '프론트엔드 개발자',
     range: '2019.07 ~ 2020.10',
     experiencies: EXPERIENCE_LIST.filter((experience) =>
-      experience.careers.includes('marketboro'),
+      experience.careers.includes('korens'),
     ),
     links: [
       {

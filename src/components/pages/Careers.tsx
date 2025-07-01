@@ -30,18 +30,6 @@ const Content = () => {
                 {career.introduce}
               </section>
 
-              {/* 프로젝트 섹션 */}
-              <section>
-                <h6 className="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
-                  Experiencies
-                </h6>
-                <ul className="list-disc ml-5 text-sm mt-1">
-                  {career.experiencies.map(({ id, name }) => (
-                    <li key={id}>{name}</li>
-                  ))}
-                </ul>
-              </section>
-
               {/* 링크 섹션 */}
               <section>
                 <h6 className="mt-2 font-semibold text-sm text-gray-700 dark:text-gray-300">
