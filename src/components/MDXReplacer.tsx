@@ -40,50 +40,54 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
     h1: (props) => (
       <h1
         id={`h1-${props.children}`}
-        className="text-4xl font-bold text-foreground mb-4"
+        className="text-4xl font-bold text-foreground mb-4 w-full"
         {...props}
       />
     ),
     h2: (props) => (
       <h2
         id={`h2-${props.children}`}
-        className="text-3xl font-semibold text-foreground mt-8 mb-4"
+        className="text-3xl font-semibold text-foreground mt-8 mb-4 w-full"
         {...props}
       />
     ),
     h3: (props) => (
       <h3
         id={`h3-${props.children}`}
-        className="text-2xl font-medium text-foreground mt-6 mb-3"
+        className="text-2xl font-medium text-foreground mt-6 mb-3 w-full"
         {...props}
       />
     ),
     h4: (props) => (
       <h4
         id={`h4-${props.children}`}
-        className="text-xl font-medium text-foreground mt-5 mb-2"
+        className="text-xl font-medium text-foreground mt-5 mb-2 w-full"
         {...props}
       />
     ),
     h5: (props) => (
       <h5
         id={`h5-${props.children}`}
-        className="text-lg font-medium text-foreground mt-4 mb-1"
+        className="text-lg font-medium text-foreground mt-4 mb-1 w-full"
         {...props}
       />
     ),
     h6: (props) => (
       <h6
         id={`h6-${props.children}`}
-        className="text-base font-medium text-foreground mt-3 mb-1"
+        className="text-base font-medium text-foreground mt-3 mb-1 w-full"
         {...props}
       />
     ),
     p: (props) => (
       <p className="text-foreground leading-relaxed mb-4 w-full" {...props} />
     ),
-    ul: (props) => <ul className="list-disc list-inside mb-4" {...props} />,
-    ol: (props) => <ol className="list-decimal list-inside mb-4" {...props} />,
+    ul: (props) => (
+      <ul className="list-disc list-inside mb-4 w-full" {...props} />
+    ),
+    ol: (props) => (
+      <ol className="list-decimal list-inside mb-4 w-full" {...props} />
+    ),
     li: (props) => <li className="mb-2" {...props} />,
     code: (props) => (
       <code
