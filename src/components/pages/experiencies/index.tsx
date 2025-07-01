@@ -52,7 +52,10 @@ export const Content = () => {
 
   const handleBookClick = (id: string) => {
     const wantToSeeDetails = match(selectedBookId)
-      .with(id, () => confirm('해당 프로젝트를 자세히 보시겠습니까?'))
+      .with(id, () => {
+        const book = EXPERIENCE_LIST.find((b) => b.id === id);
+        return book ? confirm(`"${book.name}" 책을 보시겠습니까?`) : false;
+      })
       .otherwise(() => false);
 
     if (wantToSeeDetails) {
