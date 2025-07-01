@@ -29,7 +29,7 @@ export const ExperienceTemplate = ({ experience }: Props) => {
         <TableOfContents experience={experience} />
       </Page>
 
-      <Page className="flex justify-start">{content}</Page>
+      <Page className="flex justify-start py-20">{content}</Page>
 
       <Page variant="cover">
         <img
