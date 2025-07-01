@@ -4,11 +4,11 @@ import GithubIcon from '@/assets/icons/github.svg';
 import { cn } from '@/lib/utils';
 import {
   Blend,
+  BookOpenText,
   Building2,
   FileText,
   MessageSquareCode,
   Mic,
-  MonitorSmartphone,
   Settings,
 } from 'lucide-react';
 
@@ -71,9 +71,7 @@ const LINKS: AppLinkSchema[] = [
     __type: 'INNER',
     id: 'experiencies',
     label: 'Experiencies',
-    icon: (
-      <MonitorSmartphone size={28} className="text-foreground bg-background" />
-    ),
+    icon: <BookOpenText size={28} className="text-foreground bg-background" />,
     status: 'CONSTRUCTION',
     target: '_self',
     to: '/experiencies',

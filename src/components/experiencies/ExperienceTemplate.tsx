@@ -22,7 +22,9 @@ export const ExperienceTemplate = ({ experience }: Props) => {
       </Page>
 
       <Page className="flex items-center justify-center">
-        <h1 className="text-3xl md:text-6xl font-bold my-6">{name}</h1>
+        <h1 className="text-3xl md:text-6xl! font-bold my-6 w-full text-center">
+          {name}
+        </h1>
       </Page>
 
       <Page label="Table of Contents">
