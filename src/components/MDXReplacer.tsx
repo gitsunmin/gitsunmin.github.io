@@ -25,6 +25,8 @@ const SafeImage = ({
       {...props}
       src={imageSrc}
       alt={hasError ? 'No image available' : alt || 'Image'}
+      aria-describedby={hasError ? 'no-image-available' : undefined}
+      data-origin-src={hasError ? src : undefined}
       onError={handleError}
       className="rounded-lg shadow-md mx-auto my-2"
     />
