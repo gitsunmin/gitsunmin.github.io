@@ -10,7 +10,7 @@ const Contetnt = () => {
     from: '/_layout/experiencies/$experienceId',
   });
   const experience = EXPERIENCE_LIST.find(
-    (experience) => experience.id === experienceId,
+    (experience) => experience.id === experienceId
   );
 
   return match(experience)
