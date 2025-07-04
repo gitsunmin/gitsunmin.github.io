@@ -22,7 +22,7 @@
     "@mdx-js/rollup": "^3.1.0",
     "@react-three/drei": "9.122.0",
     "@react-three/fiber": "8.18.0",
-    "@tanstack/react-router": "^1.120.18",
+    "@tanstack/react-router": "^1.124.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
