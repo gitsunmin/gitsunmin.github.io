@@ -1,7 +1,6 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EXPERIENCE_LIST } from '@/data/experiencies';
 import { useRouter } from '@tanstack/react-router';
-import { OrbitControls } from '@react-three/drei';
 import { Suspense, useRef, useState } from 'react';
 import { match } from 'ts-pattern';
 import { BookShelf } from '@/components/canvas/BookShelf';
@@ -80,7 +79,6 @@ export const Content = () => {
         selectedBookId={selectedBookId}
         onBookClick={handleBookClick}
       />
-      <OrbitControls enableZoom={false} />
     </Canvas>
   );
 };

@@ -20,8 +20,8 @@
     "@gitsunmin/ui": "^0.0.0-alpha.1",
     "@mdx-js/react": "^3.1.0",
     "@mdx-js/rollup": "^3.1.0",
-    "@react-three/drei": "9.122.0",
-    "@react-three/fiber": "8.18.0",
+    "@react-three/drei": "^10.4.2",
+    "@react-three/fiber": "^9.2.0",
     "@tanstack/react-router": "^1.124.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -31,7 +31,7 @@
     "shiki": "^3.7.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
-    "three": "0.173.0",
+    "three": "^0.178.0",
     "ts-pattern": "^5.7.1"
   },
   "devDependencies": {
@@ -47,9 +47,9 @@
     "@testing-library/react": "^16.3.0",
     "@types/mdx": "^2.0.13",
     "@types/node": "^22.13.4",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1",
-    "@types/three": "^0.173.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@types/three": "^0.178.0",
     "@typescript-eslint/eslint-plugin": "^8.24.1",
     "@typescript-eslint/parser": "^8.24.1",
     "@vitejs/plugin-react-swc": "^3.8.0",
@@ -73,7 +73,7 @@
     "vitest": "^3.1.4"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

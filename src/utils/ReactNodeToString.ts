@@ -1,4 +1,4 @@
-import { isValidElement, type ReactNode } from 'react';
+import { isValidElement, type ReactNode, Children } from 'react';
 import { match, P } from 'ts-pattern';
 
 export interface HeadingInfo {
@@ -26,7 +26,8 @@ export function reactToText(node: ReactNode): string {
         .with({
             node: { props: { children: P.nonNullable } }
         }, ({ node }) => {
-            return Array.isArray(node.props.children) ? node.props.children.map(reactToText).join('') : reactToText(node.props.children);
+            const element = node as React.ReactElement<Record<string, unknown>>;
+            return Children.toArray(element.props.children as ReactNode).map(reactToText).join('');
         })
         .with({ typeof: 'object', node: { type: P.nonNullable } }, ({ node }) => {
             if (typeof node.type === 'function') {
@@ -51,16 +52,20 @@ export const extractHeadings = (node: ReactNode): HeadingInfo[] => {
     })
         .with({ typeof: 'object', node: { type: P.union('h1', 'h2', 'h3', 'h4', 'h5', 'h6') } }, ({ node }) => {
 
+            const element = node as React.ReactElement<{ children?: ReactNode }>;
             return [...headings, {
-                level: Number.parseInt(node.type.slice(1), 10),
-                id: `${node.type}-${node.props.children}`,
-                text: node.props.children
+                level: typeof element.type === 'string' ? Number.parseInt(element.type.slice(1), 10) : 0,
+                id: `${element.type}-${reactToText(element.props.children)}`,
+                text: reactToText(element.props.children)
             }];
         })
         .with({
             node: { props: { children: P.nonNullable } }
         }, ({ node }) => {
-            return Array.isArray(node.props.children) ? [...headings, ...node.props.children.map(extractHeadings)] : [...headings, ...extractHeadings(node.props.children)];
+            return [
+                ...headings,
+                ...Children.toArray(node.props.children as ReactNode).flatMap(extractHeadings)
+            ];
         })
         .with({ typeof: 'object', node: { type: P.nonNullable } }, ({ node }) => {
             if (typeof node.type === 'function') {
