@@ -52,7 +52,7 @@ export const TableOfContents = ({ experience }: Props) => {
       {items.map((item) => (
         <li key={item.id} className="space-y-1">
           <Link
-            to=""
+            to="/"
             hash={item.id}
             className="font-semibold"
             hashScrollIntoView={{
