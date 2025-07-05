@@ -51,6 +51,23 @@ function generateBarcode(ctx: CanvasRenderingContext2D, content: string, x: numb
     ctx.fillText(content, x + width / 2, y + height + 15);
 }
 
+// 텍스트 크기를 동적으로 조절하는 함수
+function getOptimalFontSize(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxFontSize: number): number {
+    let fontSize = maxFontSize;
+
+    while (fontSize > 20) { // 최소 폰트 크기 20px
+        ctx.font = `bold ${fontSize}px Arial`;
+        const metrics = ctx.measureText(text);
+
+        if (metrics.width <= maxWidth) {
+            return fontSize;
+        }
+        fontSize -= 2;
+    }
+
+    return 20; // 최소 폰트 크기 반환
+}
+
 // 전면 표지 생성
 function generateFrontCover(bookInfo: BookInfo): Buffer {
     const canvas = createCanvas(600, 800);
@@ -62,33 +79,56 @@ function generateFrontCover(bookInfo: BookInfo): Buffer {
 
     // 제목
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 48px Arial';
     ctx.textAlign = 'center';
 
-    // 제목이 길면 줄바꿈 처리
+    // 제목을 단어별로 분리
     const words = bookInfo.title.split(' ');
-    let line = '';
-    let y = 300;
-    const lineHeight = 60;
+    const maxWidth = 520; // 좌우 여백 40px씩
+    const lines: string[] = [];
 
-    for (let i = 0; i < words.length; i++) {
-        const testLine = `${line + words[i]} `;
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
+    // 단어들을 라인별로 나누기
+    let currentLine = '';
+    for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
 
-        if (testWidth > 500 && i > 0) {
-            ctx.fillText(line, 300, y);
-            line = `${words[i]} `;
-            y += lineHeight;
+        // 임시로 큰 폰트로 측정
+        ctx.font = 'bold 72px Arial';
+        const testWidth = ctx.measureText(testLine).width;
+
+        if (testWidth > maxWidth && currentLine) {
+            lines.push(currentLine);
+            currentLine = word;
         } else {
-            line = testLine;
+            currentLine = testLine;
         }
     }
-    ctx.fillText(line, 300, y);
+    if (currentLine) {
+        lines.push(currentLine);
+    }
+
+    // 각 라인에 대해 최적의 폰트 크기 찾기
+    let optimalFontSize = 72; // 시작 폰트 크기
+    for (const line of lines) {
+        const lineOptimalSize = getOptimalFontSize(ctx, line, maxWidth, 72);
+        optimalFontSize = Math.min(optimalFontSize, lineOptimalSize);
+    }
+
+    // 제목 그리기
+    ctx.font = `bold ${optimalFontSize}px Arial`;
+    const lineHeight = optimalFontSize * 1.2;
+    const totalHeight = lines.length * lineHeight;
+    const startY = 300 - (totalHeight / 2);
+
+    for (let i = 0; i < lines.length; i++) {
+        const y = startY + (i * lineHeight);
+        ctx.fillText(lines[i], 300, y);
+    }
 
     // 저자명
-    ctx.font = '24px Arial';
-    ctx.fillText(`by ${bookInfo.author}`, 300, y + 100);
+    const authorFontSize = Math.max(20, optimalFontSize * 0.4);
+    ctx.font = `${authorFontSize}px Arial`;
+    const authorY = startY + totalHeight + 60;
+    ctx.fillText(`by ${bookInfo.author}`, 300, authorY);
 
     return canvas.toBuffer('image/png');
 }
@@ -108,12 +148,24 @@ function generateSpineCover(bookInfo: BookInfo): Buffer {
     ctx.rotate(-Math.PI / 2);
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 20px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(bookInfo.title, 0, 0);
 
-    ctx.font = '14px Arial';
-    ctx.fillText(bookInfo.author, 0, 25);
+    // 제목 폰트 크기 동적 조절 (세로 길이 700px에 맞춤)
+    const titleMaxWidth = 700;
+    let titleFontSize = 60; // 시작 폰트 크기를 더 크게 조정
+
+    while (titleFontSize > 16) {
+        ctx.font = `bold ${titleFontSize}px Arial`;
+        const titleMetrics = ctx.measureText(bookInfo.title);
+
+        if (titleMetrics.width <= titleMaxWidth) {
+            break;
+        }
+        titleFontSize -= 2;
+    }
+
+    ctx.font = `bold ${titleFontSize}px Arial`;
+    ctx.fillText(bookInfo.title, 0, 0);
 
     ctx.restore();
 

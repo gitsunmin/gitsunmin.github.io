@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist",
     "bd": "bun run build && bun run deploy",
     "pull:modules": "git submodule update --remote --merge",
+    "gen:book-cover": "bun .scripts/generate-book-cover.ts",
     "test:vi": "vitest",
     "test:ui": "vitest --ui",
     "prepare": "husky"
@@ -62,6 +63,7 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "gh-pages": "^6.3.0",
     "globals": "^16.0.0",
+    "sharp": "^0.34.2",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "postcss": "^8.5.3",
