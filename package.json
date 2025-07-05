@@ -56,7 +56,7 @@
     "@vitejs/plugin-react-swc": "^3.8.0",
     "@vitest/snapshot": "^3.2.4",
     "@vitest/ui": "^3.2.4",
-    "caniuse-lite": "^1.0.30001721",
+    "caniuse-lite": "^1.0.30001726",
     "esbuild": "^0.25.5",
     "eslint": "^9.20.1",
     "eslint-plugin-react-hooks": "^5.1.0",
