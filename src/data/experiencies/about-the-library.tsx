@@ -1,7 +1,7 @@
 import type { Experience } from '@/data/experiencies/';
-import BookFrontCover from '@/assets/experiencies/about-the-library/book-cover-front.webp';
-import BookBackCover from '@/assets/experiencies/about-the-library/book-cover-back.webp';
-import BookSideCover from '@/assets/experiencies/about-the-library/book-cover-spine.webp';
+import BookFrontCover from '@/assets/experiencies/about-the-library/cover/book-cover-front.webp';
+import BookBackCover from '@/assets/experiencies/about-the-library/cover/book-cover-back.webp';
+import BookSideCover from '@/assets/experiencies/about-the-library/cover/book-cover-back.webp';
 import Content from '@/docs/experiencies/about-the-library/index.mdx';
 import { MDXReplacer } from '@/components/MDXReplacer';
 
