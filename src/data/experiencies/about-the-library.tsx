@@ -6,7 +6,7 @@ import Content from '@/docs/experiencies/about-the-library/index.mdx';
 import { MDXReplacer } from '@/components/MDXReplacer';
 
 export const EXPERIENCE_LIBRARY: Experience = {
-  id: 'experience-library-development',
+  id: 'experience_about-the-library',
   careers: ['marketboro'],
   name: 'About The Library',
   content: <Content components={MDXReplacer({})} />,

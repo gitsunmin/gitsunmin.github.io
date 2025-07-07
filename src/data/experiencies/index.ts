@@ -3,7 +3,7 @@ import { EXPERIENCE_LIBRARY } from '@/data/experiencies/about-the-library';
 import type { JSX } from 'react/jsx-runtime';
 
 export type Experience = {
-  readonly id: string;
+  readonly id: `${string}_${string}`;
   readonly careers: CareerId[];
   readonly name: string;
   readonly book: {

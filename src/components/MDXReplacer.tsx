@@ -2,36 +2,7 @@ import { CodeBlockWrapper } from '@/components/Codeblock';
 import { Link } from '@tanstack/react-router';
 import type { MDXComponents } from 'mdx/types';
 import { match, P } from 'ts-pattern';
-import { useState } from 'react';
-import NoImageAvailable from '@/assets/no_image_available.png';
-
-const SafeImage = ({
-  src,
-  alt,
-  ...props
-}: React.ImgHTMLAttributes<HTMLImageElement>) => {
-  const [imageSrc, setImageSrc] = useState(src);
-  const [hasError, setHasError] = useState(false);
-
-  const handleError = () => {
-    if (!hasError) {
-      setImageSrc(NoImageAvailable);
-      setHasError(true);
-    }
-  };
-
-  return (
-    <img
-      {...props}
-      src={imageSrc}
-      alt={hasError ? 'No image available' : alt || 'Image'}
-      aria-describedby={hasError ? 'no-image-available' : undefined}
-      data-origin-src={hasError ? src : undefined}
-      onError={handleError}
-      className="rounded-lg shadow-md mx-auto my-2"
-    />
-  );
-};
+import { SafeImage } from '@/components/SafeImage';
 
 type Props = {
   components?: MDXComponents;
