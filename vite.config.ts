@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import path from 'node:path';
 import { copyFileSync } from 'node:fs';
 import mdx from '@mdx-js/rollup';
@@ -14,6 +14,18 @@ export default defineConfig(({ mode }) => {
       __MODE__: JSON.stringify(mode),
     },
     plugins: [
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'src/assets/til/**/*',
+            dest: 'til',
+          },
+          {
+            src: 'src/assets/experiencies/**/*',
+            dest: 'experiencies',
+          },
+        ],
+      }),
       imageDownloader({
         active: mode === 'production',
         targets: [
@@ -31,7 +43,7 @@ export default defineConfig(({ mode }) => {
         ],
       }),
       tilRouteGenerator({ silent: mode === 'development', mode }),
-      TanStackRouterVite({}),
+      tanstackRouter({}),
       mdx(),
       react(),
       {
@@ -46,14 +58,6 @@ export default defineConfig(({ mode }) => {
           }
         },
       },
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'src/assets/til/**/*',
-            dest: 'til',
-          },
-        ],
-      }),
     ],
     assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.webp', '**/*.svg'],
     base: '/',

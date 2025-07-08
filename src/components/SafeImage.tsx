@@ -16,19 +16,14 @@ export const SafeImage = ({ src, alt, className, ...props }: Props) => {
   };
 
   return (
-    <figure className="py-2">
-      <img
-        {...props}
-        src={imageSrc}
-        alt={hasError ? 'No image available' : alt || 'Image'}
-        aria-describedby={hasError ? 'no-image-available' : undefined}
-        data-origin-src={hasError ? src : undefined}
-        onError={handleError}
-        className={cn('rounded-lg shadow-md mx-auto my-2', className)}
-      />
-      <figcaption>
-        Get browser details using <code>navigator</code>.
-      </figcaption>
-    </figure>
+    <img
+      {...props}
+      src={imageSrc}
+      alt={hasError ? 'No image available' : alt || 'Image'}
+      aria-describedby={hasError ? 'no-image-available' : undefined}
+      data-origin-src={hasError ? src : undefined}
+      onError={handleError}
+      className={cn('rounded-lg shadow-md mx-auto my-2', className)}
+    />
   );
 };
