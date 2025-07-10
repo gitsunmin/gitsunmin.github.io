@@ -71,7 +71,7 @@ export const TableOfContents = ({ experience }: Props) => {
   );
 
   const nestedHeadings = buildNestedStructure(
-    headings.map((heading) => ({ ...heading, children: [] }))
+    headings.map((heading) => ({ ...heading, children: [] })),
   );
 
   return (

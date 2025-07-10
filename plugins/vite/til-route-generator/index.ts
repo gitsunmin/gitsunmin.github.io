@@ -78,9 +78,7 @@ const replaceImagePath = (pathes: {
   writeFileSync(path.join(DOCS_DIR, relativePath), updatedImageContent);
 };
 
-const replaceLinkPath = (pathes: {
-  relativePath: string;
-}) => {
+const replaceLinkPath = (pathes: { relativePath: string }) => {
   const { relativePath } = pathes;
   let mdxContent = readFileSync(path.join(DOCS_DIR, relativePath), 'utf-8');
 
@@ -106,13 +104,10 @@ const replaceLinkPath = (pathes: {
   const updatedLinkContent = mdxContent.replace(
     /(?<!!)\[(?!\^)[^\]]*\]\((?![a-zA-Z][a-zA-Z0-9+.-]*:\/\/)([^)]+)\)/g,
     (match, linkPath) => {
-      const newLinkPath = path.join(
-        '/',
-        path.relative(
-          ROOT_DIR,
-          path.join('til', linkPath),
-        ),
-      ).replace(/\.mdx$/, '').replace(/\/index$/, '/');
+      const newLinkPath = path
+        .join('/', path.relative(ROOT_DIR, path.join('til', linkPath)))
+        .replace(/\.mdx$/, '')
+        .replace(/\/index$/, '/');
       return match.replace(linkPath, newLinkPath);
     },
   );
@@ -155,7 +150,7 @@ const importTILContents = (inputDir: string, mode: string) => {
 
         replaceLinkPath({
           relativePath,
-        })
+        });
 
         replaceImagePath({
           relativePath,

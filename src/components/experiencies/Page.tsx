@@ -21,7 +21,7 @@ export const Page = ({
       {
         'flex items-center justify-center': variant === 'cover',
       },
-      className
+      className,
     )}
   >
     {label && (

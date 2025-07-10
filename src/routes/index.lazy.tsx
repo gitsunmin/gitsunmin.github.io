@@ -26,19 +26,19 @@ const AppLink = (props: AppLinkSchema) => {
       from={'/'}
       rel={target === '_blank' ? 'noopener noreferrer' : undefined}
       className={cn(
-        'flex w-14 flex-col justify-center items-center gap-x-1 gap-y-2 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90 relative'
+        'flex w-14 flex-col justify-center items-center gap-x-1 gap-y-2 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90 relative',
       )}
     >
       <div
         className={cn(
-          'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center '
+          'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center ',
         )}
       >
         {icon}
       </div>
       <div
         className={cn(
-          'text-xs text-foreground break-keep text-center line-clamp-1'
+          'text-xs text-foreground break-keep text-center line-clamp-1',
         )}
       >
         {label}
@@ -159,12 +159,12 @@ function RouteComponent() {
       className={cn(
         'fixed',
         'mx-auto px-4 py-6 w-full h-[100dvh] break-all pb-10',
-        'bg-background'
+        'bg-background',
       )}
     >
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
         {LINKS.filter(
-          (link) => link.status === 'ENABLED' || __MODE__ === 'development'
+          (link) => link.status === 'ENABLED' || __MODE__ === 'development',
         ).map((link) => (
           <li
             key={link.id}

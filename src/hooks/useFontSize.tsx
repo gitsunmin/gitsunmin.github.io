@@ -36,7 +36,7 @@ export function useFontSize() {
     document.documentElement.classList.remove(
       'text-small',
       'text-medium',
-      'text-large'
+      'text-large',
     );
 
     // Add the current font size class
@@ -47,7 +47,7 @@ export function useFontSize() {
       fontSize === 'small' ? '0.875' : fontSize === 'large' ? '1.125' : '1';
     document.documentElement.style.setProperty(
       '--font-size-scale',
-      fontSizeScale
+      fontSizeScale,
     );
   }, [fontSize]);
 
@@ -82,7 +82,7 @@ export function useFontSize() {
           return '';
       }
     },
-    [fontSize]
+    [fontSize],
   );
 
   return {
