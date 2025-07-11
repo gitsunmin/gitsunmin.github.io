@@ -57,7 +57,7 @@
     "@vitest/snapshot": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "caniuse-lite": "^1.0.30001726",
-    "esbuild": "^0.25.5",
+    "esbuild": "^0.25.6",
     "eslint": "^9.20.1",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.7",
