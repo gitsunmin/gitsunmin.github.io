@@ -144,6 +144,7 @@ const LINKS: AppLinkSchema[] = [
 ] as const;
 
 function RouteComponent() {
+
   return (
     <main
       className={cn(

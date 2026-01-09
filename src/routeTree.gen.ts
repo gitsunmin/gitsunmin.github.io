@@ -13,7 +13,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as LayoutRouteImport } from './routes/_layout'
-import { Route as BooksRouteImport } from './routes/_books'
 import { Route as LayoutRecRoomRouteImport } from './routes/_layout/rec-room'
 import { Route as LayoutLoomRouteImport } from './routes/_layout/loom'
 import { Route as LayoutInterviewRouteImport } from './routes/_layout/interview'
@@ -216,10 +215,6 @@ const SettingsRoute = SettingsRouteImport.update({
 } as any)
 const LayoutRoute = LayoutRouteImport.update({
   id: '/_layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BooksRoute = BooksRouteImport.update({
-  id: '/_books',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexLazyRoute = IndexLazyRouteImport.update({
@@ -1737,7 +1732,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexLazyRoute
-  '/_books': typeof BooksRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/settings': typeof SettingsRoute
   '/_layout/careers': typeof LayoutCareersRoute
@@ -2329,7 +2323,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/_books'
     | '/_layout'
     | '/settings'
     | '/_layout/careers'
@@ -2528,7 +2521,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  BooksRoute: typeof BooksRoute
   LayoutRoute: typeof LayoutRouteWithChildren
   SettingsRoute: typeof SettingsRoute
 }
@@ -2547,13 +2539,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof LayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_books': {
-      id: '/_books'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof BooksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -4390,7 +4375,6 @@ const LayoutRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  BooksRoute: BooksRoute,
   LayoutRoute: LayoutRouteWithChildren,
   SettingsRoute: SettingsRoute,
 }
