@@ -4,7 +4,6 @@ import GithubIcon from '@/assets/icons/github.svg';
 import { cn } from '@/lib/utils';
 import {
   Blend,
-  BookOpenText,
   Building2,
   FileText,
   MessageSquareCode,
@@ -66,15 +65,6 @@ const LINKS: AppLinkSchema[] = [
     status: 'ENABLED',
     target: '_self',
     to: '/careers',
-  },
-  {
-    __type: 'INNER',
-    id: 'experiencies',
-    label: 'Experiencies',
-    icon: <BookOpenText size={28} className="text-foreground bg-background" />,
-    status: 'CONSTRUCTION',
-    target: '_self',
-    to: '/experiencies',
   },
   {
     __type: 'INNER',

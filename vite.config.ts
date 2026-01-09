@@ -20,10 +20,6 @@ export default defineConfig(({ mode }) => {
             src: 'src/assets/til/**/*',
             dest: 'til',
           },
-          {
-            src: 'src/assets/experiencies/**/*',
-            dest: 'experiencies',
-          },
         ],
       }),
       imageDownloader({

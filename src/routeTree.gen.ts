@@ -18,9 +18,7 @@ import { Route as LayoutRecRoomRouteImport } from './routes/_layout/rec-room'
 import { Route as LayoutLoomRouteImport } from './routes/_layout/loom'
 import { Route as LayoutInterviewRouteImport } from './routes/_layout/interview'
 import { Route as LayoutCareersRouteImport } from './routes/_layout/careers'
-import { Route as LayoutExperienciesIndexRouteImport } from './routes/_layout/experiencies/index'
 import { Route as LayoutTilREADMERouteImport } from './routes/_layout/til/README'
-import { Route as LayoutExperienciesExperienceIdRouteImport } from './routes/_layout/experiencies/$experienceId'
 import { Route as LayoutTilWebassemblyIndexRouteImport } from './routes/_layout/til/webassembly/index'
 import { Route as LayoutTilReact_nativeIndexRouteImport } from './routes/_layout/til/react_native/index'
 import { Route as LayoutTilWebWebComponentRouteImport } from './routes/_layout/til/web/web-component'
@@ -249,22 +247,11 @@ const LayoutCareersRoute = LayoutCareersRouteImport.update({
   path: '/careers',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutExperienciesIndexRoute = LayoutExperienciesIndexRouteImport.update({
-  id: '/experiencies/',
-  path: '/experiencies/',
-  getParentRoute: () => LayoutRoute,
-} as any)
 const LayoutTilREADMERoute = LayoutTilREADMERouteImport.update({
   id: '/til/README',
   path: '/til/README',
   getParentRoute: () => LayoutRoute,
 } as any)
-const LayoutExperienciesExperienceIdRoute =
-  LayoutExperienciesExperienceIdRouteImport.update({
-    id: '/experiencies/$experienceId',
-    path: '/experiencies/$experienceId',
-    getParentRoute: () => LayoutRoute,
-  } as any)
 const LayoutTilWebassemblyIndexRoute =
   LayoutTilWebassemblyIndexRouteImport.update({
     id: '/til/webassembly/',
@@ -1362,9 +1349,7 @@ export interface FileRoutesByFullPath {
   '/interview': typeof LayoutInterviewRoute
   '/loom': typeof LayoutLoomRoute
   '/rec-room': typeof LayoutRecRoomRoute
-  '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute
   '/til/README': typeof LayoutTilREADMERoute
-  '/experiencies': typeof LayoutExperienciesIndexRoute
   '/til/accessibility/optimal-text-contrast-calculation': typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute
@@ -1560,9 +1545,7 @@ export interface FileRoutesByTo {
   '/interview': typeof LayoutInterviewRoute
   '/loom': typeof LayoutLoomRoute
   '/rec-room': typeof LayoutRecRoomRoute
-  '/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute
   '/til/README': typeof LayoutTilREADMERoute
-  '/experiencies': typeof LayoutExperienciesIndexRoute
   '/til/accessibility/optimal-text-contrast-calculation': typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute
   '/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute
   '/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute
@@ -1761,9 +1744,7 @@ export interface FileRoutesById {
   '/_layout/interview': typeof LayoutInterviewRoute
   '/_layout/loom': typeof LayoutLoomRoute
   '/_layout/rec-room': typeof LayoutRecRoomRoute
-  '/_layout/experiencies/$experienceId': typeof LayoutExperienciesExperienceIdRoute
   '/_layout/til/README': typeof LayoutTilREADMERoute
-  '/_layout/experiencies/': typeof LayoutExperienciesIndexRoute
   '/_layout/til/accessibility/optimal-text-contrast-calculation': typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute
   '/_layout/til/algorithm/depth-first-search-algorithm': typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute
   '/_layout/til/algorithm/implementation-algorithm': typeof LayoutTilAlgorithmImplementationAlgorithmRoute
@@ -1961,9 +1942,7 @@ export interface FileRouteTypes {
     | '/interview'
     | '/loom'
     | '/rec-room'
-    | '/experiencies/$experienceId'
     | '/til/README'
-    | '/experiencies'
     | '/til/accessibility/optimal-text-contrast-calculation'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
@@ -2159,9 +2138,7 @@ export interface FileRouteTypes {
     | '/interview'
     | '/loom'
     | '/rec-room'
-    | '/experiencies/$experienceId'
     | '/til/README'
-    | '/experiencies'
     | '/til/accessibility/optimal-text-contrast-calculation'
     | '/til/algorithm/depth-first-search-algorithm'
     | '/til/algorithm/implementation-algorithm'
@@ -2359,9 +2336,7 @@ export interface FileRouteTypes {
     | '/_layout/interview'
     | '/_layout/loom'
     | '/_layout/rec-room'
-    | '/_layout/experiencies/$experienceId'
     | '/_layout/til/README'
-    | '/_layout/experiencies/'
     | '/_layout/til/accessibility/optimal-text-contrast-calculation'
     | '/_layout/til/algorithm/depth-first-search-algorithm'
     | '/_layout/til/algorithm/implementation-algorithm'
@@ -2616,25 +2591,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutCareersRouteImport
       parentRoute: typeof LayoutRoute
     }
-    '/_layout/experiencies/': {
-      id: '/_layout/experiencies/'
-      path: '/experiencies'
-      fullPath: '/experiencies'
-      preLoaderRoute: typeof LayoutExperienciesIndexRouteImport
-      parentRoute: typeof LayoutRoute
-    }
     '/_layout/til/README': {
       id: '/_layout/til/README'
       path: '/til/README'
       fullPath: '/til/README'
       preLoaderRoute: typeof LayoutTilREADMERouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/experiencies/$experienceId': {
-      id: '/_layout/experiencies/$experienceId'
-      path: '/experiencies/$experienceId'
-      fullPath: '/experiencies/$experienceId'
-      preLoaderRoute: typeof LayoutExperienciesExperienceIdRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/til/webassembly/': {
@@ -3954,9 +3915,7 @@ interface LayoutRouteChildren {
   LayoutInterviewRoute: typeof LayoutInterviewRoute
   LayoutLoomRoute: typeof LayoutLoomRoute
   LayoutRecRoomRoute: typeof LayoutRecRoomRoute
-  LayoutExperienciesExperienceIdRoute: typeof LayoutExperienciesExperienceIdRoute
   LayoutTilREADMERoute: typeof LayoutTilREADMERoute
-  LayoutExperienciesIndexRoute: typeof LayoutExperienciesIndexRoute
   LayoutTilAccessibilityOptimalTextContrastCalculationRoute: typeof LayoutTilAccessibilityOptimalTextContrastCalculationRoute
   LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute: typeof LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute
   LayoutTilAlgorithmImplementationAlgorithmRoute: typeof LayoutTilAlgorithmImplementationAlgorithmRoute
@@ -4151,9 +4110,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutInterviewRoute: LayoutInterviewRoute,
   LayoutLoomRoute: LayoutLoomRoute,
   LayoutRecRoomRoute: LayoutRecRoomRoute,
-  LayoutExperienciesExperienceIdRoute: LayoutExperienciesExperienceIdRoute,
   LayoutTilREADMERoute: LayoutTilREADMERoute,
-  LayoutExperienciesIndexRoute: LayoutExperienciesIndexRoute,
   LayoutTilAccessibilityOptimalTextContrastCalculationRoute:
     LayoutTilAccessibilityOptimalTextContrastCalculationRoute,
   LayoutTilAlgorithmDepthFirstSearchAlgorithmRoute:

@@ -1,5 +1,3 @@
-import { EXPERIENCE_LIST, type Experience } from '@/data/experiencies';
-
 import marketboro_logo from '@/assets/logos/marketboro_logo.webp';
 import korens_logo from '@/assets/logos/korens_logo.webp';
 
@@ -15,7 +13,6 @@ type Career = {
   caution?: string;
   positoin: string;
   range: string;
-  experiencies: Experience[];
   links: {
     label: string;
     url: string;
@@ -32,9 +29,6 @@ export const Career: Career[] = [
 이 과정에서 성능 최적화, 접근성 개선, 그리고 사용자 경험(UX) 향상 등 다양한 실무 경험을 쌓았으며, 최신 프론트엔드 기술 스택을 폭넓게 적용한 프로젝트를 수행하고 있습니다.`,
     range: '2020.10 ~ ',
     positoin: '프론트엔드 개발자',
-    experiencies: EXPERIENCE_LIST.filter((experience) =>
-      experience.careers.includes('marketboro'),
-    ),
     links: [
       {
         label: '마켓보로 웹사이트',
@@ -60,9 +54,6 @@ export const Career: Career[] = [
       특히, 초기 개발 환경과 프로세스 구축에 참여하여, 개발 역량뿐만 아니라 문제 해결 능력과 주도적인 업무 수행 능력을 함양하였습니다.`,
     positoin: '프론트엔드 개발자',
     range: '2019.07 ~ 2020.10',
-    experiencies: EXPERIENCE_LIST.filter((experience) =>
-      experience.careers.includes('korens'),
-    ),
     links: [
       {
         label: '코렌스 웹사이트',
