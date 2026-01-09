@@ -55,9 +55,19 @@ const Carousel: React.FC<Props> = ({
   useEffect(() => {
     if (!emblaApi) return;
 
-    setScrollSnaps(emblaApi.scrollSnapList());
+    // Initialize scrollSnaps and selectedIndex
+    const setupEmbla = () => {
+      setScrollSnaps(emblaApi.scrollSnapList());
+      onSelectHandler(); // Initial selection
+    };
+
+    setupEmbla(); // Call once on mount or when emblaApi changes
+
+    // Set up event listeners and return cleanup function
     emblaApi.on('select', onSelectHandler);
-    onSelectHandler();
+    return () => {
+      emblaApi.off('select', onSelectHandler);
+    };
   }, [emblaApi, onSelectHandler]);
 
   return (
