@@ -1,8 +1,6 @@
-import { Link } from '@tanstack/react-router';
 import { Button } from './Button';
 import { cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
-import GitsunminProfile from '@/assets/avatar/gitsunmin.webp';
 
 type Props = {
   title?: string;
@@ -26,13 +24,13 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
       <Button variant="ghost" className="lg:hidden" onClick={handleBack}>
         <ArrowLeft />
       </Button>
-      <Link
-        to="/"
+      <a
+        href="/"
         className="flex items-center gap-2 py-1 justify-center md:justify-start"
       >
         <span className="hidden md:block">
           <img
-            src={GitsunminProfile}
+            src="/assets/avatar/gitsunmin.webp"
             alt="logo"
             className="h-10 w-10 rounded-full"
           />
@@ -51,7 +49,7 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
             {title}
           </h1>
         </span>
-      </Link>
+      </a>
       <div className="size-10" />
     </header>
   );

@@ -1,0 +1,8 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { CareersPage } from '@/components/pages/Careers';
+---
+
+<MainLayout title="Careers - Gitsunmin" headerTitle="Careers">
+  <CareersPage client:only="react" />
+</MainLayout>

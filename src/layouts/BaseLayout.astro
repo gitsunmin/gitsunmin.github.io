@@ -1,0 +1,38 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { Providers } from '@/components/Providers';
+import '@/globals.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Gitsunmin',
+  description = "Gitsunmin's website | 김선민의 웹사이트",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <ClientRouter />
+  </head>
+  <body>
+    <Providers client:only="react">
+      <slot />
+    </Providers>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light dark;
+  }
+</style>

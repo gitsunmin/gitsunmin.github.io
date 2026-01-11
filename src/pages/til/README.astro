@@ -1,0 +1,74 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+const tilEntries = await getCollection('til');
+
+// 카테고리별로 그룹화
+const categories = tilEntries.reduce(
+  (
+    acc: Record<string, CollectionEntry<'til'>[]>,
+    entry: CollectionEntry<'til'>,
+  ) => {
+    const category = entry.id.split('/')[0];
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(entry);
+    return acc;
+  },
+  {} as Record<string, CollectionEntry<'til'>[]>,
+);
+
+const sortedCategories = Object.entries(categories).sort(([a], [b]) =>
+  a.localeCompare(b),
+) as [string, CollectionEntry<'til'>[]][];
+
+// 각 entry에 대한 표시 정보 미리 계산
+const categoriesWithDisplay = sortedCategories.map(([category, entries]) => ({
+  category,
+  entries: entries.map((entry) => {
+    // entry.id는 'algorithm/depth-first-search-algorithm.mdx' 형식
+    // .mdx를 제거하고 /til/ 경로를 추가
+    const cleanId = entry.id.replace(/\.mdx$/, '');
+    const fileName = cleanId.split('/').pop() || '';
+    const displayName = fileName.replace(/-/g, ' ');
+
+    return {
+      url: `/til/${cleanId}`,
+      title: entry.data.title || displayName,
+    };
+  }),
+}));
+---
+
+<MainLayout title="TIL - Gitsunmin" headerTitle="TIL">
+  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto">
+    <h1 class="text-5xl font-bold mb-12 w-full">
+      TIL
+      <div class="text-xl font-normal text-gray-500 dark:text-gray-400">
+        (=Today I Learned)
+      </div>
+    </h1>
+    <div class="prose dark:prose-invert max-w-none">
+      <h2>Today I Learned</h2>
+      <p>개발하면서 배운 것들을 기록합니다.</p>
+      
+      {categoriesWithDisplay.map(({ category, entries }) => (
+        <div class="mb-8">
+          <h3 class="capitalize">{category.replace(/_/g, ' ')}</h3>
+          <ul class="list-disc pl-5">
+            {entries.map((entry) => (
+              <li>
+                <a href={entry.url} class="text-blue-500 hover:underline">
+                  {entry.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</MainLayout>

@@ -1,5 +1,4 @@
 import { CodeBlockWrapper } from '@/components/Codeblock';
-import { Link } from '@tanstack/react-router';
 import type { MDXComponents } from 'mdx/types';
 import { match, P } from 'ts-pattern';
 import { SafeImage } from '@/components/SafeImage';
@@ -89,10 +88,10 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
     a: (props) =>
       match(props.href)
         .with(P.string.startsWith('/'), (href) => (
-          <Link {...props} href={href} to={'/'} className="text-blue-400" />
+          <a {...props} href={href} className="text-blue-400" />
         ))
         .otherwise(() => (
-          <a className="text-blue-400" target="_blank" {...props} />
+          <a className="text-blue-400" target="_blank" rel="noopener noreferrer" {...props} />
         )),
     img: (props) => <SafeImage {...props} />,
     ...components,

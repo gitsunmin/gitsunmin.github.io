@@ -1,0 +1,37 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { TILPage } from '@/components/pages/TIL';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const tilEntries = await getCollection('til');
+
+  return tilEntries.map((entry: CollectionEntry<'til'>) => ({
+    params: { slug: entry.id.replace(/\.mdx$/, '') },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'til'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const title =
+  entry.data.title ||
+  entry.id
+    .split('/')
+    .pop()
+    ?.replace(/\.mdx$/, '') ||
+  'TIL';
+---
+
+<MainLayout title={`${title} - TIL - Gitsunmin`} headerTitle="TIL">
+  <TILPage>
+    <article class="prose dark:prose-invert max-w-none">
+      <Content />
+    </article>
+  </TILPage>
+</MainLayout>

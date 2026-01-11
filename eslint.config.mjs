@@ -17,14 +17,14 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/dist', '**/.eslintrc.cjs'],
+    ignores: ['**/dist', '**/.eslintrc.cjs', '.astro/**'],
   },
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
-      'plugin:react-hooks/recommended',
-    ),
+      'plugin:react-hooks/recommended'
+    )
   ),
   {
     plugins: {

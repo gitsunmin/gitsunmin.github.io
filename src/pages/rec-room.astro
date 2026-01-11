@@ -1,0 +1,8 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { RecRoom as RecRoomComponent } from '@/components/pages/RecRoom';
+---
+
+<MainLayout title="Rec Room - Gitsunmin" headerTitle="Rec Room">
+  <RecRoomComponent client:only="react" />
+</MainLayout>

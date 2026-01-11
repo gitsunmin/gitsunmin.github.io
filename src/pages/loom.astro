@@ -1,0 +1,8 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { LoomPage } from '@/components/pages/Loom';
+---
+
+<MainLayout title="Loom - Gitsunmin" headerTitle="Loom">
+  <LoomPage client:only="react" />
+</MainLayout>

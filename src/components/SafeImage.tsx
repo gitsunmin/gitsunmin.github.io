@@ -1,4 +1,4 @@
-import NoImageAvailable from '@/assets/no_image_available.png';
+const NoImageAvailable = '/assets/no_image_available.png';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 

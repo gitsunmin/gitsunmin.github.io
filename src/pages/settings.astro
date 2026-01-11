@@ -1,0 +1,8 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import { SettingsPage } from '@/components/pages/Settings';
+---
+
+<MainLayout title="Settings - Gitsunmin" headerTitle="Settings">
+  <SettingsPage client:only="react" />
+</MainLayout>

@@ -48,7 +48,7 @@ const Content = ({ interviewer, interviewee }: Props) => {
                 <div className="flex items-start">
                   <Avatar
                     src={user.avatar}
-                    alt={`${name} profile`}
+                    alt={`${user.name} profile`}
                     size={40}
                     className="rounded-full border border-gray-200 dark:border-gray-700"
                   />
