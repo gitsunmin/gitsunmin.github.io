@@ -8,90 +8,112 @@ import {
   Mic,
   Settings,
   Blend,
+  Github,
+  Linkedin,
 } from 'lucide-react';
-import GithubIcon from '@/assets/icons/github.svg';
 
-const LINKS = [
+type Link = {
+  __type: 'INNER' | 'OUTER';
+  id: string;
+  label: string;
+  status: 'ENABLED' | 'DISABLED';
+  target: '_self' | '_blank';
+  to: string;
+  icon: string;
+};
+
+const LINKS: Link[] = [
   {
     __type: 'INNER',
     id: 'careers',
     label: 'Careers',
-    icon: 'Building2',
     status: 'ENABLED',
     target: '_self',
     to: '/careers',
+    icon: 'Building2',
   },
   {
     __type: 'INNER',
     id: 'interview',
     label: 'Interview',
-    icon: 'MessageSquareCode',
     status: 'ENABLED',
     target: '_self',
     to: '/interview',
+    icon: 'MessageSquareCode',
   },
   {
     __type: 'INNER',
     id: 'til',
     label: 'TIL',
-    icon: 'FileText',
     status: 'ENABLED',
     target: '_self',
     to: '/til/README',
+    icon: 'FileText',
   },
   {
     __type: 'INNER',
     id: 'loom',
     label: 'Loom',
-    icon: 'Blend',
     status: 'ENABLED',
     target: '_self',
     to: '/loom',
+    icon: 'Blend',
   },
   {
     __type: 'INNER',
     id: 'rec-room',
     label: 'Rec Room',
-    icon: 'Mic',
     status: 'ENABLED',
     target: '_self',
     to: '/rec-room',
+    icon: 'Mic',
   },
   {
     __type: 'OUTER',
     id: 'github',
     label: 'Github',
-    icon: 'github',
     target: '_blank',
     status: 'ENABLED',
     to: 'https://github.com/gitsunmin',
+    icon: 'Github',
   },
   {
     __type: 'OUTER',
     id: 'linkedin',
     label: 'linkedin',
-    icon: 'linkedin',
     target: '_blank',
     status: 'ENABLED',
     to: 'https://www.linkedin.com/in/gitsunmin/',
+    icon: 'Linkedin',
   },
   {
     __type: 'INNER',
     id: 'settings',
     label: 'Settings',
-    icon: 'Settings',
     status: 'ENABLED',
     target: '_self',
     to: '/settings',
+    icon: 'Settings',
   },
-] as const;
+];
+
+const iconMap = {
+  Building2: Building2,
+  MessageSquareCode: MessageSquareCode,
+  FileText: FileText,
+  Blend: Blend,
+  Mic: Mic,
+  Github: Github,
+  Linkedin: Linkedin,
+  Settings: Settings,
+};
 ---
 
 <BaseLayout>
   <main
     class={cn(
       'fixed',
-      'mx-auto px-4 py-6 w-full h-[100dvh] break-all pb-10',
+      'mx-auto px-4 py-6 w-full h-dvh break-all pb-10',
       'bg-background'
     )}
   >
@@ -112,41 +134,12 @@ const LINKS = [
                   'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center'
                 )}
               >
-                {link.icon === 'Building2' && (
-                  <Building2 size={28} className="text-foreground bg-background" />
-                )}
-                {link.icon === 'MessageSquareCode' && (
-                  <MessageSquareCode
-                    size={28}
-                    className="text-foreground bg-background"
-                  />
-                )}
-                {link.icon === 'FileText' && (
-                  <FileText size={28} className="text-foreground bg-background" />
-                )}
-                {link.icon === 'Blend' && (
-                  <Blend size={28} className="text-foreground bg-background" />
-                )}
-                {link.icon === 'Mic' && (
-                  <Mic size={28} className="text-foreground bg-background" />
-                )}
-                {link.icon === 'github' && (
-                  <img
-                    src={GithubIcon}
-                    alt="github icon"
-                    width={28}
-                    height={28}
-                    class="text-foreground dark:invert"
-                  />
-                )}
-                {link.icon === 'linkedin' && (
-                  <div class="text-foreground bg-background font-bold text-2xl">
-                    In
-                  </div>
-                )}
-                {link.icon === 'Settings' && (
-                  <Settings size={28} className="text-foreground bg-background" />
-                )}
+                {(() => {
+                  const Icon = iconMap[link.icon as keyof typeof iconMap];
+                  return Icon ? (
+                    <Icon size={28} className="text-foreground bg-background" />
+                  ) : null;
+                })()}
               </div>
               <div
                 class={cn(

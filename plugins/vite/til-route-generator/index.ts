@@ -200,10 +200,6 @@ const generateComponent = (relativePath: string, outputPath: string) => {
     moduleSpecifier: `@til/${relativePath}`,
   });
   sourceFile.addImportDeclaration({
-    namedImports: ['createFileRoute'],
-    moduleSpecifier: '@tanstack/react-router',
-  });
-  sourceFile.addImportDeclaration({
     namedImports: ['MDXReplacer'],
     moduleSpecifier: '@/components/MDXReplacer',
   });

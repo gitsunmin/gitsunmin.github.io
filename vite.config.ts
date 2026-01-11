@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import path from 'node:path';
 import { copyFileSync } from 'node:fs';
 import mdx from '@mdx-js/rollup';
@@ -39,7 +38,6 @@ export default defineConfig(({ mode }) => {
         ],
       }),
       tilRouteGenerator({ silent: mode === 'development', mode }),
-      tanstackRouter({}),
       mdx(),
       react(),
       {
