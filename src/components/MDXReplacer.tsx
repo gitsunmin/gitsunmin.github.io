@@ -1,7 +1,7 @@
-import { CodeBlockWrapper } from '@/components/Codeblock';
 import type { MDXComponents } from 'mdx/types';
 import { match, P } from 'ts-pattern';
 import { SafeImage } from '@/components/SafeImage';
+import { PreWithCopy } from '@/components/PreWithCopy';
 
 type Props = {
   components?: MDXComponents;
@@ -63,35 +63,29 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
     li: (props) => <li className="mb-2" {...props} />,
     code: (props) => (
       <code
-        className="bg-gray-100 text-red-600 px-1 py-0.5 rounded"
+        className="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"
         {...props}
       />
     ),
+    pre: (props) => <PreWithCopy {...props} />,
     blockquote: (props) => (
       <blockquote
-        className="border-l-4 border-gray-300 pl-4 italic text-gray-600"
+        className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4"
         {...props}
       />
     ),
-    pre: (el) => {
-      const preComponent = el.children as unknown as {
-        props: { className: string; children: string };
-      };
-      const { className, children: code } = preComponent.props;
-      return (
-        <CodeBlockWrapper
-          languege={className?.split('-').slice(1).join('') ?? 'javascript'}
-          code={code}
-        />
-      );
-    },
     a: (props) =>
       match(props.href)
         .with(P.string.startsWith('/'), (href) => (
-          <a {...props} href={href} className="text-blue-400" />
+          <a {...props} href={href} className="text-blue-500 dark:text-blue-400 hover:underline" />
         ))
         .otherwise(() => (
-          <a className="text-blue-400" target="_blank" rel="noopener noreferrer" {...props} />
+          <a
+            className="text-blue-500 dark:text-blue-400 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+          />
         )),
     img: (props) => <SafeImage {...props} />,
     ...components,

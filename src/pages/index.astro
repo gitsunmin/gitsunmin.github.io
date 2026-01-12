@@ -10,6 +10,7 @@ import {
   Blend,
   Github,
   Linkedin,
+  Quote
 } from 'lucide-react';
 
 type Link = {
@@ -23,6 +24,24 @@ type Link = {
 };
 
 const LINKS: Link[] = [
+  {
+    __type: 'INNER',
+    id: 'blog',
+    label: 'Blog',
+    status: 'ENABLED',
+    target: '_self',
+    to: '/blog',
+    icon: 'Quote',
+  },
+  {
+    __type: 'INNER',
+    id: 'til',
+    label: 'TIL',
+    status: 'ENABLED',
+    target: '_self',
+    to: '/til/README',
+    icon: 'FileText',
+  },
   {
     __type: 'INNER',
     id: 'careers',
@@ -40,15 +59,6 @@ const LINKS: Link[] = [
     target: '_self',
     to: '/interview',
     icon: 'MessageSquareCode',
-  },
-  {
-    __type: 'INNER',
-    id: 'til',
-    label: 'TIL',
-    status: 'ENABLED',
-    target: '_self',
-    to: '/til/README',
-    icon: 'FileText',
   },
   {
     __type: 'INNER',
@@ -106,6 +116,7 @@ const iconMap = {
   Github: Github,
   Linkedin: Linkedin,
   Settings: Settings,
+  Quote: Quote,
 };
 ---
 

@@ -20,4 +20,18 @@ const til = defineCollection({
     }).passthrough(), // 추가 필드 허용
 });
 
-export const collections = { til };
+const blogCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    author: z.string().default('gitsunmin'),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    tags: z.array(z.string()),
+    heroImage: z.string().optional(),
+  }),
+});
+
+export const collections = { til, blog: blogCollection };
+

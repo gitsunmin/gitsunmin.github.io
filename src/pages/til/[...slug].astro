@@ -3,6 +3,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { TILPage } from '@/components/pages/TIL';
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { MDXReplacer } from '@/components/MDXReplacer';
 
 export async function getStaticPaths() {
   const tilEntries = await getCollection('til');
@@ -31,7 +32,7 @@ const title =
 <MainLayout title={`${title} - TIL - Gitsunmin`} headerTitle="TIL">
   <TILPage>
     <article class="prose dark:prose-invert max-w-none">
-      <Content />
+      <Content components={MDXReplacer({})} />
     </article>
   </TILPage>
 </MainLayout>

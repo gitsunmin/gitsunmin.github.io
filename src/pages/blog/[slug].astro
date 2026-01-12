@@ -1,0 +1,35 @@
+---
+import { type GetStaticPaths } from 'astro';
+import { type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { MDXReplacer } from '@/components/MDXReplacer';
+
+export const getStaticPaths = (async () => {
+  const posts: CollectionEntry<'blog'>[] = await getCollection('blog');
+  return posts.map((post: CollectionEntry<'blog'>) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+---
+<MainLayout title={post.data.title} description={post.data.description}>
+  <article class="prose dark:prose-invert prose-lg max-w-none p-4 md:p-8">
+    {post.data.heroImage && <img src={post.data.heroImage} alt="" class="w-full h-auto rounded-lg mb-8" />}
+    <h1 class="text-4xl font-extrabold mb-4">{post.data.title}</h1>
+    <div class="text-gray-500 dark:text-gray-400 mb-8">
+      <span>작성일: {post.data.pubDate.toLocaleDateString('ko-KR')}</span>
+      {post.data.updatedDate && <span>(수정일: {post.data.updatedDate.toLocaleDateString('ko-KR')})</span>}
+      <div class="mt-2">
+        {post.data.tags.map((tag: string) => <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200 mr-2 mb-2">#{tag}</span>)}
+      </div>
+    </div>
+    <Content components={MDXReplacer({})} />
+  </article>
+</MainLayout>
