@@ -1,0 +1,281 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>관심사의 분리로 해보는 리팩토링 - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="서론" class="text-4xl font-bold text-foreground mb-4 w-full">서론</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">총 40만줄이 넘는 프로젝트를 운영하며 코드와 로직이 모두 복잡하여 유지보수에 어려움을 겪었습니다. “어떻게든 해야, 나라도 코드를 수정할 수 있겠다.”는 생각으로 리펙토링을 고려해보았습니다. 가장 먼저 각 로직을 분석하기 위해서 “일단 나누자”는 생각으로 접근하여, “관심사의 분리”를 이용한 경험을 이야기 해보려고 합니다.</p>
+<h1 id="본론" class="text-4xl font-bold text-foreground mb-4 w-full">본론</h1>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">본론의 내용 및 코드는 이해를 돕기 위해서 축약 및 과장되었을 수 있습니다.</p>
+</blockquote>
+<h2 id="관심사의-분리란" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">관심사의 분리란?</h2>
+<h3 id="정의" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">정의</h3>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ko.wikipedia.org/wiki/%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99" title="컴퓨터 과학">컴퓨터 과학</a>에서 <strong>관심사 분리</strong>(separation of concerns, <strong>SoC</strong>)는 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ko.wikipedia.org/wiki/%EC%BB%B4%ED%93%A8%ED%84%B0_%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8" title="컴퓨터 프로그램">컴퓨터 프로그램</a>을 구별된 부분으로 분리시키는 디자인 원칙으로, 각 부문은 개개의 관심사를 해결한다.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">간단하게 요약해보면, 관심사의 분리란 코드나 로직에서 관심을 가질 수 있는 부분을 분리시키는 것을 이야기합니다. 이렇게하면, 사람으로 하여금 단위 코드 혹은 로직당 받아들여야하는 정보의 양이 작아질 수 있기 때문에, 코드나 로직을 파악하기에 좀 더 쉽다는 느낌이 들 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">아래에 관심사의 분리 방법에 대해서 이야기할 것인데, 이름이 왜 Horizontal, Vertical인지 보다는 어떻게 직교하는지에 촛점을 두고 보면 이해하기 더 쉽습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">우선, 요리를 하는 로직에서 수평분할(Horizontal Separation)과 수직 분함(vertical Separation)에 대해서 이야기 해보겠습니다.</p>
+<h3 id="수평분할horizontal-separation" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">수평분할(Horizontal Separation)</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">수평분할은 만약에 라면을 끓인다고 가정하였을 때, 라면을 끓이는 행위를 아래와 같이 분할하는 것을 이야기합니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">라면을 끓인다.</li>
+</ul>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2">냄비를 준비한다.</li>
+<li class="mb-2">물을 끓인다.</li>
+<li class="mb-2">면을 넣는다.</li>
+<li class="mb-2">스프류를 넣는다.</li>
+<li class="mb-2">3~5분을 기다린다.</li>
+<li class="mb-2">완료 콜백을 보낸다.</li>
+</ol>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">라면은 내맘대로 끓였습니다. 이렇게 먹어도 맛있습니다. ㅡㅡ</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">위에서 보았듯이, 라면을 끓인다는 하나의 로직을 각 행위로 분할이 되어진 것을 볼 수 있습니다. 이제 실제 프로젝트에서는 어떻게 적용할 수 있는지를 한 번 살펴보겠습니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">상품을 구입하는 서비스를 만든다.</li>
+</ul>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2">UI</li>
+<li class="mb-2">Data</li>
+<li class="mb-2">Business Logic</li>
+<li class="mb-2">Resources</li>
+</ol>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 예시를 보시면, 상품을 구입하는 서비스를 구성하는 UI와 Data 그리고 Business Logic과 Resources들로 관심사를 분리한 것을 볼 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">만약에, 한 파일의 한 함수에 UI를 구성하고, Data를 조회 및 수정하며, 구입이 이루어지는 모든 Business Logic과 이미지와 같은 것들이 그냥 절차대로 추상화 없이 전부 나열되어있는 코드가 있다고 상상해보십시오.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">“안 분리 불안”이 오지 않을까요? 아마 분리하고 싶어서 불안하고 초조한 상태가 될 것입니다.</p>
+<h3 id="수직분할vertical-separation" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">수직분할(Vertical Separation)</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">수직분할도 요리로 예시를 들어보려고 하는데, 이 수직 분할은 아래와 같이 예시를 들 수 있습니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">라면을 끓이면서 햇반을 데웁니다. 그리고 출출함을 방지하기 위해서 햄버거 배달 주문을 하겠습니다.</li>
+<li class="mb-2">라면을 끓인다.</li>
+<li class="mb-2">햇반을 전자레인지에 데운다.</li>
+<li class="mb-2">햄버거를 배달 주문한다.</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">위에서 보았듯이, 배고플 때에는 정신없이 요리를 준비하기에 바쁩니다. 이해는 하지만, 저것들을 누군가에게 명령을 해야한다고 생각해보면, 듣는 입장에서는 또 “안 분리 불안”이 옵니다. 저는 위와 같이 하나의 요리씩 분리해서 명령을 내려주면 좋을 것 같습니다. 이와 같은 예시를 실제 프로젝트에서는 어떻게 적용할 수 있는지를 한 번 살펴보겠습니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">상품 구입을 하면서 같은 소비자들끼리 채팅을 할 수 있는 서비스를 만든다.</li>
+<li class="mb-2">상품을 구입하는 기능</li>
+<li class="mb-2">소비자의 정보를 조회하는 기능</li>
+<li class="mb-2">채팅 기능</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 예시를 보시면, 서비스에 많은 기능이 있습니다. 이 또한 상품을 조회하고, 상품을 선택하고 채팅 내용을 조회하거나 하는 모든 기능들이 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">renderChatableProductsPage()</code>라는 함수에 전부 절차대로 혹은 채팅 처럼 코드의 순서로는 파악하기 힘든 로직이 막 쓰여있다고 생각해 보겠습니다. “안 분리 불안”이 올 것 같습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">위 내용처럼 프로그래밍에서 관심사의 분리란, 한 행동을 여러 작은 행동으로 분할하거나, 여러 행동을 공통되는 행동끼리 분리하는 것을 이야기합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">사람은 컴퓨터와 마찬가지로 한 번에 받아들일 수 있는 정보에 제한이 있습니다. 분리되지 않은 코드는 사람이 한 번에 많은 양의 코드를 분석하도록 합니다. 하지만, 분리된 코드는 마치 Map 자료구조처럼 하나의 Key로 요약을 하여 정보를 받아들일 수 있습니다. 그렇기 때문에, 관심사의 분리는 프로그램의 성능보다는 사람이 읽고 파악하기 쉽게 하기 위해서 사용할 수 있습니다. 저는 꼭 필요한 원칙이라고 생각합니다.</p>
+<h2 id="리팩토링" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">리팩토링</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">관심사의 분리가 필요하다고 생각된 코드는 상품을 등록하기 위해서 상품 선택 다이얼로그를 띄우고, 상품을 여러개 선택하여 여러건을 한 번에 등록하여 거래 전표를 작성하는 기능이었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 기능의 코드를 각색하여 Before &amp; After로 표현해보겠습니다.</p>
+<h3 id="기존-코드의-문제점" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">기존 코드의 문제점</h3>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#B392F0"> onClick</span><span style="color:#F97583"> =</span><span style="color:#F97583"> async</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> config</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    closingDate: </span><span style="color:#9ECBFF">&#39;2020-12-31&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 상품 등록 마감일</span></span>
+<span class="line"><span style="color:#E1E4E8">    minOrderQuantity: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 최소 주문 수량</span></span>
+<span class="line"><span style="color:#E1E4E8">    maxOrderQuantity: </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 최대 주문 수량</span></span>
+<span class="line"><span style="color:#E1E4E8">    customerClosingData: </span><span style="color:#9ECBFF">&#39;2020-12-31&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 거래처 상품 등록 마감일</span></span>
+<span class="line"><span style="color:#E1E4E8">    stockQuantityMap: {</span></span>
+<span class="line"><span style="color:#79B8FF">      1</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      2</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      3</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    }, </span><span style="color:#6A737D">// 재고량 맵, key: 상품 id, value: 재고량</span></span>
+<span class="line"><span style="color:#E1E4E8">    limitAmount: </span><span style="color:#79B8FF">100000</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 총 금액 한도</span></span>
+<span class="line"><span style="color:#E1E4E8">    totalAmountNotation: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 총 금액 표기법 (소수점 2째 자리에서 반올림)</span></span>
+<span class="line"><span style="color:#E1E4E8">    vatNotation: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 부가세 표기법 (소수점 1째 자리에서 반올림)</span></span>
+<span class="line"><span style="color:#6A737D">    // 여러가지 설정들...</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> itemDialog</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> openItemDialog</span><span style="color:#E1E4E8">(config);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (itemDialog.result) {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> checkedItems</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> checkItems</span><span style="color:#E1E4E8">(itemDialog.items, config);</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (_.</span><span style="color:#B392F0">isEmpty</span><span style="color:#E1E4E8">(checkedItems)) {</span></span>
+<span class="line"><span style="color:#B392F0">      openToast</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;등록된 상품이 없습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">      // store에 상품을 등록한다.</span></span>
+<span class="line"><span style="color:#B392F0">      mutateDetail</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">      // 그리드에 상품을 등록한다.</span></span>
+<span class="line"><span style="color:#B392F0">      insertMultiRows</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">      // 등록된 상품에 포커스를 준다.</span></span>
+<span class="line"><span style="color:#B392F0">      focusItem</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">      reSortItems</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    openToast</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;등록된 상품이 없습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D"> * checkItems 함수는 아래와 같은 일을 한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 기존에 등록된 상품이 있는지 체크한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 상품 등록 기간이 마감되었는지 체크한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 거래처에서 상품등록을 마감했는지 체크한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 상품 수량이 재고량을 초과하였는지 체크한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 상품 등록 최대수량 및 최소 수량을 초과 혹은 미달하였는지 체크한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 총 상품의 가격이 최대 한도를 초과하였는지 체크한다.</span></span>
+<span class="line"><span style="color:#6A737D"> *</span></span>
+<span class="line"><span style="color:#6A737D"> * 상품의 총 금액에 사용자가 설정한 총 금액 표기법을 적용한다.</span></span>
+<span class="line"><span style="color:#6A737D"> * 상품의 부가세에 사용자가 설정한 부가세 표기법을 적용한다.</span></span>
+<span class="line"><span style="color:#6A737D"> */</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#B392F0"> checkItems</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">items</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[], </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> run </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  run </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">some</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    item.closingDate </span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> config.closingDate;</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">run) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  run </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">some</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    item.customerClosingDate </span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> config.customerClosingDate;</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">run) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  items </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    item.stockQuantity </span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> config.stockQuantityMap[item.id];</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (items.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> ===</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  run </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">some</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    item.totalAmount </span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> config.limitAmount;</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">run) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> totalAmount </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  items.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    totalAmount </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> totalAmount </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> item.totalAmount;</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (totalAmount </span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> config.limitAmount) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">map</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> ({</span></span>
+<span class="line"><span style="color:#F97583">    ...</span><span style="color:#E1E4E8">item,</span></span>
+<span class="line"><span style="color:#E1E4E8">    totalAmount: item.totalAmount.</span><span style="color:#B392F0">toFixed</span><span style="color:#E1E4E8">(config.totalAmountNotation),</span></span>
+<span class="line"><span style="color:#E1E4E8">    vat: item.vat.</span><span style="color:#B392F0">toFixed</span><span style="color:#E1E4E8">(config.vatNotation),</span></span>
+<span class="line"><span style="color:#E1E4E8">  }));</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">위 코드는 실제 코드를 요약한 것으로서, 더욱 복잡하였지만, 관심사의 분리의 필요성에 대해서 이야기하기에는 충분한 것 같습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">해당 코드는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">onClick</code>만 보았을 때에는, 심각하게 이해하기 힘들다는 생각이 들지는 않습니다. 하지만 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">checkItems</code>함수는 보게되면, 어떤 역할을 하는지, 어떤 변경이 일어나는지를 파악하기에 어렵습니다. 또한, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">checkItems</code>함수는 단순히 상품을 확인만 하는 것이 아니라, 값을 변경하고 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">물론 이 부분은 기획된 내용 조차도 너무 복잡합니다. 위에서 이야기하였던 마치 자료구조의 Map처럼 하나의 키로서 요약을 하더라도 키가 너무 많습니다. 하지만, 이 부분을 분리하여 코드를 이해하기 쉽게 만들 수 있습니다. (키가 많은건 어쩔 수 없더라고요..키ㅋ)</p>
+<h3 id="수정된-코드" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">수정된 코드</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">기존 코드의 문제점을 개선하기 위한 관심사의 분리를 적용한 수정된 코드입니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// 1. UI 업데이트 관련 코드를 별도의 함수로 분리</span></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> updateUIWithItems</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">checkedItems</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[]) {</span></span>
+<span class="line"><span style="color:#6A737D">  // 그리드에 상품을 등록한다.</span></span>
+<span class="line"><span style="color:#B392F0">  insertMultiRows</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"><span style="color:#6A737D">  // 등록된 상품에 포커스를 준다.</span></span>
+<span class="line"><span style="color:#B392F0">  focusItem</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"><span style="color:#6A737D">  // 상품을 재정렬한다.</span></span>
+<span class="line"><span style="color:#B392F0">  reSortItems</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 2. 상품 검증 로직을 별도의 함수로 분리</span></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> validateItems</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">items</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[], </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[] {</span></span>
+<span class="line"><span style="color:#6A737D">  // 상품 등록 기간, 거래처 마감일, 재고량, 최대 한도 체크 등의 복잡한 로직을 분리하여 처리</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> validItems</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#B392F0">      isWithinClosingDate</span><span style="color:#E1E4E8">(item, config) </span><span style="color:#F97583">&amp;&amp;</span></span>
+<span class="line"><span style="color:#B392F0">      isCustomerClosingDateValid</span><span style="color:#E1E4E8">(item, config) </span><span style="color:#F97583">&amp;&amp;</span></span>
+<span class="line"><span style="color:#B392F0">      isStockSufficient</span><span style="color:#E1E4E8">(item, config) </span><span style="color:#F97583">&amp;&amp;</span></span>
+<span class="line"><span style="color:#B392F0">      isQuantityValid</span><span style="color:#E1E4E8">(item, config) </span><span style="color:#F97583">&amp;&amp;</span></span>
+<span class="line"><span style="color:#B392F0">      isTotalAmountWithinLimit</span><span style="color:#E1E4E8">(item, config)</span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#E1E4E8">  });</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#B392F0"> applyNotationsToItems</span><span style="color:#E1E4E8">(validItems, config);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 3. 각 조건별 검증 로직을 더 작은 함수로 분리</span></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> isWithinClosingDate</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">item</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> item.closingDate </span><span style="color:#F97583">&lt;=</span><span style="color:#E1E4E8"> config.closingDate;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> isCustomerClosingDateValid</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">item</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> item.customerClosingDate </span><span style="color:#F97583">&lt;=</span><span style="color:#E1E4E8"> config.customerClosingDate;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> isStockSufficient</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">item</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> item.stockQuantity </span><span style="color:#F97583">&lt;=</span><span style="color:#E1E4E8"> config.stockQuantityMap[item.id];</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> isQuantityValid</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">item</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    item.orderQuantity </span><span style="color:#F97583">&gt;=</span><span style="color:#E1E4E8"> config.minOrderQuantity </span><span style="color:#F97583">&amp;&amp;</span></span>
+<span class="line"><span style="color:#E1E4E8">    item.orderQuantity </span><span style="color:#F97583">&lt;=</span><span style="color:#E1E4E8"> config.maxOrderQuantity</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> isTotalAmountWithinLimit</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">item</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> item.totalAmount </span><span style="color:#F97583">&lt;=</span><span style="color:#E1E4E8"> config.limitAmount;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 4. 금액 관련 표기법 적용 로직 분리</span></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> applyNotationsToItems</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">items</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[], </span><span style="color:#FFAB70">config</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[] {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> items.</span><span style="color:#B392F0">map</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">item</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> ({</span></span>
+<span class="line"><span style="color:#F97583">    ...</span><span style="color:#E1E4E8">item,</span></span>
+<span class="line"><span style="color:#E1E4E8">    totalAmount: item.totalAmount.</span><span style="color:#B392F0">toFixed</span><span style="color:#E1E4E8">(config.totalAmountNotation),</span></span>
+<span class="line"><span style="color:#E1E4E8">    vat: item.vat.</span><span style="color:#B392F0">toFixed</span><span style="color:#E1E4E8">(config.vatNotation),</span></span>
+<span class="line"><span style="color:#E1E4E8">  }));</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 5. 이벤트 핸들러에서 분리된 로직 사용</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#B392F0"> onClick</span><span style="color:#F97583"> =</span><span style="color:#F97583"> async</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> config</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    closingDate: </span><span style="color:#9ECBFF">&#39;2020-12-31&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 상품 등록 마감일</span></span>
+<span class="line"><span style="color:#E1E4E8">    minOrderQuantity: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 최소 주문 수량</span></span>
+<span class="line"><span style="color:#E1E4E8">    maxOrderQuantity: </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 최대 주문 수량</span></span>
+<span class="line"><span style="color:#E1E4E8">    customerClosingData: </span><span style="color:#9ECBFF">&#39;2020-12-31&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 거래처 상품 등록 마감일</span></span>
+<span class="line"><span style="color:#E1E4E8">    stockQuantityMap: {</span></span>
+<span class="line"><span style="color:#79B8FF">      1</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      2</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">      3</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    }, </span><span style="color:#6A737D">// 재고량 맵, key: 상품 id, value: 재고량</span></span>
+<span class="line"><span style="color:#E1E4E8">    limitAmount: </span><span style="color:#79B8FF">100000</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 총 금액 한도</span></span>
+<span class="line"><span style="color:#E1E4E8">    totalAmountNotation: </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 총 금액 표기법 (소수점 2째 자리에서 반올림)</span></span>
+<span class="line"><span style="color:#E1E4E8">    vatNotation: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">// 부가세 표기법 (소수점 1째 자리에서 반올림)</span></span>
+<span class="line"><span style="color:#6A737D">    // 여러가지 설정들...</span></span>
+<span class="line"><span style="color:#E1E4E8">  }; </span><span style="color:#6A737D">// 설정 객체는 동일하게 유지</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> itemDialog</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> openItemDialog</span><span style="color:#E1E4E8">(config);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (itemDialog.result) {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> checkedItems</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> validateItems</span><span style="color:#E1E4E8">(itemDialog.items, config);</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (_.</span><span style="color:#B392F0">isEmpty</span><span style="color:#E1E4E8">(checkedItems)) {</span></span>
+<span class="line"><span style="color:#B392F0">      openToast</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;등록된 상품이 없습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">      // store에 상품을 등록한다.</span></span>
+<span class="line"><span style="color:#B392F0">      mutateDetail</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"><span style="color:#6A737D">      // UI 업데이트</span></span>
+<span class="line"><span style="color:#B392F0">      updateUIWithItems</span><span style="color:#E1E4E8">(checkedItems);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    openToast</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;상품 선택이 취소되었습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 수정된 코드는 다음과 같은 방법으로 관심사를 분리하였습니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2"><strong>UI 업데이트</strong>: UI와 관련된 코드를 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">updateUIWithItems</code> 함수로 분리하여, 데이터 처리 로직과 분리시킵니다.</li>
+<li class="mb-2"><strong>상품 검증 로직</strong>: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">validateItems</code> 함수에서는 상품의 유효성 검증만을 수행합니다.</li>
+<li class="mb-2"><strong>검증 조건 분리</strong>: 각각의 검증 조건을 작은 함수로 분리하여, 각각의 검증 로직을 명확하게 합니다.</li>
+<li class="mb-2"><strong>금액 표기법 적용</strong>: 금액 표기법을 적용하는 로직을 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">applyNotationsToItems</code> 함수로 분리하여, 변환 로직의 책임을 명확히 합니다.</li>
+<li class="mb-2"><strong>이벤트 핸들링</strong>: 최종적으로 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">onClick</code> 이벤트 핸들러에서는 이러한 함수들을 호출하여, 각 함수가 독립적으로 관심사를 처리하도록 구성합니다.</li>
+</ol>
+<p class="text-foreground leading-relaxed mb-4 w-full">이벤트 핸들러에서는 이러한 함수들을 호출하여, 각 함수가 독립적으로 관심사를 처리하도록 구성합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이와 같이 코드를 작성함으로써 각 함수는 명확한 역할과 책임을 가지며, 수정 및 유지보수가 용이한 구조가 되었습니다.</p>
+<h1 id="결론" class="text-4xl font-bold text-foreground mb-4 w-full">결론</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 프로젝트의 리팩토링은 관심사의 분리 원칙을 적용하여 복잡한 코드베이스를 명확하고 관리 가능한 단위로 재구성하는 과정을 포함합니다. 기존 코드에서 분석한 문제점을 토대로, 개선 방향을 설정하고 구체적인 개선 사항을 실행하는 단계로 진행되었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">리팩토링을 통해 개선된 코드는 다음과 같은 장점을 가집니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2"><strong>가독성 향상</strong>: 함수와 모듈이 각각의 책임에 따라 분리되어, 코드를 이해하고 파악하기 쉬워졌습니다.</li>
+<li class="mb-2"><strong>유지보수 용이성</strong>: 작은 단위로 분할된 코드는 개별적으로 수정 및 확장이 용이하며, 버그 발생 시 추적과 수정이 간결해집니다.</li>
+<li class="mb-2"><strong>테스트 가능성 증가</strong>: 각 함수가 단일 책임을 가지므로, 단위 테스트를 통한 검증이 용이해집니다.</li>
+<li class="mb-2"><strong>재사용성</strong>: 공통 로직을 재사용 가능한 함수로 분리함으로써, 코드 중복을 줄이고 효율성을 높입니다.</li>
+</ol>
+<p class="text-foreground leading-relaxed mb-4 w-full">앞으로의 개발 과정에서도 이 원칙들을 유지하면서, 코드의 개선과 확장성을 위한 기반을 마련하려고 합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">최종적으로, 이 프로젝트에서 리팩토링을 통해 얻은 교훈은 단순히 코드의 성능 개선을 넘어서 개발자의 작업 효율성과 코드의 질적인 면에서의 향상에 기여한다는 것입니다. 따라서, 지속적인 리팩토링과 코드 품질 관리는 소프트웨어 개발의 핵심적인 부분임을 재확인할 수 있었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 프로젝트의 경험을 바탕으로, 향후 유사한 규모와 복잡성을 지닌 다른 프로젝트에서도 관심사의 분리와 같은 원칙들이 적극적으로 채택되어, 지속 가능하고 유연한 소프트웨어 아키텍처를 구축하는 데 도움이 되기를 기대합니다.</p>
+<h1 id="참조" class="text-4xl font-bold text-foreground mb-4 w-full">참조</h1>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://velog.io/@seanlion/soc1">https://velog.io/@seanlion/soc1</a></li>
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://kaki104.tistory.com/725">https://kaki104.tistory.com/725</a></li>
+</ul> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

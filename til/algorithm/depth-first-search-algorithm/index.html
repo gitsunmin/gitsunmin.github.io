@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>depth-first-search-algorithm - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="depth-first-search-algorithm" class="text-4xl font-bold text-foreground mb-4 w-full">Depth-First Search Algorithm</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">Depth-First Search Algorithm(=DFS)은 깊이 우선 탐색으로서, 자료구조인 Graph를 탐색하는 방법중 하나입니다.</p>
+<h2 id="grapgh" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">Grapgh</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">Graph는 아래의 도표와 같이 표현하는 자료구조이며, 동그라미를 정점(Vertex) 또는 노드(Node), 동그라미를 이어주는 선을 간선(Edge)이라고 표현합니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">flowchart LR</span></span>
+<span class="line"><span style="color:#E1E4E8">    A((A))</span></span>
+<span class="line"><span style="color:#E1E4E8">    B((B))</span></span>
+<span class="line"><span style="color:#E1E4E8">    C((C))</span></span>
+<span class="line"><span style="color:#E1E4E8">    D((D))</span></span>
+<span class="line"><span style="color:#E1E4E8">    E((E))</span></span>
+<span class="line"><span style="color:#E1E4E8">    F((F))</span></span>
+<span class="line"><span style="color:#E1E4E8">    G((G))</span></span>
+<span class="line"><span style="color:#E1E4E8">    H((H))</span></span>
+<span class="line"><span style="color:#E1E4E8">    I((I))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    A---B</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    B---D</span></span>
+<span class="line"><span style="color:#E1E4E8">    B---E</span></span>
+<span class="line"><span style="color:#E1E4E8">    D---E</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    A---C</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    C---F</span></span>
+<span class="line"><span style="color:#E1E4E8">    F---G</span></span>
+<span class="line"><span style="color:#E1E4E8">    G---H</span></span>
+<span class="line"><span style="color:#E1E4E8">    G---I</span></span>
+<span class="line"><span style="color:#E1E4E8">    I---C</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">프로그래밍 언어로서 표현하면 아래와 같이 표현할 수 있습니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>graph = {</span></span>
+<span class="line"><span>    &#39;A&#39;: [&#39;B&#39;, &#39;C&#39;],</span></span>
+<span class="line"><span>    &#39;B&#39;: [&#39;A&#39;, &#39;D&#39;, &#39;E&#39;],</span></span>
+<span class="line"><span>    &#39;C&#39;: [&#39;A&#39;, &#39;F&#39;, &#39;I&#39;],</span></span>
+<span class="line"><span>    &#39;D&#39;: [&#39;B&#39;, &#39;E&#39;],</span></span>
+<span class="line"><span>    &#39;E&#39;: [&#39;B&#39;, &#39;D&#39;],</span></span>
+<span class="line"><span>    &#39;F&#39;: [&#39;C&#39;, &#39;G&#39;],</span></span>
+<span class="line"><span>    &#39;G&#39;: [&#39;F&#39;, &#39;H&#39;, &#39;I&#39;],</span></span>
+<span class="line"><span>    &#39;H&#39;: [&#39;G&#39;],</span></span>
+<span class="line"><span>    &#39;I&#39;: [&#39;G&#39;, &#39;C&#39;]</span></span>
+<span class="line"><span>}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<h2 id="dfs" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">DFS</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">DFS는 위 Graph를 탐색하는 것이며, 이름 그대로 깊이를 우선적으로 탐색하는 방법입니다.
+시작 노드를 A로 하여 아래에 탐색 순서를 작성하였습니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2">시작 노드 A를 방문하고, 방문한 노드 목록에 추가합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A]</li>
+</ul>
+</li>
+<li class="mb-2">인접한 노드들 중 아직 방문하지 않은 노드를 찾아 이동합니다. 노드 A와 인접한 노드들은 B와 C입니다. 노드 B로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B]</li>
+</ul>
+</li>
+<li class="mb-2">노드 B와 인접한 노드들 중 아직 방문하지 않은 노드를 찾습니다. 인접한 노드들은 A, D, E입니다. 이미 방문한 노드 A를 제외하고 노드 D로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D]</li>
+</ul>
+</li>
+<li class="mb-2">노드 D와 인접한 노드들 중 아직 방문하지 않은 노드를 찾습니다. 인접한 노드들은 B와 E입니다. 이미 방문한 노드 B를 제외하고 노드 E로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D, E]</li>
+</ul>
+</li>
+<li class="mb-2">노드 E와 인접한 노드들 중 아직 방문하지 않은 노드를 찾습니다. 인접한 노드들은 B와 D이지만 이미 방문한 상태입니다. 이전 노드인 D로 돌아갑니다.</li>
+<li class="mb-2">노드 D에서 다시 인접한 노드 중 방문하지 않은 노드를 찾습니다. 이전에 확인한 노드 E를 제외하고 다른 노드가 없으므로, 더 이상 방문할 노드가 없습니다. 이전 노드인 B로 돌아갑니다.</li>
+<li class="mb-2">노드 B에서 인접한 노드 중 방문하지 않은 노드를 찾습니다. 이전에 확인한 노드 D와 E를 제외하고 다른 노드가 없으므로, 더 이상 방문할 노드가 없습니다. 이전 노드인 A로 돌아갑니다.</li>
+<li class="mb-2">노드 A에서 인접한 노드 중 방문하지 않은 노드를 찾습니다. 노드 C로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D, E, C]</li>
+</ul>
+</li>
+<li class="mb-2">노드 C와 인접한 노드 중 방문하지 않은 노드를 찾습니다. 인접한 노드들은 A, F, I입니다. 이미 방문한 노드 A를 제외하고 노드 F로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D, E, C, F]</li>
+</ul>
+</li>
+<li class="mb-2">노드 F와 인접한 노드 중 방문하지 않은 노드를 찾습니다. 인접한 노드들은 C와 G입니다. 이미 방문한 노드 C를 제외하고 노드 G로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D, E, C, F, G]</li>
+</ul>
+</li>
+<li class="mb-2">노드 G와 인접한 노드 중 방문하지 않은 노드를 찾습니다. 인접한 노드들은 F, H, I입니다. 이미 방문한 노드 F를 제외하고 노드 H로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D, E, C, F, G, H]</li>
+</ul>
+</li>
+<li class="mb-2">노드 H와 인접한 노드 중 방문하지 않은 노드를 찾습니다. 인접한 노드는 G뿐이며 이미 방문한 상태입니다. 이전 노드인 G로 돌아갑니다.</li>
+<li class="mb-2">노드 G에서 인접한 노드 중 방문하지 않은 노드를 찾습니다. 이전에 확인한 노드 F와 H를 제외하고 노드 I로 이동합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">방문한 노드: [A, B, D, E, C, F, G, H, I]</li>
+</ul>
+</li>
+<li class="mb-2">노드 I와 인접한 노드 중 방문하지 않은 노드를 찾습니다. 인접한 노드들은 G와 C이지만 이미 방문한 상태입니다. 이전 노드인 G로 돌아갑니다.</li>
+<li class="mb-2">노드 G에서 인접한 노드 중 방문하지 않은 노드를 찾습니다. 이미 확인한 노드들 F, H, I를 제외하고 다른 노드가 없으므로, 더 이상 방문할 노드가 없습니다. 탐색을 종료합니다.</li>
+</ol>
+<p class="text-foreground leading-relaxed mb-4 w-full">방문 순서를 숫자로 표기하여 아래와 같이 다시 Graph를 그려보았습니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">flowchart LR</span></span>
+<span class="line"><span style="color:#E1E4E8">    1((1))</span></span>
+<span class="line"><span style="color:#E1E4E8">    2((2))</span></span>
+<span class="line"><span style="color:#E1E4E8">    3((3))</span></span>
+<span class="line"><span style="color:#E1E4E8">    4((4))</span></span>
+<span class="line"><span style="color:#E1E4E8">    5((5))</span></span>
+<span class="line"><span style="color:#E1E4E8">    6((6))</span></span>
+<span class="line"><span style="color:#E1E4E8">    7((7))</span></span>
+<span class="line"><span style="color:#E1E4E8">    8((8))</span></span>
+<span class="line"><span style="color:#E1E4E8">    9((9))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    1---2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    2---3</span></span>
+<span class="line"><span style="color:#E1E4E8">    2---4</span></span>
+<span class="line"><span style="color:#E1E4E8">    3---4</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    1---5</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    5---6</span></span>
+<span class="line"><span style="color:#E1E4E8">    6---7</span></span>
+<span class="line"><span style="color:#E1E4E8">    7---8</span></span>
+<span class="line"><span style="color:#E1E4E8">    7---9</span></span>
+<span class="line"><span style="color:#E1E4E8">    9---5</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">DFS를 수행하는 javascript 코드를 작성하였습니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> graph</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">  A: [</span><span style="color:#9ECBFF">&#39;B&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;C&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  B: [</span><span style="color:#9ECBFF">&#39;A&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;D&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;E&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  C: [</span><span style="color:#9ECBFF">&#39;A&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;F&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;I&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  D: [</span><span style="color:#9ECBFF">&#39;B&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;E&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  E: [</span><span style="color:#9ECBFF">&#39;B&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;D&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  F: [</span><span style="color:#9ECBFF">&#39;C&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;G&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  G: [</span><span style="color:#9ECBFF">&#39;F&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;H&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;I&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  H: [</span><span style="color:#9ECBFF">&#39;G&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  I: [</span><span style="color:#9ECBFF">&#39;G&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;C&#39;</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> dfs</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">graph</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">startNode</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  function</span><span style="color:#B392F0"> explore</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">node</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">visited</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (visited.</span><span style="color:#B392F0">has</span><span style="color:#E1E4E8">(node)) {</span></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#E1E4E8"> visited;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> newVisited</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Set</span><span style="color:#E1E4E8">(visited);</span></span>
+<span class="line"><span style="color:#E1E4E8">    newVisited.</span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(node);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> neighbors</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> graph[node];</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> neighbors.</span><span style="color:#B392F0">reduce</span><span style="color:#E1E4E8">((</span><span style="color:#FFAB70">acc</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">neighbor</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#B392F0"> explore</span><span style="color:#E1E4E8">(neighbor, acc), newVisited);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> visited</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> explore</span><span style="color:#E1E4E8">(startNode, </span><span style="color:#F97583">new</span><span style="color:#B392F0"> Set</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> Array.</span><span style="color:#B392F0">from</span><span style="color:#E1E4E8">(visited);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> visitedOrder</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> dfs</span><span style="color:#E1E4E8">(graph, </span><span style="color:#9ECBFF">&#39;A&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(visitedOrder);</span></span>
+<span class="line"><span style="color:#6A737D">/** [&#39;A&#39;, &#39;B&#39;, &#39;D&#39;, &#39;E&#39;, &#39;C&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;, &#39;I&#39;] */</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

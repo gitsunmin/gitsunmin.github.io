@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>Flutter APP &amp; Widget Life Cycle - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="서론" class="text-4xl font-bold text-foreground mb-4 w-full">서론</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">Flutter는 세련된 UI와 뛰어난 성능을 제공하는 모바일 앱 개발 프레임워크입니다. APP과 Widget의 라이프사이클은 Flutter에서 앱의 행동과 성능을 이해하는 핵심요소입니다.</p>
+<h1 id="본론" class="text-4xl font-bold text-foreground mb-4 w-full">본론</h1>
+<h2 id="flutter-app-라이프사이클" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full"><strong>Flutter APP 라이프사이클</strong></h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">Flutter APP의 라이프사이클은 기본적으로 기기의 OS에 따라 결정됩니다. Android와 iOS 모두 APP의 상태 변화에 따른 이벤트를 발생시키는데, 이 이벤트들은 Flutter에서 특정 콜백 메서드를 통해 처리됩니다. 주요 라이프사이클 상태는 다음과 같습니다:</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><strong><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">inactive</code></strong>: APP이 활성 상태에서 벗어났지만 아직 메모리에 있습니다.</li>
+<li class="mb-2"><strong><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">paused</code></strong>: APP이 백그라운드로 이동하였으나, 아직 실행 중입니다.</li>
+<li class="mb-2"><strong><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">resumed</code></strong>: APP이 백그라운드에서 포그라운드로 돌아왔습니다.</li>
+<li class="mb-2"><strong><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">detached</code></strong>: APP이 종료되기 직전의 상태입니다.</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">각 상태는 APP의 생명주기 내에서 특정 시점에 발생하며, 해당 상태에 따라 APP의 동작과 자원 사용을 최적화할 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>예제 코드:</strong></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:flutter/material.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:logger/logger.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">final</span><span style="color:#E1E4E8"> logger </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Logger</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  printer</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> PrettyPrinter</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">void</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#B392F0">  runApp</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">const</span><span style="color:#79B8FF"> MyApp</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#79B8FF"> MyApp</span><span style="color:#F97583"> extends</span><span style="color:#79B8FF"> StatelessWidget</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> MyApp</span><span style="color:#E1E4E8">({</span><span style="color:#79B8FF">super</span><span style="color:#E1E4E8">.key});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#79B8FF">  Widget</span><span style="color:#B392F0"> build</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">BuildContext</span><span style="color:#E1E4E8"> context) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> MaterialApp</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">      title</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> &#39;Gitsunmin Service&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">      theme</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> ThemeData</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        primarySwatch</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Colors</span><span style="color:#E1E4E8">.blue,</span></span>
+<span class="line"><span style="color:#E1E4E8">        visualDensity</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> VisualDensity</span><span style="color:#E1E4E8">.adaptivePlatformDensity,</span></span>
+<span class="line"><span style="color:#E1E4E8">      ),</span></span>
+<span class="line"><span style="color:#E1E4E8">      home</span><span style="color:#F97583">:</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> MyHomePage</span><span style="color:#E1E4E8">(title</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> &#39;gitsunmin&#39;</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#79B8FF"> MyHomePage</span><span style="color:#F97583"> extends</span><span style="color:#79B8FF"> StatefulWidget</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> MyHomePage</span><span style="color:#E1E4E8">({</span><span style="color:#79B8FF">super</span><span style="color:#E1E4E8">.key, </span><span style="color:#F97583">required</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.title});</span></span>
+<span class="line"><span style="color:#F97583">  final</span><span style="color:#79B8FF"> String</span><span style="color:#E1E4E8"> title;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#79B8FF">  State</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">MyHomePage</span><span style="color:#E1E4E8">&gt; </span><span style="color:#B392F0">createState</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> _MyHomePageState</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#79B8FF"> _MyHomePageState</span><span style="color:#F97583"> extends</span><span style="color:#79B8FF"> State</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">MyHomePage</span><span style="color:#E1E4E8">&gt; </span><span style="color:#F97583">with</span><span style="color:#79B8FF"> WidgetsBindingObserver</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> initState</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">    //앱 상태 변경 이벤트 등록</span></span>
+<span class="line"><span style="color:#79B8FF">    WidgetsBinding</span><span style="color:#E1E4E8">.instance.</span><span style="color:#B392F0">addObserver</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">initState</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> dispose</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">    //앱 상태 변경 이벤트 해제</span></span>
+<span class="line"><span style="color:#6A737D">    //문제는 앱 종료시 dispose함수가 호출되지 않아 해당 함수를 실행 할 수가 없다.</span></span>
+<span class="line"><span style="color:#79B8FF">    WidgetsBinding</span><span style="color:#E1E4E8">.instance.</span><span style="color:#B392F0">removeObserver</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">dispose</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // 앱 상태 변경시 호출</span></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> didChangeAppLifecycleState</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">AppLifecycleState</span><span style="color:#E1E4E8"> state) {</span></span>
+<span class="line"><span style="color:#F97583">    switch</span><span style="color:#E1E4E8"> (state) {</span></span>
+<span class="line"><span style="color:#F97583">      case</span><span style="color:#79B8FF"> AppLifecycleState</span><span style="color:#E1E4E8">.inactive</span><span style="color:#F97583">:</span></span>
+<span class="line"><span style="color:#6A737D">        // 앱이 비활성화 되었을때</span></span>
+<span class="line"><span style="color:#E1E4E8">        logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;inactive&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">      case</span><span style="color:#79B8FF"> AppLifecycleState</span><span style="color:#E1E4E8">.resumed</span><span style="color:#F97583">:</span></span>
+<span class="line"><span style="color:#6A737D">        // 앱이 재개 되었을때</span></span>
+<span class="line"><span style="color:#E1E4E8">        logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;resumed&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">      case</span><span style="color:#79B8FF"> AppLifecycleState</span><span style="color:#E1E4E8">.paused</span><span style="color:#F97583">:</span></span>
+<span class="line"><span style="color:#6A737D">        // 앱이 일시정지 되었을때</span></span>
+<span class="line"><span style="color:#E1E4E8">        logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;paused&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">      case</span><span style="color:#79B8FF"> AppLifecycleState</span><span style="color:#E1E4E8">.detached</span><span style="color:#F97583">:</span></span>
+<span class="line"><span style="color:#6A737D">        // 앱이 종료되었을때</span></span>
+<span class="line"><span style="color:#E1E4E8">        logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;detached&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        break</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#79B8FF">  Widget</span><span style="color:#B392F0"> build</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">BuildContext</span><span style="color:#E1E4E8"> context) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> Scaffold</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">      appBar</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> AppBar</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        title</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Text</span><span style="color:#E1E4E8">(widget.title),</span></span>
+<span class="line"><span style="color:#E1E4E8">      ),</span></span>
+<span class="line"><span style="color:#E1E4E8">      body</span><span style="color:#F97583">:</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> Center</span><span style="color:#E1E4E8">(child</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> Text</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;Test WidgetsBindingObserver.&quot;</span><span style="color:#E1E4E8">)),</span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<h2 id="flutter-widget-라이프사이클" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full"><strong>Flutter Widget 라이프사이클</strong></h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">Flutter Widget의 라이프사이클은 Widget의 생성부터 소멸까지의 과정을 설명합니다. 주요 메서드는 다음과 같습니다:</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><strong>createState()</strong>: StatefulWidget이 생성될 때 호출되며, State 객체를 생성합니다.</li>
+<li class="mb-2"><strong>initState()</strong>: State 객체의 초기화가 일어나는 메서드입니다.</li>
+<li class="mb-2"><strong>didChangeDependencies()</strong>: Widget이 부모 Widget으로부터 데이터를 받거나, 외부 데이터 소스와의 연결이 필요할 때 호출됩니다.</li>
+<li class="mb-2"><strong>build()</strong>: Widget을 화면에 그리기 위한 메서드입니다.</li>
+<li class="mb-2"><strong>didUpdateWidget()</strong>: 부모 Widget으로부터 새로운 설정을 받았을 때 호출됩니다.</li>
+<li class="mb-2"><strong>setState()</strong>: 데이터 변경을 통해 UI를 갱신할 필요가 있을 때 호출됩니다. 이 메서드를 호출하면 Widget은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">dirty</code> 상태가 되어 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">build()</code>가 다시 호출됩니다.</li>
+<li class="mb-2"><strong>deactivate()</strong>: Widget이 위젯 트리에서 제거될 준비가 되면 호출됩니다.</li>
+<li class="mb-2"><strong>dispose()</strong>: Widget의 생명주기가 종료되고 메모리에서 해제될 준비가 되면 호출됩니다.</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">dirty</code>와 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">clean</code> 개념: Widget은 그려질 준비가 되었을 때 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">clean</code> 상태입니다. 하지만 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">setState()</code>를 호출하면 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">dirty</code> 상태가 되어 다시 그려질 필요가 생깁니다. <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">build()</code> 메서드가 호출된 후에는 Widget은 다시 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">clean</code> 상태가 됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>예제 코드:</strong></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:flutter/material.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:logger/logger.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">final</span><span style="color:#E1E4E8"> logger </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> Logger</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  printer</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> PrettyPrinter</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#79B8FF"> LifecycleWidget</span><span style="color:#F97583"> extends</span><span style="color:#79B8FF"> StatefulWidget</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> LifecycleWidget</span><span style="color:#E1E4E8">({</span><span style="color:#79B8FF">super</span><span style="color:#E1E4E8">.key});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#79B8FF">  State</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">LifecycleWidget</span><span style="color:#E1E4E8">&gt; </span><span style="color:#B392F0">createState</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> _LifecycleWidgetState</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#79B8FF"> _LifecycleWidgetState</span><span style="color:#F97583"> extends</span><span style="color:#79B8FF"> State</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">LifecycleWidget</span><span style="color:#E1E4E8">&gt; {</span></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> initState</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">initState</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;initState() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> didChangeDependencies</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">didChangeDependencies</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;didChangeDependencies() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#79B8FF">  Widget</span><span style="color:#B392F0"> build</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">BuildContext</span><span style="color:#E1E4E8"> context) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;build() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> IconButton</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">      icon</span><span style="color:#F97583">:</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> Icon</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">Icons</span><span style="color:#E1E4E8">.add),</span></span>
+<span class="line"><span style="color:#E1E4E8">      onPressed</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () {</span></span>
+<span class="line"><span style="color:#B392F0">        setState</span><span style="color:#E1E4E8">(() {</span></span>
+<span class="line"><span style="color:#6A737D">          // Widget becomes dirty</span></span>
+<span class="line"><span style="color:#E1E4E8">          logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;setState() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">      },</span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> didUpdateWidget</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">covariant</span><span style="color:#79B8FF"> LifecycleWidget</span><span style="color:#E1E4E8"> oldWidget) {</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">didUpdateWidget</span><span style="color:#E1E4E8">(oldWidget);</span></span>
+<span class="line"><span style="color:#E1E4E8">    logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;didUpdateWidget() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> deactivate</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">deactivate</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;deactivate() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  @override</span></span>
+<span class="line"><span style="color:#F97583">  void</span><span style="color:#B392F0"> dispose</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">    super</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">dispose</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    logger.</span><span style="color:#B392F0">d</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;dispose() called&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<h1 id="결론" class="text-4xl font-bold text-foreground mb-4 w-full">결론</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">Flutter의 APP과 Widget 라이프사이클은 앱의 성능과 사용자 경험을 최적화하는 데 중요한 역할을 합니다. 이를 통해 Flutter 앱 개발 시 앱의 동작을 더 잘 이해하고 최적화 할 수 있습니다.</p>
+<h1 id="참조" class="text-4xl font-bold text-foreground mb-4 w-full">참조</h1>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">Flutter 공식 문서: <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://flutter.dev/docs">Flutter Docs</a></li>
+<li class="mb-2">Flutter App Lifecycles: <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://api.flutter.dev/flutter/dart-ui/AppLifecycleState.html">Flutter App Lifecycle</a></li>
+<li class="mb-2">Flutter Widget Lifecycle: <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://api.flutter.dev/flutter/widgets/State-class.html">Flutter Widget Lifecycle</a></li>
+</ul> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

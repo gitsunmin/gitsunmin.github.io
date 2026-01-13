@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>sounds-and-recording-on-web - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="sounds-and-recording-on-web" class="text-4xl font-bold text-foreground mb-4 w-full">Sounds and Recording on Web</h1>
+<hr/>
+<h2 id="1-소리의-본질-파형waveform" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">1. 소리의 본질: 파형(Waveform)</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">소리는 공기의 압력 변화가 시간에 따라 전파되는 **파동(wave)**이다.</li>
+<li class="mb-2">디지털로는 시간에 따른 진폭(Amplitude)으로 표현된다.</li>
+<li class="mb-2"><strong>Waveform</strong>은 소리의 시간 축과 진폭 축을 표현한 가장 기본적인 시각화 방식이다.</li>
+<li class="mb-2">주기(Frequency)가 짧을수록 높은 음, 길수록 낮은 음을 의미한다.</li>
+</ul>
+<hr/>
+<h2 id="2-주파수-분석-푸리에-변환-fourier-transform" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">2. 주파수 분석: 푸리에 변환 (Fourier Transform)</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">복잡한 파형을 단순한 주파수 성분들의 조합으로 분해하는 수학적 도구이다.</li>
+<li class="mb-2">**FFT(Fast Fourier Transform)**는 이를 빠르게 계산할 수 있는 알고리즘이다.</li>
+<li class="mb-2">**주파수 스펙트럼(Spectrum)**은 각 주파수 대역에 얼마나 강한 에너지가 존재하는지를 시각화한다.</li>
+<li class="mb-2">Web Audio API의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">AnalyserNode.getByteFrequencyData()</code>로 구현 가능하다.</li>
+</ul>
+<hr/>
+<h2 id="3-시간--주파수-스펙트로그램-spectrogram" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">3. 시간 + 주파수: 스펙트로그램 (Spectrogram)</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">스펙트럼을 시간 축에 따라 변화하는 형태로 표현한 시각화 방법.</li>
+<li class="mb-2">x축: 시간 / y축: 주파수 / 색상: 에너지 또는 볼륨</li>
+<li class="mb-2">소리의 세부 구조나 감정적 특징 분석에 유용함.</li>
+<li class="mb-2">음성 인식, 새소리 분류, 음악 분류 등의 ML 분야에서 활용됨.</li>
+</ul>
+<hr/>
+<h2 id="4-음의-높이pitch-표현" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">4. 음의 높이(Pitch) 표현</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">음의 높이는 **기본 주파수(Fundamental Frequency)**에 의해 결정됨.</li>
+<li class="mb-2">A4는 440Hz, 반음마다 2^(1/12)씩 차이 남.</li>
+<li class="mb-2">Pitch Detection 알고리즘: Autocorrelation, YIN, Harmonic Product Spectrum 등</li>
+<li class="mb-2">실제 구현 시 Web Audio API의 주파수 분석 + 커스텀 알고리즘을 결합</li>
+</ul>
+<hr/>
+<h2 id="5-볼륨에너지-표현" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">5. 볼륨/에너지 표현</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">소리의 크기는 RMS(Root Mean Square) 등의 수학적 계산으로 나타냄</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">AnalyserNode.getByteTimeDomainData()</code>도 사용 가능</li>
+<li class="mb-2">실시간 볼륨 바, LED Meter 구현에 활용</li>
+</ul>
+<hr/>
+<h2 id="6-웹-시각화-구현-예시-web-audio-api" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">6. 웹 시각화 구현 예시 (Web Audio API)</h2>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> analyser</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> audioContext.</span><span style="color:#B392F0">createAnalyser</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">analyser.fftSize </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 2048</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> dataArray</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Uint8Array</span><span style="color:#E1E4E8">(analyser.frequencyBinCount);</span></span>
+<span class="line"><span style="color:#E1E4E8">analyser.</span><span style="color:#B392F0">getByteFrequencyData</span><span style="color:#E1E4E8">(dataArray);</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">위 데이터를 기반으로 Canvas나 SVG로 시각화 가능</li>
+<li class="mb-2">주파수 막대, 파형 애니메이션 등 구현 가능</li>
+</ul>
+<hr/>
+<h2 id="7-관련-이론-및-키워드-정리" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">7. 관련 이론 및 키워드 정리</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>분야</th><th>키워드</th></tr></thead><tbody><tr><td>신호 처리</td><td>FFT, STFT, Windowing</td></tr><tr><td>음향학</td><td>Frequency, Amplitude, Phase</td></tr><tr><td>청각 이론</td><td>Equal-loudness curve, Mel scale</td></tr><tr><td>음악 이론</td><td>Pitch, Timbre, Overtones</td></tr><tr><td>ML 활용</td><td>MFCC, Spectrograms, CNN</td></tr></tbody></table>
+<hr/>
+<h2 id="8-추천-라이브러리도구" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">8. 추천 라이브러리/도구</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Tone.js</code> : 음악 시퀀싱, 신디사이저 기능까지 포함한 Web Audio 라이브러리</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Howler.js</code> : 오디오 재생 중심의 견고한 JS 라이브러리</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">use-sound</code> : React에서 Howler.js 기반의 훅 제공</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">p5.sound</code> : 시각화와 함께 배우기에 유용</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Sonic Visualiser</code> : 실제 오디오 데이터를 시각화할 수 있는 툴</li>
+</ul>
+<hr/> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

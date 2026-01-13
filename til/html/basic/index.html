@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>basic - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="basic" class="text-4xl font-bold text-foreground mb-4 w-full">Basic</h1>
+<h2 id="html의-구조" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">HTML의 구조</h2>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">&gt;my name is sunmin.&lt;/</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">&gt;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">위 태그에서 p를 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;&gt;</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;/&gt;</code>로 감싸는 것을 <strong>태그</strong>라고 한다.</li>
+<li class="mb-2">첫 번째 태그는 <strong>시작 태그(Opening tag)</strong>, 두 번째 태그는 **종료 태그(Closing tag)**라고 한다.</li>
+<li class="mb-2">‘my name is sunmin.‘은 **내용(Content)**이라고 한다.</li>
+<li class="mb-2">태그와 내용을 합쳐 **요소(Element)**라고 한다.</li>
+<li class="mb-2">요소는 **요소 이름(Element name)**과 **속성(Attribute)**으로 구성된다.</li>
+<li class="mb-2">요소 이름은 **태그 이름(Tag name)**이라고도 한다.</li>
+<li class="mb-2">요소 이름과 속성은 <strong>대소문자를 구분하지 않는다</strong>. (HTML5에서는 소문자로 통일)</li>
+<li class="mb-2">몇몇 요소는 <strong>종료 태그가 없다</strong>. (예: br, hr, img)</li>
+<li class="mb-2">요소는 **중첩(Nesting)**될 수 있다.</li>
+<li class="mb-2">요소는 <strong>중첩되는 순서가 중요하다</strong>.</li>
+<li class="mb-2">요소는 <strong>중첩되는 순서에 따라 의미가 달라진다</strong>.</li>
+<li class="mb-2">요소는 <strong>중첩되는 순서에 따라 브라우저에 표시되는 모습이 달라진다</strong>.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">예: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;strong&gt;&lt;em&gt;안녕하세요&lt;/em&gt;&lt;/strong&gt;</code> vs <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;em&gt;&lt;strong&gt;안녕하세요&lt;/strong&gt;&lt;/em&gt;</code></li>
+<li class="mb-2">전자는 <strong>굵은 글씨로 강조</strong>되고, 후자는 <strong>기울임꼴로 강조</strong>된다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="glossary" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">Glossary</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><em>메타데이터</em>: 데이터를 설명하는 데이터 예를 들어, HTML은 데이터입니다. 그리고 HTML의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;head&gt;</code> 안에는 문서 작성자나 문서 요약과 같이 문서를 설명하는 데이터, 즉 메타데이터를 넣을 수 있습니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">Global attributes: 모든 HTML 요소에 사용할 수 있는 속성</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">evnet-handler: 이벤트 핸들러 속성은 이벤트가 발생했을 때 실행할 스크립트를 지정합니다.</li>
+<li class="mb-2">accesskey: 요소에 키보드 단축키를 지정합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;button accesskey=&quot;b&quot;&gt;버튼&lt;/button&gt;</code></li>
+<li class="mb-2">운영체제, 브라우저에 따라 단축키를 사용하는 방법이 다릅니다.</li>
+<li class="mb-2">예시로서 Mac + Chrome에서는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">control + option + b</code>를 누르면 버튼 클릭 이벤트와 동일한 이벤트가 발생합니다.</li>
+</ul>
+</li>
+<li class="mb-2">id: 요소의 고유한 식별자를 나타냅니다.</li>
+<li class="mb-2">class: 요소의 클래스를 나타냅니다.</li>
+<li class="mb-2">style: 요소에 적용할 CSS 스타일을 나타냅니다.</li>
+<li class="mb-2">title: 요소와 관련된 추가 정보를 나타냅니다.</li>
+<li class="mb-2">lang: 요소의 언어를 나타냅니다.</li>
+<li class="mb-2">…</li>
+</ul>
+</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes">책깔피</a></p>
+<h2 id="tags" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">Tags</h2>
+<h4 id="doctype-html" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;!DOCTYPE html&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 태그는 html파일의 가장 첫 줄에 위치해야 하며, doctype은 자동 오류 확인이나 다른 유용한 것을 의미하는 좋은 HTML로 인정받기 위해 HTML 페이지가 따라야 할 일련의 규칙으로의 연결통로로써 작동하는 것을 의미하였습니다.</p>
+<h4 id="htmlhtml" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;html&gt;&lt;/html&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 페이지 전체의 콘텐츠를 감싸며, 루트(root) 요소라고도 합니다.</p>
+<h5 id="속성" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">속성</h5>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">lang: 이 lang 속성은 스크린 리더와 같은 보조 기술을 사용하는 사람들에게 문서가 어떤 언어로 작성되었는지 알려주며, 검색 엔진에게도 도움이 됩니다.</li>
+</ul>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">html</span><span style="color:#B392F0"> lang</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;ko&quot;</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  ...</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">&gt;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 외에도 manifest, xmlns, xmlns:xlink 등의 속성이 있지만, 최근에는 사용되지 않는 속성들이므로 생략하도록 하겠습니다.</p>
+<h4 id="headhead" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;head&gt;&lt;/head&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 문서에 대한 메타데이터를 포함하며, 문서 제목, 스크립트, 스타일 시트, 기타 메타 정보를 포함할 수 있습니다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">참고: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;head&gt;</code>의 주 목적은 기계 처리를 위한 정보이고, 사람이 읽을 수 있는 정보가 아닙니다. 최상위 제목, 작성자 목록 등 사람에게 보여야 할 정보는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;header&gt;</code> 요소를 사용하세요.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">또힌. 사용되는 문서가 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;iframe&gt;</code>, srcdoc 문서거나, 제목 정보가 더 높은 단계의 규약에 존재하는 경우(HTML 이메일의 제목처럼) 0개 이상의 메타에이터 콘텐츠.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이외에는 하나 이상의 메타데이터 콘텐츠. 단, 정확히 한 개의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;title&gt;</code> 요소를 포함해야 합니다.</p>
+<h5 id="속성-1" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">속성</h5>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">profile: 이 profile 속성은 문서에 대한 프로필 링크를 정의합니다. 이 속성은 더 이상 사용되지 않으며, 대신 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;link rel=&quot;profile&quot;&gt;</code>을 사용하세요.</li>
+</ul>
+<h5 id="example" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">Example</h5>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">&lt;!</span><span style="color:#85E89D">DOCTYPE</span><span style="color:#B392F0"> html</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  &lt;</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">&gt;문서 제목&lt;/</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  &lt;/</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">&lt;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">&gt;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<h4 id="meta" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;meta&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">HTML <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;meta&gt;</code> 요소는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">html</code>문서의 <em>메타데이터</em>를 나타냅니다.</p>
+<h5 id="속성-2" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">속성</h5>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">charset: 페이지의 문자 인코딩을 선언합니다. 이 특성이 존재할 경우, 그 값은 반드시 문자열 “utf-8”의 대소문자 구분 없는 ASCII 표현이어야 합니다.</li>
+<li class="mb-2">name: 메타 요소가 어떤 정보의 형태를 갖고 있는지 알려줍니다.</li>
+<li class="mb-2">content: 실제 메타데이터의 컨텐츠입니다.</li>
+</ul>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">facebook에서는 더 풍부한 메타데이터를 사용하기 위해서 아래와 같은 프로토콜을 사용하고 있습니다.</p>
+</blockquote>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ogp.me/">Open Graph Data</a></li>
+</ul>
+<h4 id="titletitle" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;title&gt;&lt;/title&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 문서의 제목을 정의합니다. 제목은 브라우저의 제목 표시줄이나 페이지의 탭에 표시됩니다. 또한 검색 엔진의 결과 페이지에 표시됩니다.</p>
+<h4 id="link" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;link&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;head/&gt;</code> 내부에 선언되며, 현재 문서와 외부 리소스의 관계를 정의합니다. 파비콘, 스타일 시트, 스크립트 등을 연결할 때 사용합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">아래의 예시는 파비콘을 연결하는 예시입니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">link</span><span style="color:#B392F0"> rel</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;shortcut icon&quot;</span><span style="color:#B392F0"> href</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;favicon.ico&quot;</span><span style="color:#B392F0"> type</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;image/x-icon&quot;</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#B392F0">  sizes</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;16x16 32x32&quot;</span></span>
+<span class="line"><span style="color:#E1E4E8">/&gt;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">아래 예시는 스타일 시트를 연결하는 예시입니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">link</span><span style="color:#B392F0"> rel</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;stylesheet&quot;</span><span style="color:#B392F0"> href</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;styles.css&quot;</span><span style="color:#E1E4E8"> /&gt;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">아래 예시는 자바스크립트를 연결하는 예시입니다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">&lt;</span><span style="color:#85E89D">link</span><span style="color:#B392F0"> rel</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;preload&quot;</span><span style="color:#B392F0"> href</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;script.js&quot;</span><span style="color:#B392F0"> as</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">&quot;script&quot;</span><span style="color:#E1E4E8"> /&gt;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<h5 id="속성-3" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">속성</h5>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">rel: 현재 문서와 링크된 문서 사이의 관계를 나타냅니다.</li>
+<li class="mb-2">href: 링크된 리소스의 URL을 나타냅니다.</li>
+<li class="mb-2">type: 링크된 리소스의 MIME 타입을 나타냅니다.</li>
+<li class="mb-2">sizes: 링크된 리소스의 크기를 나타냅니다.</li>
+<li class="mb-2">as: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;link&gt;</code> 요소에 rel=“preload” 또는 rel=“modulepreload” 특성을 지정했을 때만 사용합니다 as 특성은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;link&gt;</code> 요소가 불러오는 콘텐츠의 유형을 지정합니다. 요청 매칭, 올바른 콘텐츠 보안 정책의 적용, 올바른 Accept 요청 헤더 적용에 필요합니다. 이에 더해, rel=“preload”는 as 특성을 사용해 요청 우선순위를 매깁니다. 다음 표는 특성의 유효한 값과, 해당 값이 적용되는 요소 또는 리소스를 나열합니다.</li>
+<li class="mb-2">crossorigin: 리소스를 가져올 때 CORS를 사용해야 하는지 나타내는 열거형 특성입니다. CORS 활성화 이미지는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;canvas&gt;</code> 요소를 “오염”(taint)시키지 않고 재사용할 수 있습니다. 가능한 값은 다음과 같습니다.</li>
+<li class="mb-2">anonymous, use-credentials: 교차 출처 요청(Origin HTTP 헤더를 가진 요청)을 수행하지만 인증 정보, 즉 쿠키, X.509 인증서, HTTP Basic 인증 중 어떠한 것도 전송하지 않습니다. 서버에서 Access-Control-Allow-Origin HTTP 헤더를 설정하지 않아서 출처 사이트에 인증 정보를 전달하지 않으면 리소스가 오염되어 사용처가 제한됩니다.</li>
+<li class="mb-2">hreflang: 연결할 리소스가 사용하는 언어입니다. 오직 제안하는 용도로만 사용합니다. 가능한 값은 RFC 5646(BCP 47)에 따릅니다. href 특성이 존재할 때만 사용하세요.</li>
+<li class="mb-2">imagesizes: rel=“preload” 와 as=“image” 에 한하여, imagesizes 특성은 img 요소에 사용되는 적절한 리소스를 해당 srcset 과 sizes 특성으로 preload 하도록 하는 크기 특성입니다.</li>
+<li class="mb-2">imagesrcset: rel=“preload” 와 as=“image” 에 한하여, imagesrcset 특성은 img 요소에 사용되는 적절한 리소스를 해당 srcset 과 sizes 특성으로 preload 하도록 하는 소스 세트 특성입니다.</li>
+<li class="mb-2">integrity: 인라인 메타데이터를 포함합니다. 브라우저에게 가져오도록 지시하려는 리소스(파일)의 Base64로 인코딩된 암호학적 해시입니다. 이를 이용해 브라우저는 가져온 리소스가 예기치 못한 조작 없이 전달되었는지 확인할 수 있습니다. 하위 리소스 무결성을 참고하십시오.</li>
+<li class="mb-2">referrerpolicy:
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">no-referrer 는 Referer 헤더가 전달되지 않을 것을 의미합니다.</li>
+<li class="mb-2">no-referrer-when-downgrade 는 TLS (HTTPS) 없이 출처로 이동할 때 Referer 헤더가 전달되지 않을 것을 의미합니다. 이것은 따로 지정한 정책이 없는 경우의 사용자 에이전트 기본 동작입니다.</li>
+<li class="mb-2">origin 은 레퍼러가 페이지의 출처(대략적으로 scheme, host, port)가 됨을 의미합니다.</li>
+<li class="mb-2">origin-when-cross-origin 은 다른 출처로의 이동이 scheme, host, port로 제한되며, 같은 출처로의 이동에는 레퍼러의 경로가 포함됨을 의미합니다.</li>
+<li class="mb-2">unsafe-url 은 레퍼러에 출처와 경로 (fragment, password, username은 제외)가 포함됨을 의미합니다. 이 경우 TLS로 보호된 리소스의 출처와 경로가 안전하지 않은 출처로 유출될 수 있으므로 안전하지 않습니다.</li>
+</ul>
+</li>
+<li class="mb-2">media: 연결할 리소스가 사용하는 미디어나 장치를 나타냅니다. 이 특성은 rel=“stylesheet” 일 때만 사용합니다. 이 특성을 사용해 미디어 유형이나 쿼리를 지정할 수도 있습니다. 그러면 해당 미디어 조건을 만족할 때만 리소스를 불러옵니다.</li>
+<li class="mb-2">title: title 특성은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;link&gt;</code> 요소에서 특수한 의미를 가집니다. rel=“stylesheet” 에 사용되었을 경우, title은 기본 혹은 대체 스타일시트를 정의합니다.</li>
+</ul>
+<h4 id="bodybody" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;body&gt;&lt;/body&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 문서의 본문을 나타냅니다. 브라우저는 이 요소의 콘텐츠 즉, 보여지는 부분을 표시합니다. 그렇기 때문에, 보여지는 부분의 전역적인 콜백을 정의하는 것이 가능합니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">onafterprint
+사용자가 문서를 출력한 뒤 호출할 함수.</li>
+<li class="mb-2">onbeforeprint
+사용자가 문서 출력을 요청했을 때 호출할 함수.</li>
+<li class="mb-2">onblur
+문서가 포커스를 상실했을 때 호출할 함수.</li>
+<li class="mb-2">onerror
+문서를 제대로 불러오지 못했을 때 호출할 함수.</li>
+<li class="mb-2">onfocus
+문서가 포커스를 받을 때 호출할 함수.</li>
+<li class="mb-2">onhashchange
+문서의 현재 주소 중 Fragment identifier part(해시(’#’) 문자로 시작)가 변경됐을 때 호출할 함수.</li>
+<li class="mb-2">onlanguagechange Experimental
+선호 언어 변경 시 호출할 함수.</li>
+<li class="mb-2">onload
+문서를 다 불러왔을 때 호출할 함수.</li>
+<li class="mb-2">onmessage
+문서가 메시지를 받았을 때 호출할 함수.</li>
+<li class="mb-2">onoffline
+네트워크 연결이 끊겼을 때 호출할 함수.</li>
+<li class="mb-2">ononline
+네트워크 연결을 복구했을 때 호출할 함수.</li>
+<li class="mb-2">onpopstate
+사용자가 세션 기록을 따라 이동했을 때 호출할 함수.</li>
+<li class="mb-2">onundo
+사용자가 되돌리기 변경 기록(undo transaction history)에서 이전으로 이동했을 때 호출할 함수.</li>
+<li class="mb-2">onredo
+사용자가 되돌리기 변경 기록(undo transaction history)에서 다시 이후로 이동했을 때 호출할 함수.</li>
+<li class="mb-2">onresize
+문서의 크기가 바뀔 때 호출할 함수.</li>
+<li class="mb-2">onstorage
+저장 영역이 변경되었을 때 호출할 함수.</li>
+<li class="mb-2">onunload
+문서를 처분(unload) 중일 때 호출할 함수.</li>
+</ul>
+<h4 id="h1-2-3-4-5-6h1-2-3-4-5-6" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;h1, 2, 3, 4, 5, 6&gt;&lt;/h1, 2, 3, 4, 5, 6&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 문서의 섹션 제목을 나타냅니다. <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;h1&gt;</code>은 가장 중요한 제목을 나타내며, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;h6&gt;</code>은 가장 낮은 수준의 제목을 나타냅니다.</p>
+<h4 id="img" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;img&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 이미지를 문서에 삽입합니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">src: 이미지의 URL을 나타냅니다.</li>
+<li class="mb-2">alt: 이미지를 불러오지 못 할 경우에 대체 텍스트를 나타냅니다.</li>
+<li class="mb-2">width: 이미지의 너비를 나타냅니다.</li>
+<li class="mb-2">height: 이미지의 높이를 나타냅니다.</li>
+<li class="mb-2">srcset: 같은 비율의 다양한 크기를 가지는 동일 이미지들을 최소 2개 이상 명시하는 속성
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">브라우저에 이미지 선택권을 위임하는 속성</li>
+<li class="mb-2">뷰포트의 크기에 따라 다른 이미지를 보여주는 것을 가능하게 합니다.</li>
+<li class="mb-2">브라우저가 지원하지 않는 경우에는 src 속성을 사용합니다.</li>
+<li class="mb-2">브라우저가 srcset을 지원하지 않는 경우에는 src 속성을 사용합니다.</li>
+<li class="mb-2">예를들면, 이렇게 사용하면 됩니다. <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;img src=&quot;small.jpg&quot; srcset=&quot;medium.jpg 1000w, large.jpg 2000w&quot; alt=&quot;A rad wolf&quot;&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">sizes: 이미지의 크기를 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;img src=&quot;small.jpg&quot; sizes=&quot;(max-width: 600px) 200px, (max-width: 1000px) 400px, 800px&quot; alt=&quot;A rad wolf&quot;&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">crossorigin: 이미지를 가져올 때 CORS를 사용할지 여부를 나타냅니다.</li>
+<li class="mb-2">usemap: 이미지와 연결된 이미지 맵을 나타냅니다.</li>
+<li class="mb-2">ismap: 이미지가 이미지 맵을 나타내는지 여부를 나타냅니다.</li>
+<li class="mb-2">anonymous: 자격 증명 없이 교차 출처 요청을 전송합니다. 즉, Origin HTTP 헤더를 쿠키, X.509 인증서, HTTP Basic 인증 없이 전송합니다. 서버에서 Access-Control-Allow-Origin HTTP 헤더를 지정하지 않음으로써 요청 출처 사이트에 자격 증명을 보내지 않는다면 이미지는 “오염”되고, 사용처가 제한됩니다.</li>
+<li class="mb-2">use-credentials: 자격 증명과 함께 교차 출처 요청을 전송합니다. 즉, Origin HTTP 헤더를 쿠키, X 509 인증서, 또는 HTTP Basic 이증과 함께 전송합니다. 서버에서 Access-Control-Allow-Credentials HTTP 헤더를 통한 자격 증명을 요청 출처 사이트에 보내지 않는다면 이미지는 “오염”되고, 사용처가 제한됩니다.</li>
+<li class="mb-2">decoding: 이미지 디코딩에 관해 브라우저에 제공할 힌트. 가능한 값은 다음과 같습니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">auto: 브라우저가 이미지를 디코딩하는 방법을 결정합니다.</li>
+<li class="mb-2">sync: 이미지를 동기적으로 디코딩합니다.</li>
+<li class="mb-2">async: 이미지를 비동기적으로 디코딩합니다.</li>
+<li class="mb-2">예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;img src=&quot;image.png&quot; decoding=&quot;async&quot; alt=&quot;A rad wolf&quot;&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">loading: 이미지 로딩 전략을 나타냅니다. 가능한 값은 다음과 같습니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">auto: 브라우저가 이미지 로딩 전략을 결정합니다.</li>
+<li class="mb-2">eager: 이미지를 즉시 로딩합니다.</li>
+<li class="mb-2">lazy: 이미지를 지연 로딩합니다.</li>
+<li class="mb-2">예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;img src=&quot;image.png&quot; loading=&quot;lazy&quot; alt=&quot;A rad wolf&quot;&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="h1-2-3-4-5-6h1-2-3-4-5-6-1" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;h1, 2, 3, 4, 5, 6&gt;&lt;/h1, 2, 3, 4, 5, 6&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 문서의 섹션 제목을 나타냅니다. <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;h1&gt;</code>은 가장 중요한 제목을 나타내며, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;h6&gt;</code>은 가장 낮은 수준의 제목을 나타냅니다.</p>
+<h4 id="pp" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;p&gt;&lt;/p&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 문단을 나타냅니다.</p>
+<h4 id="aa" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a&gt;&lt;/a&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 하이퍼링크를 나타냅니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">href: 링크의 URL을 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">sheme: 링크의 URL의 스키마를 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;https://developer.mozilla.org/&quot;&gt;MDN&lt;/a&gt;</code></li>
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;mailto: [email protected]&quot;&gt;Send email&lt;/a&gt;</code></li>
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;tel:+12015550123&quot;&gt;Call me&lt;/a&gt;</code></li>
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;sms:+12015550123&quot;&gt;Send a message&lt;/a&gt;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="mb-2">target: 링크를 열 위치를 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">_self: 현재 창에서 링크를 엽니다.</li>
+<li class="mb-2">_blank: 새 창에서 링크를 엽니다.</li>
+<li class="mb-2">_parent: 부모 창에서 링크를 엽니다.</li>
+<li class="mb-2">_top: 최상위 창에서 링크를 엽니다. 부모 window가 없으면 _self와 같은 효과를 냅니다.</li>
+</ul>
+</li>
+<li class="mb-2">download: 링크를 다운로드할 때 사용할 파일 이름을 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;image.png&quot; download=&quot;radwolf.png&quot;&gt;Download&lt;/a&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">rel: 현재 문서와 링크된 문서 사이의 관계를 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;https://developer.mozilla.org/&quot; rel=&quot;external&quot;&gt;MDN&lt;/a&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">type: 링크된 리소스의 MIME 타입을 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;image.png&quot; type=&quot;image/png&quot;&gt;Download&lt;/a&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">referrerpolicy: 링크된 리소스에 대한 referrer 정보를 제어합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;https://developer.mozilla.org/&quot; referrerpolicy=&quot;no-referrer&quot;&gt;MDN&lt;/a&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">ping: 링크된 리소스에 대한 클릭 정보를 전송합니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;https://developer.mozilla.org/&quot; ping=&quot;https://example.com/tracker&quot;&gt;MDN&lt;/a&gt;</code></li>
+</ul>
+</li>
+<li class="mb-2">hreflang: 링크된 리소스의 언어를 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;a href=&quot;https://developer.mozilla.org/&quot; hreflang=&quot;en&quot;&gt;MDN&lt;/a&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="lili" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;li&gt;&lt;/li&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 목록의 항목을 나타냅니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">value: 항목의 순서를 나타냅니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용 예시: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;ol&gt;&lt;li value=&quot;2&quot;&gt;두 번째 항목&lt;/li&gt;&lt;/ol&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="ulul" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;ul&gt;&lt;/ul&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 순서 없는 목록을 나타냅니다. unordered list의 약자입로서 순서가 없는 목록을 나타냅니다.</p>
+<h4 id="olol" class="text-xl font-medium text-foreground mt-5 mb-2 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;ol&gt;&lt;/ol&gt;</code></h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 요소는 순서 있는 목록을 나타냅니다. ordered list의 약자로서 순서가 있는 목록을 나타냅니다.</p> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

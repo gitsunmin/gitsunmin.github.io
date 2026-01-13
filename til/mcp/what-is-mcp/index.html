@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>what-is-mcp - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="what-is-mcp" class="text-4xl font-bold text-foreground mb-4 w-full">What is MCP</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">Model Context Protocol (MCP)는 애플리케이션이 대규모 언어 모델(LLM)에 컨텍스트를 제공하는 방식을 표준화한 오픈 프로토콜(Open Protocol)입니다. 이 프로토콜은 LLM 기반 도구들이 보다 정확하고 상황에 맞는 응답을 생성할 수 있도록, 모델에 유의미한 컨텍스트 정보를 효율적으로 제공하는 것을 목적으로 합니다.</p>
+<h2 id="mcp의-구성-요소" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">MCP의 구성 요소</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">MCP는 여러 컴포넌트로 구성되며, 각 요소는 다음과 같은 역할을 수행합니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2">MCP Host</li>
+</ol>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">정의: MCP를 통해 데이터를 접근하려는 주요 애플리케이션입니다.</li>
+<li class="mb-2">예시:
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">Claude Desktop과 같은 LLM 애플리케이션</li>
+<li class="mb-2">개발용 IDE (예: VSCode, IntelliJ)</li>
+<li class="mb-2">AI 기반 툴 또는 어시스턴트 앱</li>
+</ul>
+</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">이들은 LLM이 특정 작업을 수행할 수 있도록 외부 데이터를 요청하고, 그 데이터를 MCP를 통해 받아들이는 중심적인 역할을 합니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full" start="2">
+<li class="mb-2">MCP Client</li>
+</ol>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">정의: MCP 서버와 1:1 연결을 유지하는 프로토콜 클라이언트입니다.</li>
+<li class="mb-2">MCP Client는 Host와 Server 간의 중계자 역할을 하며, 필요한 데이터를 요청하고 결과를 전달합니다.</li>
+<li class="mb-2">Client는 다양한 서버에 동시에 연결될 수 있으며, 서버로부터 오는 응답을 통합하여 Host로 전달합니다.</li>
+</ul>
+<ol class="list-decimal list-inside mb-4 w-full" start="3">
+<li class="mb-2">MCP Server</li>
+</ol>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">정의: 특정 기능 또는 데이터를 MCP를 통해 외부에 제공하는 경량화된 프로그램입니다.</li>
+<li class="mb-2">기능:
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">특정 파일 시스템에 접근해 파일을 읽어 제공</li>
+<li class="mb-2">로컬 데이터베이스에서 쿼리 실행</li>
+<li class="mb-2">외부 API를 호출하여 실시간 데이터를 수집</li>
+</ul>
+</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">서버는 일반적으로 한 가지 유형의 데이터를 제공하도록 설계되며, MCP 프로토콜을 따릅니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full" start="4">
+<li class="mb-2">로컬 데이터 소스 (Local Data Sources)</li>
+</ol>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">사용자의 컴퓨터 내에 존재하는 데이터
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">예: 문서 파일, 코드베이스, 로컬 SQLite DB, 설정 파일 등</li>
+</ul>
+</li>
+<li class="mb-2">MCP Server는 이러한 로컬 데이터를 안전하게 접근하고, 필요에 따라 정제하여 Host로 전달합니다.</li>
+</ul>
+<ol class="list-decimal list-inside mb-4 w-full" start="5">
+<li class="mb-2">원격 서비스 (Remote Services)</li>
+</ol>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">MCP Server가 외부 네트워크를 통해 접근 가능한 리소스입니다.</li>
+<li class="mb-2">예시:
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">외부 REST API</li>
+<li class="mb-2">클라우드 저장소 (예: Google Drive, Dropbox)</li>
+<li class="mb-2">온라인 데이터베이스</li>
+</ul>
+</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">이를 통해 모델은 로컬 환경을 넘어서 더 풍부하고 시의성 있는 정보를 확보할 수 있습니다.</p> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

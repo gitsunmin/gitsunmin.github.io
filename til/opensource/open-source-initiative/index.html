@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>open-source-initiative - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="open-source-initiative" class="text-4xl font-bold text-foreground mb-4 w-full">Open Source Initiative</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">Open Source Initiative (OSI)는 오픈 소스 소프트웨어 사용을 정리하기 위하여 만들어진 단체입니다. OSI는 오픈 소스 소프트웨어의 정의를 제공하고, 오픈 소스 소프트웨어의 사용을 정리하는 데에 도움을 주고 있습니다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">사이트에 방문하여 오픈소스에 대해서 더 자세한 내용을 일 수 있었습니다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://opensource.org/">opensource.org</a></p>
+</blockquote>
+<h2 id="오픈-소스-소프트웨어의-정의" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">오픈 소스 소프트웨어의 정의</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">OSI에서는 오픈 소스 소프트웨어를 단순히 소스 코드를 공개하는 것이 아닌, 다음과 같은 10가지 조건을 만족하는 소프트웨어라고 정의하고 있습니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">재배포 가능성</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">소프트웨어의 라이선스는 재배포를 허용해야 합니다. 라이선스가 재배포를 허용하지 않는다면, 소스 코드를 공개하더라도 오픈 소스 소프트웨어가 아닙니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">소스 코드
+소프트웨어의 소스 코드는 반드시 공개되어야 합니다. 고의적으로 난독화를 하거나 소스 코드가 공개되지 않는다면, 오픈 소스 소프트웨어가 아닙니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">파생 저작물
+소프트웨어의 라이선스는 파생 저작물을 허용해야 합니다. 피셍 저장물을 허용하고 같은 라이선스를 사용하도록 강제하는 것이 일반적입니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">원저자의 소스 코드의 무결성
+소프트웨어의 라이선스는 원저자의 소스 코드의 무결성을 보장해야 합니다. 소스 코드가 수정되었다면, 수정된 부분을 명확하게 표시해야 합니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">개인 또는 집단에 대한 차별 금지
+소프트웨어의 라이선스는 개인 또는 집단에 대한 차별을 금지해야 합니다. 라이선스가 특정 개인 또는 집단에 대한 차별을 허용한다면, 오픈 소스 소프트웨어가 아닙니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">노력 분야에 대한 차별 금지
+라이선스는 특정 분야에서 프로그램을 사용하는 것을 제한해서는 안 됩니다. 예를 들어, 비즈니스에서 프로그램을 사용하거나 유전자 연구에 사용하는 것을 제한해서는 안 됩니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">라이선스의 배포
+기밀 유지 계약을 요구하는 등 간접적인 방법으로 소프트웨어를 폐쇄하는 행위를 금지하기 위해서 라이선스가 프로그램에 첨부되어야 하며 재배포 시에도 모든 사람에게 제공되어야 합니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">라이선스는 제품에 한정되어서는 안 됩니다.
+프로그램에 부여된 권리는 프로그램이 특정 소프트웨어 배포판의 일부인지 여부에 따라 달라져서는 안 됩니다. 해당 배포판에서 프로그램을 추출하여 프로그램의 라이선스 조건 내에서 사용 또는 배포하는 경우, 프로그램을 재배포하는 모든 당사자는 원래 소프트웨어 배포판과 함께 부여된 것과 동일한 권리를 가져야 합니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">라이선스는 다른 소프트웨어에 대한 제한을 포함해서는 안 됩니다.
+라이선스는 라이선스가 부여된 소프트웨어와 함께 배포되는 다른 소프트웨어에 대한 제한을 두지 않아야 합니다. 예를 들어, 라이선스는 동일한 매체에 배포되는 다른 모든 프로그램이 오픈 소스 소프트웨어여야 한다고 주장해서는 안 됩니다.</p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">라이선스는 기술 중립적이어야 합니다.
+라이선스는 특정 기술이나 인터페이스에 대한 의존성을 강제해서는 안 됩니다. 예를 들어, 라이선스는 특정 인터페이스를 사용하도록 강제해서는 안 됩니다.</p>
+</li>
+</ol>
+<p class="text-foreground leading-relaxed mb-4 w-full">추가로 이러한 정의가 데미안 소프트웨어 가이드라인에서 파생되었다고 하여 함께 링크를 첨부합니다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.debian.org/social_contract#guidelines">링크</a></p> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

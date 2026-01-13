@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>Web Assembly - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h2 id="서론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">서론</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">WebAssembly는 V8 엔진에서 실행할 수 있는 Javascript 외의 포맷입니다. 이 포맷은 Javascript 보다 더 저수준 언어에 가깝고 평균적으로 더 나은 성능으로 실행될 수 있습니다. 그렇다면, 어떠한 차이 때문에 이러한 결과가 도출되었는지 알아보고, 사용 방법도 알아보겠습니다.</p>
+<h2 id="본론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">본론</h2>
+<h3 id="v8-엔진은-무엇인가" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">V8 엔진은 무엇인가?</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">서론에서 언급했듯이, WebAssembly는 V8 엔진에서 실행되는 저수준 포맷입니다. 그렇다면, WebAssembly를 알기 전에 V8 엔진은 무엇일까요? 간단하게라도 조사하고 넘어가야겠다는 생각이 들어서 찾아보았습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">V8 엔진은 Google에서 만든 오픈소스 프로젝트이며 Javascript와 WebAssembly를 실행할 수 있는 엔진입니다. 예를 들어, Javascript는 분석되어 기계어(Machine Code)로 변환되며, 이를 통해 컴퓨터의 CPU가 해당 명령을 수행할 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">더 자세한 내용이 궁금하시다면, 아래의 링크에서 좀 더 찾아보면 도움이 될 것 같습니다.
+<a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://v8.dev/">Link</a></p>
+<h3 id="v8엔진에서의-javascript" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">V8엔진에서의 Javascript</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 글의 주제는 WebAssembly이지만, WebAssembly의 동작 방식을 알기 전에 Javascript가 V8엔진에서 어떻게 동작하는지 간단히 알아보고, WebAssembly의 동작을 살펴보도록 하겠습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">아래의 이미지는 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://medium.com/dailyjs/understanding-v8s-bytecode-317d46c94775">Link</a>에서 가지고온 V8엔진에서의 Javascript의 동작 순서를 그려낸 것입니다.
+<img src="[object Object]" alt="v8_engine_pipeline" class="rounded-lg shadow-md mx-auto my-2"/></p>
+<p class="text-foreground leading-relaxed mb-4 w-full">자바스크립트 소스 코드는 구체적인 문법 규칙을 따르는 텍스트 형태로 존재합니다. 이러한 텍스트는 문법적 분석을 통해 기계가 이해할 수 있는 형태로 번역될 수 있습니다. 이 번역 과정을 효율적으로 수행하기 위해, 소스 코드는 먼저 구조화된 데이터 형태인 추상 구문 트리(Abstract Syntax Tree, AST)로 변환됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">Google의 V8 엔진은 자바스크립트 코드를 처리하기 위해 파서(Parser)를 사용하여 이러한 AST를 생성합니다. AST는 소스 코드의 구문적 구조를 반영하며, 각 노드는 개별 코드 구성 요소(예: 변수 선언, 함수 호출 등)를 나타냅니다. 생성된 AST는 코드의 의미를 분석하고 실행 계획을 세우는 기반으로 사용됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">V8 엔진에 내장된 Ignition이라는 인터프리터는 이 AST를 해석하여 바이트코드로 변환하는 역할을 수행합니다. 바이트코드는 V8 엔진의 저수준 언어로, 더 빠른 실행을 가능하게 하는 중간 표현 형태입니다. 이 바이트코드는 TurboFan이라고 불리는 고급 최적화 컴파일러에 의해 처리됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">TurboFan은 실행 중에 수집된 성능 데이터를 분석하고, 바이트코드를 최적화된 기계어 코드로 변환합니다. 이 과정은 코드의 실행 속도를 크게 향상시킬 수 있으며, 자바스크립트 애플리케이션의 전반적인 성능을 최적화하는 데 중요한 역할을 합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">단, 빨간색 화살표의 내용이 다시 Bytecode로 변환되어지는 것이라고 오해할 수 있지만, 그런 의미가 아니라, 다음 동작을 하기 위해서 다시 Ignition으로 돌아간다고 이해하면 좋을 것 같습니다. 컴파일의 최종 결과물의 형태는 기계가 해석할 수 있는 기계어(Machin Code)가 맞습니다.</p>
+<h3 id="v8엔진에서의-webassembly" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">v8엔진에서의 WebAssembly</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">V8 엔진에서 Javascript는 소스 코드를 분석하고, AST(Abstract Syntax Tree) 변환을 거쳐, Ignition 인터프리터를 통해 바이트 코드로 변환됩니다. 반면, WebAssembly는 이진 코드 형태로 브라우저에 전달되며, 간단하고 빠른 파싱 후에 바로 기계어로 컴파일이 가능한 상태가 됩니다. 이 과정을 담당하는 V8 엔진의 컴파일러는 Liftoff라고 불립니다. Liftoff는 WebAssembly를 바로 실행 가능한 기계어로 빠르게 변환할 수 있습니다. 성능 최적화가 필요한 경우, 추가적인 최적화를 위해 TurboFan 컴파일러가 사용됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">Liftoff는 WebAssembly의 빠른 컴파일을 책임지며, 최적화가 필요한 경우 TurboFan으로 코드를 넘겨 더 깊은 최적화를 수행합니다. 이 두 컴파일러의 협력을 통해 V8 엔진은 WebAssembly 코드를 효율적으로 처리하며, 빠른 시작과 고성능 유지를 동시에 달성할 수 있습니다.</p>
+<h3 id="webassembly를-사용해-보기" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">WebAssembly를 사용해 보기</h3>
+<h4 id="next에서-webassembly-사용해보기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Next에서 WebAssembly 사용해보기</h4>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">Next에서 제공하는 example을 방문한다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/vercel/next.js/tree/canary/examples/with-webassembly">HERE</a></p>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">제공하는 프로젝트 생성 방법을 따라해본다. (하지만, 나는 Bun으로 함.)</p>
+</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">bunx</span><span style="color:#9ECBFF"> create-next-app</span><span style="color:#79B8FF"> --example</span><span style="color:#9ECBFF"> with-webassembly</span><span style="color:#9ECBFF"> with-webassembly-app</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ol class="list-decimal list-inside mb-4 w-full" start="3">
+<li class="mb-2">생성된 프로젝트에서 pakage.json의 script를 확인하여 컴파일 명령어를 실행한다.</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">bun</span><span style="color:#9ECBFF"> build-rust</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ol class="list-decimal list-inside mb-4 w-full" start="4">
+<li class="mb-2">프로젝트를 확인한다.</li>
+</ol>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">root에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">add.wasm</code> 파일이 생성된 것을 확인할 수 있다.</li>
+<li class="mb-2">root에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">add.wasm.d.ts</code> 파일이 생성된 것을 확인할 수 있다.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">src/</code> 폴더에 .rs 확장자인 Rust 소스 파일이 있는 것을 확인할 수 있다.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">components/RustServerComponent.tsx</code>를 확인해본다.</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">위 파일들을 확인하면 간단하게라도 흐름을 파악할 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">components/RustServerComponent.tsx</code>에서 import한 .wasm 파일에서 함수를 추출하여 바로 사용할 수 있는 점이 조금 신기하네요.</p>
+<h4 id="간단한-성능-테스트해보기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">간단한 성능 테스트해보기</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">간단하게라도 성능을 한 번 테스트 해보기 위해서 ts(js)와 rust로 피보나치수열을 계산해주는 함수를 각각 만들어 비교를 해 보았습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">위에서 생성하였던 프로젝트에서 조금 수정을 해보았습니다.</p>
+<ol class="list-decimal list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">src/fibonacci.rs</code>을 추가</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">src/fibonacci.rs</code>파일의 내용을 아래와 같이 수정</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">#[no_mangle]</span></span>
+<span class="line"><span style="color:#F97583">pub</span><span style="color:#F97583"> extern</span><span style="color:#9ECBFF"> &quot;C&quot;</span><span style="color:#F97583"> fn</span><span style="color:#B392F0"> fibonacci</span><span style="color:#E1E4E8">(n</span><span style="color:#F97583">:</span><span style="color:#B392F0"> usize</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">-&gt;</span><span style="color:#B392F0"> u64</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#F97583"> mut</span><span style="color:#E1E4E8"> a </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#F97583"> mut</span><span style="color:#E1E4E8"> b </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> _ </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> 1</span><span style="color:#F97583">..</span><span style="color:#E1E4E8">n {</span></span>
+<span class="line"><span style="color:#F97583">        let</span><span style="color:#E1E4E8"> temp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> a </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> b;</span></span>
+<span class="line"><span style="color:#E1E4E8">        a </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> b;</span></span>
+<span class="line"><span style="color:#E1E4E8">        b </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> temp;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    a</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ol class="list-decimal list-inside mb-4 w-full" start="3">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">package.json</code>파일의 script 수정</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> &quot;build-rust&quot;:</span><span style="color:#9ECBFF"> &quot;rustc --target wasm32-unknown-unknown -O --crate-type=cdylib src/fibonacci.rs -o fibonacci.wasm&quot;,</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ol class="list-decimal list-inside mb-4 w-full" start="4">
+<li class="mb-2">root에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">fibonacci.wasm.d.ts</code>파일 추가</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> fibonacci</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">number</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ol class="list-decimal list-inside mb-4 w-full" start="5">
+<li class="mb-2">3번에서 추가하였던 script를 실행</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">bun</span><span style="color:#9ECBFF"> build-rust</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">root에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">fibonacci.wasm</code> 파일이 생성되어짐.</li>
+</ul>
+<ol class="list-decimal list-inside mb-4 w-full" start="6">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">components/RustServerComponent.tsx</code>을 수정.</li>
+</ol>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> TS</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">  fibonacci</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">n</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> a </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    let</span><span style="color:#E1E4E8"> b </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">let</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&lt;</span><span style="color:#E1E4E8"> n; i</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">      let</span><span style="color:#E1E4E8"> temp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> a </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> b;</span></span>
+<span class="line"><span style="color:#E1E4E8">      a </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> b;</span></span>
+<span class="line"><span style="color:#E1E4E8">      b </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> temp;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> a;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> RustServerComponent</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">number</span><span style="color:#E1E4E8"> }</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">number</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> Rust</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#F97583"> import</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;../fibonacci.wasm&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;fibonacci number:&#39;</span><span style="color:#E1E4E8">, number);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">group</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Typescript Calculate&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">time</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;ts&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> tsResult</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> TS</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ibonacci</span><span style="color:#E1E4E8">(number).</span><span style="color:#B392F0">toString</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">timeEnd</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;ts&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;tsResult:&#39;</span><span style="color:#E1E4E8">, tsResult);</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">groupEnd</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">group</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;Rust Calculate&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">time</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;rs&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> rsResult</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Rust.</span><span style="color:#B392F0">fibonacci</span><span style="color:#E1E4E8">(number).</span><span style="color:#B392F0">toString</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">timeEnd</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;rs&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;rsResult:&#39;</span><span style="color:#E1E4E8">, rsResult);</span></span>
+<span class="line"><span style="color:#E1E4E8">  console.</span><span style="color:#B392F0">groupEnd</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> &lt;&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">h2</span><span style="color:#E1E4E8">&gt;Typescript vs Rust(Wasm)&lt;/</span><span style="color:#85E89D">h2</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">      &lt;</span><span style="color:#85E89D">h3</span><span style="color:#E1E4E8">&gt;결과는 Server Console 창을 확인해주세요. 서버 컴포넌트니깐&lt;/</span><span style="color:#85E89D">h3</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;/</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  &lt;/&gt;;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">4번 연속으로 실행을 해서 아래와 같은 데이터를 얻을 수 있었습니다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>순서</th><th>언어</th><th>실행 시간 (ms)</th></tr></thead><tbody><tr><td>1</td><td>Typescript</td><td>3.792</td></tr><tr><td>1</td><td>Rust</td><td>0.060</td></tr><tr><td>2</td><td>Typescript</td><td>0.007</td></tr><tr><td>2</td><td>Rust</td><td>0.023</td></tr><tr><td>3</td><td>Typescript</td><td>0.004</td></tr><tr><td>3</td><td>Rust</td><td>0.006</td></tr><tr><td>4</td><td>Typescript</td><td>0.007</td></tr><tr><td>4</td><td>Rust</td><td>0.029</td></tr></tbody></table>
+<h2 id="결론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">결론</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">위에서 설명한 것처럼 Javascript와 WebAssembly는 각각 다른 목적과 특성을 가지고 있습니다. WebAssembly는 특정 고성능 로직을 최적화된 형태로 실행하기 위해 개발된 기술로, 크롬 브라우저 뿐만 아니라 V8 엔진을 사용하는 모든 곳에서 바이너리 코드로 실행됩니다. 초기 실험에서 보았듯, WebAssembly는 처음 실행 시 빠른 성능을 보여주지만, 반복 실행에서는 자바스크립트(여기서는 Typescript)가 JIT 최적화를 통해 성능이 향상되며, 경우에 따라 WebAssembly보다 빠르게 실행될 수 있습니다. 이는 WebAssembly가 모든 상황에서 최선의 선택은 아님을 시사합니다. 초기 로딩 속도가 중요하거나, 고성능이 필수적인 작업에서 WebAssembly의 사용을 고려할 수 있으며, 일반적인 웹 애플리케이션 개발에서는 자바스크립트의 유연성과 성능 최적화가 더 적합할 수 있습니다.</p>
+<h2 id="참조" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">참조</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://tecoble.techcourse.co.kr/post/2021-11-24-web-assembly/">웹어셈블리</a></li>
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://dongwoo.blog/2017/06/06/%eb%b2%88%ec%97%ad-%ec%b9%b4%ed%88%b0%ec%9c%bc%eb%a1%9c-%ec%86%8c%ea%b0%9c%ed%95%98%eb%8a%94-%ec%9b%b9%ec%96%b4%ec%85%88%eb%b8%94%eb%a6%ac/">카툰으로 소개하는 웹어셈블리</a></li>
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://v8.dev/docs">v8 docs</a></li>
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://docs.google.com/document/d/11T2CRex9hXxoJwbYqVQ32yIPMh0uouUZLdyrtmMoL44/edit">Ignition: V8 Interpreter</a></li>
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://v8.dev/docs/wasm-compilation-pipeline">WebAssembly compilation pipeline</a></li>
+</ul> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>

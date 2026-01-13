@@ -1,0 +1,495 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>Svelte의 동작 - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="mE0JQ" component-url="/_astro/Providers.DM2VvpnK.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:&quot;react&quot;}" await-children><template data-astro-template>  <astro-island uid="2t9TGb" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h2 id="1-목표" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">1. 목표</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">Svelte가 화면을 어떻게 그려내고 있는지를 확인한다.</li>
+</ul>
+<h2 id="2-svelte를-compile하는-방법" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">2. svelte를 compile하는 방법</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">(저는 svelte 3.43.0버전을 사용하였습니다.)</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">svelte가 설치된 npm 프로젝트를 생성한다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> init</span><span style="color:#79B8FF"> -y</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> i</span><span style="color:#79B8FF"> --save-dev</span><span style="color:#9ECBFF"> svelte</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">Root Path에 아래와 같이 코드를 작성 후에 실행을 시켜준다.</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// file 관련된 node 기본 라이브러리</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> fs</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;fs&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> path</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;path&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#6A737D">// svelte의 compiler</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> svelteCompiler</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;svelte/compiler&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// svelte파일</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> pathToComponent</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> path.</span><span style="color:#B392F0">join</span><span style="color:#E1E4E8">(__dirname, </span><span style="color:#9ECBFF">&#39;./src/component.svelte&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#6A737D">// svelte파일을 text로 변환</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> svelteCode</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> fs.</span><span style="color:#B392F0">readFileSync</span><span style="color:#E1E4E8">(pathToComponent, </span><span style="color:#9ECBFF">&#39;utf-8&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#6A737D">// 변환된 text를 input으로하여 svelte의 compiler를 실행</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> compiled</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> svelteCompiler.</span><span style="color:#B392F0">compile</span><span style="color:#E1E4E8">(svelteCode);</span></span>
+<span class="line"><span style="color:#6A737D">/* </span></span>
+<span class="line"><span style="color:#6A737D">compile method가 리턴하는 것들</span></span>
+<span class="line"><span style="color:#6A737D">  js</span></span>
+<span class="line"><span style="color:#6A737D">  css</span></span>
+<span class="line"><span style="color:#6A737D">  ast</span></span>
+<span class="line"><span style="color:#6A737D">  warnings</span></span>
+<span class="line"><span style="color:#6A737D">  vars</span></span>
+<span class="line"><span style="color:#6A737D">  stat</span></span>
+<span class="line"><span style="color:#6A737D">*/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// compiler의 output을 ./output.js 경로의 파일로 리턴 (js만 이용하여 리턴)</span></span>
+<span class="line"><span style="color:#E1E4E8">fs.</span><span style="color:#B392F0">writeFileSync</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">  path.</span><span style="color:#B392F0">join</span><span style="color:#E1E4E8">(__dirname, </span><span style="color:#9ECBFF">&#39;./output.js&#39;</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#E1E4E8">  compiled.js.code,</span></span>
+<span class="line"><span style="color:#9ECBFF">  &#39;utf-8&#39;</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">node</span><span style="color:#9ECBFF"> ./index.js</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">.svelte</code> 파일은 svelte 문법에 맞게 작성하기만 하면 된다. 저는 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/gitsunmin/how-to-run-svelte-compiler/blob/master/src/component.svelte">github</a>에 이렇게 작성했습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그러면 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/gitsunmin/how-to-run-svelte-compiler/blob/master/output.js">github repository의 output</a> 처럼 compile된 javascript 코드를 확인할 수 있습니다.</p>
+<h2 id="3-svelte-complier는-어떤-것들을-리턴하는가" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">3. svelte complier는 어떤 것들을 리턴하는가</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://svelte.dev/docs#svelte_compile">svelte 공식 docs</a> 에 나와있는 내용과 직접 로그를 찍어 확인한 결과는 아래와 같습니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">배경지식
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">source map
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">소스맵은 말 그대로 원본소스와 변환된 소스를 맵핑해 주는 방법을 제안한 것이다.</li>
+</ul>
+</li>
+<li class="mb-2">AST(abstract syntax tree, 추상 구문 트리)
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ko.wikipedia.org/wiki/%EC%B6%94%EC%83%81_%EA%B5%AC%EB%AC%B8_%ED%8A%B8%EB%A6%AC">https://ko.wikipedia.org/wiki/추상<em>구문</em>트리</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">js</code> 와 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">css</code> 는 다음과 같은 properties를 가지는 Object입니다:
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">code</code> : JavaScript 문자열</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">map</code> : sourcemap(빌드한 파일과 원본 파일을 서로 연결시켜주는 정보)</li>
+</ul>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">ast</code> : 구성 요소의 구조를 나타내는 AST(abstract syntax tree)입니다.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">warnings</code> : 컴파일하는 동안 생성된 경고 Object의 Array입니다. 각 warning에는 다음과 같은 여러 속성이 있습니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">code</code> : 경고 범주를 식별하는 문자열입니다.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">message</code> : 사람이 읽을 수 있는 용어로 문제를 설명합니다.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">start</code> 와 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">end</code> :
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">특정 위치에 관한 경우와 개체 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">line</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">column</code>및 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">character</code>(문자 위치) 속성</li>
+</ul>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">frame</code>: 해당하는 경우 문제가 되는 코드를 줄 번호로 강조 표시하는 문자열</li>
+</ul>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">vars</code>: Object의 Array이며, 변수나 함수 등을 설명합니다. Object는 아래와 같은 속성이 있습니다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">name</code>: 각 변수의 이름.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">export_name</code> : export하는 이름. (설정하지 않으면, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">name</code> 으로 설정.)</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">injected</code> : <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code> 일 경우에는 직접작성한 것이 아닌, svelte에 의해 주입된 것</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">module</code> : <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;script context=&quot;module&quot;&gt;</code> 를 사용했을 경우에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code>.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">mutated</code>: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code>일 경우 component 내부에 할당된 변수.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">→ (어떻게 쓰이는지를 정확히 알아내지 못했습니다.)</li>
+</ul>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">reassigned</code> :<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code> 일 경우에는 Component 내부에서 재할당이 이루어진 변수임.</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">referenced</code>: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code>일 경우 Template(svelte의 html영역)에서 참조중(사용중).</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">referenced_from_script</code>: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code>일 경우 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">&lt;script&gt;</code> 에서 참조중(사용중).</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">writable</code>: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">true</code> 인 경우에는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">let</code> or <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">var</code> 에 의해 선언된 것. (<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">const</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">class</code> 또는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">function</code> 은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">false</code>)</li>
+</ul>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">stats</code>: 컴파일러 진단을 위해 Svelte 개발자 팀에서 사용하는 객체입니다. 동일하게 유지하기 위해 그것에 의존하지 말라고 하네요!</li>
+</ul>
+<h2 id="4-compile된-javascript-코드는-화면을-어떻게-그리고있을까" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">4. compile된 javascript 코드는 화면을 어떻게 그리고있을까?</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">간단하게 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">click</code> 버튼을 만들고, 버튼을 클릭하면, True/False가 토글되면서 보여지는 애플리케이션을 예시로, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">compile</code>된 output.js를 간단하게 만들어 보았습니다. → <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/gitsunmin/how-to-run-svelte-compiler/blob/master/output.js">output.js</a></p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">처음 화면을 로드할 때의 실행 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">init()</code></p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">component.$$</code> 초기화 (component 관련 <em>state, lifecycle, 등</em>)
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">component.$$</code> 의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">interface</code>와 실제 초기화되는 로직</li>
+</ul>
+</li>
+</ul>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">interface</span><span style="color:#B392F0"> T$$</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  dirty</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#FFAB70">  ctx</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  bound</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">  update</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  callbacks</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  after_update</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#FFAB70">  props</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Record</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">string</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">&gt;;</span></span>
+<span class="line"><span style="color:#FFAB70">  fragment</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> null</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> false</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> Fragment</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  not_equal</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  before_update</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#FFAB70">  context</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">any</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">any</span><span style="color:#E1E4E8">&gt;;</span></span>
+<span class="line"><span style="color:#FFAB70">  on_mount</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#FFAB70">  on_destroy</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#FFAB70">  skip_bound</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> boolean</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  on_disconnect</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">[];</span></span>
+<span class="line"><span style="color:#FFAB70">  root</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Element</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> ShadowRoot</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> $$</span><span style="color:#F97583">:</span><span style="color:#B392F0"> T$$</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (component.$$ </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">  fragment: </span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  ctx: </span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // state</span></span>
+<span class="line"><span style="color:#E1E4E8">  props,</span></span>
+<span class="line"><span style="color:#E1E4E8">  update: noop,</span></span>
+<span class="line"><span style="color:#E1E4E8">  not_equal,</span></span>
+<span class="line"><span style="color:#E1E4E8">  bound: </span><span style="color:#B392F0">blank_object</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // lifecycle</span></span>
+<span class="line"><span style="color:#E1E4E8">  on_mount: [],</span></span>
+<span class="line"><span style="color:#E1E4E8">  on_destroy: [],</span></span>
+<span class="line"><span style="color:#E1E4E8">  on_disconnect: [],</span></span>
+<span class="line"><span style="color:#E1E4E8">  before_update: [],</span></span>
+<span class="line"><span style="color:#E1E4E8">  after_update: [],</span></span>
+<span class="line"><span style="color:#E1E4E8">  context: </span><span style="color:#F97583">new</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    options.context </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> (parent_component </span><span style="color:#F97583">?</span><span style="color:#E1E4E8"> parent_component.$$.context </span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> [])</span></span>
+<span class="line"><span style="color:#E1E4E8">  ),</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // everything else</span></span>
+<span class="line"><span style="color:#E1E4E8">  callbacks: </span><span style="color:#B392F0">blank_object</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">  dirty,</span></span>
+<span class="line"><span style="color:#E1E4E8">  skip_bound: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  root: options.target </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> parent_component.$$.root,</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.ctx</code> 셋팅, output.js의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">instance</code>함수 실행 결과값 저장</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">instance 예시</li>
+</ul>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> instance</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">$$self</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">$$props</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">$$invalidate</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> isClick </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  function</span><span style="color:#B392F0"> SMButtonClick</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#B392F0">    $$invalidate</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, (isClick </span><span style="color:#F97583">=</span><span style="color:#F97583"> !</span><span style="color:#E1E4E8">isClick));</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> [isClick, SMButtonClick];</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// 실제 동작하는 부분을 함수로 뺴둔 것입니다.</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#B392F0"> $$invalidate</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">i</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">ret</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">...</span><span style="color:#FFAB70">rest</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> value</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> rest.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> ?</span><span style="color:#E1E4E8"> rest[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> ret;</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> ($$.ctx </span><span style="color:#F97583">&amp;&amp;</span><span style="color:#B392F0"> not_equal</span><span style="color:#E1E4E8">($$.ctx[i], ($$.ctx[i] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> value))) {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">$$.skip_bound </span><span style="color:#F97583">&amp;&amp;</span><span style="color:#E1E4E8"> $$.bound[i]) $$.bound[i](value);</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (ready) </span><span style="color:#B392F0">make_dirty</span><span style="color:#E1E4E8">(component, i);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.fragment</code> 생성</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">interface Fragment</code></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">/**</span></span>
+<span class="line"><span style="color:#6A737D"> * INTERNAL, DO NOT USE. Code may change at any time.</span></span>
+<span class="line"><span style="color:#6A737D"> */</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> interface</span><span style="color:#B392F0"> Fragment</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">  key</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#FFAB70">  first</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* create  */</span><span style="color:#B392F0"> c</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* claim   */</span><span style="color:#B392F0"> l</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">nodes</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* hydrate */</span><span style="color:#B392F0"> h</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* mount   */</span><span style="color:#B392F0"> m</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">target</span><span style="color:#F97583">:</span><span style="color:#B392F0"> HTMLElement</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">anchor</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* update  */</span><span style="color:#B392F0"> p</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">ctx</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">dirty</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* measure */</span><span style="color:#B392F0"> r</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* fix     */</span><span style="color:#B392F0"> f</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* animate */</span><span style="color:#B392F0"> a</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* intro   */</span><span style="color:#B392F0"> i</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">local</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* outro   */</span><span style="color:#B392F0"> o</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">local</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> any</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">  /* destroy */</span><span style="color:#B392F0"> d</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">detaching</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> |</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">output.js</code> 예시</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> create_fragment</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">ctx</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> h1;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> t1;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> div;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> t2;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> t3;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> button;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> mounted;</span></span>
+<span class="line"><span style="color:#F97583">  let</span><span style="color:#E1E4E8"> dispose;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    c</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">      h1 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> element</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;h1&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">      h1.textContent </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &#39;Svelte Compiler는 어떻게 실행될까?&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">      t1 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> space</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">      div </span><span style="color:#F97583">=</span><span style="color:#B392F0"> element</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;div&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">      t2 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">(</span><span style="color:#6A737D">/*isClick*/</span><span style="color:#E1E4E8"> ctx[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">]);</span></span>
+<span class="line"><span style="color:#E1E4E8">      t3 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> space</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">      button </span><span style="color:#F97583">=</span><span style="color:#B392F0"> element</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;button&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">      button.textContent </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &#39;클릭&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">      attr</span><span style="color:#E1E4E8">(div, </span><span style="color:#9ECBFF">&#39;class&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;cl svelte-17q3uc1&#39;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#B392F0">    m</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">target</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">anchor</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#B392F0">      insert</span><span style="color:#E1E4E8">(target, h1, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">      insert</span><span style="color:#E1E4E8">(target, t1, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">      insert</span><span style="color:#E1E4E8">(target, div, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">      append</span><span style="color:#E1E4E8">(div, t2);</span></span>
+<span class="line"><span style="color:#B392F0">      insert</span><span style="color:#E1E4E8">(target, t3, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">      insert</span><span style="color:#E1E4E8">(target, button, anchor);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">mounted) {</span></span>
+<span class="line"><span style="color:#E1E4E8">        dispose </span><span style="color:#F97583">=</span><span style="color:#B392F0"> listen</span><span style="color:#E1E4E8">(button, </span><span style="color:#9ECBFF">&#39;click&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">/*SMButtonClick*/</span><span style="color:#E1E4E8"> ctx[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">]());</span></span>
+<span class="line"><span style="color:#E1E4E8">        mounted </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#B392F0">    p</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">ctx</span><span style="color:#E1E4E8">, [</span><span style="color:#FFAB70">dirty</span><span style="color:#E1E4E8">]) {</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (dirty </span><span style="color:#F97583">&amp;</span><span style="color:#6A737D"> /*isClick*/</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) </span><span style="color:#B392F0">set_data</span><span style="color:#E1E4E8">(t2, </span><span style="color:#6A737D">/*isClick*/</span><span style="color:#E1E4E8"> ctx[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">]);</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">    i: noop,</span></span>
+<span class="line"><span style="color:#E1E4E8">    o: noop,</span></span>
+<span class="line"><span style="color:#B392F0">    d</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">detaching</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (detaching) </span><span style="color:#B392F0">detach</span><span style="color:#E1E4E8">(h1);</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (detaching) </span><span style="color:#B392F0">detach</span><span style="color:#E1E4E8">(t1);</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (detaching) </span><span style="color:#B392F0">detach</span><span style="color:#E1E4E8">(div);</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (detaching) </span><span style="color:#B392F0">detach</span><span style="color:#E1E4E8">(t3);</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (detaching) </span><span style="color:#B392F0">detach</span><span style="color:#E1E4E8">(button);</span></span>
+<span class="line"><span style="color:#E1E4E8">      mounted </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">      dispose</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#E1E4E8">  };</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+</ul>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.fragment.c()</code> 실행
+<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">output.js</code>의 예시</p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#B392F0">c</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">  h1 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> element</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;h1&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  h1.textContent </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &quot;Svelte Compiler는 어떻게 실행될까?&quot;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  t1 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> space</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  div </span><span style="color:#F97583">=</span><span style="color:#B392F0"> element</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;div&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  t2 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">(</span><span style="color:#6A737D">/*isClick*/</span><span style="color:#E1E4E8"> ctx[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">]);</span></span>
+<span class="line"><span style="color:#E1E4E8">  t3 </span><span style="color:#F97583">=</span><span style="color:#B392F0"> space</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">  button </span><span style="color:#F97583">=</span><span style="color:#B392F0"> element</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;button&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  button.textContent </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &quot;클릭&quot;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">  attr</span><span style="color:#E1E4E8">(div, </span><span style="color:#9ECBFF">&quot;class&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&quot;cl svelte-17q3uc1&quot;</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">},</span></span>
+<span class="line"><span style="color:#6A737D">// type에 맞게 선언이 되어짐.</span></span>
+<span class="line"><span style="color:#6A737D">// text() 예시</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> text</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">data</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> document.</span><span style="color:#B392F0">createTextNode</span><span style="color:#E1E4E8">(data); </span><span style="color:#6A737D">// 텍스트 노드를 리턴</span></span>
+<span class="line"><span style="color:#6A737D">  // https://developer.mozilla.org/ko/docs/Web/API/Document/createTextNode</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">mount_component()</code> → <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.fragment.m() 실행</code></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// https://github.dev/sveltejs/svelte</span></span>
+<span class="line"><span style="color:#6A737D">// src/runtime/internal/Component.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> mount_component</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">component</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">target</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">anchor</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">customElement</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">fragment</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">on_mount</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">on_destroy</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">after_update</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> component.$$;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  fragment </span><span style="color:#F97583">&amp;&amp;</span><span style="color:#E1E4E8"> fragment.</span><span style="color:#B392F0">m</span><span style="color:#E1E4E8">(target, anchor);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">customElement) {</span></span>
+<span class="line"><span style="color:#6A737D">    // onMount happens before the initial afterUpdate</span></span>
+<span class="line"><span style="color:#B392F0">    add_render_callback</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">      const</span><span style="color:#79B8FF"> new_on_destroy</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> on_mount.</span><span style="color:#B392F0">map</span><span style="color:#E1E4E8">(run).</span><span style="color:#B392F0">filter</span><span style="color:#E1E4E8">(is_function);</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (on_destroy) {</span></span>
+<span class="line"><span style="color:#E1E4E8">        on_destroy.</span><span style="color:#B392F0">push</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">...</span><span style="color:#E1E4E8">new_on_destroy);</span></span>
+<span class="line"><span style="color:#E1E4E8">      } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">        // Edge case - component was destroyed immediately,</span></span>
+<span class="line"><span style="color:#6A737D">        // most likely as a result of a binding initialising</span></span>
+<span class="line"><span style="color:#B392F0">        run_all</span><span style="color:#E1E4E8">(new_on_destroy);</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">      component.$$.on_mount </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  after_update.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(add_render_callback);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.fragment.m()</code></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// output.js</span></span>
+<span class="line"><span style="color:#B392F0">m</span><span style="color:#E1E4E8">(target, anchor) {</span></span>
+<span class="line"><span style="color:#B392F0">  insert</span><span style="color:#E1E4E8">(target, h1, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">  insert</span><span style="color:#E1E4E8">(target, t1, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">  insert</span><span style="color:#E1E4E8">(target, div, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">  append</span><span style="color:#E1E4E8">(div, t2);</span></span>
+<span class="line"><span style="color:#B392F0">  insert</span><span style="color:#E1E4E8">(target, t3, anchor);</span></span>
+<span class="line"><span style="color:#B392F0">  insert</span><span style="color:#E1E4E8">(target, button, anchor);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">mounted) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    dispose </span><span style="color:#F97583">=</span><span style="color:#B392F0"> listen</span><span style="color:#E1E4E8">(button, </span><span style="color:#9ECBFF">&quot;click&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#6A737D">/*SMButtonClick*/</span><span style="color:#E1E4E8"> ctx[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">]());</span></span>
+<span class="line"><span style="color:#E1E4E8">    mounted </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">},</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// https://github.dev/sveltejs/svelte</span></span>
+<span class="line"><span style="color:#6A737D">// src/runtime/internal/dom.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> insert</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">target</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Node</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">node</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Node</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">anchor</span><span style="color:#F97583">?:</span><span style="color:#B392F0"> Node</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">  target.</span><span style="color:#B392F0">insertBefore</span><span style="color:#E1E4E8">(node, anchor </span><span style="color:#F97583">||</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> append</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">target</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Node</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">node</span><span style="color:#F97583">:</span><span style="color:#B392F0"> Node</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">  target.</span><span style="color:#B392F0">appendChild</span><span style="color:#E1E4E8">(node);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> listen</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">node</span><span style="color:#F97583">:</span><span style="color:#B392F0"> EventTarget</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">event</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">handler</span><span style="color:#F97583">:</span><span style="color:#B392F0"> EventListenerOrEventListenerObject</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">options</span><span style="color:#F97583">?:</span><span style="color:#79B8FF"> boolean</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> AddEventListenerOptions</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> EventListenerOptions</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">  node.</span><span style="color:#B392F0">addEventListener</span><span style="color:#E1E4E8">(event, handler, options);</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> () </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> node.</span><span style="color:#B392F0">removeEventListener</span><span style="color:#E1E4E8">(event, handler, options);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flush()</code></p>
+</li>
+</ul>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">수정사항을 DOM에 반영하는 방법을 간단하게 소개하자면 아래와 같습니다.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">변경사항이 있을 때, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.dirty</code> 라는 변수로 값의 수정 여부를 반영하여 저장함.</p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">make_dirty()</code>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// src/runtime/internal/Component.ts</span></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> make_dirty</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">component</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">i</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (component.$$.dirty[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">===</span><span style="color:#F97583"> -</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    dirty_components.</span><span style="color:#B392F0">push</span><span style="color:#E1E4E8">(component);</span></span>
+<span class="line"><span style="color:#B392F0">    schedule_update</span><span style="color:#E1E4E8">(); </span><span style="color:#6A737D">// 예약</span></span>
+<span class="line"><span style="color:#E1E4E8">    component.$$.dirty.</span><span style="color:#B392F0">fill</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">  component.$$.dirty[(i </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> 31</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">|</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">|=</span><span style="color:#79B8FF"> 1</span><span style="color:#F97583"> &lt;&lt;</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">%</span><span style="color:#79B8FF"> 31</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">dirty를 추가하는 방식 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://blog.bitsrc.io/the-art-of-bitmasking-ec58ab1b4c03">bitmasks</a></li>
+</ul>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">component.$$.dirty[(i </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> 31</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">|</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">|=</span><span style="color:#79B8FF"> 1</span><span style="color:#F97583"> &lt;&lt;</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">%</span><span style="color:#79B8FF"> 31</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#6A737D">// case 1</span></span>
+<span class="line"><span style="color:#6A737D">// i = 1</span></span>
+<span class="line"><span style="color:#6A737D">// $$.dirty[0] = 0b0000000000000000000000000000001 (2진법)</span></span>
+<span class="line"><span style="color:#6A737D">// case 2</span></span>
+<span class="line"><span style="color:#6A737D">// i = 32</span></span>
+<span class="line"><span style="color:#6A737D">// $$.dirty[1] = 0b0000000000000000000000000000001 (2진법)</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.dirty</code>의 타입은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">number[]</code>이고, javascript에서 number로 31비트까지 저장을 할 수 있다.
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">(32비트인데 마이너스 부호가 1비트를 차지한다.)</li>
+</ul>
+</li>
+<li class="mb-2">그러므로 $$.dirty의 한 index에 31가지의 True/False의 값을 저장할 수 있다.</li>
+</ul>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full">변경한 내용으로 DOM을 업데이트하도록 예약을 합니다. → <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">schedule_update()</code></p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">schedule_update()</code>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// src/runtime/internal/scheduler.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> schedule_update</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">update_scheduled) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    update_scheduled </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    resolved_promise.</span><span style="color:#B392F0">then</span><span style="color:#E1E4E8">(flush);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+</ul>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.dirty</code>로 표시한 각 구성 요소에 대해 업데이트를 호출합니다. → <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flush()</code></p>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flush()</code></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// src/runtime/internal/scheduler.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> flush</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (flushing) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  flushing </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  do</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">    // first, call beforeUpdate functions</span></span>
+<span class="line"><span style="color:#6A737D">    // and update components</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">let</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&lt;</span><span style="color:#E1E4E8"> dirty_components.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">+=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">      const</span><span style="color:#79B8FF"> component</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> dirty_components[i];</span></span>
+<span class="line"><span style="color:#B392F0">      set_current_component</span><span style="color:#E1E4E8">(component);</span></span>
+<span class="line"><span style="color:#B392F0">      update</span><span style="color:#E1E4E8">(component.$$);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#B392F0">    set_current_component</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">null</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    dirty_components.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    while</span><span style="color:#E1E4E8"> (binding_callbacks.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">) binding_callbacks.</span><span style="color:#B392F0">pop</span><span style="color:#E1E4E8">()();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // then, once components are updated, call</span></span>
+<span class="line"><span style="color:#6A737D">    // afterUpdate functions. This may cause</span></span>
+<span class="line"><span style="color:#6A737D">    // subsequent updates...</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">let</span><span style="color:#E1E4E8"> i </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">&lt;</span><span style="color:#E1E4E8"> render_callbacks.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">; i </span><span style="color:#F97583">+=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">      const</span><span style="color:#79B8FF"> callback</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> render_callbacks[i];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">seen_callbacks.</span><span style="color:#B392F0">has</span><span style="color:#E1E4E8">(callback)) {</span></span>
+<span class="line"><span style="color:#6A737D">        // ...so guard against infinite loops</span></span>
+<span class="line"><span style="color:#E1E4E8">        seen_callbacks.</span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(callback);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">        callback</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">      }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    render_callbacks.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  } </span><span style="color:#F97583">while</span><span style="color:#E1E4E8"> (dirty_components.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  while</span><span style="color:#E1E4E8"> (flush_callbacks.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    flush_callbacks.</span><span style="color:#B392F0">pop</span><span style="color:#E1E4E8">()();</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">  update_scheduled </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  flushing </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  seen_callbacks.</span><span style="color:#B392F0">clear</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">update()</code></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> update</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">$$</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> ($$.fragment </span><span style="color:#F97583">!==</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    $$.</span><span style="color:#B392F0">update</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#B392F0">    run_all</span><span style="color:#E1E4E8">($$.before_update);</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> dirty</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> $$.dirty;</span></span>
+<span class="line"><span style="color:#E1E4E8">    $$.dirty </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">]; </span><span style="color:#6A737D">// dirty를 초기화할 수 있도록 값을 변경</span></span>
+<span class="line"><span style="color:#E1E4E8">    $$.fragment </span><span style="color:#F97583">&amp;&amp;</span><span style="color:#E1E4E8"> $$.fragment.</span><span style="color:#B392F0">p</span><span style="color:#E1E4E8">($$.ctx, dirty);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    $$.after_update.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(add_render_callback);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+<li class="mb-2">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$$.fragment.p($$.ctx, dirty)</code></p>
+<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// output.js</span></span>
+<span class="line"><span style="color:#B392F0">p</span><span style="color:#E1E4E8">(ctx, [dirty]) {</span></span>
+<span class="line"><span style="color:#6A737D">  // dirty에 저장될 때, 2진법으로 변환 되어서 2^0에 1로 저장이 되어있는지 확인</span></span>
+<span class="line"><span style="color:#6A737D">  // (수정이 되었는지 확인)</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (dirty </span><span style="color:#F97583">&amp;</span><span style="color:#6A737D"> /*isClick*/</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#B392F0">    set_data</span><span style="color:#E1E4E8">(t2, </span><span style="color:#6A737D">/*isClick*/</span><span style="color:#E1E4E8"> ctx[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">]);</span></span>
+<span class="line"><span style="color:#6A737D">    // isClick을 변경</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">},</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// https://github.dev/sveltejs/svelte</span></span>
+<span class="line"><span style="color:#6A737D">// src/runtime/internal/dom.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> set_data</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">text</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">data</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">  data </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &#39;&#39;</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> data;</span></span>
+<span class="line"><span style="color:#F97583">  if</span><span style="color:#E1E4E8"> (text.wholeText </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> data) text.data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> data;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5결론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">5.결론</h2>
+<ul class="list-disc list-inside mb-4 w-full">
+<li class="mb-2">VirtureDOM을 사용하지 않고, DOM API만을 이용하여 화면을 그리고 있으며, 변경사항을 관리하는 방법을 bitmasks라는 것을 이용하여 변경사항을 관리함.</li>
+</ul>
+<h2 id="참조" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">참조</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ichi.pro/ko/meolis-sog-e-svelte-keompail-247581368156757">https://ichi.pro/ko/meolis-sog-e-svelte-keompail-247581368156757</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ichi.pro/ko/meolis-sog-e-svelte-keompailhagi-part-2-153926413705372">https://ichi.pro/ko/meolis-sog-e-svelte-keompailhagi-part-2-153926413705372</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.dev/sveltejs/svelte/blob/master/src/runtime/internal/dom.ts">https://github.dev/sveltejs/svelte/blob/master/src/runtime/internal/dom.ts</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://svelte.dev/docs#svelte_compile">https://svelte.dev/docs#svelte_compile</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://stackoverflow.com/questions/59541070/how-is-svelte-making-a-component-dirty">https://stackoverflow.com/questions/59541070/how-is-svelte-making-a-component-dirty</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://rebro.kr/63">https://rebro.kr/63</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://90byt.es/svelte/">https://90byt.es/svelte/</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://velog.io/@vnthf/svelte%EA%B0%80-%EB%B9%A0%EB%A5%B8-%EC%9D%B4%EC%9C%A0">https://velog.io/@vnthf/svelte가-빠른-이유</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://blog.bitsrc.io/the-art-of-bitmasking-ec58ab1b4c03">https://blog.bitsrc.io/the-art-of-bitmasking-ec58ab1b4c03</a></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://dev.to/somedood/bitmasks-a-very-esoteric-and-impractical-way-of-managing-booleans-1hlf">https://dev.to/somedood/bitmasks-a-very-esoteric-and-impractical-way-of-managing-booleans-1hlf</a></p> </article> </div>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </template><!--astro:end--></astro-island> </body></html>
