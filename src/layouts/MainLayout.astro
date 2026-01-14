@@ -20,7 +20,7 @@ const {
 ---
 
 <BaseLayout title={title} description={description}>
-  <Header title={headerTitle} client:only="react" />
+  <Header title={headerTitle} client:load />
   <main
     class={cn(
       'flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full',

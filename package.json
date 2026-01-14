@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "biome format --write .",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist --dotfiles",
     "bd": "bun run build && bun run deploy",
     "pull:modules": "git submodule update --remote --merge",
     "gen:book-cover": "bun .scripts/generate-book-cover.ts",
