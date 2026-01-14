@@ -1,91 +1,113 @@
-<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="안녕하세요. 저는 백수이자 1인 개발자이며 1인 사업가입니다."><title>백수, 1인 개발자, 1인 사업가</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><astro-island uid="THBn4" prefix="r159" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="25vbn7" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0]}" ssr client="only" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <article class="prose dark:prose-invert prose-lg max-w-3xl mx-auto px-4 py-18 md:px-8 md:py-24"> <img src="/assets/blog/start/thumbnail.svg" onerror="this.src='/assets/blog/default-thumbnail.svg';" alt="백수, 1인 개발자, 1인 사업가" class="w-full h-auto rounded-lg mb-8 shadow-lg"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">백수, 1인 개발자, 1인 사업가</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 1. 13.</span> <span class="ml-2">(수정일: 2026. 1. 13.)</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># life</span> </div> </div> <h1 id="배경" class="text-4xl font-bold text-foreground mb-4 w-full">배경</h1>
-<p class="text-foreground leading-relaxed mb-4 w-full">2026년도부터는 나는 백수이자 1인 개발자, 1인 사업가로서 새로운 시작을 하려고 한다. 왜 이런 선택을 했는지에 대한 계획을 남기고 기록해 두려고 한다. 이 글은 2026년 첫 포스트이며, 앞으로 계속 포스트를 작성하며 기록해 두려고 한다.</p>
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="안녕하세요. 저는 백수이자 1인 개발자이며, 1인 사업가입니다."><title>백수, 1인 개발자, 1인 사업가</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BVCk-ah5.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="2np0jP" prefix="r175" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="ZMRDGo" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">Gitsunmin</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <article class="prose dark:prose-invert prose-lg max-w-3xl mx-auto px-4 py-18 md:px-8 md:py-24"> <img src="/assets/blog/start/thumbnail.svg" onerror="this.src='/assets/blog/default-thumbnail.svg';" alt="백수, 1인 개발자, 1인 사업가" class="w-full h-auto rounded-lg mb-8 shadow-lg"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">백수, 1인 개발자, 1인 사업가</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 1. 13.</span> <span class="ml-2">(수정일: 2026. 1. 13.)</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># life</span> </div> </div> <h1 id="배경" class="text-4xl font-bold text-foreground mb-4 w-full">배경</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">2026년부터 나는 백수이자 1인 개발자, 1인 사업가로서의 삶을 시작하려 한다.<br/>
+왜 이런 선택을 하게 되었는지, 그리고 어떤 계획을 가지고 있는지를 기록으로 남겨두고 싶었다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 글은 2026년의 첫 포스트이며, 앞으로 계속해서 나의 선택과 시도들을 기록해 나가려고 한다.</p>
 <h1 id="본론" class="text-4xl font-bold text-foreground mb-4 w-full">본론</h1>
 <h2 id="왜-퇴사를-했을까" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">왜 퇴사를 했을까?</h2>
-<p class="text-foreground leading-relaxed mb-4 w-full">나는 무엇을 해야할지, 돈을 어떻게 벌어야할지 불안하게만 느껴지던 20대 시절이 있었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">그 때 외할머니가 80살이 다 되셨는데도 일을 하고 싶어하는 모습을 보면서 고민을 해결했었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">“80살 까지도 일할건데, 지금 몇 년의 경력이 뭐가 중요하며, 돈은 또 없으면 어때?” 라는 생각이 들었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">그래서 불안한 감정도 잠재울 수 있었고, 미래를 담담하게 받아들일 수 있었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">이런 생각이 내가 혼자 사업을 하려고 마음먹게된 계기가 되었던 것 같다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">물론, 직장에서 일을 계속 하는것도 좋지만, “내가 만들고 싶은 것들을 만들면서 돈을 벌 수 있는 방법도 있지 않을까?” 라는 생각이 들었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">1년 정도는 백수이자 1인 개발자, 1인 사업가로서 지내보면서, 내가 해보고 싶은 것들을 하며 돈을 벌 수 있는지 시도해보고 싶었다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">20대 시절에는 무엇을 해야 할지, 돈은 어떻게 벌어야 할지 늘 불안했다.<br/>
+미래를 생각하면 생각할수록 마음이 조급해졌던 시기였다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그 무렵, 외할머니가 여든을 앞둔 나이에도 여전히 일을 하고 싶어 하시는 모습을 보게 되었다.<br/>
+그 모습을 보며 문득 이런 생각이 들었다.</p>
 <blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
-<p class="text-foreground leading-relaxed mb-4 w-full">실패할 수도 있고, 성공할 수도 있겠지만, 80살까지 일할건데, 지금 몇 년의 경력이 뭐가 중요하며, 돈은 또 없으면 어때?</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">“80살까지도 일할 건데, 지금 몇 년의 경력이 뭐가 중요하며, 돈은 또 없으면 어때?”</p>
 </blockquote>
-<p class="text-foreground leading-relaxed mb-4 w-full">그렇게 퇴사를 하게 되었다.</p>
-<h2 id="사업자등록" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">사업자등록</h2>
-<p class="text-foreground leading-relaxed mb-4 w-full">퇴사를 결심하고, 1인 개발자, 1인 사업가로서 활동하기 위해서, 사업자 등록을 하였다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">사실 당분간은 사업자 등록 없이 활동해도 되지만, 일을 함에 있어서 원동력이 될 것 같고, 세금 관련 처리를 위해서도 필요할 것 같아서, 사업자 등록을 하게 되었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">사업자 등록을 하기 위해서 세무사와 상담하고, 세무서를 방문하면서 복잡하고도 미묘한 세법의 세계에 잠시 발을 들이게 되었다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그 생각은 묘하게 마음을 편안하게 만들었다.<br/>
+불안한 감정도 조금은 잠재울 수 있었고, 미래를 담담하게 받아들일 수 있게 되었다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">아마 이때부터였던 것 같다.<br/>
+혼자서 무언가를 만들어보고, 그걸로 돈을 벌어보는 삶을 진지하게 생각하게 된 계기가.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">물론 직장에서 계속 일하는 것도 충분히 좋은 선택이다.<br/>
+하지만 동시에 이런 생각도 들었다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">“내가 만들고 싶은 것들을 만들면서 돈을 벌 수 있는 방법도 있지 않을까?”</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">그래서 1년 정도는 백수이자 1인 개발자, 1인 사업가로 지내보며,<br/>
+내가 해보고 싶은 것들로 실제 수익을 만들어낼 수 있는지 직접 시도해보고 싶어졌다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">실패할 수도 있고, 성공할 수도 있겠지만<br/>
+어차피 80살까지 일할 거라면, 지금 몇 년의 경력이 그리 중요할까.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그렇게 퇴사를 결심하게 되었다.</p>
+<h2 id="사업자-등록" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">사업자 등록</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">퇴사를 결심한 뒤, 1인 개발자이자 1인 사업가로 활동하기 위해 사업자 등록을 했다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">사실 당분간은 사업자 등록 없이도 활동할 수 있었지만,<br/>
+일을 시작하는 데 있어 하나의 원동력이 필요했고,<br/>
+세금 관련 처리 역시 미리 준비해두는 편이 좋겠다고 판단했다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">사업자 등록을 위해 세무사와 상담을 하고, 세무서를 방문하면서<br/>
+복잡하고도 미묘한 세법의 세계에 잠시 발을 들이게 되었다.</p>
 <blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
 <p class="text-foreground leading-relaxed mb-4 w-full">어렵다.</p>
 </blockquote>
-<p class="text-foreground leading-relaxed mb-4 w-full">법과 관련된 부분은 담당하는 사람마다 다르고, 지역마다 다르며, 상황마다 다르다. 어지럽다. 하기 싫다. 아.. 아니, 그래도 해야지..</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">어찌저찌 사업자 등록을 마쳤고, 이제 본격적으로 백수이자 1인 개발자이며, 1인 사업가로서의 삶을 시작하려고 한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">법과 관련된 부분은 담당하는 사람마다 다르고,<br/>
+지역마다 다르고, 상황마다 다르다.<br/>
+어지럽다. 하기 싫다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">아.. 아니, 그래도 해야지..</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">어찌저찌 사업자 등록을 마쳤고,<br/>
+이제 본격적으로 백수이자 1인 개발자, 그리고 1인 사업가로서의 삶을 시작하려 한다.</p>
 <h2 id="습관-만들기" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">습관 만들기</h2>
-<p class="text-foreground leading-relaxed mb-4 w-full">앞으로 1년 동안은 채찍질하는 팀장도 없을 것이며, 동료도 없을 것이다. 스스로 동기부여를 하고, 스스로 학습하고, 스스로 일을 해야 한다.
-그렇게 하기 위해서는 좋은 습관을 만드는 것이 중요하다고 생각한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">앞으로 1년 동안은 채찍질하는 팀장도, 함께 일하는 동료도 없다.<br/>
+스스로 동기부여를 하고, 스스로 학습하고, 스스로 일을 만들어가야 한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그러기 위해서는 결국 <strong>습관</strong>이 가장 중요하다고 생각한다.</p>
 <h4 id="부족한-지식-채우기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">부족한 지식 채우기</h4>
-<p class="text-foreground leading-relaxed mb-4 w-full">매일 공부하는 시간을 가지려고 한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">매일 공부하는 시간을 확보하려 한다.</p>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">매일 30분 정도는 경제, 주식 관련 기사와 지표를 확인하고 공부하는 시간을 가지려고 한다.</li>
-<li class="mb-2">매일 30분 정도는 개발 관련 새로운 기술, 트렌드, 도구 등을 공부하는 시간을 가지려고 한다.</li>
-<li class="mb-2">그 외로 매일 아침 1시간씩 공부하는 시간을 가지려고 한다. 주제는 AI, 마케팅, 영어 등 다양하게 가져가려고 한다.</li>
-<li class="mb-2">자기전에는 독서를 하려고 한다. 최소 20분 이상.</li>
+<li class="mb-2">하루 30분은 경제·주식 관련 기사와 지표를 확인하며 공부한다.</li>
+<li class="mb-2">하루 30분은 개발 관련 새로운 기술, 트렌드, 도구를 살펴본다.</li>
+<li class="mb-2">매일 아침 1시간은 AI, 마케팅, 영어 등 다양한 주제로 학습한다.</li>
+<li class="mb-2">자기 전에는 최소 20분 이상 독서를 한다.</li>
 </ul>
 <h4 id="집중-시간-확보" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">집중 시간 확보</h4>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">매일 최소 3시간은 온전히 집중할 수 있는 시간을 확보하려고 한다. 이 시간 동안에는 외부 방해 요소를 최대한 차단한다.</li>
+<li class="mb-2">매일 최소 3시간은 온전히 집중할 수 있는 시간을 확보한다.</li>
+<li class="mb-2">이 시간에는 외부 방해 요소를 최대한 차단한다.</li>
 </ul>
-<h4 id="일정관리" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">일정관리</h4>
+<h4 id="일정-관리" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">일정 관리</h4>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">매일 아침 그 날의 할 일을 계획하고, 우선순위를 정리한다.</li>
-<li class="mb-2">매주 일요일에는 다음 주의 주요 목표와 일정을 미리 계획한다.</li>
-<li class="mb-2">매달 말에는 그 달의 성과를 리뷰하고, 다음 달의 목표를 설정한다.</li>
+<li class="mb-2">매일 아침, 그날의 할 일을 정리하고 우선순위를 설정한다.</li>
+<li class="mb-2">매주 일요일에는 다음 주의 목표와 일정을 미리 계획한다.</li>
+<li class="mb-2">매달 말에는 한 달간의 성과를 리뷰하고 다음 달의 목표를 세운다.</li>
 <li class="mb-2">캘린더 앱을 활용해 중요한 일정과 마감일을 관리한다.</li>
 </ul>
 <h4 id="휴식" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">휴식</h4>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">매 주 월요일은 필수 습관을 제외하고는 휴식일로 정한다.</li>
-<li class="mb-2">책을 읽어도 되고, 영화를 봐도 되고, 산책을 해도 된다. 그냥 쉬는 날로 만든다.</li>
+<li class="mb-2">매주 월요일은 필수 습관을 제외하고는 휴식일로 정한다.</li>
+<li class="mb-2">책을 읽어도 좋고, 영화를 봐도 좋고, 산책을 해도 된다.</li>
+<li class="mb-2">아무것도 하지 않아도 괜찮은 날로 만든다.</li>
 </ul>
 <h4 id="건강-관리" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">건강 관리</h4>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">밥먹고 15분 이상 산책을 한다.</li>
+<li class="mb-2">식사 후에는 15분 이상 산책을 한다.</li>
 <li class="mb-2">매일 맨몸 운동(턱걸이, 팔굽혀펴기, 윗몸일으키기 등)을 한다.</li>
 </ul>
 <h1 id="결론" class="text-4xl font-bold text-foreground mb-4 w-full">결론</h1>
-<p class="text-foreground leading-relaxed mb-4 w-full">어찌저찌하여 백수겸 1인 개발자 및 1인 사업가가 되었다.</p>
-<p class="text-foreground leading-relaxed mb-4 w-full">1인으로 일을 하기 위해서는 습관이 중요하다.
-아래 체크리스트를 매일 확인하여 좋은 습관 만들기를 실천하는 것이 목표이다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">어찌저찌하여 백수이자 1인 개발자, 그리고 1인 사업가가 되었다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">혼자서 일을 하기 위해서는 무엇보다 습관이 중요하다.<br/>
+아래의 체크리스트를 매일 확인하며, 좋은 습관을 만드는 것이 현재의 목표다.</p>
 <h4 id="일일-체크리스트" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">일일 체크리스트</h4>
 <ul class="list-disc list-inside mb-4 w-full">
 <li class="mb-2"><input type="checkbox" disabled/> 30분 경제 기사 리딩 및 주식 공부</li>
-<li class="mb-2"><input type="checkbox" disabled/> 30분 개발 관련 트렌드 확인</li>
-<li class="mb-2"><input type="checkbox" disabled/> 1시간 AI/마케팅/영어 등 공부</li>
+<li class="mb-2"><input type="checkbox" disabled/> 30분 개발 트렌드 확인</li>
+<li class="mb-2"><input type="checkbox" disabled/> 1시간 AI / 마케팅 / 영어 학습</li>
 <li class="mb-2"><input type="checkbox" disabled/> 캘린더 확인 및 일정 계획</li>
-<li class="mb-2"><input type="checkbox" disabled/> 3시간 집중 작업 시간 확보</li>
+<li class="mb-2"><input type="checkbox" disabled/> 3시간 집중 작업</li>
 <li class="mb-2"><input type="checkbox" disabled/> 휴식 및 산책</li>
 <li class="mb-2"><input type="checkbox" disabled/> 운동</li>
-<li class="mb-2"><input type="checkbox" disabled/> 일기 및 매일 아침 할 일 계획</li>
+<li class="mb-2"><input type="checkbox" disabled/> 일기 및 아침 할 일 정리</li>
 <li class="mb-2"><input type="checkbox" disabled/> 자기 전 20분 독서</li>
 </ul>
 <h4 id="주간-루틴" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">주간 루틴</h4>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><input type="checkbox" disabled/> 매주 금요일 오후에는 주간 회고 시간을 가진다.</li>
-<li class="mb-2"><input type="checkbox" disabled/> 매주 일요일에는 다음 주 일정과 목표를 계획한다.</li>
+<li class="mb-2"><input type="checkbox" disabled/> 매주 금요일 오후, 주간 회고</li>
+<li class="mb-2"><input type="checkbox" disabled/> 매주 일요일, 다음 주 일정 및 목표 계획</li>
 </ul>
 <h4 id="월별-루틴" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">월별 루틴</h4>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><input type="checkbox" disabled/> 매달 말에는 그 달의 성과를 리뷰하고, 다음 달의 목표를 설정한다.</li>
-<li class="mb-2"><input type="checkbox" disabled/> 매달 첫 주에는 새로운 습관이나 루틴을 추가하거나 조정한다.</li>
+<li class="mb-2"><input type="checkbox" disabled/> 매달 말, 월간 성과 리뷰 및 다음 달 목표 설정</li>
+<li class="mb-2"><input type="checkbox" disabled/> 매달 첫 주, 새로운 습관 또는 루틴 추가·조정</li>
 </ul>
-<p class="text-foreground leading-relaxed mb-4 w-full">이 체크리스트를 분기별로 확인해보려고 한다. (아래 점수로 확인)</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 체크리스트는 분기별로 점수로 확인해볼 생각이다.</p>
 <ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">⭐️⭐️⭐️⭐️⭐️: 일주일간 매일 실천하였으며, 이 일을 수행하지 않으면 손이 떨리고 불안함.</li>
-<li class="mb-2">⭐️⭐️⭐️⭐️★: 일주일간 5일 이상 실천하였으며, 일을 수행하지 않으면 머릿속에서 계속 생각남.</li>
-<li class="mb-2">⭐️⭐️⭐️★★: 일주일간 3일 이상 실천하였으며, 일을 수행하지 않아도 아무렇지 않음.</li>
-<li class="mb-2">⭐️⭐️★★★: 일주일간 2일 이상 실천하였으며, 일을 수행하는 것이 좀 불편함.</li>
-<li class="mb-2">⭐️★★★★: 일주일간 1일 이상 실천하였음.</li>
-<li class="mb-2">★★★★★: 아,, 이런게 있었지..</li>
+<li class="mb-2">⭐️⭐️⭐️⭐️⭐️ : 일주일 내내 실천. 안 하면 손이 떨리고 불안함.</li>
+<li class="mb-2">⭐️⭐️⭐️⭐️★ : 주 5일 이상 실천. 안 하면 계속 신경 쓰임.</li>
+<li class="mb-2">⭐️⭐️⭐️★★ : 주 3일 이상 실천. 안 해도 크게 상관없음.</li>
+<li class="mb-2">⭐️⭐️★★★ : 주 2일 이상 실천. 조금 불편함.</li>
+<li class="mb-2">⭐️★★★★ : 주 1일 이상 실천.</li>
+<li class="mb-2">★★★★★ : 아… 이런 게 있었지.</li>
 </ul> </article>  </main> <link rel="preload" as="image" href="https://github.com/gitsunmin.png"/><footer class="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer"><div class="flex items-center gap-4 justify-cente w-full"><img src="https://github.com/gitsunmin.png" alt="logo" class="rounded-full size-10"/><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island> </body></html>
