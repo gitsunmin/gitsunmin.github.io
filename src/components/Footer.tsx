@@ -2,13 +2,8 @@
 
 export const Footer = () => {
   return (
-    <footer className="p-4 mt-4 flex flex-col gap-y-4 bg-background-footer text-foreground-footer">
-      <div className="flex items-center gap-4 justify-cente w-full">
-        <img
-          src="https://github.com/gitsunmin.png"
-          alt="logo"
-          className="rounded-full size-10"
-        />
+    <footer className="p-4 mt-4 flex justify-between text-foreground">
+      <div className="flex items-center">
         <span>Powered by Gitsunmin</span>
       </div>
       <ul className="flex gap-2 justify-end">
