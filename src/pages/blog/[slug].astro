@@ -34,4 +34,79 @@ const heroImage = post.data.heroImage || DEFAULT_HERO_IMAGE;
     </div>
     <Content components={MDXReplacer({})} />
   </article>
+
+  <script is:inline>
+    function initCopyButtons() {
+      const wrappers = document.querySelectorAll('.code-block-wrapper');
+      
+      wrappers.forEach((wrapper) => {
+        const button = wrapper.querySelector('.copy-button');
+        const pre = wrapper.querySelector('pre');
+        const copyIcon = button?.querySelector('.copy-icon');
+        const checkIcon = button?.querySelector('.check-icon');
+        
+        if (!button || !pre) return;
+        
+        // Remove existing listener if any (by cloning)
+        const newButton = button.cloneNode(true);
+        button.parentNode?.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', async () => {
+          const codeElement = pre.querySelector('code');
+          const code = codeElement?.innerText || pre.innerText || '';
+          
+          try {
+            await navigator.clipboard.writeText(code);
+            
+            const btnCopyIcon = newButton.querySelector('.copy-icon');
+            const btnCheckIcon = newButton.querySelector('.check-icon');
+            
+            // Show check icon
+            btnCopyIcon?.classList.add('hidden');
+            btnCheckIcon?.classList.remove('hidden');
+            newButton.classList.add('opacity-100');
+            newButton.classList.remove('opacity-0');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              btnCopyIcon?.classList.remove('hidden');
+              btnCheckIcon?.classList.add('hidden');
+              newButton.classList.remove('opacity-100');
+              newButton.classList.add('opacity-0', 'group-hover:opacity-100');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      });
+    }
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCopyButtons);
+    } else {
+      initCopyButtons();
+    }
+
+    // Re-initialize on view transitions
+    document.addEventListener('astro:page-load', initCopyButtons);
+  </script>
+
+  <style is:global>
+    .code-block-wrapper:hover .copy-button {
+      opacity: 1 !important;
+    }
+    
+    .code-block-wrapper pre {
+      transition: border-color 0.2s ease;
+    }
+    
+    .code-block-wrapper:hover pre {
+      border-color: rgb(156 163 175 / 0.5) !important;
+    }
+    
+    .dark .code-block-wrapper:hover pre {
+      border-color: rgb(75 85 99 / 0.5) !important;
+    }
+  </style>
 </MainLayout>

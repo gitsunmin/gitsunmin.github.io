@@ -295,3 +295,14 @@
     font-size: calc(3.75rem * var(--font-size-scale)) !important;
   }
 }
+
+@layer base {
+  .prose ul, .prose ol {
+    list-style-position: outside;
+    padding-inline-start: 1.5rem;
+  }
+
+  .prose ul ul, .prose ol ol, .prose ul ol, .prose ol ul {
+    padding-inline-start: 1.5rem;
+  }
+}
