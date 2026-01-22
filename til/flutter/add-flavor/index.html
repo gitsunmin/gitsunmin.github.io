@@ -1,16 +1,16 @@
-<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>add-flavor - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BfFV-uM0.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z27PidT" prefix="r317" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="Z1tPDf7" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">TIL</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="add-flavor" class="text-4xl font-bold text-foreground mb-4 w-full">Add Flavor</h1>
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>add-flavor - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BdDYSdFu.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="ZadI8q" prefix="r317" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="Z1tPDf7" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">TIL</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="add-flavor" class="text-4xl font-bold text-foreground mb-4 w-full">Add Flavor</h1>
 <h2 id="서론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">서론</h2>
 <p class="text-foreground leading-relaxed mb-4 w-full">Flutter 개발을 하면서 같은 코드로 여러 환경을 지원하기 위한 방법으로 Flavor를 사용할 수 있습니다. 이 글에서 Flavor를 사용하는 방법에 대해서 알아보겠습니다.</p>
 <h2 id="본론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">본론</h2>
 <h3 id="flavor를-사용하는-이유" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">Flavor를 사용하는 이유</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">Flutter에서는 iOS와 Android를 동시에 개발할 수 있습니다. 그리고 iOS와 Android에서는 각각 다른 환경을 지원해야 합니다. 예를 들어, iOS에서는 개발, 스테이지, 프로덕션 환경을 지원해야 합니다. 그리고 Android에서는 개발, 스테이지, 프로덕션, QA 환경을 지원해야 합니다. 이렇게 여러 환경을 지원하기 위해서는 각 환경별로 다른 설정을 해야 합니다. 이때, Flavor를 사용하면 각 환경별로 다른 설정을 할 수 있습니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full">사용 툴</p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">macOS</li>
-<li class="mb-2">flutter: 3.16.1</li>
-<li class="mb-2">vscode: 1.84.2
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">flutter extension: 3.76.0</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">macOS</li>
+<li class="mb-2 ml-0">flutter: 3.16.1</li>
+<li class="mb-2 ml-0">vscode: 1.84.2
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">flutter extension: 3.76.0</li>
 </ul>
 </li>
 </ul>
@@ -19,90 +19,90 @@
 <h4 id="ios에서-flavor-적용하기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">iOS에서 Flavor 적용하기</h4>
 <p class="text-foreground leading-relaxed mb-4 w-full">iOS에 Flavor을 적용하기 위해서는 Xcode를 사용해서 설정하는 것이 가장 쉽기 때문에 Xcode를 사용해서 설정하겠습니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full">아래의 Flutter 구조에서 ios 폴더를 우클릭하여 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">opne in Xcode</code>를 클릭합니다.</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>.</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>.</span></span>
 <span class="line"><span>├── README.md</span></span>
 <span class="line"><span>├── android</span></span>
 <span class="line"><span>├── ios</span></span>
 <span class="line"><span>├── lib</span></span>
 <span class="line"><span>├── pubspec.lock</span></span>
 <span class="line"><span>├── pubspec.yaml</span></span>
-<span class="line"><span>└── test</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>└── test</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <p class="text-foreground leading-relaxed mb-4 w-full">Xcode에서의 동작들은 설명하겠습니다.</p>
 <h5 id="configurations-추가하기" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">Configurations 추가하기</h5>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">Xcode가 열리면, 왼쪽의 네비게이션에서 Runner와 Pods가 있을텐데, Runner를 클릭해주세요.</li>
-<li class="mb-2">Runner를 클릭하면, 중앙 상단에 탭중에서 info 탭을 클릭해주세요.</li>
-<li class="mb-2">info 탭에서 Configurations를 클릭해주세요.</li>
-<li class="mb-2">Debug와 Release 그리고 Profile이 있을텐데, + 버튼을 클릭하여 새로운 Configuration을 추가해주세요. 추가하실 때, 각 Configuration의 Based Configuration은 Debug, Release, Profile로 설정해주세요.</li>
-<li class="mb-2">각 Configuration의 이름은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Debug-TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Debug-PRODUCTION</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Release-TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Release-PRODUCTION</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Profile-TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Profile-PRODUCTION</code>으로 설정해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Xcode가 열리면, 왼쪽의 네비게이션에서 Runner와 Pods가 있을텐데, Runner를 클릭해주세요.</li>
+<li class="mb-2 ml-0">Runner를 클릭하면, 중앙 상단에 탭중에서 info 탭을 클릭해주세요.</li>
+<li class="mb-2 ml-0">info 탭에서 Configurations를 클릭해주세요.</li>
+<li class="mb-2 ml-0">Debug와 Release 그리고 Profile이 있을텐데, + 버튼을 클릭하여 새로운 Configuration을 추가해주세요. 추가하실 때, 각 Configuration의 Based Configuration은 Debug, Release, Profile로 설정해주세요.</li>
+<li class="mb-2 ml-0">각 Configuration의 이름은 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Debug-TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Debug-PRODUCTION</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Release-TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Release-PRODUCTION</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Profile-TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Profile-PRODUCTION</code>으로 설정해주세요.</li>
 </ol>
 <h5 id="schemes-추가하기" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">Schemes 추가하기</h5>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">Xcode의 메뉴바에서 Product &gt; Scheme &gt; Edit Scheme…을 클릭해주세요.</li>
-<li class="mb-2">Runner를 클릭하고, 팝업의 하단에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Duplicate Scheme</code> 버튼을 클릭해주세요.</li>
-<li class="mb-2">새로운 Scheme의 이름을 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">PRODUCTION</code>으로 설정해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Xcode의 메뉴바에서 Product &gt; Scheme &gt; Edit Scheme…을 클릭해주세요.</li>
+<li class="mb-2 ml-0">Runner를 클릭하고, 팝업의 하단에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Duplicate Scheme</code> 버튼을 클릭해주세요.</li>
+<li class="mb-2 ml-0">새로운 Scheme의 이름을 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">TEST</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">PRODUCTION</code>으로 설정해주세요.</li>
 </ol>
 <h5 id="build-settings-추가하기" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">Build Settings 추가하기</h5>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Configurations 추가하기</code>에서 Runner를 클릭하고, PROJECT와 TARGETS 중에 TARGETS에 있는 Runner를 클릭해주세요.</li>
-<li class="mb-2">중앙 상단에 탭중에서 Build Settings 탭을 클릭해주세요.</li>
-<li class="mb-2">오른쪽 상단에 검색창에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Product Bundle Identifier</code>를 검색해주세요.</li>
-<li class="mb-2">각 Configuration의 Product Bundle Identifier를 설정해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Configurations 추가하기</code>에서 Runner를 클릭하고, PROJECT와 TARGETS 중에 TARGETS에 있는 Runner를 클릭해주세요.</li>
+<li class="mb-2 ml-0">중앙 상단에 탭중에서 Build Settings 탭을 클릭해주세요.</li>
+<li class="mb-2 ml-0">오른쪽 상단에 검색창에 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Product Bundle Identifier</code>를 검색해주세요.</li>
+<li class="mb-2 ml-0">각 Configuration의 Product Bundle Identifier를 설정해주세요.</li>
 </ol>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">ex)</li>
-<li class="mb-2">Debug-TEST: com.example.flutter.flavor.test</li>
-<li class="mb-2">Debug-PRODUCTION: com.example.flutter.flavor.production</li>
-<li class="mb-2">Release-TEST: com.example.flutter.flavor.test</li>
-<li class="mb-2">Release-PRODUCTION: com.example.flutter.flavor.production</li>
-<li class="mb-2">Profile-TEST: com.example.flutter.flavor.test</li>
-<li class="mb-2">Profile-PRODUCTION: com.example.flutter.flavor.production</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">ex)</li>
+<li class="mb-2 ml-0">Debug-TEST: com.example.flutter.flavor.test</li>
+<li class="mb-2 ml-0">Debug-PRODUCTION: com.example.flutter.flavor.production</li>
+<li class="mb-2 ml-0">Release-TEST: com.example.flutter.flavor.test</li>
+<li class="mb-2 ml-0">Release-PRODUCTION: com.example.flutter.flavor.production</li>
+<li class="mb-2 ml-0">Profile-TEST: com.example.flutter.flavor.test</li>
+<li class="mb-2 ml-0">Profile-PRODUCTION: com.example.flutter.flavor.production</li>
 </ul>
 <h5 id="infoplist-추가하기" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">Info.plist 추가하기</h5>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Build Settings 추가하기</code>를 마친 후에 같은 메뉴 탭에서 오른쪽 상단에 + 버튼을 클릭해주세요.</li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Add User-Defined Setting</code>을 클릭해주세요.</li>
-<li class="mb-2">변수명은 자유이지만, 에시로서 저는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>을 등록했습니다.
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>: Flovor의 이름을 설정합니다.</li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>: 모바일에서 보여질 앱의 이름을 설정합니다.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Build Settings 추가하기</code>를 마친 후에 같은 메뉴 탭에서 오른쪽 상단에 + 버튼을 클릭해주세요.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Add User-Defined Setting</code>을 클릭해주세요.</li>
+<li class="mb-2 ml-0">변수명은 자유이지만, 에시로서 저는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>을 등록했습니다.
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>: Flovor의 이름을 설정합니다.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>: 모바일에서 보여질 앱의 이름을 설정합니다.</li>
 </ul>
 </li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>의 값은 각 Configuration의 이름과 동일하게 설정해주세요.
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">ex)</li>
-<li class="mb-2">Debug-TEST: TEST</li>
-<li class="mb-2">Debug-PRODUCTION: PRODUCTION</li>
-<li class="mb-2">Release-TEST: TEST</li>
-<li class="mb-2">Release-PRODUCTION: PRODUCTION</li>
-<li class="mb-2">Profile-TEST: TEST</li>
-<li class="mb-2">Profile-PRODUCTION: PRODUCTION</li>
-<li class="mb-2">이렇게 설정하면, 각 Configuration의 이름에 따라서 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>의 값이 변경됩니다.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>의 값은 각 Configuration의 이름과 동일하게 설정해주세요.
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">ex)</li>
+<li class="mb-2 ml-0">Debug-TEST: TEST</li>
+<li class="mb-2 ml-0">Debug-PRODUCTION: PRODUCTION</li>
+<li class="mb-2 ml-0">Release-TEST: TEST</li>
+<li class="mb-2 ml-0">Release-PRODUCTION: PRODUCTION</li>
+<li class="mb-2 ml-0">Profile-TEST: TEST</li>
+<li class="mb-2 ml-0">Profile-PRODUCTION: PRODUCTION</li>
+<li class="mb-2 ml-0">이렇게 설정하면, 각 Configuration의 이름에 따라서 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_FLAVOR</code>의 값이 변경됩니다.</li>
 </ul>
 </li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>의 값은 이렇게 했습니다.
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">ex)</li>
-<li class="mb-2">Debug-TEST: TEST</li>
-<li class="mb-2">Debug-PRODUCTION: PRODUCTION</li>
-<li class="mb-2">Release-TEST: TEST</li>
-<li class="mb-2">Release-PRODUCTION: PRODUCTION</li>
-<li class="mb-2">Profile-TEST: TEST</li>
-<li class="mb-2">Profile-PRODUCTION: PRODUCTION</li>
-<li class="mb-2">이렇게 설정하면, 각 Configuration의 이름에 따라서 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>의 값이 변경됩니다.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>의 값은 이렇게 했습니다.
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">ex)</li>
+<li class="mb-2 ml-0">Debug-TEST: TEST</li>
+<li class="mb-2 ml-0">Debug-PRODUCTION: PRODUCTION</li>
+<li class="mb-2 ml-0">Release-TEST: TEST</li>
+<li class="mb-2 ml-0">Release-PRODUCTION: PRODUCTION</li>
+<li class="mb-2 ml-0">Profile-TEST: TEST</li>
+<li class="mb-2 ml-0">Profile-PRODUCTION: PRODUCTION</li>
+<li class="mb-2 ml-0">이렇게 설정하면, 각 Configuration의 이름에 따라서 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">APP_NAME</code>의 값이 변경됩니다.</li>
 </ul>
 </li>
-<li class="mb-2">info탭을 눌러주세요.</li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Bundle display name</code>을 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$(APP_NAME)</code>으로 설정해주세요.</li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Flvaor</code>이라는 키를 추가하고, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$(APP_FLAVOR)</code>로 설정해주세요.</li>
+<li class="mb-2 ml-0">info탭을 눌러주세요.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Bundle display name</code>을 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$(APP_NAME)</code>으로 설정해주세요.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">Flvaor</code>이라는 키를 추가하고, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">$(APP_FLAVOR)</code>로 설정해주세요.</li>
 </ol>
 <h4 id="android에서-flavor-적용하기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Android에서 Flavor 적용하기</h4>
 <h5 id="buildgradle-를-설정" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">build.gradle 를 설정</h5>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">/android/app/src/build.gradle 파일을 열어주세요.</li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">buildTypes</code>에 아래의 코드를 추가해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">/android/app/src/build.gradle 파일을 열어주세요.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">buildTypes</code>에 아래의 코드를 추가해주세요.</li>
 </ol>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">flavorDimensions </span><span style="color:#9ECBFF">&quot;default&quot;</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="groovy"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">flavorDimensions </span><span style="color:#9ECBFF">&quot;default&quot;</span></span>
 <span class="line"><span style="color:#E1E4E8">productFlavors {</span></span>
 <span class="line"><span style="color:#79B8FF">    TEST</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#E1E4E8">        dimension </span><span style="color:#9ECBFF">&quot;default&quot;</span></span>
@@ -116,22 +116,22 @@
 <span class="line"><span style="color:#E1E4E8">        versionNameSuffix </span><span style="color:#9ECBFF">&quot;-PRODUCTION&quot;</span></span>
 <span class="line"><span style="color:#E1E4E8">        resValue </span><span style="color:#9ECBFF">&quot;string&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&quot;app_name&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&quot;PRODUCTION&quot;</span><span style="color:#6A737D"> // 원하는 앱 이름을 설정해주세요.</span></span>
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
-<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h5 id="androidmanifestxml-설정" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">AndroidManifest.xml 설정</h5>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">/android/app/src/main/AndroidManifest.xml 파일을 열어주세요.</li>
-<li class="mb-2"><application android:label="@string/app_name"></application>를 정의해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">/android/app/src/main/AndroidManifest.xml 파일을 열어주세요.</li>
+<li class="mb-2 ml-0"><application android:label="@string/app_name"></application>를 정의해주세요.</li>
 </ol>
 <h4 id="flutter에서-flavor-사용하기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Flutter에서 Flavor 사용하기</h4>
 <h5 id="native와-소통하기" class="text-lg font-medium text-foreground mt-4 mb-1 w-full">Native와 소통하기</h5>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full">ios</p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">ios/Runner/AppDelegate.swift</code> 파일을 열어주세요.</li>
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">didFinishLaunchingWithOptions</code> 메소드에서 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">GeneratedPluginRegistrant.register(with: self)</code> 위에 아래의 코드를 추가해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">ios/Runner/AppDelegate.swift</code> 파일을 열어주세요.</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">didFinishLaunchingWithOptions</code> 메소드에서 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">GeneratedPluginRegistrant.register(with: self)</code> 위에 아래의 코드를 추가해주세요.</li>
 </ol>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">let</span><span style="color:#E1E4E8"> channel </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> FlutterMethodChannel</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;flavor&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">binaryMessenger</span><span style="color:#E1E4E8">: controller.binaryMessenger)</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="swift"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">let</span><span style="color:#E1E4E8"> channel </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> FlutterMethodChannel</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;flavor&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">binaryMessenger</span><span style="color:#E1E4E8">: controller.binaryMessenger)</span></span>
 <span class="line"><span style="color:#E1E4E8">channel.</span><span style="color:#79B8FF">setMethodCallHandler</span><span style="color:#E1E4E8">({</span></span>
 <span class="line"><span style="color:#E1E4E8">        (</span><span style="color:#79B8FF">call</span><span style="color:#E1E4E8">: FlutterMethodCall, </span><span style="color:#79B8FF">result</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">@escaping</span><span style="color:#E1E4E8"> FlutterResult) </span><span style="color:#F97583">-&gt;</span><span style="color:#79B8FF"> Void</span><span style="color:#F97583"> in</span></span>
 <span class="line"></span>
@@ -140,15 +140,15 @@
 <span class="line"><span style="color:#E1E4E8">        } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#79B8FF">          result</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;notImplemented&quot;</span><span style="color:#E1E4E8">)</span></span>
 <span class="line"><span style="color:#E1E4E8">        }</span></span>
-<span class="line"><span style="color:#E1E4E8">      })</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">      })</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full">android</p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">android/app/src/main/kotlin/.../flavor/MainActivity.kt</code> 파일을 열어주세요.</li>
-<li class="mb-2">아래의 코드를 작성해 주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">android/app/src/main/kotlin/.../flavor/MainActivity.kt</code> 파일을 열어주세요.</li>
+<li class="mb-2 ml-0">아래의 코드를 작성해 주세요.</li>
 </ol>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">package</span><span style="color:#B392F0"> com.example.flavor_example  </span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="kotlin"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">package</span><span style="color:#B392F0"> com.example.flavor_example  </span></span>
 <span class="line"></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">import</span><span style="color:#B392F0"> androidx.annotation.NonNull</span><span style="color:#E1E4E8">;  </span></span>
@@ -165,15 +165,15 @@
 <span class="line"><span style="color:#E1E4E8">              call, result </span><span style="color:#F97583">-&gt;</span><span style="color:#E1E4E8"> result.</span><span style="color:#B392F0">success</span><span style="color:#E1E4E8">(BuildConfig.FLAVOR)  </span></span>
 <span class="line"><span style="color:#E1E4E8">      }  </span></span>
 <span class="line"><span style="color:#E1E4E8">  }</span></span>
-<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full">flutter</p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">lib/main.dart</code> 파일을 열어주세요.</li>
-<li class="mb-2">아래의 함수를 작성해서 사용해주세요.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">lib/main.dart</code> 파일을 열어주세요.</li>
+<li class="mb-2 ml-0">아래의 함수를 작성해서 사용해주세요.</li>
 </ol>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:flutter/material.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="dart"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:flutter/material.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#F97583">import</span><span style="color:#9ECBFF"> &#39;package:flutter/services.dart&#39;</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#79B8FF">Future</span><span style="color:#E1E4E8">&lt;</span><span style="color:#79B8FF">String</span><span style="color:#E1E4E8">&gt; </span><span style="color:#B392F0">_getFlavorFromNative</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> {</span></span>
@@ -184,10 +184,10 @@
 <span class="line"><span style="color:#E1E4E8">  } </span><span style="color:#F97583">on</span><span style="color:#79B8FF"> PlatformException</span><span style="color:#F97583"> catch</span><span style="color:#E1E4E8"> (e) {</span></span>
 <span class="line"><span style="color:#F97583">    return</span><span style="color:#9ECBFF"> &quot;Failed to get flavor: &#39;</span><span style="color:#9ECBFF">${</span><span style="color:#79B8FF">e</span><span style="color:#9ECBFF">.</span><span style="color:#79B8FF">message</span><span style="color:#9ECBFF">}</span><span style="color:#9ECBFF">&#39;.&quot;</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#E1E4E8">  }</span></span>
-<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
-<ol class="list-decimal list-inside mb-4 w-full" start="3">
-<li class="mb-2">그리고 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flutter run --flavor TEST</code> 또는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flutter run --flavor PRODUCTION</code>을 실행해주세요.</li>
-<li class="mb-2">각 네이티브에서 설정한 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">FLAVOR</code>의 값을 가져올 수 있습니다.</li>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<ol class="list-decimal list-outside mb-4 w-full pl-6" start="3">
+<li class="mb-2 ml-0">그리고 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flutter run --flavor TEST</code> 또는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">flutter run --flavor PRODUCTION</code>을 실행해주세요.</li>
+<li class="mb-2 ml-0">각 네이티브에서 설정한 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">FLAVOR</code>의 값을 가져올 수 있습니다.</li>
 </ol>
 </li>
 </ul>

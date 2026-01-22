@@ -1,151 +1,153 @@
-<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="JWT 기반 Access/Refresh Token 이중화, Refresh Token Rotation(RTR), Redis 세션 관리를 통한 프로덕션 레벨 인증 시스템 설계와 구현 방법을 상세히 다룹니다."><title>인증 시스템 설계에 관한 연구</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BfFV-uM0.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="2iScD5" prefix="r809" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="ZMRDGo" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">Gitsunmin</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <article class="prose dark:prose-invert prose-lg max-w-3xl mx-auto px-4 py-18 md:px-8 md:py-24"> <img src="/assets/blog/study-on-design-of-authentication-system/thumbnail.svg" onerror="this.src='/assets/blog/default-thumbnail.svg';" alt="인증 시스템 설계에 관한 연구" class="w-full h-auto rounded-lg mb-8 shadow-lg"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">인증 시스템 설계에 관한 연구</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 1. 22.</span> <span class="ml-2">(수정일: 2026. 1. 22.)</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># study</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># redis</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># authentication</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># security</span> </div> </div> <p class="text-foreground leading-relaxed mb-4 w-full">현대 웹 애플리케이션에서 인증(Authentication)은 단순히 사용자를 확인하는 것을 넘어, 보안과 사용자 경험, 그리고 시스템 성능 사이의 최적의 균형점을 찾는 엔지니어링 과정입니다.</p>
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="JWT 기반 Access/Refresh Token 이중화, Refresh Token Rotation(RTR), Redis 세션 관리를 통한 프로덕션 레벨 인증 시스템 설계와 구현 방법을 상세히 다룹니다."><title>인증 시스템 설계에 관한 연구</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><style>.code-block-wrapper:hover .copy-button{opacity:1!important}.code-block-wrapper pre{transition:border-color .2s ease}.code-block-wrapper:hover pre{border-color:#9ca3af80!important}.dark .code-block-wrapper:hover pre{border-color:#4b556380!important}
+</style>
+<link rel="stylesheet" href="/_astro/blog.BdDYSdFu.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="2uW85e" prefix="r809" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="ZMRDGo" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">Gitsunmin</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <article class="prose dark:prose-invert prose-lg max-w-3xl mx-auto px-4 py-18 md:px-8 md:py-24"> <img src="/assets/blog/study-on-design-of-authentication-system/thumbnail.svg" onerror="this.src='/assets/blog/default-thumbnail.svg';" alt="인증 시스템 설계에 관한 연구" class="w-full h-auto rounded-lg mb-8 shadow-lg"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">인증 시스템 설계에 관한 연구</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 1. 22.</span> <span class="ml-2">(수정일: 2026. 1. 22.)</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># study</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># redis</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># authentication</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># security</span> </div> </div> <p class="text-foreground leading-relaxed mb-4 w-full">현대 웹 애플리케이션에서 인증(Authentication)은 단순히 사용자를 확인하는 것을 넘어, 보안과 사용자 경험, 그리고 시스템 성능 사이의 최적의 균형점을 찾는 엔지니어링 과정입니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full">본 문서에서는 프로덕션 환경에서 검증된 JWT 기반 인증 시스템의 설계와 구현을 다룹니다. Access Token과 Refresh Token의 이중화 전략부터 시작하여, Redis를 활용한 효율적인 세션 관리, 그리고 토큰 탈취 위협을 최소화하는 Refresh Token Rotation(RTR) 기법까지 실무에 바로 적용 가능한 수준으로 상세히 다룹니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>다루는 주요 내용:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">JWT 기반 토큰 이중화 구조 설계 원리</li>
-<li class="mb-2">Redis를 활용한 고성능 세션 관리</li>
-<li class="mb-2">Refresh Token Rotation(RTR)을 통한 보안 강화</li>
-<li class="mb-2">전체 인증 플로우 구현 (로그인, 토큰 갱신, 로그아웃)</li>
-<li class="mb-2">프로덕션 환경 보안 고려사항 및 공격 시나리오 대응</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">JWT 기반 토큰 이중화 구조 설계 원리</li>
+<li class="mb-2 ml-0">Redis를 활용한 고성능 세션 관리</li>
+<li class="mb-2 ml-0">Refresh Token Rotation(RTR)을 통한 보안 강화</li>
+<li class="mb-2 ml-0">전체 인증 플로우 구현 (로그인, 토큰 갱신, 로그아웃)</li>
+<li class="mb-2 ml-0">프로덕션 환경 보안 고려사항 및 공격 시나리오 대응</li>
 </ul>
 <hr/>
 <h2 id="1-인증-시스템의-이중-구조-access-token과-refresh-token" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">1. 인증 시스템의 이중 구조: Access Token과 Refresh Token</h2>
 <p class="text-foreground leading-relaxed mb-4 w-full">인증 시스템에서 토큰의 수명은 보안과 사용자 경험이라는 양날의 검과 같습니다. 이를 해결하기 위해 두 종류의 토큰을 혼용합니다.</p>
 <h3 id="11-access-token" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1.1. Access Token</h3>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>역할:</strong> 모든 API 요청의 인증 헤더에 포함되어 사용자의 신원을 증명하는 단기 인증 토큰입니다.</li>
-<li class="mb-2"><strong>특징:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">매 요청마다 네트워크를 통해 전송되므로 탈취 위험이 상대적으로 높습니다.</li>
-<li class="mb-2">이를 보완하기 위해 유효기간을 짧게(권장: 15분~30분) 설정합니다.</li>
-<li class="mb-2">탈취되더라도 짧은 시간 내에 만료되어 피해를 최소화할 수 있습니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>역할:</strong> 모든 API 요청의 인증 헤더에 포함되어 사용자의 신원을 증명하는 단기 인증 토큰입니다.</li>
+<li class="mb-2 ml-0"><strong>특징:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">매 요청마다 네트워크를 통해 전송되므로 탈취 위험이 상대적으로 높습니다.</li>
+<li class="mb-2 ml-0">이를 보완하기 위해 유효기간을 짧게(권장: 15분~30분) 설정합니다.</li>
+<li class="mb-2 ml-0">탈취되더라도 짧은 시간 내에 만료되어 피해를 최소화할 수 있습니다.</li>
 </ul>
 </li>
-<li class="mb-2"><strong>저장 위치:</strong> 클라이언트 메모리(변수) 또는 짧은 TTL의 쿠키에 저장합니다.</li>
+<li class="mb-2 ml-0"><strong>저장 위치:</strong> 클라이언트 메모리(변수) 또는 짧은 TTL의 쿠키에 저장합니다.</li>
 </ul>
 <h3 id="12-refresh-token" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1.2. Refresh Token</h3>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>역할:</strong> Access Token이 만료되었을 때 새로운 토큰 쌍을 발급받기 위한 장기 인증 토큰입니다.</li>
-<li class="mb-2"><strong>특징:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">Access Token보다 긴 유효기간(권장: 7일~14일)을 가집니다.</li>
-<li class="mb-2">평소에는 통신에 노출되지 않고, 토큰 갱신 요청 시에만 서버로 전송됩니다.</li>
-<li class="mb-2"><strong>반드시 서버 측(Redis)에도 저장하여 무효화 가능한 상태를 유지해야 합니다.</strong></li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>역할:</strong> Access Token이 만료되었을 때 새로운 토큰 쌍을 발급받기 위한 장기 인증 토큰입니다.</li>
+<li class="mb-2 ml-0"><strong>특징:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Access Token보다 긴 유효기간(권장: 7일~14일)을 가집니다.</li>
+<li class="mb-2 ml-0">평소에는 통신에 노출되지 않고, 토큰 갱신 요청 시에만 서버로 전송됩니다.</li>
+<li class="mb-2 ml-0"><strong>반드시 서버 측(Redis)에도 저장하여 무효화 가능한 상태를 유지해야 합니다.</strong></li>
 </ul>
 </li>
-<li class="mb-2"><strong>저장 위치:</strong> HttpOnly, Secure 플래그가 설정된 쿠키에 저장하여 JavaScript 접근을 차단합니다.</li>
+<li class="mb-2 ml-0"><strong>저장 위치:</strong> HttpOnly, Secure 플래그가 설정된 쿠키에 저장하여 JavaScript 접근을 차단합니다.</li>
 </ul>
 <h3 id="13-토큰-이중화의-장점" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1.3. 토큰 이중화의 장점</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">이러한 이중 구조는 다음과 같은 이점을 제공합니다:</p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><strong>보안성:</strong> 자주 사용되는 Access Token은 짧은 수명으로 위험을 최소화</li>
-<li class="mb-2"><strong>사용자 경험:</strong> Refresh Token으로 자동 갱신하여 재로그인 없이 연속적인 사용 가능</li>
-<li class="mb-2"><strong>제어 가능성:</strong> Refresh Token을 서버에서 관리하여 필요시 즉시 세션 무효화 가능</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>보안성:</strong> 자주 사용되는 Access Token은 짧은 수명으로 위험을 최소화</li>
+<li class="mb-2 ml-0"><strong>사용자 경험:</strong> Refresh Token으로 자동 갱신하여 재로그인 없이 연속적인 사용 가능</li>
+<li class="mb-2 ml-0"><strong>제어 가능성:</strong> Refresh Token을 서버에서 관리하여 필요시 즉시 세션 무효화 가능</li>
 </ol>
 <hr/>
 <h2 id="2-redis를-활용한-토큰-관리의-필연성" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">2. Redis를 활용한 토큰 관리의 필연성</h2>
 <p class="text-foreground leading-relaxed mb-4 w-full">JWT(JSON Web Token)는 기본적으로 무상태(Stateless)를 지향하지만, 실제 프로덕션 환경에서는 세션 제어 능력이 필수적입니다. Redis는 이러한 요구사항을 충족시키는 최적의 솔루션입니다.</p>
 <h3 id="21-redis가-필요한-이유" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2.1. Redis가 필요한 이유</h3>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>즉시 세션 무효화 (Kill Switch)</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">JWT는 한 번 발급되면 만료 전까지 서버가 제어하기 어렵습니다.</li>
-<li class="mb-2">Redis에 Refresh Token을 저장하면 로그아웃, 보안 위협 감지, 비밀번호 변경 등의 상황에서 해당 키를 삭제하여 즉시 접근을 차단할 수 있습니다.</li>
-<li class="mb-2">이는 JWT의 무상태 장점을 유지하면서도 필요시 상태 제어를 가능하게 합니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">JWT는 한 번 발급되면 만료 전까지 서버가 제어하기 어렵습니다.</li>
+<li class="mb-2 ml-0">Redis에 Refresh Token을 저장하면 로그아웃, 보안 위협 감지, 비밀번호 변경 등의 상황에서 해당 키를 삭제하여 즉시 접근을 차단할 수 있습니다.</li>
+<li class="mb-2 ml-0">이는 JWT의 무상태 장점을 유지하면서도 필요시 상태 제어를 가능하게 합니다.</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>고성능 I/O</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">인증 검증은 모든 API 요청의 관문으로, 시스템에서 가장 빈번하게 발생하는 작업입니다.</li>
-<li class="mb-2">인메모리(In-Memory) 기반인 Redis는 일반적으로 1ms 미만의 응답 속도를 제공합니다.</li>
-<li class="mb-2">디스크 기반 DB 대비 10~100배 빠른 성능으로 대규모 트래픽에도 안정적입니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">인증 검증은 모든 API 요청의 관문으로, 시스템에서 가장 빈번하게 발생하는 작업입니다.</li>
+<li class="mb-2 ml-0">인메모리(In-Memory) 기반인 Redis는 일반적으로 1ms 미만의 응답 속도를 제공합니다.</li>
+<li class="mb-2 ml-0">디스크 기반 DB 대비 10~100배 빠른 성능으로 대규모 트래픽에도 안정적입니다.</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>자동 만료 관리 (TTL)</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">Redis의 Time-To-Live 기능으로 토큰 만료 시점에 데이터가 자동 삭제됩니다.</li>
-<li class="mb-2">별도의 배치 작업이나 스케줄러 없이 메모리 관리가 자동화됩니다.</li>
-<li class="mb-2">시스템 리소스를 효율적으로 활용할 수 있습니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Redis의 Time-To-Live 기능으로 토큰 만료 시점에 데이터가 자동 삭제됩니다.</li>
+<li class="mb-2 ml-0">별도의 배치 작업이나 스케줄러 없이 메모리 관리가 자동화됩니다.</li>
+<li class="mb-2 ml-0">시스템 리소스를 효율적으로 활용할 수 있습니다.</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>멀티 디바이스 지원</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">사용자별로 여러 디바이스의 Refresh Token을 관리할 수 있습니다.</li>
-<li class="mb-2">Key 네이밍 전략 (예: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">user:{userId}:device:{deviceId}</code>)으로 디바이스별 세션 제어가 가능합니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">사용자별로 여러 디바이스의 Refresh Token을 관리할 수 있습니다.</li>
+<li class="mb-2 ml-0">Key 네이밍 전략 (예: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">user:{userId}:device:{deviceId}</code>)으로 디바이스별 세션 제어가 가능합니다.</li>
 </ul>
 </li>
 </ol>
 <h3 id="22-redis-데이터-구조-설계" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2.2. Redis 데이터 구조 설계</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">Refresh Token 저장을 위한 Redis 키 구조는 다음과 같이 설계할 수 있습니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>Key: user:{userId}:refresh_token</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>Key: user:{userId}:refresh_token</span></span>
 <span class="line"><span>Value: {refreshToken}</span></span>
-<span class="line"><span>TTL: 604800 (7일, 초 단위)</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>TTL: 604800 (7일, 초 단위)</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <p class="text-foreground leading-relaxed mb-4 w-full">멀티 디바이스를 지원하는 경우:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>Key: user:{userId}:device:{deviceId}:refresh_token</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>Key: user:{userId}:device:{deviceId}:refresh_token</span></span>
 <span class="line"><span>Value: {refreshToken}</span></span>
-<span class="line"><span>TTL: 604800</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>TTL: 604800</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <hr/>
 <h2 id="3-jwt의-핵심-기술-서명-알고리즘과-보안" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">3. JWT의 핵심 기술: 서명 알고리즘과 보안</h2>
 <h3 id="31-hmacsha256을-통한-무결성-보장" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">3.1. HMACSHA256을 통한 무결성 보장</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">JWT의 Signature(서명) 영역에 사용되는 HMACSHA256 알고리즘은 데이터의 **무결성(Integrity)**과 **인증(Authentication)**을 동시에 보장합니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>동작 원리:</strong></p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>Signature = HMACSHA256(</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>Signature = HMACSHA256(</span></span>
 <span class="line"><span>  base64UrlEncode(header) + &quot;.&quot; + base64UrlEncode(payload),</span></span>
 <span class="line"><span>  secret</span></span>
-<span class="line"><span>)</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><strong>서명 생성:</strong> 서버는 JWT의 Header와 Payload를 인코딩한 후, 비밀 키(Secret Key)와 함께 HMAC-SHA256 해시 함수에 입력하여 서명을 생성합니다.</li>
-<li class="mb-2"><strong>서명 검증:</strong> 클라이언트로부터 받은 토큰의 Header와 Payload를 동일한 방식으로 해싱한 후, 토큰에 포함된 서명과 비교합니다.</li>
-<li class="mb-2"><strong>변조 감지:</strong> Payload나 Header가 1바이트라도 변경되면 해시값이 완전히 달라져 즉시 변조를 탐지할 수 있습니다.</li>
+<span class="line"><span>)</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>서명 생성:</strong> 서버는 JWT의 Header와 Payload를 인코딩한 후, 비밀 키(Secret Key)와 함께 HMAC-SHA256 해시 함수에 입력하여 서명을 생성합니다.</li>
+<li class="mb-2 ml-0"><strong>서명 검증:</strong> 클라이언트로부터 받은 토큰의 Header와 Payload를 동일한 방식으로 해싱한 후, 토큰에 포함된 서명과 비교합니다.</li>
+<li class="mb-2 ml-0"><strong>변조 감지:</strong> Payload나 Header가 1바이트라도 변경되면 해시값이 완전히 달라져 즉시 변조를 탐지할 수 있습니다.</li>
 </ol>
 <h3 id="32-secret-key-관리-모범-사례" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">3.2. Secret Key 관리 모범 사례</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">Secret Key는 인증 시스템의 핵심 보안 요소입니다. 다음 원칙을 반드시 준수해야 합니다:</p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>충분한 엔트로피:</strong> 최소 256비트(32바이트) 이상의 무작위 문자열 사용</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D"># 안전한 Secret Key 생성 예시</span></span>
-<span class="line"><span style="color:#B392F0">openssl</span><span style="color:#9ECBFF"> rand</span><span style="color:#79B8FF"> -base64</span><span style="color:#79B8FF"> 32</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D"># 안전한 Secret Key 생성 예시</span></span>
+<span class="line"><span style="color:#B392F0">openssl</span><span style="color:#9ECBFF"> rand</span><span style="color:#79B8FF"> -base64</span><span style="color:#79B8FF"> 32</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>환경 분리:</strong> 개발/스테이징/프로덕션 환경마다 다른 Secret Key 사용</p>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>안전한 저장:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">코드에 하드코딩 금지</li>
-<li class="mb-2">환경 변수 또는 AWS Secrets Manager, HashiCorp Vault 등의 비밀 관리 서비스 활용</li>
-<li class="mb-2">Git 저장소에 커밋되지 않도록 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">.gitignore</code> 설정</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">코드에 하드코딩 금지</li>
+<li class="mb-2 ml-0">환경 변수 또는 AWS Secrets Manager, HashiCorp Vault 등의 비밀 관리 서비스 활용</li>
+<li class="mb-2 ml-0">Git 저장소에 커밋되지 않도록 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">.gitignore</code> 설정</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>주기적 로테이션:</strong> 보안 정책에 따라 정기적으로 키를 교체 (예: 90일마다)</p>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>Access Token과 Refresh Token의 분리:</strong> 두 토큰은 서로 다른 Secret Key를 사용하여 한쪽이 노출되어도 다른 쪽의 보안을 유지합니다.</p>
 </li>
 </ol>
 <h3 id="33-rs256-vs-hs256" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">3.3. RS256 vs HS256</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">마이크로서비스 환경에서는 비대칭 키 알고리즘(RS256)도 고려할 수 있습니다:</p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>HS256 (대칭 키):</strong> 단일 서버 또는 신뢰할 수 있는 내부 서비스 간 통신에 적합</li>
-<li class="mb-2"><strong>RS256 (비대칭 키):</strong> 여러 서비스가 토큰을 검증해야 하는 경우, 공개 키만 배포하여 보안성 향상</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>HS256 (대칭 키):</strong> 단일 서버 또는 신뢰할 수 있는 내부 서비스 간 통신에 적합</li>
+<li class="mb-2 ml-0"><strong>RS256 (비대칭 키):</strong> 여러 서비스가 토큰을 검증해야 하는 경우, 공개 키만 배포하여 보안성 향상</li>
 </ul>
 <hr/>
 <h2 id="4-실전-구현-nodejs와-redis-연동" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">4. 실전 구현: Node.js와 Redis 연동</h2>
 <h3 id="41-환경-설정-및-redis-연결" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4.1. 환경 설정 및 Redis 연결</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>환경별 권장사항:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>로컬 개발:</strong> Docker Compose를 통한 일관된 개발 환경 구축</li>
-<li class="mb-2"><strong>프로덕션:</strong> AWS ElastiCache, Redis Cloud 등의 관리형 서비스 사용</li>
-<li class="mb-2"><strong>고가용성:</strong> Redis Sentinel 또는 Cluster 모드로 장애 대응</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>로컬 개발:</strong> Docker Compose를 통한 일관된 개발 환경 구축</li>
+<li class="mb-2 ml-0"><strong>프로덕션:</strong> AWS ElastiCache, Redis Cloud 등의 관리형 서비스 사용</li>
+<li class="mb-2 ml-0"><strong>고가용성:</strong> Redis Sentinel 또는 Cluster 모드로 장애 대응</li>
 </ul>
 <h4 id="redis-클라이언트-설정" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Redis 클라이언트 설정</h4>
 <p class="text-foreground leading-relaxed mb-4 w-full">프로덕션 환경에 적합한 연결 설정은 다음과 같습니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// config/redisClient.js</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// config/redisClient.js</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> redis</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;redis&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#6A737D">// Redis 클라이언트 생성 및 설정</span></span>
@@ -191,9 +193,9 @@
 <span class="line"><span style="color:#E1E4E8">    process.</span><span style="color:#B392F0">exit</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">});</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF">module</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">exports</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> client;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#79B8FF">module</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">exports</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> client;</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h4 id="docker-compose-로컬-환경-설정" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Docker Compose 로컬 환경 설정</h4>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D"># docker-compose.yml</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="yaml"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D"># docker-compose.yml</span></span>
 <span class="line"><span style="color:#85E89D">version</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&#39;3.8&#39;</span></span>
 <span class="line"><span style="color:#85E89D">services</span><span style="color:#E1E4E8">:</span></span>
 <span class="line"><span style="color:#85E89D">  redis</span><span style="color:#E1E4E8">:</span></span>
@@ -210,9 +212,9 @@
 <span class="line"><span style="color:#85E89D">      retries</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">5</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#85E89D">volumes</span><span style="color:#E1E4E8">:</span></span>
-<span class="line"><span style="color:#85E89D">  redis_data</span><span style="color:#E1E4E8">:</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#85E89D">  redis_data</span><span style="color:#E1E4E8">:</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h4 id="환경-변수-설정" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">환경 변수 설정</h4>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D"># .env</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D"># .env</span></span>
 <span class="line"><span style="color:#E1E4E8">REDIS_HOST</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">localhost</span></span>
 <span class="line"><span style="color:#E1E4E8">REDIS_PORT</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">6379</span></span>
 <span class="line"><span style="color:#E1E4E8">REDIS_PASSWORD</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">your_secure_password</span></span>
@@ -220,10 +222,10 @@
 <span class="line"><span style="color:#E1E4E8">ACCESS_TOKEN_SECRET</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">your_access_token_secret_key_256bit</span></span>
 <span class="line"><span style="color:#E1E4E8">REFRESH_TOKEN_SECRET</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">your_refresh_token_secret_key_256bit</span></span>
 <span class="line"><span style="color:#E1E4E8">ACCESS_TOKEN_EXPIRES_IN</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">15m</span></span>
-<span class="line"><span style="color:#E1E4E8">REFRESH_TOKEN_EXPIRES_IN</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">7d</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">REFRESH_TOKEN_EXPIRES_IN</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">7d</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="42-유틸리티-함수-정의" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4.2. 유틸리티 함수 정의</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">먼저 토큰 생성 및 검증에 사용할 헬퍼 함수를 정의합니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// utils/tokenUtils.js</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// utils/tokenUtils.js</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> jwt</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;jsonwebtoken&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#6A737D">/**</span></span>
@@ -275,17 +277,17 @@
 <span class="line"><span style="color:#E1E4E8">    generateRefreshToken,</span></span>
 <span class="line"><span style="color:#E1E4E8">    verifyAccessToken,</span></span>
 <span class="line"><span style="color:#E1E4E8">    verifyRefreshToken</span></span>
-<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="43-로그인-엔드포인트-구현" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4.3. 로그인 엔드포인트 구현</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">사용자 인증의 시작점인 로그인 API를 구현합니다. 비밀번호 검증 시 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">bcrypt</code>를 사용하며, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">cost factor</code>를 적절히 설정하는 것이 중요합니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>Bcrypt Cost Factor (Salt Rounds):</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">bcrypt.hash(password, saltRounds)</code>의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">saltRounds</code> 인자는 해싱의 복잡도를 결정합니다.</li>
-<li class="mb-2">값이 높을수록 더 많은 계산이 필요하여 브루트 포스 공격에 더 오래 저항할 수 있지만, 서버의 응답 시간도 길어집니다.</li>
-<li class="mb-2"><strong>권장 값:</strong> 10~12. (12 이상은 대부분의 웹 서비스에서 과도할 수 있습니다.)</li>
-<li class="mb-2">하드웨어 성능이 발전함에 따라 이 값은 주기적으로 재평가해야 합니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">bcrypt.hash(password, saltRounds)</code>의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">saltRounds</code> 인자는 해싱의 복잡도를 결정합니다.</li>
+<li class="mb-2 ml-0">값이 높을수록 더 많은 계산이 필요하여 브루트 포스 공격에 더 오래 저항할 수 있지만, 서버의 응답 시간도 길어집니다.</li>
+<li class="mb-2 ml-0"><strong>권장 값:</strong> 10~12. (12 이상은 대부분의 웹 서비스에서 과도할 수 있습니다.)</li>
+<li class="mb-2 ml-0">하드웨어 성능이 발전함에 따라 이 값은 주기적으로 재평가해야 합니다.</li>
 </ul>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// routes/auth.js</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// routes/auth.js</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> express</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;express&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> bcrypt</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;bcrypt&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> redisClient</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;../config/redisClient&#39;</span><span style="color:#E1E4E8">);</span></span>
@@ -367,10 +369,10 @@
 <span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">; </span><span style="color:#6A737D">// placeholder</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF">module</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">exports</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> router;</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#79B8FF">module</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">exports</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> router;</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="42-refresh-token-rotation-rtr-로직" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4.2. Refresh Token Rotation (RTR) 로직</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">보안을 한 단계 더 높이기 위해 토큰 재발급 시 Refresh Token도 함께 갱신하는 RTR 기법을 적용합니다.</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">/**</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">/**</span></span>
 <span class="line"><span style="color:#6A737D"> * 토큰 갱신 엔드포인트 (Refresh Token Rotation 적용)</span></span>
 <span class="line"><span style="color:#6A737D"> */</span></span>
 <span class="line"><span style="color:#E1E4E8">router.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;/auth/refresh&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">req</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">res</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
@@ -438,34 +440,34 @@
 <span class="line"><span style="color:#E1E4E8">        console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;토큰 갱신 에러:&#39;</span><span style="color:#E1E4E8">, err);</span></span>
 <span class="line"><span style="color:#E1E4E8">        res.</span><span style="color:#B392F0">status</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">500</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;서버 오류가 발생했습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h4 id="rtr의-핵심-보안-메커니즘" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">RTR의 핵심 보안 메커니즘</h4>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>토큰 재사용 탐지 (Reuse Detection)</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">이미 사용된 Refresh Token으로 재요청 시 탈취로 간주</li>
-<li class="mb-2">즉시 모든 세션 무효화로 추가 피해 방지</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">이미 사용된 Refresh Token으로 재요청 시 탈취로 간주</li>
+<li class="mb-2 ml-0">즉시 모든 세션 무효화로 추가 피해 방지</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>토큰 패밀리 (Token Family)</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">각 갱신마다 새로운 토큰 쌍 발급</li>
-<li class="mb-2">탈취자가 오래된 토큰을 사용하면 즉시 감지 가능</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">각 갱신마다 새로운 토큰 쌍 발급</li>
+<li class="mb-2 ml-0">탈취자가 오래된 토큰을 사용하면 즉시 감지 가능</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>자동 세션 정리</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">Redis TTL로 오래된 토큰 자동 삭제</li>
-<li class="mb-2">메모리 효율성과 보안 동시 달성</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Redis TTL로 오래된 토큰 자동 삭제</li>
+<li class="mb-2 ml-0">메모리 효율성과 보안 동시 달성</li>
 </ul>
 </li>
 </ol>
 <h3 id="45-로그아웃-구현" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4.5. 로그아웃 구현</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">로그아웃은 단순히 클라이언트에서 토큰을 삭제하는 것이 아니라, 서버 측 세션도 함께 무효화해야 합니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">/**</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">/**</span></span>
 <span class="line"><span style="color:#6A737D"> * 로그아웃 엔드포인트</span></span>
 <span class="line"><span style="color:#6A737D"> */</span></span>
 <span class="line"><span style="color:#E1E4E8">router.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;/auth/logout&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">req</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">res</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
@@ -499,10 +501,10 @@
 <span class="line"><span style="color:#E1E4E8">        console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;로그아웃 에러:&#39;</span><span style="color:#E1E4E8">, err);</span></span>
 <span class="line"><span style="color:#E1E4E8">        res.</span><span style="color:#B392F0">status</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">500</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;서버 오류가 발생했습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="46-인증-미들웨어-구현" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4.6. 인증 미들웨어 구현</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">보호된 API 라우트에 적용할 인증 미들웨어입니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// middleware/authMiddleware.js</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// middleware/authMiddleware.js</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">verifyAccessToken</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;../utils/tokenUtils&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#6A737D">/**</span></span>
@@ -527,9 +529,9 @@
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#79B8FF">module</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">exports</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { authenticateToken };</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#79B8FF">module</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">exports</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> { authenticateToken };</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>사용 예시:</strong></p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">authenticateToken</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;../middleware/authMiddleware&#39;</span><span style="color:#E1E4E8">);</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">authenticateToken</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;../middleware/authMiddleware&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#6A737D">// 보호된 라우트</span></span>
 <span class="line"><span style="color:#E1E4E8">router.</span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;/api/profile&#39;</span><span style="color:#E1E4E8">, authenticateToken, </span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">req</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">res</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
@@ -540,7 +542,7 @@
 <span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (err) {</span></span>
 <span class="line"><span style="color:#E1E4E8">        res.</span><span style="color:#B392F0">status</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">500</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;서버 오류가 발생했습니다.&#39;</span><span style="color:#E1E4E8"> });</span></span>
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <hr/>
 <h2 id="5-브라우저-저장소와-쿠키-보안-전략" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">5. 브라우저 저장소와 쿠키 보안 전략</h2>
 <p class="text-foreground leading-relaxed mb-4 w-full">토큰을 어디에 저장하느냐는 보안 아키텍처의 핵심 결정사항입니다. 각 저장 방식은 고유한 취약점과 장점을 가지고 있습니다.</p>
@@ -583,79 +585,79 @@
 <table><thead><tr><th>저장소</th><th>XSS 취약성</th><th>CSRF 취약성</th><th>권장 용도</th></tr></thead><tbody><tr><td>LocalStorage</td><td>높음 (JS 접근 가능)</td><td>없음</td><td><strong>사용 비권장</strong></td></tr><tr><td>SessionStorage</td><td>높음 (JS 접근 가능)</td><td>없음</td><td><strong>사용 비권장</strong></td></tr><tr><td>메모리 (변수)</td><td>낮음 (페이지 새로고침 시 소실)</td><td>없음</td><td>Access Token</td></tr><tr><td>HttpOnly Cookie</td><td>없음 (JS 접근 차단)</td><td>있음 (대응 필요)</td><td><strong>Refresh Token (권장)</strong></td></tr></tbody></table>
 <h3 id="52-권장-저장-전략" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">5.2. 권장 저장 전략</h3>
 <h4 id="access-token" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Access Token</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>저장 위치:</strong> 클라이언트 애플리케이션의 메모리 (JavaScript 변수)</li>
-<li class="mb-2"><strong>장점:</strong> XSS 공격에 상대적으로 안전 (DOM에 노출되지 않음)</li>
-<li class="mb-2"><strong>단점:</strong> 페이지 새로고침 시 소실 → Refresh Token으로 재발급</li>
-<li class="mb-2"><strong>대안:</strong> 짧은 TTL의 쿠키 사용 가능 (자동 전송 편의성)</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>저장 위치:</strong> 클라이언트 애플리케이션의 메모리 (JavaScript 변수)</li>
+<li class="mb-2 ml-0"><strong>장점:</strong> XSS 공격에 상대적으로 안전 (DOM에 노출되지 않음)</li>
+<li class="mb-2 ml-0"><strong>단점:</strong> 페이지 새로고침 시 소실 → Refresh Token으로 재발급</li>
+<li class="mb-2 ml-0"><strong>대안:</strong> 짧은 TTL의 쿠키 사용 가능 (자동 전송 편의성)</li>
 </ul>
 <h4 id="refresh-token" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Refresh Token</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>저장 위치:</strong> HttpOnly + Secure 쿠키 (<strong>필수</strong>)</li>
-<li class="mb-2"><strong>이유:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">JavaScript에서 접근 불가하여 XSS 공격 방어</li>
-<li class="mb-2">긴 유효기간을 가지므로 LocalStorage 사용 시 위험이 큼</li>
-<li class="mb-2">서버가 쿠키 유효성을 완전히 제어 가능</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>저장 위치:</strong> HttpOnly + Secure 쿠키 (<strong>필수</strong>)</li>
+<li class="mb-2 ml-0"><strong>이유:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">JavaScript에서 접근 불가하여 XSS 공격 방어</li>
+<li class="mb-2 ml-0">긴 유효기간을 가지므로 LocalStorage 사용 시 위험이 큼</li>
+<li class="mb-2 ml-0">서버가 쿠키 유효성을 완전히 제어 가능</li>
 </ul>
 </li>
 </ul>
 <h3 id="53-쿠키-보안-속성-상세-설명" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">5.3. 쿠키 보안 속성 상세 설명</h3>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">res.</span><span style="color:#B392F0">cookie</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;refreshToken&#39;</span><span style="color:#E1E4E8">, token, {</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#E1E4E8">res.</span><span style="color:#B392F0">cookie</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;refreshToken&#39;</span><span style="color:#E1E4E8">, token, {</span></span>
 <span class="line"><span style="color:#E1E4E8">    httpOnly: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,      </span><span style="color:#6A737D">// (1) XSS 방어</span></span>
 <span class="line"><span style="color:#E1E4E8">    secure: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,        </span><span style="color:#6A737D">// (2) HTTPS 전용</span></span>
 <span class="line"><span style="color:#E1E4E8">    sameSite: </span><span style="color:#9ECBFF">&#39;strict&#39;</span><span style="color:#E1E4E8">,  </span><span style="color:#6A737D">// (3) CSRF 방어</span></span>
 <span class="line"><span style="color:#E1E4E8">    maxAge: </span><span style="color:#79B8FF">604800000</span><span style="color:#E1E4E8">,   </span><span style="color:#6A737D">// (4) 7일 (밀리초)</span></span>
 <span class="line"><span style="color:#E1E4E8">    path: </span><span style="color:#9ECBFF">&#39;/auth&#39;</span><span style="color:#E1E4E8">,       </span><span style="color:#6A737D">// (5) 경로 제한 (선택사항)</span></span>
 <span class="line"><span style="color:#E1E4E8">    domain: </span><span style="color:#9ECBFF">&#39;.example.com&#39;</span><span style="color:#6A737D"> // (6) 도메인 제한 (선택사항)</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h4 id="1-httponly" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">(1) HttpOnly</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>기능:</strong> JavaScript (<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">document.cookie</code>)를 통한 접근을 완전히 차단</li>
-<li class="mb-2"><strong>방어:</strong> XSS (Cross-Site Scripting) 공격으로부터 토큰 탈취 방지</li>
-<li class="mb-2"><strong>중요성:</strong> ★★★★★ (필수)</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>기능:</strong> JavaScript (<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">document.cookie</code>)를 통한 접근을 완전히 차단</li>
+<li class="mb-2 ml-0"><strong>방어:</strong> XSS (Cross-Site Scripting) 공격으로부터 토큰 탈취 방지</li>
+<li class="mb-2 ml-0"><strong>중요성:</strong> ★★★★★ (필수)</li>
 </ul>
 <h4 id="2-secure" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">(2) Secure</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>기능:</strong> HTTPS 연결에서만 쿠키 전송</li>
-<li class="mb-2"><strong>방어:</strong> HTTP 연결에서의 중간자 공격 (MITM) 차단</li>
-<li class="mb-2"><strong>주의:</strong> 로컬 개발 환경에서는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">false</code>로 설정 (HTTP 사용)</li>
-<li class="mb-2"><strong>중요성:</strong> ★★★★★ (프로덕션 필수)</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>기능:</strong> HTTPS 연결에서만 쿠키 전송</li>
+<li class="mb-2 ml-0"><strong>방어:</strong> HTTP 연결에서의 중간자 공격 (MITM) 차단</li>
+<li class="mb-2 ml-0"><strong>주의:</strong> 로컬 개발 환경에서는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">false</code>로 설정 (HTTP 사용)</li>
+<li class="mb-2 ml-0"><strong>중요성:</strong> ★★★★★ (프로덕션 필수)</li>
 </ul>
 <h4 id="3-samesite" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">(3) SameSite</h4>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>옵션별 특징:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>Strict (가장 안전):</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">동일 사이트 요청에서만 쿠키 전송</li>
-<li class="mb-2">CSRF 공격을 거의 완벽하게 차단</li>
-<li class="mb-2">외부 링크를 통한 접근 시에도 쿠키가 전송되지 않음</li>
-<li class="mb-2">사용자 경험에 영향을 줄 수 있음 (예: 이메일 링크 클릭 시 로그인 상태 유지 안 됨)</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">동일 사이트 요청에서만 쿠키 전송</li>
+<li class="mb-2 ml-0">CSRF 공격을 거의 완벽하게 차단</li>
+<li class="mb-2 ml-0">외부 링크를 통한 접근 시에도 쿠키가 전송되지 않음</li>
+<li class="mb-2 ml-0">사용자 경험에 영향을 줄 수 있음 (예: 이메일 링크 클릭 시 로그인 상태 유지 안 됨)</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>Lax (균형):</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">GET 요청과 최상위 네비게이션에서는 쿠키 전송</li>
-<li class="mb-2">POST, PUT, DELETE 등 상태 변경 요청에서는 쿠키 미전송</li>
-<li class="mb-2">대부분의 CSRF 공격 차단</li>
-<li class="mb-2">합리적인 사용자 경험 제공</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">GET 요청과 최상위 네비게이션에서는 쿠키 전송</li>
+<li class="mb-2 ml-0">POST, PUT, DELETE 등 상태 변경 요청에서는 쿠키 미전송</li>
+<li class="mb-2 ml-0">대부분의 CSRF 공격 차단</li>
+<li class="mb-2 ml-0">합리적인 사용자 경험 제공</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>None (비권장):</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">모든 크로스 사이트 요청에서 쿠키 전송</li>
-<li class="mb-2">Secure 속성과 함께 사용해야 함</li>
-<li class="mb-2">특수한 경우 (iframe, 크로스 도메인 인증)에만 사용</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">모든 크로스 사이트 요청에서 쿠키 전송</li>
+<li class="mb-2 ml-0">Secure 속성과 함께 사용해야 함</li>
+<li class="mb-2 ml-0">특수한 경우 (iframe, 크로스 도메인 인증)에만 사용</li>
 </ul>
 </li>
 </ul>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>권장 설정:</strong> <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">strict</code> (보안 우선) 또는 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">lax</code> (사용성 고려)</p>
 <h3 id="54-추가-보안-레이어-csrf-토큰" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">5.4. 추가 보안 레이어: CSRF 토큰</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">SameSite 속성만으로 부족한 경우, 추가로 CSRF 토큰 패턴을 적용할 수 있습니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// CSRF 토큰 생성 (로그인 시)</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// CSRF 토큰 생성 (로그인 시)</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> crypto</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;crypto&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> csrfToken</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> crypto.</span><span style="color:#B392F0">randomBytes</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">32</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">toString</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;hex&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
@@ -677,59 +679,59 @@
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> storedToken</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> redisClient.</span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`csrf:${</span><span style="color:#E1E4E8">userId</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (receivedToken </span><span style="color:#F97583">!==</span><span style="color:#E1E4E8"> storedToken) {</span></span>
 <span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> res.</span><span style="color:#B392F0">status</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">403</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">({ message: </span><span style="color:#9ECBFF">&#39;CSRF 토큰 불일치&#39;</span><span style="color:#E1E4E8"> });</span></span>
-<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <hr/>
 <h2 id="6-표준-프로토콜-rfc-준수의-중요성" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">6. 표준 프로토콜: RFC 준수의 중요성</h2>
 <p class="text-foreground leading-relaxed mb-4 w-full">우리가 사용하는 쿠키와 JWT는 임의의 구현이 아닌, 국제 표준화 기구(IETF)에서 정의한 RFC(Request for Comments) 문서를 따릅니다.</p>
 <h3 id="61-주요-rfc-표준" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">6.1. 주요 RFC 표준</h3>
 <h4 id="rfc-6265---http-state-management-mechanism-쿠키" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">RFC 6265 - HTTP State Management Mechanism (쿠키)</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>정의:</strong> 쿠키의 구조, 속성, 보안 요구사항</li>
-<li class="mb-2"><strong>핵심 내용:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">쿠키의 Set-Cookie 헤더 포맷</li>
-<li class="mb-2">Domain, Path, Secure, HttpOnly 속성 규격</li>
-<li class="mb-2">쿠키의 생명주기 및 만료 처리</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>정의:</strong> 쿠키의 구조, 속성, 보안 요구사항</li>
+<li class="mb-2 ml-0"><strong>핵심 내용:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">쿠키의 Set-Cookie 헤더 포맷</li>
+<li class="mb-2 ml-0">Domain, Path, Secure, HttpOnly 속성 규격</li>
+<li class="mb-2 ml-0">쿠키의 생명주기 및 만료 처리</li>
 </ul>
 </li>
-<li class="mb-2"><strong>참고:</strong> <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc6265">RFC 6265</a></li>
+<li class="mb-2 ml-0"><strong>참고:</strong> <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc6265">RFC 6265</a></li>
 </ul>
 <h4 id="rfc-7519---json-web-token-jwt" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">RFC 7519 - JSON Web Token (JWT)</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>정의:</strong> JWT의 구조, 클레임, 서명 방식</li>
-<li class="mb-2"><strong>핵심 내용:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">Header, Payload, Signature의 3-part 구조</li>
-<li class="mb-2">표준 클레임 (iss, sub, aud, exp, nbf, iat, jti)</li>
-<li class="mb-2">서명 알고리즘 (HS256, RS256 등)</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>정의:</strong> JWT의 구조, 클레임, 서명 방식</li>
+<li class="mb-2 ml-0"><strong>핵심 내용:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Header, Payload, Signature의 3-part 구조</li>
+<li class="mb-2 ml-0">표준 클레임 (iss, sub, aud, exp, nbf, iat, jti)</li>
+<li class="mb-2 ml-0">서명 알고리즘 (HS256, RS256 등)</li>
 </ul>
 </li>
-<li class="mb-2"><strong>참고:</strong> <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc7519">RFC 7519</a></li>
+<li class="mb-2 ml-0"><strong>참고:</strong> <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc7519">RFC 7519</a></li>
 </ul>
 <h4 id="rfc-6749---oauth-20-authorization-framework" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">RFC 6749 - OAuth 2.0 Authorization Framework</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>정의:</strong> Access Token과 Refresh Token의 개념적 기초</li>
-<li class="mb-2"><strong>핵심 내용:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">Access Token의 역할과 수명</li>
-<li class="mb-2">Refresh Token을 통한 토큰 갱신 플로우</li>
-<li class="mb-2">인증 서버와 리소스 서버의 분리</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>정의:</strong> Access Token과 Refresh Token의 개념적 기초</li>
+<li class="mb-2 ml-0"><strong>핵심 내용:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Access Token의 역할과 수명</li>
+<li class="mb-2 ml-0">Refresh Token을 통한 토큰 갱신 플로우</li>
+<li class="mb-2 ml-0">인증 서버와 리소스 서버의 분리</li>
 </ul>
 </li>
-<li class="mb-2"><strong>참고:</strong> <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc6749">RFC 6749</a></li>
+<li class="mb-2 ml-0"><strong>참고:</strong> <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://datatracker.ietf.org/doc/html/rfc6749">RFC 6749</a></li>
 </ul>
 <h3 id="62-표준-준수의-이점" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">6.2. 표준 준수의 이점</h3>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><strong>상호 운용성:</strong> 모든 브라우저와 서버가 동일한 방식으로 데이터를 처리</li>
-<li class="mb-2"><strong>보안 모범 사례:</strong> 오랜 기간 검증된 보안 메커니즘 활용</li>
-<li class="mb-2"><strong>유지보수성:</strong> 표준을 따르면 라이브러리와 도구의 지원을 받을 수 있음</li>
-<li class="mb-2"><strong>확장성:</strong> 새로운 플랫폼이나 서비스와의 통합이 용이</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>상호 운용성:</strong> 모든 브라우저와 서버가 동일한 방식으로 데이터를 처리</li>
+<li class="mb-2 ml-0"><strong>보안 모범 사례:</strong> 오랜 기간 검증된 보안 메커니즘 활용</li>
+<li class="mb-2 ml-0"><strong>유지보수성:</strong> 표준을 따르면 라이브러리와 도구의 지원을 받을 수 있음</li>
+<li class="mb-2 ml-0"><strong>확장성:</strong> 새로운 플랫폼이나 서비스와의 통합이 용이</li>
 </ol>
 <hr/>
 <h2 id="7-프로덕션-환경-고려사항" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">7. 프로덕션 환경 고려사항</h2>
 <h3 id="71-성능-최적화" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7.1. 성능 최적화</h3>
 <h4 id="redis-연결-풀-관리" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Redis 연결 풀 관리</h4>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// 연결 풀 설정 예시 (ioredis 사용)</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// 연결 풀 설정 예시 (ioredis 사용)</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> Redis</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;ioredis&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> redis</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Redis</span><span style="color:#E1E4E8">({</span></span>
@@ -741,10 +743,10 @@
 <span class="line"><span style="color:#E1E4E8">    connectTimeout: </span><span style="color:#79B8FF">10000</span><span style="color:#E1E4E8">,</span></span>
 <span class="line"><span style="color:#6A737D">    // 연결 풀 크기 조정</span></span>
 <span class="line"><span style="color:#E1E4E8">    lazyConnect: </span><span style="color:#79B8FF">true</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h4 id="rate-limiting-속도-제한" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Rate Limiting (속도 제한)</h4>
 <p class="text-foreground leading-relaxed mb-4 w-full">토큰 엔드포인트는 브루트 포스 공격의 주요 타겟입니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> rateLimit</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;express-rate-limit&#39;</span><span style="color:#E1E4E8">);</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> rateLimit</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;express-rate-limit&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">RedisStore</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;rate-limit-redis&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> redisClient</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;../config/redisClient&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
@@ -774,10 +776,10 @@
 <span class="line"></span>
 <span class="line"><span style="color:#E1E4E8">router.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;/auth/refresh&#39;</span><span style="color:#E1E4E8">, refreshLimiter, </span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">req</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">res</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#6A737D">    // 토큰 갱신 로직</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="72-모니터링-및-로깅" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7.2. 모니터링 및 로깅</h3>
 <h4 id="보안-이벤트-로깅" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">보안 이벤트 로깅</h4>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> winston</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;winston&#39;</span><span style="color:#E1E4E8">);</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> winston</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;winston&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> securityLogger</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> winston.</span><span style="color:#B392F0">createLogger</span><span style="color:#E1E4E8">({</span></span>
 <span class="line"><span style="color:#E1E4E8">    level: </span><span style="color:#9ECBFF">&#39;info&#39;</span><span style="color:#E1E4E8">,</span></span>
@@ -802,11 +804,11 @@
 <span class="line"><span style="color:#E1E4E8">    email: email,</span></span>
 <span class="line"><span style="color:#E1E4E8">    ip: req.ip,</span></span>
 <span class="line"><span style="color:#E1E4E8">    timestamp: </span><span style="color:#F97583">new</span><span style="color:#B392F0"> Date</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">toISOString</span><span style="color:#E1E4E8">()</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="73-고가용성-high-availability" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7.3. 고가용성 (High Availability)</h3>
 <h4 id="redis-sentinel-구성" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">Redis Sentinel 구성</h4>
 <p class="text-foreground leading-relaxed mb-4 w-full">프로덕션 환경에서는 Redis의 단일 장애점을 제거해야 합니다:</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> Redis</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;ioredis&#39;</span><span style="color:#E1E4E8">);</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> Redis</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;ioredis&#39;</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> redis</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Redis</span><span style="color:#E1E4E8">({</span></span>
 <span class="line"><span style="color:#E1E4E8">    sentinels: [</span></span>
@@ -816,77 +818,77 @@
 <span class="line"><span style="color:#E1E4E8">    ],</span></span>
 <span class="line"><span style="color:#E1E4E8">    name: </span><span style="color:#9ECBFF">&#39;mymaster&#39;</span><span style="color:#E1E4E8">,</span></span>
 <span class="line"><span style="color:#E1E4E8">    password: process.env.</span><span style="color:#79B8FF">REDIS_PASSWORD</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="74-보안-강화-체크리스트" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7.4. 보안 강화 체크리스트</h3>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><input type="checkbox" disabled/> <strong>Secret Key:</strong> 256비트 이상의 강력한 무작위 키 사용</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>환경 변수:</strong> 모든 민감한 정보를 환경 변수로 관리</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>HTTPS:</strong> 프로덕션에서 반드시 HTTPS 사용</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>Rate Limiting:</strong> 모든 인증 엔드포인트에 적용</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>쿠키 속성:</strong> HttpOnly, Secure, SameSite 모두 설정</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>토큰 수명:</strong> Access Token 15-30분, Refresh Token 7-14일</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>Redis 보안:</strong> 비밀번호 설정 및 네트워크 격리</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>로깅:</strong> 보안 이벤트 상세 로깅 및 모니터링</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>입력 검증:</strong> 모든 사용자 입력에 대한 검증 및 sanitization</li>
-<li class="mb-2"><input type="checkbox" disabled/> <strong>에러 메시지:</strong> 구체적인 실패 이유를 노출하지 않음</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>Secret Key:</strong> 256비트 이상의 강력한 무작위 키 사용</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>환경 변수:</strong> 모든 민감한 정보를 환경 변수로 관리</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>HTTPS:</strong> 프로덕션에서 반드시 HTTPS 사용</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>Rate Limiting:</strong> 모든 인증 엔드포인트에 적용</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>쿠키 속성:</strong> HttpOnly, Secure, SameSite 모두 설정</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>토큰 수명:</strong> Access Token 15-30분, Refresh Token 7-14일</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>Redis 보안:</strong> 비밀번호 설정 및 네트워크 격리</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>로깅:</strong> 보안 이벤트 상세 로깅 및 모니터링</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>입력 검증:</strong> 모든 사용자 입력에 대한 검증 및 sanitization</li>
+<li class="mb-2 ml-0"><input type="checkbox" disabled/> <strong>에러 메시지:</strong> 구체적인 실패 이유를 노출하지 않음</li>
 </ul>
 <h3 id="75-공격-시나리오별-대응-전략" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7.5. 공격 시나리오별 대응 전략</h3>
 <h4 id="시나리오-1-access-token-탈취" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">시나리오 1: Access Token 탈취</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>영향:</strong> 제한적 (짧은 수명으로 자동 만료)</li>
-<li class="mb-2"><strong>대응:</strong> 탈취 감지 시 해당 세션 무효화</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>영향:</strong> 제한적 (짧은 수명으로 자동 만료)</li>
+<li class="mb-2 ml-0"><strong>대응:</strong> 탈취 감지 시 해당 세션 무효화</li>
 </ul>
 <h4 id="시나리오-2-refresh-token-탈취" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">시나리오 2: Refresh Token 탈취</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>영향:</strong> 심각 (장기간 접근 가능)</li>
-<li class="mb-2"><strong>대응:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">RTR로 재사용 즉시 탐지</li>
-<li class="mb-2">모든 세션 무효화</li>
-<li class="mb-2">사용자에게 알림 및 비밀번호 변경 권고</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>영향:</strong> 심각 (장기간 접근 가능)</li>
+<li class="mb-2 ml-0"><strong>대응:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">RTR로 재사용 즉시 탐지</li>
+<li class="mb-2 ml-0">모든 세션 무효화</li>
+<li class="mb-2 ml-0">사용자에게 알림 및 비밀번호 변경 권고</li>
 </ul>
 </li>
 </ul>
 <h4 id="시나리오-3-xss-공격" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">시나리오 3: XSS 공격</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>영향:</strong> LocalStorage 사용 시 치명적</li>
-<li class="mb-2"><strong>대응:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">HttpOnly 쿠키 사용으로 근본적 차단</li>
-<li class="mb-2">CSP (Content Security Policy) 헤더 설정</li>
-<li class="mb-2">입력 sanitization 철저히</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>영향:</strong> LocalStorage 사용 시 치명적</li>
+<li class="mb-2 ml-0"><strong>대응:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">HttpOnly 쿠키 사용으로 근본적 차단</li>
+<li class="mb-2 ml-0">CSP (Content Security Policy) 헤더 설정</li>
+<li class="mb-2 ml-0">입력 sanitization 철저히</li>
 </ul>
 </li>
 </ul>
 <h4 id="시나리오-4-csrf-공격" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">시나리오 4: CSRF 공격</h4>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>영향:</strong> 상태 변경 요청 위조</li>
-<li class="mb-2"><strong>대응:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">SameSite 쿠키 속성 사용</li>
-<li class="mb-2">CSRF 토큰 패턴 적용</li>
-<li class="mb-2">Origin/Referer 헤더 검증</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>영향:</strong> 상태 변경 요청 위조</li>
+<li class="mb-2 ml-0"><strong>대응:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">SameSite 쿠키 속성 사용</li>
+<li class="mb-2 ml-0">CSRF 토큰 패턴 적용</li>
+<li class="mb-2 ml-0">Origin/Referer 헤더 검증</li>
 </ul>
 </li>
 </ul>
 <hr/>
 <h2 id="8-전체-인증-플로우-요약" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">8. 전체 인증 플로우 요약</h2>
 <h3 id="81-로그인-플로우" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">8.1. 로그인 플로우</h3>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: 이메일/비밀번호 전송</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: 이메일/비밀번호 전송</span></span>
 <span class="line"><span>2. 서버: 사용자 인증 (bcrypt)</span></span>
 <span class="line"><span>3. 서버: Access Token + Refresh Token 생성</span></span>
 <span class="line"><span>4. 서버: Refresh Token을 Redis에 저장 (TTL 7일)</span></span>
 <span class="line"><span>5. 서버: Refresh Token을 HttpOnly 쿠키로 전송</span></span>
 <span class="line"><span>6. 서버: Access Token을 응답 body로 전송</span></span>
-<span class="line"><span>7. 클라이언트: Access Token을 메모리에 저장</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>7. 클라이언트: Access Token을 메모리에 저장</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="82-api-요청-플로우" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">8.2. API 요청 플로우</h3>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: Authorization 헤더에 Access Token 포함</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: Authorization 헤더에 Access Token 포함</span></span>
 <span class="line"><span>2. 서버: Access Token 검증 (서명, 만료)</span></span>
 <span class="line"><span>3. 서버: 유효하면 요청 처리</span></span>
 <span class="line"><span>4. 서버: 만료되었으면 401 응답</span></span>
-<span class="line"><span>5. 클라이언트: 401 수신 시 토큰 갱신 요청</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>5. 클라이언트: 401 수신 시 토큰 갱신 요청</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="83-토큰-갱신-플로우-rtr" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">8.3. 토큰 갱신 플로우 (RTR)</h3>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: 쿠키의 Refresh Token 자동 전송</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: 쿠키의 Refresh Token 자동 전송</span></span>
 <span class="line"><span>2. 서버: Refresh Token 검증 (서명, 만료)</span></span>
 <span class="line"><span>3. 서버: Redis의 저장된 토큰과 비교</span></span>
 <span class="line"><span>4. 서버: 불일치 시 → 재사용 탐지 → 모든 세션 무효화</span></span>
@@ -894,44 +896,44 @@
 <span class="line"><span>6. 서버: 새 Refresh Token을 Redis에 저장 (기존 토큰 덮어쓰기)</span></span>
 <span class="line"><span>7. 서버: 새 Refresh Token을 HttpOnly 쿠키로 전송</span></span>
 <span class="line"><span>8. 서버: 새 Access Token을 응답 body로 전송</span></span>
-<span class="line"><span>9. 클라이언트: 새 Access Token으로 원래 요청 재시도</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>9. 클라이언트: 새 Access Token으로 원래 요청 재시도</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <h3 id="84-로그아웃-플로우" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">8.4. 로그아웃 플로우</h3>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: 로그아웃 요청</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>1. 클라이언트: 로그아웃 요청</span></span>
 <span class="line"><span>2. 서버: Refresh Token 추출 및 검증</span></span>
 <span class="line"><span>3. 서버: Redis에서 Refresh Token 삭제</span></span>
 <span class="line"><span>4. 서버: Refresh Token 쿠키 삭제</span></span>
-<span class="line"><span>5. 클라이언트: 메모리의 Access Token 삭제</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span>5. 클라이언트: 메모리의 Access Token 삭제</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <hr/>
 <h2 id="9-최신-동향-및-미래-전망" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">9. 최신 동향 및 미래 전망</h2>
 <h3 id="91-oauth-21-더-간결하고-안전하게" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">9.1. OAuth 2.1: 더 간결하고 안전하게</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">OAuth 2.0은 10년 이상 인증 및 인가의 표준으로 자리 잡았지만, 그동안 여러 보안 취약점이 발견되고 복잡한 명세로 인해 구현 실수가 발생하기 쉬웠습니다. 이를 개선하기 위해 <strong>OAuth 2.1</strong> 이 등장했습니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full">OAuth 2.1은 기존 2.0의 모범 사례를 집대성하고, 취약한 부분을 제거한 차세대 프로토콜입니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>주요 변경 사항:</strong></p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2">
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>PKCE (Proof Key for Code Exchange) 의무화:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">기존에는 모바일 앱 등 Public 클라이언트에 권장되었으나, 이제 모든 클라이언트 타입(Confidential 포함)에 의무화됩니다.</li>
-<li class="mb-2">Authorization Code 탈취 공격을 원천적으로 차단하여 보안성을 크게 향상시킵니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">기존에는 모바일 앱 등 Public 클라이언트에 권장되었으나, 이제 모든 클라이언트 타입(Confidential 포함)에 의무화됩니다.</li>
+<li class="mb-2 ml-0">Authorization Code 탈취 공격을 원천적으로 차단하여 보안성을 크게 향상시킵니다.</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>암시적 허용 타입(Implicit Grant) 폐지:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">response_type=token</code> 사용이 금지됩니다. 이 방식은 Access Token을 프론트엔드 채널(URL Fragment)로 직접 전달하여 토큰 탈취에 매우 취약했습니다.</li>
-<li class="mb-2">모든 플로우는 Authorization Code 방식을 통해 백엔드 채널로 토큰을 교환해야 합니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">response_type=token</code> 사용이 금지됩니다. 이 방식은 Access Token을 프론트엔드 채널(URL Fragment)로 직접 전달하여 토큰 탈취에 매우 취약했습니다.</li>
+<li class="mb-2 ml-0">모든 플로우는 Authorization Code 방식을 통해 백엔드 채널로 토큰을 교환해야 합니다.</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>Redirect URI 정확성 강화:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">와일드카드나 서브도메인을 허용하지 않고, 완전한 URI를 사전에 등록해야 합니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">와일드카드나 서브도메인을 허용하지 않고, 완전한 URI를 사전에 등록해야 합니다.</li>
 </ul>
 </li>
-<li class="mb-2">
+<li class="mb-2 ml-0">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>Refresh Token Rotation 권장:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">본 문서에서 핵심적으로 다룬 RTR 기법이 OAuth 2.1에서 강력히 권장됩니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">본 문서에서 핵심적으로 다룬 RTR 기법이 OAuth 2.1에서 강력히 권장됩니다.</li>
 </ul>
 </li>
 </ol>
@@ -940,25 +942,25 @@
 <h3 id="92-비밀번호-없는-미래-passkey-fido" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">9.2. 비밀번호 없는 미래: Passkey (FIDO)</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">사용자 비밀번호는 피싱, 데이터 유출 등 끊임없는 보안 위협의 원인이 됩니다. <strong>Passkey</strong>는 이러한 문제를 해결하기 위한 차세대 인증 기술로, W3C와 FIDO Alliance가 표준화했습니다.</p>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>동작 원리:</strong></p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><strong>등록:</strong> 사용자가 서비스에 Passkey를 등록하면, 사용자의 디바이스(스마트폰, 노트북 등)에 암호화된 개인 키(Private Key)가 생성되고, 서비스 서버에는 공개 키(Public Key)만 저장됩니다.</li>
-<li class="mb-2"><strong>인증:</strong>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2">사용자가 로그인을 시도하면, 서버는 챌린지(무작위 문자열)를 보냅니다.</li>
-<li class="mb-2">디바이스는 생체 인증(지문, 얼굴 인식)이나 PIN으로 사용자를 확인한 후, 개인 키로 챌린지에 서명하여 서버로 보냅니다.</li>
-<li class="mb-2">서버는 저장된 공개 키로 서명을 검증하여 인증을 완료합니다.</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>등록:</strong> 사용자가 서비스에 Passkey를 등록하면, 사용자의 디바이스(스마트폰, 노트북 등)에 암호화된 개인 키(Private Key)가 생성되고, 서비스 서버에는 공개 키(Public Key)만 저장됩니다.</li>
+<li class="mb-2 ml-0"><strong>인증:</strong>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">사용자가 로그인을 시도하면, 서버는 챌린지(무작위 문자열)를 보냅니다.</li>
+<li class="mb-2 ml-0">디바이스는 생체 인증(지문, 얼굴 인식)이나 PIN으로 사용자를 확인한 후, 개인 키로 챌린지에 서명하여 서버로 보냅니다.</li>
+<li class="mb-2 ml-0">서버는 저장된 공개 키로 서명을 검증하여 인증을 완료합니다.</li>
 </ul>
 </li>
 </ol>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>장점:</strong></p>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"><strong>강력한 보안:</strong> 서버에 비밀번호가 저장되지 않아 데이터 유출 시에도 안전하며, 피싱 공격이 불가능합니다.</li>
-<li class="mb-2"><strong>편리한 경험:</strong> 비밀번호를 외울 필요 없이 생체 인증만으로 빠르고 간편하게 로그인할 수 있습니다.</li>
-<li class="mb-2"><strong>플랫폼 간 동기화:</strong> Apple, Google, Microsoft 계정을 통해 여러 디바이스에서 Passkey를 동기화하여 사용할 수 있습니다.</li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>강력한 보안:</strong> 서버에 비밀번호가 저장되지 않아 데이터 유출 시에도 안전하며, 피싱 공격이 불가능합니다.</li>
+<li class="mb-2 ml-0"><strong>편리한 경험:</strong> 비밀번호를 외울 필요 없이 생체 인증만으로 빠르고 간편하게 로그인할 수 있습니다.</li>
+<li class="mb-2 ml-0"><strong>플랫폼 간 동기화:</strong> Apple, Google, Microsoft 계정을 통해 여러 디바이스에서 Passkey를 동기화하여 사용할 수 있습니다.</li>
 </ul>
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>기존 시스템에 통합하기:</strong>
 Passkey는 기존 인증 시스템을 대체하는 것이 아니라, 추가적인 인증 옵션으로 제공될 수 있습니다. 사용자는 이메일/비밀번호 로그인 또는 Passkey 로그인을 선택할 수 있습니다.</p>
-<div class="relative my-4 w-full group"><pre class="overflow-x-auto p-4 rounded-lg bg-gray-900 dark:bg-gray-950 shadow-lg"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// Passkey 라이브러리 예시 (simplewebauthn 사용)</span></span>
+<div class="relative my-6 w-full group code-block-wrapper"><pre class="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800" style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="javascript"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// Passkey 라이브러리 예시 (simplewebauthn 사용)</span></span>
 <span class="line"><span style="color:#6A737D">// routes/passkey.js</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#6A737D">// 1. 등록 옵션 생성</span></span>
@@ -979,17 +981,72 @@ Passkey는 기존 인증 시스템을 대체하는 것이 아니라, 추가적�
 <span class="line"><span style="color:#6A737D">// 4. 인증 검증</span></span>
 <span class="line"><span style="color:#E1E4E8">router.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&#39;/passkey/verify-authentication&#39;</span><span style="color:#E1E4E8">, (</span><span style="color:#FFAB70">req</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">res</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#6A737D">    // ... 서명 검증 후 로그인 처리 (JWT 토큰 발급)</span></span>
-<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="absolute top-2 right-2 p-2 rounded-md transition-all z-40 cursor-pointer bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100" aria-label="Copy code" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg></button></div>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
 <p class="text-foreground leading-relaxed mb-4 w-full">Passkey 도입은 인증 시스템의 미래 방향을 제시하며, 사용자에게 최상의 보안과 편의성을 제공하는 중요한 단계가 될 것입니다.</p>
 <hr/>
 <h2 id="결론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">결론</h2>
 <p class="text-foreground leading-relaxed mb-4 w-full">엔터프라이즈급 인증 시스템 구축은 단순한 기능 구현을 넘어, 다층적 보안 메커니즘의 유기적 결합입니다. 본 문서에서 다룬 핵심 요소들을 정리하면:</p>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2"><strong>토큰 이중화:</strong> Access Token의 편의성과 Refresh Token의 보안성을 동시에 확보</li>
-<li class="mb-2"><strong>Redis 활용:</strong> 고성능 세션 관리와 즉시 무효화 능력 제공</li>
-<li class="mb-2"><strong>RTR 기법:</strong> 토큰 재사용 탐지로 탈취 공격 조기 차단</li>
-<li class="mb-2"><strong>쿠키 보안:</strong> HttpOnly, Secure, SameSite 속성으로 다층 방어</li>
-<li class="mb-2"><strong>표준 준수:</strong> RFC 및 OAuth 2.1과 같은 최신 표준을 따라 상호 운용성과 안정성 확보</li>
-<li class="mb-2"><strong>미래 준비:</strong> Passkey와 같은 비밀번호 없는 기술을 도입하여 사용자 경험과 보안을 한 단계 더 발전</li>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>토큰 이중화:</strong> Access Token의 편의성과 Refresh Token의 보안성을 동시에 확보</li>
+<li class="mb-2 ml-0"><strong>Redis 활용:</strong> 고성능 세션 관리와 즉시 무효화 능력 제공</li>
+<li class="mb-2 ml-0"><strong>RTR 기법:</strong> 토큰 재사용 탐지로 탈취 공격 조기 차단</li>
+<li class="mb-2 ml-0"><strong>쿠키 보안:</strong> HttpOnly, Secure, SameSite 속성으로 다층 방어</li>
+<li class="mb-2 ml-0"><strong>표준 준수:</strong> RFC 및 OAuth 2.1과 같은 최신 표준을 따라 상호 운용성과 안정성 확보</li>
+<li class="mb-2 ml-0"><strong>미래 준비:</strong> Passkey와 같은 비밀번호 없는 기술을 도입하여 사용자 경험과 보안을 한 단계 더 발전</li>
 </ol>
-<p class="text-foreground leading-relaxed mb-4 w-full">이러한 원칙들을 바탕으로 견고하고 확장 가능하며 안전한 인증 시스템을 설계하고 구현할 수 있습니다.</p> </article>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island> </body></html>
+<p class="text-foreground leading-relaxed mb-4 w-full">이러한 원칙들을 바탕으로 견고하고 확장 가능하며 안전한 인증 시스템을 설계하고 구현할 수 있습니다.</p> </article> <script>
+    function initCopyButtons() {
+      const wrappers = document.querySelectorAll('.code-block-wrapper');
+      
+      wrappers.forEach((wrapper) => {
+        const button = wrapper.querySelector('.copy-button');
+        const pre = wrapper.querySelector('pre');
+        const copyIcon = button?.querySelector('.copy-icon');
+        const checkIcon = button?.querySelector('.check-icon');
+        
+        if (!button || !pre) return;
+        
+        // Remove existing listener if any (by cloning)
+        const newButton = button.cloneNode(true);
+        button.parentNode?.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', async () => {
+          const codeElement = pre.querySelector('code');
+          const code = codeElement?.innerText || pre.innerText || '';
+          
+          try {
+            await navigator.clipboard.writeText(code);
+            
+            const btnCopyIcon = newButton.querySelector('.copy-icon');
+            const btnCheckIcon = newButton.querySelector('.check-icon');
+            
+            // Show check icon
+            btnCopyIcon?.classList.add('hidden');
+            btnCheckIcon?.classList.remove('hidden');
+            newButton.classList.add('opacity-100');
+            newButton.classList.remove('opacity-0');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              btnCopyIcon?.classList.remove('hidden');
+              btnCheckIcon?.classList.add('hidden');
+              newButton.classList.remove('opacity-100');
+              newButton.classList.add('opacity-0', 'group-hover:opacity-100');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      });
+    }
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCopyButtons);
+    } else {
+      initCopyButtons();
+    }
+
+    // Re-initialize on view transitions
+    document.addEventListener('astro:page-load', initCopyButtons);
+  </script>   </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island> </body></html>

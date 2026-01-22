@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>how-does-the-internet-work - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BfFV-uM0.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="3YH3d" prefix="r257" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="Z1tPDf7" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">TIL</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="how-does-the-internet-work" class="text-4xl font-bold text-foreground mb-4 w-full">How does the Internet work</h1>
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>how-does-the-internet-work - TIL - Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script><link rel="stylesheet" href="/_astro/blog.BdDYSdFu.css"></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="w8kdT" prefix="r257" component-url="/_astro/Providers.CDrezrva.js" component-export="Providers" renderer-url="/_astro/client.9unXo8s5.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="Z1tPDf7" prefix="r2" component-url="/_astro/Header.DohD74y_.js" component-export="Header" renderer-url="/_astro/client.9unXo8s5.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><link rel="preload" as="image" href="/assets/avatar/gitsunmin.webp"/><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">TIL</h1></span></a><div class="size-10"></div></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 py-4 md:py-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><h1 class="text-5xl font-bold mb-12 w-full">TIL<div class="text-xl font-normal text-gray-500 dark:text-gray-400">(=Today I Learned)</div></h1> <article class="prose dark:prose-invert max-w-none"> <h1 id="how-does-the-internet-work" class="text-4xl font-bold text-foreground mb-4 w-full">How does the Internet work</h1>
 <p class="text-foreground leading-relaxed mb-4 w-full"><a href="/algorithm/depth-first-search-algorithm.mdx" class="text-blue-500 dark:text-blue-400 hover:underline">aaaa</a></p>
 <h2 id="인터넷의-역사" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">인터넷의 역사</h2>
 <h3 id="초기-시작과-arpanet" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">초기 시작과 ARPANET</h3>
@@ -30,80 +30,80 @@
 <h3 id="데이터-전송-프로토콜" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">데이터 전송 프로토콜</h3>
 <p class="text-foreground leading-relaxed mb-4 w-full">인터넷에서 데이터는 다양한 프로토콜을 통해 전송됩니다. 가장 일반적인 프로토콜은 HTTP<sup><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fn-15" id="user-content-fnref-15" data-footnote-ref="" aria-describedby="footnote-label">15</a></sup>(웹 페이지 전송), HTTPS<sup><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fn-16" id="user-content-fnref-16" data-footnote-ref="" aria-describedby="footnote-label">16</a></sup>(보안 웹 페이지 전송), FTP<sup><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fn-17" id="user-content-fnref-17" data-footnote-ref="" aria-describedby="footnote-label">17</a></sup>(파일 전송), SMTP<sup><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fn-18" id="user-content-fnref-18" data-footnote-ref="" aria-describedby="footnote-label">18</a></sup>(이메일 전송) 등이 있습니다. 이러한 프로토콜은 데이터 전송의 규칙을 정의하며, 데이터의 무결성과 보안을 보장합니다. 예를 들어, HTTPS는 웹페이지 데이터를 암호화하여 사용자와 서버 간의 통신을 보호합니다.</p>
 <hr/>
-<ul class="list-disc list-inside mb-4 w-full">
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
-<li class="mb-2"></li>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
+<li class="mb-2 ml-0"></li>
 </ul>
 <section data-footnotes class="footnotes"><h2 id="footnote-label" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">Footnotes</h2>
-<ol class="list-decimal list-inside mb-4 w-full">
-<li class="mb-2" id="user-content-fn-1">
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0" id="user-content-fn-1">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>ARPANET</strong>: Advanced Research Projects Agency Network의 약자. 미국 국방부의 연구 프로젝트로 시작된 초기 인터넷 네트워크. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-1" data-footnote-backref="" aria-label="Back to reference 1">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-2">
+<li class="mb-2 ml-0" id="user-content-fn-2">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>TCP/IP</strong>: Transmission Control Protocol/Internet Protocol의 약자. 데이터 전송의 표준 규칙. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-2" data-footnote-backref="" aria-label="Back to reference 2">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-3">
+<li class="mb-2 ml-0" id="user-content-fn-3">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>월드 와이드 웹</strong>: 인터넷 상의 정보를 하이퍼텍스트를 통해 접근할 수 있도록 만든 시스템. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-3" data-footnote-backref="" aria-label="Back to reference 3">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-4">
+<li class="mb-2 ml-0" id="user-content-fn-4">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>패킷 교환</strong>: 데이터를 작은 조각으로 나누어 전송하는 방식. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-4" data-footnote-backref="" aria-label="Back to reference 4">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-5">
+<li class="mb-2 ml-0" id="user-content-fn-5">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>TCP</strong>: Transmission Control Protocol의 약자. 데이터를 패킷으로 나누고 전송을 확인하는 프로토콜. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-5" data-footnote-backref="" aria-label="Back to reference 5">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-6">
+<li class="mb-2 ml-0" id="user-content-fn-6">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>IP</strong>: Internet Protocol의 약자. 패킷에 주소를 부여하여 전달하는 프로토콜. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-6" data-footnote-backref="" aria-label="Back to reference 6">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-7">
+<li class="mb-2 ml-0" id="user-content-fn-7">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>ICANN</strong>: Internet Corporation for Assigned Names and Numbers의 약자. 도메인 이름과 IP 주소 할당을 관리하는 기구. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-7" data-footnote-backref="" aria-label="Back to reference 7">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-8">
+<li class="mb-2 ml-0" id="user-content-fn-8">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>IETF</strong>: Internet Engineering Task Force의 약자. 인터넷 표준을 개발하고 유지하는 기구. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-8" data-footnote-backref="" aria-label="Back to reference 8">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-9">
+<li class="mb-2 ml-0" id="user-content-fn-9">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>ISP</strong>: Internet Service Provider의 약자. 인터넷 서비스를 제공하는 회사. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-9" data-footnote-backref="" aria-label="Back to reference 9">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-10">
+<li class="mb-2 ml-0" id="user-content-fn-10">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>백본</strong>: 주요 인터넷 트래픽을 처리하는 대규모 네트워크. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-10" data-footnote-backref="" aria-label="Back to reference 10">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-11">
+<li class="mb-2 ml-0" id="user-content-fn-11">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>라우터</strong>: 네트워크 간의 데이터 경로를 설정하는 장비. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-11" data-footnote-backref="" aria-label="Back to reference 11">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-12">
+<li class="mb-2 ml-0" id="user-content-fn-12">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>스위치</strong>: 네트워크 내에서 데이터를 전달하는 장비. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-12" data-footnote-backref="" aria-label="Back to reference 12">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-13">
+<li class="mb-2 ml-0" id="user-content-fn-13">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>클라이언트-서버 모델</strong>: 사용자의 디바이스(클라이언트)와 데이터를 제공하는 컴퓨터(서버) 간의 데이터 흐름 모델. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-13" data-footnote-backref="" aria-label="Back to reference 13">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-14">
+<li class="mb-2 ml-0" id="user-content-fn-14">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>DNS</strong>: Domain Name System의 약자. 도메인 이름을 IP 주소로 변환하는 시스템. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-14" data-footnote-backref="" aria-label="Back to reference 14">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-15">
+<li class="mb-2 ml-0" id="user-content-fn-15">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>HTTP</strong>: HyperText Transfer Protocol의 약자. 웹 페이지 전송을 위한 프로토콜. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-15" data-footnote-backref="" aria-label="Back to reference 15">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-16">
+<li class="mb-2 ml-0" id="user-content-fn-16">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>HTTPS</strong>: HyperText Transfer Protocol Secure의 약자. 보안 웹 페이지 전송을 위한 프로토콜. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-16" data-footnote-backref="" aria-label="Back to reference 16">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-17">
+<li class="mb-2 ml-0" id="user-content-fn-17">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>FTP</strong>: File Transfer Protocol의 약자. 파일 전송을 위한 프로토콜. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-17" data-footnote-backref="" aria-label="Back to reference 17">↩</a></p>
 </li>
-<li class="mb-2" id="user-content-fn-18">
+<li class="mb-2 ml-0" id="user-content-fn-18">
 <p class="text-foreground leading-relaxed mb-4 w-full"><strong>SMTP</strong>: Simple Mail Transfer Protocol의 약자. 이메일 전송을 위한 프로토콜. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="#user-content-fnref-18" data-footnote-backref="" aria-label="Back to reference 18">↩</a></p>
 </li>
 </ol>
