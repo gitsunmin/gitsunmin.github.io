@@ -1,0 +1,88 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="400" y1="0" x2="400" y2="450" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#38BDF8" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="coloredBlur"/>
+      <feComposite in="SourceGraphic" in2="coloredBlur" operator="over"/>
+    </filter>
+
+    <filter id="redisGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#EF4444" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="coloredBlur"/>
+      <feComposite in="SourceGraphic" in2="coloredBlur" operator="over"/>
+    </filter>
+
+    <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-color="#22C55E" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="coloredBlur"/>
+      <feComposite in="SourceGraphic" in2="coloredBlur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bgGradient)"/>
+  
+  <!-- Stylized ground/waves -->
+  <path d="M0 400L200 360L400 380L600 340L800 380V450H0V400Z" fill="#1E293B" opacity="0.5"/>
+  <path d="M0 420L150 390L350 410L550 380L800 400V450H0V420Z" fill="#334155" opacity="0.3"/>
+
+  <!-- Main Security Shield Icon -->
+  <g transform="translate(400, 200)" filter="url(#glow)">
+    <path d="M0 -60L50 -40V20C50 50 0 70 0 70C0 70 -50 50 -50 20V-40L0 -60Z" fill="#38BDF8" fill-opacity="0.2" stroke="#38BDF8" stroke-width="4"/>
+    <circle cx="0" cy="5" r="15" fill="none" stroke="#F1F5F9" stroke-width="4"/>
+    <rect x="-2" y="15" width="4" height="15" rx="2" fill="#F1F5F9"/>
+  </g>
+
+  <!-- Access Token (Cyan Crystal) -->
+  <g transform="translate(250, 220)" filter="url(#glow)">
+    <path d="M0 20L30 0L60 20L30 40L0 20Z" fill="#7DD3FC"/>
+    <path d="M0 20L30 40V60L0 40V20Z" fill="#38BDF8"/>
+    <path d="M60 20L30 40V60L60 40V20Z" fill="#0EA5E9"/>
+  </g>
+
+  <!-- Refresh Token (Gold/Yellow Crystal) -->
+  <g transform="translate(550, 180)" filter="url(#glow)">
+    <path d="M0 20L30 0L60 20L30 40L0 20Z" fill="#FDE047"/>
+    <path d="M0 20L30 40V60L0 40V20Z" fill="#FACC15"/>
+    <path d="M60 20L30 40V60L60 40V20Z" fill="#EAB308"/>
+  </g>
+
+  <!-- Redis (Red Cube Layers) -->
+  <g transform="translate(620, 320)" filter="url(#redisGlow)">
+    <path d="M0 10L20 0L40 10L20 20L0 10Z" fill="#F87171"/>
+    <path d="M0 10L20 20V25L0 15V10Z" fill="#EF4444"/>
+    <path d="M40 10L20 20V25L40 15V10Z" fill="#DC2626"/>
+    
+    <g transform="translate(0, 10)">
+      <path d="M0 10L20 0L40 10L20 20L0 10Z" fill="#F87171"/>
+      <path d="M0 10L20 20V25L0 15V10Z" fill="#EF4444"/>
+      <path d="M40 10L20 20V25L40 15V10Z" fill="#DC2626"/>
+    </g>
+  </g>
+
+  <!-- Node.js (Green Nodes) -->
+  <g transform="translate(150, 300)" filter="url(#nodeGlow)">
+    <circle cx="0" cy="0" r="10" fill="#4ADE80"/>
+    <circle cx="30" cy="20" r="8" fill="#22C55E"/>
+    <line x1="0" y1="0" x2="30" y2="20" stroke="#86EFAC" stroke-width="2"/>
+    <circle cx="-20" cy="30" r="12" fill="#16A34A"/>
+    <line x1="0" y1="0" x2="-20" y2="30" stroke="#86EFAC" stroke-width="2"/>
+  </g>
+
+  <!-- Connections/Network Lines -->
+  <g opacity="0.1" stroke="#F1F5F9" stroke-width="1">
+    <line x1="0" y1="450" x2="800" y2="0"/>
+    <line x1="0" y1="0" x2="800" y2="450"/>
+    <circle cx="400" cy="225" r="150" fill="none"/>
+    <circle cx="400" cy="225" r="300" fill="none"/>
+  </g>
+
+</svg>
