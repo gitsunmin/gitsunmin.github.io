@@ -35,7 +35,26 @@ const heroImage = post.data.heroImage || DEFAULT_HERO_IMAGE;
       </div>
     </div>
     <Content components={MDXReplacer({})} />
+    <section class="pb-16 pt-8">
+      <script is:inline src="https://giscus.app/client.js"
+        data-repo="gitsunmin/gitsunmin.github.io"
+        data-repo-id="R_kgDOMZl2kA"
+        data-category="Comments"
+        data-category-id="DIC_kwDOMZl2kM4C3wBs"
+        data-mapping="pathname"
+        data-strict="1"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="ko"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </section>
   </article>
+
 
   <script is:inline>
     function initCopyButtons() {
@@ -95,6 +114,11 @@ const heroImage = post.data.heroImage || DEFAULT_HERO_IMAGE;
   </script>
 
   <style is:global>
+    .giscus,
+    .giscus-frame {
+      width: 100% !important;
+    }
+
     .code-block-wrapper:hover .copy-button {
       opacity: 1 !important;
     }
