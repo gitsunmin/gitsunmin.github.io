@@ -9,5 +9,5 @@
     }
   },
   "include": ["src/**/*", "*.ts", "*.tsx"],
-  "exclude": ["node_modules", "dist", "modules/**/*", "**/modules/**/*"]
+  "exclude": ["node_modules", "dist", "modules/**/*", "**/modules/**/*", "vite.config.ts", "plugins"]
 }

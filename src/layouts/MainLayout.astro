@@ -9,6 +9,10 @@ interface Props {
   description?: string;
   headerTitle?: string;
   className?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  canonicalURL?: string;
+  jsonLd?: string;
 }
 
 const {
@@ -16,10 +20,14 @@ const {
   description = "Gitsunmin's website | 김선민의 웹사이트",
   headerTitle,
   className,
+  ogImage,
+  ogType,
+  canonicalURL,
+  jsonLd,
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} ogImage={ogImage} ogType={ogType} canonicalURL={canonicalURL} jsonLd={jsonLd}>
   <Header title={headerTitle} client:load />
   <main
     class={cn(

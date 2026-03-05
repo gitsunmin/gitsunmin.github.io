@@ -120,7 +120,24 @@ const iconMap = {
 };
 ---
 
-<BaseLayout>
+<BaseLayout
+  jsonLd={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Gitsunmin',
+    url: 'https://gitsunmin.github.io',
+    description: "Gitsunmin's website | 김선민의 웹사이트",
+    author: {
+      '@type': 'Person',
+      name: 'Sunmin Kim',
+      url: 'https://gitsunmin.github.io',
+      sameAs: [
+        'https://github.com/gitsunmin',
+        'https://www.linkedin.com/in/gitsunmin/',
+      ],
+    },
+  })}
+>
   <main
     class={cn(
       'fixed',
