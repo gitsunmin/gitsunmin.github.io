@@ -1,0 +1,154 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+const filtered = headings.filter((h) => h.depth >= 2 && h.depth <= 4);
+---
+
+{filtered.length > 0 && (
+  <>
+    <!-- Desktop TOC: hidden on mobile, shown on lg+ -->
+    <nav class="toc-desktop hidden lg:block" aria-label="목차">
+      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+        목차
+      </p>
+      <ul class="space-y-1">
+        {filtered.map((heading) => (
+          <li style={`padding-left: ${(heading.depth - 2) * 12}px`}>
+            <a
+              href={`#${heading.slug}`}
+              class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"
+              data-slug={heading.slug}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Mobile TOC: collapsible, shown below lg -->
+    <div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+      <button
+        id="toc-mobile-toggle"
+        class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        aria-expanded="false"
+        aria-controls="toc-mobile-content"
+      >
+        <span>목차</span>
+        <svg
+          id="toc-chevron"
+          class="w-4 h-4 transition-transform duration-200"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+      <div
+        id="toc-mobile-content"
+        class="hidden px-4 py-3 bg-white dark:bg-gray-900"
+      >
+        <ul class="space-y-1">
+          {filtered.map((heading) => (
+            <li style={`padding-left: ${(heading.depth - 2) * 12}px`}>
+              <a
+                href={`#${heading.slug}`}
+                class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </>
+)}
+
+<script>
+  function initTOC() {
+    // Mobile toggle
+    const toggle = document.getElementById('toc-mobile-toggle');
+    const content = document.getElementById('toc-mobile-content');
+    const chevron = document.getElementById('toc-chevron');
+
+    if (toggle && content && chevron) {
+      const newToggle = toggle.cloneNode(true) as HTMLElement;
+      toggle.parentNode?.replaceChild(newToggle, toggle);
+
+      newToggle.addEventListener('click', () => {
+        const isExpanded = newToggle.getAttribute('aria-expanded') === 'true';
+        newToggle.setAttribute('aria-expanded', String(!isExpanded));
+        content.classList.toggle('hidden', isExpanded);
+        (newToggle.querySelector('#toc-chevron') as HTMLElement)?.classList.toggle('rotate-180', !isExpanded);
+      });
+
+      // Close mobile TOC when a link is clicked
+      content.querySelectorAll('.toc-mobile-link').forEach((link) => {
+        link.addEventListener('click', () => {
+          content.classList.add('hidden');
+          newToggle.setAttribute('aria-expanded', 'false');
+          (newToggle.querySelector('#toc-chevron') as HTMLElement)?.classList.remove('rotate-180');
+        });
+      });
+    }
+
+    // Desktop active heading highlight via IntersectionObserver
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+    if (tocLinks.length === 0) return;
+
+    const setActive = (slug: string) => {
+      tocLinks.forEach((link) => {
+        const isActive = link.dataset.slug === slug;
+        link.classList.toggle('text-blue-600', isActive);
+        link.classList.toggle('dark:text-blue-400', isActive);
+        link.classList.toggle('font-medium', isActive);
+        link.classList.toggle('text-gray-500', !isActive);
+        link.classList.toggle('dark:text-gray-400', !isActive);
+      });
+    };
+
+    const headingEls = Array.from(tocLinks)
+      .map((link) => document.getElementById(link.dataset.slug!))
+      .filter(Boolean) as HTMLElement[];
+
+    if (headingEls.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length > 0) {
+          setActive(visible[0].target.id);
+        }
+      },
+      { rootMargin: '-10% 0px -80% 0px' }
+    );
+
+    headingEls.forEach((el) => observer.observe(el));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+
+  document.addEventListener('astro:page-load', initTOC);
+</script>
