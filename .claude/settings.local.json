@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun update)",
+      "Bash(bun add lucide-react@^0.577.0 eslint-plugin-react-refresh@^0.5.2)",
+      "Bash(bun run build)",
+      "Bash(node -e \":*)"
+    ]
+  }
+}

@@ -45,7 +45,7 @@ const Content = () => {
           aria-label="background color picker"
           value={bgColor}
           className="w-full h-40 rounded-lg border-2 p-0 cursor-pointer shadow-2xl [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded [&::-webkit-color-swatch-wrapper]:p-px"
-          onInput={handleFixedColorChange}
+          onChange={handleFixedColorChange}
         />
         <div
           style={{ color: fgColor, borderColor: fgColor }}
