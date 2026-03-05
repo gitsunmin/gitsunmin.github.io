@@ -1,3 +1,9 @@
 {
-	"files.readonlyInclude": ["src/routes/_layout/til/**"]
+	"files.readonlyInclude": ["src/routes/_layout/til/**"],
+
+	"github.copilot.chat.commitMessageGeneration.instructions": [
+		{
+			"text": "커밋 메시지는 반드시 한국어로 작성한다."
+		}
+	]
 }

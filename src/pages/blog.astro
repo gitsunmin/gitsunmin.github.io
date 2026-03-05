@@ -2,7 +2,9 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '@/layouts/MainLayout.astro';
 
-const posts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
+const posts: CollectionEntry<'blog'>[] = (await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
+  return import.meta.env.PROD ? !data.draft : true;
+})).sort(
   (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---

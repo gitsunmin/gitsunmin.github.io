@@ -6,7 +6,9 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { MDXReplacer } from '@/components/MDXReplacer';
 
 export const getStaticPaths = (async () => {
-  const posts: CollectionEntry<'blog'>[] = await getCollection('blog');
+  const posts: CollectionEntry<'blog'>[] = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
   return posts.map((post: CollectionEntry<'blog'>) => ({
     params: { slug: post.slug },
     props: post,
