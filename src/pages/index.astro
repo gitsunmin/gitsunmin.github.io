@@ -158,7 +158,7 @@ const iconMap = {
   >
     <ul class="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
       {
-        LINKS.map((link) => (
+        LINKS.filter(link => link.status === 'ENABLED').map((link) => (
           <li class="flex flex-col justify-center items-center">
             <a
               href={link.to}
