@@ -170,13 +170,22 @@ const iconMap = {
             >
               <div
                 class={cn(
-                  'size-14 bg-background rounded-xl shadow-md dark:shadow-white dark:shadow-sm flex items-center justify-center'
+                  'size-14 rounded-xl flex items-center justify-center',
+                  'backdrop-blur-md backdrop-saturate-150',
+                  'bg-white/30 dark:bg-white/10',
+                  'border border-white/70 dark:border-white/20',
+                  'shadow-[0_4px_24px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(0,0,0,0.05)]',
+                  'dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]',
+                  'transition-all duration-300',
+                  'group-hover:bg-white/40 dark:group-hover:bg-white/15',
+                  'group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.8)]',
+                  'dark:group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]'
                 )}
               >
                 {(() => {
                   const Icon = iconMap[link.icon as keyof typeof iconMap];
                   return Icon ? (
-                    <Icon size={28} className="text-foreground bg-background" />
+                    <Icon size={28} className="text-foreground" />
                   ) : null;
                 })()}
               </div>
