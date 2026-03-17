@@ -596,9 +596,15 @@ const Content = () => {
   }, []);
 
   // ── Export ──
+  const [projectName, setProjectName] = useState('');
   const [exportFormat, setExportFormat] = useState<'png' | 'jpeg' | 'webp'>('png');
   const [exportQuality, setExportQuality] = useState(92);
   const [exportScale, setExportScale] = useState(1);
+
+  const makeFileName = (index: number, ext: string) => {
+    const base = projectName.trim() || 'frame-studio';
+    return `${base}-${index}.${ext}`;
+  };
 
   // ── Keyboard shortcuts ──
   useEffect(() => {
@@ -871,7 +877,7 @@ const Content = () => {
     const url = canvas.toDataURL(mime, quality);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `frame-studio-${safeIdx + 1}.${exportFormat === 'jpeg' ? 'jpg' : exportFormat}`;
+    a.download = makeFileName(safeIdx + 1, exportFormat === 'jpeg' ? 'jpg' : exportFormat);
     a.click();
   };
 
@@ -892,7 +898,7 @@ const Content = () => {
       const url = canvas.toDataURL(mime, quality);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `frame-studio-${i + 1}.${ext}`;
+      a.download = makeFileName(i + 1, ext);
       a.click();
       await new Promise<void>((resolve) => setTimeout(resolve, 250));
     }
@@ -1604,6 +1610,22 @@ const Content = () => {
           {/* Export options */}
           <section className={sec}>
             <h2 className="text-sm font-semibold">내보내기 설정</h2>
+            <div className="space-y-1">
+              <label htmlFor="projectName" className={lbl}>
+                프로젝트명
+              </label>
+              <input
+                id="projectName"
+                type="text"
+                placeholder="frame-studio"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                className={inp}
+              />
+              <p className={`${lbl} opacity-60`}>
+                파일명: {projectName.trim() || 'frame-studio'}-1.{exportFormat === 'jpeg' ? 'jpg' : exportFormat}
+              </p>
+            </div>
             <div className="space-y-1">
               <span className={lbl}>포맷</span>
               <div className="flex gap-2">
