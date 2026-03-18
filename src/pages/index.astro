@@ -11,7 +11,8 @@ import {
   Blend,
   Github,
   Linkedin,
-  Quote
+  Quote,
+  QrCode
 } from 'lucide-react';
 
 type Link = {
@@ -89,6 +90,15 @@ const LINKS: Link[] = [
     icon: 'Frame',
   },
   {
+    __type: 'INNER',
+    id: 'qr-code',
+    label: 'QR Code',
+    status: 'ENABLED',
+    target: '_self',
+    to: '/qr-code',
+    icon: 'QrCode',
+  },
+  {
     __type: 'OUTER',
     id: 'github',
     label: 'Github',
@@ -128,6 +138,7 @@ const iconMap = {
   Linkedin: Linkedin,
   Settings: Settings,
   Quote: Quote,
+  QrCode: QrCode,
 };
 ---
 
