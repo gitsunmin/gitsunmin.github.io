@@ -13,10 +13,14 @@ import {
   AlignLeft,
   AlignRight,
   ChevronDown,
+  ChevronRight,
   ChevronUp,
   Copy,
   Download,
+  GripVertical,
   ImagePlus,
+  Pin,
+  PinOff,
   Plus,
   Redo2,
   Trash2,
@@ -60,6 +64,8 @@ type TextLayer = {
 
 type GradientType = 'linear' | 'radial';
 
+type ImageFit = 'fill' | 'cover' | 'contain' | 'none';
+
 type Background = {
   type: 'color' | 'gradient';
   color: string;
@@ -68,6 +74,10 @@ type Background = {
   gradientEnd: string;
   gradientAngle: number;
   image: string | null;
+  imageFit: ImageFit;
+  imageX: number; // 0-100%
+  imageY: number; // 0-100%
+  imageScale: number; // 10-200%
 };
 
 type OverlayImage = {
@@ -114,6 +124,10 @@ const DEFAULT_BG: Background = {
   gradientEnd: '#0f172a',
   gradientAngle: 135,
   image: null,
+  imageFit: 'cover',
+  imageX: 50,
+  imageY: 50,
+  imageScale: 100,
 };
 
 const DEFAULT_FILTER: ImageFilter = {
@@ -215,7 +229,40 @@ const renderFrameToCanvas = async (
   if (background.image) {
     try {
       const img = await loadImage(background.image);
-      ctx.drawImage(img, 0, 0, W, H);
+      // Always fill background color first (visible if image doesn't cover)
+      ctx.fillStyle = background.color;
+      ctx.fillRect(0, 0, W, H);
+
+      const fit = background.imageFit ?? 'cover';
+      const posX = (background.imageX ?? 50) / 100;
+      const posY = (background.imageY ?? 50) / 100;
+      const scalePercent = (background.imageScale ?? 100) / 100;
+
+      const dims = (() => {
+        if (fit === 'fill') {
+          const w = W * scalePercent;
+          const h = H * scalePercent;
+          return { w, h, x: (W - w) * posX, y: (H - h) * posY };
+        }
+        if (fit === 'cover') {
+          const ratio = Math.max(W / img.width, H / img.height) * scalePercent;
+          const w = img.width * ratio;
+          const h = img.height * ratio;
+          return { w, h, x: (W - w) * posX, y: (H - h) * posY };
+        }
+        if (fit === 'contain') {
+          const ratio = Math.min(W / img.width, H / img.height) * scalePercent;
+          const w = img.width * ratio;
+          const h = img.height * ratio;
+          return { w, h, x: (W - w) * posX, y: (H - h) * posY };
+        }
+        // 'none' — original size
+        const w = img.width * scalePercent;
+        const h = img.height * scalePercent;
+        return { w, h, x: (W - w) * posX, y: (H - h) * posY };
+      })();
+
+      ctx.drawImage(img, dims.x, dims.y, dims.w, dims.h);
     } catch {
       ctx.fillStyle = background.color;
       ctx.fillRect(0, 0, W, H);
@@ -344,6 +391,101 @@ const renderFrameToCanvas = async (
   }
 
   return output;
+};
+
+// ─── CollapsibleSection ──────────────────────────────────────────────────────
+
+type CollapsibleSectionProps = {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+};
+
+const CollapsibleSection = ({ title, defaultOpen = true, children }: CollapsibleSectionProps) => {
+  const [open, setOpen] = useState(defaultOpen);
+  const [floating, setFloating] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const dragRef = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const sec = 'border rounded-xl p-4 space-y-3';
+
+  useEffect(() => {
+    if (!floating) return;
+    const onMove = (e: MouseEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      setPos({ x: d.origX + e.clientX - d.startX, y: d.origY + e.clientY - d.startY });
+    };
+    const onUp = () => {
+      dragRef.current = null;
+    };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [floating]);
+
+  const handleFloat = () => {
+    if (!floating && sectionRef.current) {
+      const rect = sectionRef.current.getBoundingClientRect();
+      setPos({ x: rect.left, y: rect.top });
+    }
+    setFloating(!floating);
+    if (!open) setOpen(true);
+  };
+
+  const handleDragStart = (e: React.MouseEvent) => {
+    if (!floating) return;
+    e.preventDefault();
+    dragRef.current = { startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y };
+  };
+
+  const content = (
+    <section ref={sectionRef} className={cn(sec, floating && 'shadow-xl bg-background z-50 min-w-72 max-w-96')}>
+      <div className="flex items-center gap-1">
+        {floating && (
+          <button
+            type="button"
+            onMouseDown={handleDragStart}
+            className="cursor-grab active:cursor-grabbing p-0.5 opacity-40 hover:opacity-100 transition-opacity"
+            title="드래그하여 이동"
+          >
+            <GripVertical size={14} />
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="flex items-center gap-1 flex-1 text-left"
+        >
+          {open ? <ChevronDown size={14} className="shrink-0 opacity-50" /> : <ChevronRight size={14} className="shrink-0 opacity-50" />}
+          <h2 className="text-sm font-semibold">{title}</h2>
+        </button>
+        <button
+          type="button"
+          onClick={handleFloat}
+          title={floating ? '패널 고정' : '패널 분리 (PC)'}
+          className="hidden lg:flex p-0.5 opacity-40 hover:opacity-100 transition-opacity"
+        >
+          {floating ? <Pin size={13} /> : <PinOff size={13} />}
+        </button>
+      </div>
+      {open && <div className="space-y-3">{children}</div>}
+    </section>
+  );
+
+  if (floating) {
+    return (
+      <div className="fixed z-50" style={{ left: pos.x, top: pos.y }}>
+        {content}
+      </div>
+    );
+  }
+
+  return content;
 };
 
 // ─── SliderWithInput ──────────────────────────────────────────────────────────
@@ -909,7 +1051,6 @@ const Content = () => {
 
   // ── Style shortcuts ──
   const lbl = 'text-xs text-foreground/70';
-  const sec = 'border rounded-xl p-4 space-y-3';
   const inp =
     'w-full border rounded-lg px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20';
   const btn =
@@ -953,8 +1094,7 @@ const Content = () => {
         {/* ── Sidebar ── */}
         <aside className="lg:w-80 shrink-0 space-y-4">
           {/* Canvas size */}
-          <section className={sec}>
-            <h2 className="text-sm font-semibold">캔버스 크기</h2>
+          <CollapsibleSection title="캔버스 크기">
             <select
               value={presetIndex}
               onChange={(e) => commitState((p) => ({ ...p, presetIndex: Number(e.target.value) }))}
@@ -1006,11 +1146,10 @@ const Content = () => {
                 </div>
               </div>
             )}
-          </section>
+          </CollapsibleSection>
 
           {/* Background */}
-          <section className={sec}>
-            <h2 className="text-sm font-semibold">배경</h2>
+          <CollapsibleSection title="배경">
             <div className="flex gap-2">
               {(['color', 'gradient'] as const).map((t) => (
                 <button
@@ -1097,19 +1236,81 @@ const Content = () => {
               <input type="file" accept="image/*" className="hidden" onChange={handleBgImageChange} />
             </label>
             {background.image && (
-              <button
-                type="button"
-                onClick={() => updateBg({ image: null })}
-                className="text-xs text-red-500 hover:underline"
-              >
-                배경 이미지 제거
-              </button>
+              <>
+                <div className="border rounded-lg p-3 space-y-2 bg-foreground/5">
+                  <div className="space-y-1">
+                    <span className={lbl}>이미지 맞춤</span>
+                    <div className="grid grid-cols-4 gap-1">
+                      {([
+                        ['cover', '채우기'],
+                        ['contain', '맞춤'],
+                        ['fill', '늘리기'],
+                        ['none', '원본'],
+                      ] as [ImageFit, string][]).map(([fit, label]) => (
+                        <button
+                          key={fit}
+                          type="button"
+                          onClick={() => updateBg({ imageFit: fit })}
+                          className={toggleBtn(background.imageFit === fit)}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <label htmlFor="bgImgX" className={lbl}>
+                      가로 위치 ({background.imageX}%)
+                    </label>
+                    <SliderWithInput
+                      id="bgImgX"
+                      min={0}
+                      max={100}
+                      value={background.imageX}
+                      onChange={(v) => updateBg({ imageX: v })}
+                      onCommit={(v) => updateBg({ imageX: v })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label htmlFor="bgImgY" className={lbl}>
+                      세로 위치 ({background.imageY}%)
+                    </label>
+                    <SliderWithInput
+                      id="bgImgY"
+                      min={0}
+                      max={100}
+                      value={background.imageY}
+                      onChange={(v) => updateBg({ imageY: v })}
+                      onCommit={(v) => updateBg({ imageY: v })}
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label htmlFor="bgImgScale" className={lbl}>
+                      크기 ({background.imageScale}%)
+                    </label>
+                    <SliderWithInput
+                      id="bgImgScale"
+                      min={10}
+                      max={200}
+                      value={background.imageScale}
+                      onChange={(v) => updateBg({ imageScale: v })}
+                      onCommit={(v) => updateBg({ imageScale: v })}
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => updateBg({ image: null, imageFit: 'cover', imageX: 50, imageY: 50, imageScale: 100 })}
+                  className="text-xs text-red-500 hover:underline"
+                >
+                  배경 이미지 제거
+                </button>
+              </>
             )}
-          </section>
+          </CollapsibleSection>
 
           {/* Filter */}
-          <section className={sec}>
-            <h2 className="text-sm font-semibold">필터</h2>
+          <CollapsibleSection title="필터" defaultOpen={false}>
             <div className="space-y-3">
               <div className="space-y-1">
                 <label htmlFor="fBrightness" className={lbl}>
@@ -1203,12 +1404,11 @@ const Content = () => {
                 필터 초기화
               </button>
             </div>
-          </section>
+          </CollapsibleSection>
 
           {/* Text layers */}
-          <section className={sec}>
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold">텍스트 레이어</h2>
+          <CollapsibleSection title="텍스트 레이어">
+            <div className="flex justify-end">
               <button
                 type="button"
                 onClick={addTextLayer}
@@ -1479,12 +1679,11 @@ const Content = () => {
                 </div>
               </div>
             )}
-          </section>
+          </CollapsibleSection>
 
           {/* Overlay images */}
-          <section className={sec}>
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-semibold">오버레이 이미지</h2>
+          <CollapsibleSection title="오버레이 이미지">
+            <div className="flex justify-end">
               <label className="flex items-center gap-1 text-xs border rounded-lg px-2 py-1 hover:bg-foreground/5 transition-colors cursor-pointer">
                 <Plus size={12} /> 추가
                 <input type="file" accept="image/*" className="hidden" onChange={handleOverlayAdd} />
@@ -1605,11 +1804,10 @@ const Content = () => {
                 </div>
               </div>
             )}
-          </section>
+          </CollapsibleSection>
 
           {/* Export options */}
-          <section className={sec}>
-            <h2 className="text-sm font-semibold">내보내기 설정</h2>
+          <CollapsibleSection title="내보내기 설정" defaultOpen={false}>
             <div className="space-y-1">
               <label htmlFor="projectName" className={lbl}>
                 프로젝트명
@@ -1671,7 +1869,7 @@ const Content = () => {
                 ))}
               </div>
             </div>
-          </section>
+          </CollapsibleSection>
         </aside>
 
         {/* ── Canvas + Slide strip ── */}
