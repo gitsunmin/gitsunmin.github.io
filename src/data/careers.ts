@@ -1,4 +1,4 @@
-export const CAREER_NAME = ['marketboro', 'korens'] as const;
+export const CAREER_NAME = ['seonhamlabs', 'marketboro', 'korens'] as const;
 
 export type CareerId = (typeof CAREER_NAME)[number];
 
@@ -17,6 +17,26 @@ type Career = {
 };
 
 export const Career: Career[] = [
+  {
+    id: 'seonhamlabs',
+    name: '선함연구소',
+    logo: '/assets/logos/seonhamlabs_logo.webp',
+    introduce: `선함연구소는 디지털 환경에서의 정서적 고립 해소를 목표로 설립한 1인 창업 기업입니다.
+대표 겸 개발자로서 기획·설계·개발·운영 전 과정을 수행하고 있으며, 익명 P2P 힐링 커뮤니티 '돌들의 숲'을 정식 출시했습니다.
+Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리드 앱 등을 활용하고 있습니다.`,
+    positoin: '대표 / 개발자',
+    range: '2025.01 ~',
+    links: [
+      {
+        label: '선함연구소',
+        url: 'https://seonhamlabs.com',
+      },
+      {
+        label: '돌들의 숲',
+        url: 'https://forest.seonhamlabs.com',
+      },
+    ],
+  },
   {
     id: 'marketboro',
     name: '(주) 마켓보로',
