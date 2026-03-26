@@ -10,6 +10,7 @@ type Career = {
   caution?: string;
   positoin: string;
   range: string;
+  techs: string[];
   links: {
     label: string;
     url: string;
@@ -26,6 +27,22 @@ export const Career: Career[] = [
 Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리드 앱 등을 활용하고 있습니다.`,
     positoin: '대표 / 개발자',
     range: '2025.01 ~',
+    techs: [
+      'TypeScript',
+      'React',
+      'React Native',
+      'Expo',
+      'GraphQL',
+      'Relay',
+      'Cloudflare Workers',
+      'Prisma',
+      'Tailwind CSS',
+      'Vite',
+      'Astro',
+      'Three.js',
+      'Turborepo',
+      'Bun',
+    ],
     links: [
       {
         label: '선함연구소',
@@ -46,6 +63,7 @@ Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리
 성능 최적화, 접근성 개선, UX 향상 등의 경험을 쌓았습니다.`,
     range: '2020.10 ~ 2025.12',
     positoin: '프론트엔드 개발자',
+    techs: ['Vue.js', 'React.js', 'Next.js', 'pnpm', 'Vite', 'Bun', 'Tailwind CSS', 'Relay', 'TypeScript', 'JavaScript', 'DataDog'],
     links: [
       {
         label: '마켓보로 웹사이트',
@@ -70,6 +88,7 @@ Vue.js 기반 프론트엔드 개발과 Node.js 기반 백엔드 개발, AWS Amp
 초기 개발 환경과 프로세스 구축에도 참여했습니다.`,
     positoin: '프론트엔드 개발자',
     range: '2019.07 ~ 2020.10',
+    techs: ['Vue.js', 'Node.js', 'AWS Amplify', 'JavaScript', 'TypeScript'],
     links: [
       {
         label: '코렌스 웹사이트',

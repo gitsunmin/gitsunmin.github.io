@@ -96,7 +96,7 @@ const CareerCard = ({
                 src={career.logo}
                 alt={`${career.name} 로고`}
                 className={cn(
-                  'size-12 md:size-14 rounded-xl border border-border/50 object-cover bg-white',
+                  'size-12 md:size-14 rounded-xl border border-border/50 object-contain bg-white p-1',
                   'transition-all duration-300 ease-out',
                   'group-hover:scale-105 group-hover:shadow-md',
                 )}
@@ -124,6 +124,25 @@ const CareerCard = ({
           <p className="mt-5 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
             {career.introduce}
           </p>
+
+          {/* 기술 스택 */}
+          {career.techs.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-5">
+              {career.techs.map((tech) => (
+                <span
+                  key={tech}
+                  className={cn(
+                    'px-2.5 py-1 rounded-md text-[11px] font-medium',
+                    'bg-muted/60 text-muted-foreground',
+                    'transition-colors duration-200',
+                    'group-hover:bg-primary/10 group-hover:text-primary/80',
+                  )}
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* 링크 */}
           <div className="flex flex-wrap gap-2 mt-6 pt-5 border-t border-border/40">
