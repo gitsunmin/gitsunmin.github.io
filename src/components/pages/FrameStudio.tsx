@@ -87,6 +87,9 @@ type OverlayImage = {
   y: number;
   scale: number;
   rotation: number;
+  borderColor: string;
+  borderWidth: number;
+  borderRadius: number;
 };
 
 type EditorState = {
@@ -346,7 +349,42 @@ const renderFrameToCanvas = async (
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate((overlay.rotation * Math.PI) / 180);
-      ctx.drawImage(img, -w / 2, -h / 2, w, h);
+
+      // Draw border/frame around overlay
+      const borderColor = overlay.borderColor ?? '';
+      const borderWidth = overlay.borderWidth ?? 0;
+      const br = ((overlay.borderRadius ?? 0) / 100) * Math.min(w, h);
+      type RoundRectCtx = { roundRect: (x: number, y: number, w: number, h: number, r: number) => void };
+      const hasRoundRect = typeof (ctx as unknown as { roundRect?: unknown }).roundRect === 'function';
+
+      if (borderColor && borderWidth > 0) {
+        const scaledBW = borderWidth * (W / 1000);
+        const bx = -w / 2 - scaledBW / 2;
+        const by = -h / 2 - scaledBW / 2;
+        const bRectW = w + scaledBW;
+        const bRectH = h + scaledBW;
+        ctx.strokeStyle = borderColor;
+        ctx.lineWidth = scaledBW;
+        if (br > 0 && hasRoundRect) {
+          ctx.beginPath();
+          (ctx as unknown as RoundRectCtx).roundRect(bx, by, bRectW, bRectH, br);
+          ctx.stroke();
+        } else {
+          ctx.strokeRect(bx, by, bRectW, bRectH);
+        }
+      }
+
+      // Clip image to rounded corners when borderRadius > 0
+      if (br > 0 && hasRoundRect) {
+        ctx.save();
+        ctx.beginPath();
+        (ctx as unknown as RoundRectCtx).roundRect(-w / 2, -h / 2, w, h, br);
+        ctx.clip();
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      } else {
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+      }
       ctx.restore();
     } catch {
       // skip
@@ -931,6 +969,9 @@ const Content = () => {
         y: 50,
         scale: 30,
         rotation: 0,
+        borderColor: '',
+        borderWidth: 4,
+        borderRadius: 0,
       };
       commitState((prev) => ({ ...prev, overlays: [...prev.overlays, overlay] }));
       setSelectedOverlayId(overlay.id);
@@ -1801,6 +1842,61 @@ const Content = () => {
                       onCommit={(v) => commitOverlay(selectedOverlay.id, { rotation: v })}
                     />
                   </div>
+                  <div className="space-y-1">
+                    <label className={lbl}>테두리</label>
+                    <div className="flex gap-1">
+                      <input
+                        type="color"
+                        value={selectedOverlay.borderColor || '#ffffff'}
+                        onChange={(e) => commitOverlay(selectedOverlay.id, { borderColor: e.target.value })}
+                        className="h-8 w-10 rounded cursor-pointer border p-0.5 shrink-0"
+                      />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          commitOverlay(selectedOverlay.id, {
+                            borderColor: selectedOverlay.borderColor ? '' : '#ffffff',
+                          })
+                        }
+                        className={cn(
+                          'flex-1 text-xs border rounded-lg px-1.5 py-1 transition-colors',
+                          selectedOverlay.borderColor ? active : 'hover:bg-foreground/5'
+                        )}
+                      >
+                        {selectedOverlay.borderColor ? 'ON' : 'OFF'}
+                      </button>
+                    </div>
+                  </div>
+                  {selectedOverlay.borderColor && (
+                    <>
+                      <div className="space-y-1">
+                        <label htmlFor={`ovBorderW-${selectedOverlay.id}`} className={lbl}>
+                          테두리 두께
+                        </label>
+                        <SliderWithInput
+                          id={`ovBorderW-${selectedOverlay.id}`}
+                          min={1}
+                          max={20}
+                          value={selectedOverlay.borderWidth || 1}
+                          onChange={(v) => patchOverlay(selectedOverlay.id, { borderWidth: v })}
+                          onCommit={(v) => commitOverlay(selectedOverlay.id, { borderWidth: v })}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label htmlFor={`ovBorderR-${selectedOverlay.id}`} className={lbl}>
+                          모서리 둥글기 (%)
+                        </label>
+                        <SliderWithInput
+                          id={`ovBorderR-${selectedOverlay.id}`}
+                          min={0}
+                          max={50}
+                          value={selectedOverlay.borderRadius || 0}
+                          onChange={(v) => patchOverlay(selectedOverlay.id, { borderRadius: v })}
+                          onCommit={(v) => commitOverlay(selectedOverlay.id, { borderRadius: v })}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
