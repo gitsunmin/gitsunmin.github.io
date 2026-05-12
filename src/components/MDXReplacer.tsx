@@ -107,6 +107,44 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
           />
         )),
     img: (props) => <SafeImage {...props} />,
+    table: (props) => (
+      <div className="w-full overflow-x-auto my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
+        <table
+          className="w-full text-sm text-left border-collapse"
+          {...props}
+        />
+      </div>
+    ),
+    thead: (props) => (
+      <thead
+        className="sticky top-0 bg-gray-50/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"
+        {...props}
+      />
+    ),
+    tbody: (props) => (
+      <tbody
+        className="divide-y divide-gray-100 dark:divide-gray-700"
+        {...props}
+      />
+    ),
+    tr: (props) => (
+      <tr
+        className="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"
+        {...props}
+      />
+    ),
+    th: (props) => (
+      <th
+        className="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 whitespace-nowrap"
+        {...props}
+      />
+    ),
+    td: (props) => (
+      <td
+        className="px-4 py-3 text-gray-700 dark:text-gray-300 align-top"
+        {...props}
+      />
+    ),
     ...components,
   };
 };
