@@ -1,6 +1,6 @@
 import { Button } from './Button';
 import { cn } from '@/lib/utils';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
 
 type Props = {
   title?: string;
@@ -51,6 +51,9 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
         </span>
       </a>
       <div className="size-10" />
+      <a href="/search" aria-label="검색" className="flex items-center justify-center size-10 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <Search className="size-5" />
+      </a>
     </header>
   );
 };

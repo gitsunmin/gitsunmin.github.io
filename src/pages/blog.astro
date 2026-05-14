@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '@/layouts/MainLayout.astro';
+import { calcReadingTime } from '@/utils/readingTime';
 
 const posts: CollectionEntry<'blog'>[] = (await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
   return import.meta.env.PROD ? !data.draft : true;
@@ -13,6 +14,10 @@ const posts: CollectionEntry<'blog'>[] = (await getCollection('blog', ({ data }:
     <div class="mb-12">
       <h1 class="text-4xl md:text-5xl font-bold mb-3">블로그</h1>
       <p class="text-lg text-gray-600 dark:text-gray-400">기록과 생각을 공유합니다.</p>
+      <a href="/rss.xml" class="inline-flex items-center gap-1 mt-3 text-sm text-orange-500 hover:text-orange-600 transition-colors" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg>
+        RSS 구독
+      </a>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -49,6 +54,7 @@ const posts: CollectionEntry<'blog'>[] = (await getCollection('blog', ({ data }:
                 <time class="text-xs text-gray-500 dark:text-gray-500">
                   {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </time>
+                <span class="text-xs text-gray-400 dark:text-gray-600 ml-2">· 약 {calcReadingTime(post.body)}분</span>
               </div>
             </a>
           </article>

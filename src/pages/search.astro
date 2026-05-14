@@ -1,0 +1,30 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+---
+
+<MainLayout title="검색" description="블로그 글 검색">
+  <div class="max-w-3xl mx-auto px-4 py-18 md:py-24">
+    <h1 class="text-4xl font-bold mb-8">검색</h1>
+    <div id="search"></div>
+  </div>
+</MainLayout>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script is:inline>
+  (async () => {
+    try {
+      const { PagefindUI } = await import('/pagefind/pagefind-ui.js');
+      new PagefindUI({
+        element: '#search',
+        showSubResults: true,
+        translations: {
+          placeholder: '검색어를 입력하세요...',
+          zero_results: '"[SEARCH_TERM]"에 대한 결과가 없습니다.',
+        },
+      });
+    } catch {
+      const el = document.getElementById('search');
+      if (el) el.innerHTML = '<p style="color:gray;padding:1rem;">검색 기능은 빌드 후 사용 가능합니다.</p>';
+    }
+  })();
+</script>
