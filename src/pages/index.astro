@@ -4,16 +4,14 @@ import { cn } from '@/lib/utils';
 import {
   Building2,
   FileText,
-  Frame,
   MessageSquareCode,
-  Mic,
   Settings,
-  Blend,
   Github,
   Linkedin,
   Quote,
-  QrCode
 } from 'lucide-react';
+import { IPhoneFolder } from '@/components/IPhoneFolder';
+import type { FolderLink } from '@/components/IPhoneFolder';
 
 type Link = {
   __type: 'INNER' | 'OUTER';
@@ -24,6 +22,13 @@ type Link = {
   to: string;
   icon: string;
 };
+
+const FOLDER_LINKS: FolderLink[] = [
+  { id: 'loom',         label: 'Loom',         to: '/loom',         target: '_self', iconName: 'Blend' },
+  { id: 'rec-room',     label: 'Rec Room',     to: '/rec-room',     target: '_self', iconName: 'Mic'   },
+  { id: 'frame-studio', label: 'Frame Studio', to: '/frame-studio', target: '_self', iconName: 'Frame' },
+  { id: 'qr-code',      label: 'QR Code',      to: '/qr-code',      target: '_self', iconName: 'QrCode'},
+];
 
 const LINKS: Link[] = [
   {
@@ -63,42 +68,6 @@ const LINKS: Link[] = [
     icon: 'MessageSquareCode',
   },
   {
-    __type: 'INNER',
-    id: 'loom',
-    label: 'Loom',
-    status: 'ENABLED',
-    target: '_self',
-    to: '/loom',
-    icon: 'Blend',
-  },
-  {
-    __type: 'INNER',
-    id: 'rec-room',
-    label: 'Rec Room',
-    status: 'ENABLED',
-    target: '_self',
-    to: '/rec-room',
-    icon: 'Mic',
-  },
-  {
-    __type: 'INNER',
-    id: 'frame-studio',
-    label: 'Frame Studio',
-    status: 'ENABLED',
-    target: '_self',
-    to: '/frame-studio',
-    icon: 'Frame',
-  },
-  {
-    __type: 'INNER',
-    id: 'qr-code',
-    label: 'QR Code',
-    status: 'ENABLED',
-    target: '_self',
-    to: '/qr-code',
-    icon: 'QrCode',
-  },
-  {
     __type: 'OUTER',
     id: 'github',
     label: 'Github',
@@ -131,14 +100,10 @@ const iconMap = {
   Building2: Building2,
   MessageSquareCode: MessageSquareCode,
   FileText: FileText,
-  Blend: Blend,
-  Frame: Frame,
-  Mic: Mic,
   Github: Github,
   Linkedin: Linkedin,
   Settings: Settings,
   Quote: Quote,
-  QrCode: QrCode,
 };
 ---
 
@@ -169,65 +134,80 @@ const iconMap = {
   >
     <ul class="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
       {
-        LINKS.filter(link => link.status === 'ENABLED').map((link) => (
-          <li class="flex flex-col justify-center items-center">
-            <a
-              href={link.to}
-              target={link.target}
-              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-              class={cn(
-                'flex w-14 flex-col justify-center items-center gap-x-1 gap-y-2 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90 relative group'
-              )}
-            >
-              <div
+        (() => {
+          const renderLink = (link: Link) => (
+            <li class="flex flex-col justify-center items-center">
+              <a
+                href={link.to}
+                target={link.target}
+                rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
                 class={cn(
-                  'size-14 rounded-xl flex items-center justify-center',
-                  'backdrop-blur-md backdrop-saturate-150',
-                  'bg-white/30 dark:bg-white/10',
-                  'border border-white/70 dark:border-white/20',
-                  'shadow-[0_4px_24px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(0,0,0,0.05)]',
-                  'dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]',
-                  'transition-all duration-300',
-                  'group-hover:bg-white/40 dark:group-hover:bg-white/15',
-                  'group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.8)]',
-                  'dark:group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]'
+                  'flex w-14 flex-col justify-center items-center gap-x-1 gap-y-2 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90 relative group'
                 )}
               >
-                {(() => {
-                  const Icon = iconMap[link.icon as keyof typeof iconMap];
-                  return Icon ? (
-                    <Icon size={28} className="text-foreground" />
-                  ) : null;
-                })()}
-              </div>
-              <div
-                class={cn(
-                  'text-xs text-foreground break-keep text-center line-clamp-1',
-                  'transition-all duration-300 ease-out group-hover:opacity-0 group-hover:translate-y-1'
-                )}
-              >
-                {link.label}
-              </div>
-              <div
-                class={cn(
-                  'absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap',
-                  'text-xs text-foreground px-2.5 py-[5px] rounded-lg',
-                  'backdrop-blur-md backdrop-saturate-150',
-                  'bg-white/25 dark:bg-white/10',
-                  'border border-white/60 dark:border-white/20',
-                  'shadow-[0_2px_16px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.5)]',
-                  'dark:shadow-[0_2px_16px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]',
-                  'pointer-events-none z-10',
-                  'opacity-0 -translate-y-1',
-                  'group-hover:opacity-100 group-hover:translate-y-0',
-                  'transition-all duration-300 ease-out'
-                )}
-              >
-                {link.label}
-              </div>
-            </a>
-          </li>
-        ))
+                <div
+                  class={cn(
+                    'size-14 rounded-xl flex items-center justify-center',
+                    'backdrop-blur-md backdrop-saturate-150',
+                    'bg-white/30 dark:bg-white/10',
+                    'border border-white/70 dark:border-white/20',
+                    'shadow-[0_4px_24px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(0,0,0,0.05)]',
+                    'dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]',
+                    'transition-all duration-300',
+                    'group-hover:bg-white/40 dark:group-hover:bg-white/15',
+                    'group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.8)]',
+                    'dark:group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]'
+                  )}
+                >
+                  {(() => {
+                    const Icon = iconMap[link.icon as keyof typeof iconMap];
+                    return Icon ? (
+                      <Icon size={28} className="text-foreground" />
+                    ) : null;
+                  })()}
+                </div>
+                <div
+                  class={cn(
+                    'text-xs text-foreground break-keep text-center line-clamp-1',
+                    'transition-all duration-300 ease-out group-hover:opacity-0 group-hover:translate-y-1'
+                  )}
+                >
+                  {link.label}
+                </div>
+                <div
+                  class={cn(
+                    'absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap',
+                    'text-xs text-foreground px-2.5 py-[5px] rounded-lg',
+                    'backdrop-blur-md backdrop-saturate-150',
+                    'bg-white/25 dark:bg-white/10',
+                    'border border-white/60 dark:border-white/20',
+                    'shadow-[0_2px_16px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.5)]',
+                    'dark:shadow-[0_2px_16px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]',
+                    'pointer-events-none z-10',
+                    'opacity-0 -translate-y-1',
+                    'group-hover:opacity-100 group-hover:translate-y-0',
+                    'transition-all duration-300 ease-out'
+                  )}
+                >
+                  {link.label}
+                </div>
+              </a>
+            </li>
+          );
+
+          const enabled = LINKS.filter(l => l.status === 'ENABLED');
+          const careersIdx = enabled.findIndex(l => l.id === 'careers');
+          const before = enabled.slice(0, careersIdx + 1);
+          const after = enabled.slice(careersIdx + 1);
+
+          return [
+            ...before.map(renderLink),
+            <li class="flex flex-col justify-center items-center">
+              <IPhoneFolder client:load label="Tools" links={FOLDER_LINKS} />
+            </li>,
+            ...after.map(renderLink),
+          ];
+        })()
       }
     </ul>
   </main>
