@@ -126,25 +126,27 @@ export function IPhoneFolder({ label, links }: Props) {
       {/* ── Folder overlay ── */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop — light blur only; heavy blur kills colors the glass needs to refract */}
-          <div
-            className={cn(
-              'absolute inset-0 transition-opacity',
-              isVisible ? 'opacity-100' : 'opacity-0',
-            )}
-            style={{
-              transitionDuration: isVisible ? '280ms' : '320ms',
-              transitionTimingFunction: 'ease-out',
-            }}
-          >
+          {/* Backdrop — blur value itself animates (0px→6px) so it's smooth from frame 1 */}
+          <div className="absolute inset-0">
             <div
               className="absolute inset-0"
               style={{
-                backdropFilter: 'blur(6px) brightness(90%) saturate(105%)',
-                WebkitBackdropFilter: 'blur(6px) brightness(90%) saturate(105%)',
+                backdropFilter: isVisible
+                  ? 'blur(6px) brightness(90%) saturate(105%)'
+                  : 'blur(0px) brightness(100%) saturate(100%)',
+                WebkitBackdropFilter: isVisible
+                  ? 'blur(6px) brightness(90%) saturate(105%)'
+                  : 'blur(0px) brightness(100%) saturate(100%)',
+                transition: `backdrop-filter ${isVisible ? '280ms' : '320ms'} ease-out, -webkit-backdrop-filter ${isVisible ? '280ms' : '320ms'} ease-out`,
               }}
             />
-            <div className="absolute inset-0 bg-black/18 dark:bg-black/28" />
+            <div
+              className="absolute inset-0 bg-black/18 dark:bg-black/28"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transition: `opacity ${isVisible ? '280ms' : '320ms'} ease-out`,
+              }}
+            />
           </div>
 
           {/* Click-away zone (behind panel) */}
