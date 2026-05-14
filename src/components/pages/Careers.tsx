@@ -174,14 +174,14 @@ const CareerCard = ({
   );
 };
 
-const Content = () => {
+const Content = ({ careers }: { careers: (typeof Career)[number][] }) => {
   return (
     <article className="py-10 px-4 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto">
       <div className="relative flex flex-col gap-8">
         {/* 타임라인 라인 */}
         <div className="absolute left-[15px] md:left-[23px] top-7 bottom-7 w-px bg-gradient-to-b from-primary/40 via-border to-transparent" />
 
-        {Career.map((career, index) => (
+        {careers.map((career, index) => (
           <CareerCard key={career.id} career={career} index={index} />
         ))}
       </div>
@@ -190,9 +190,12 @@ const Content = () => {
 };
 
 export const CareersPage = () => {
+  // 필터링 로직 추가: isDraft가 true인 항목 제외
+  const visibleCareers = Career.filter((career) => !career.isDraft);
+
   return (
     <Suspense>
-      <Content />
+      <Content careers={visibleCareers} />
     </Suspense>
   );
 };
