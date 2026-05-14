@@ -2,70 +2,48 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { calcReadingTime } from '@/utils/readingTime';
+import { BlogList, type PostItem } from '@/components/pages/BlogList';
 
-const posts: CollectionEntry<'blog'>[] = (await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
-  return import.meta.env.PROD ? !data.draft : true;
-})).sort(
-  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+const posts: CollectionEntry<'blog'>[] = (
+  await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  })
+).sort(
+  (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const postsData: PostItem[] = posts.map((post) => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  pubDate: post.data.pubDate.toISOString(),
+  tags: post.data.tags,
+  heroImage: post.data.heroImage || '/assets/blog/default-thumbnail.svg',
+  readingTime: calcReadingTime(post.body),
+}));
 ---
+
 <MainLayout title="블로그" description="gitsunmin의 블로그입니다.">
   <section class="px-6 pt-16 pb-4 md:pt-24 md:pb-8 md:px-0 w-full md:max-w-(--breakpoint-md) lg:max-w-(--breakpoint-lg) mx-auto">
-    <div class="mb-12">
+    <div class="mb-10">
       <h1 class="text-4xl md:text-5xl font-bold mb-3">블로그</h1>
-      <p class="text-lg text-gray-600 dark:text-gray-400">기록과 생각을 공유합니다.</p>
-      <a href="/rss.xml" class="inline-flex items-center gap-1 mt-3 text-sm text-orange-500 hover:text-orange-600 transition-colors" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg>
-        RSS 구독
-      </a>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {posts.map((post) => {
-        const heroImage = post.data.heroImage || '/assets/blog/default-thumbnail.svg';
-        return (
-          <article class="group">
-            <a href={`/blog/${post.slug}`} class="block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div class="aspect-video overflow-hidden bg-gray-100 dark:bg-gray-900">
-                <img 
-                  src={heroImage} 
-                  alt={post.data.title}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              
-              <div class="p-5">
-                <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {post.data.title}
-                </h2>
-                
-                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                  {post.data.description}
-                </p>
-                
-                <div class="flex flex-wrap gap-2 mb-4">
-                  {post.data.tags.slice(0, 3).map((tag: string) => (
-                    <span class="inline-block text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                      # {tag}
-                    </span>
-                  ))}
-                </div>
-                
-                <time class="text-xs text-gray-500 dark:text-gray-500">
-                  {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </time>
-                <span class="text-xs text-gray-400 dark:text-gray-600 ml-2">· 약 {calcReadingTime(post.body)}분</span>
-              </div>
-            </a>
-          </article>
-        );
-      })}
-    </div>
-    
-    {posts.length === 0 && (
-      <div class="text-center py-16">
-        <p class="text-gray-500 dark:text-gray-400 text-lg">아직 작성된 포스트가 없습니다.</p>
+      <div class="flex items-center gap-4">
+        <p class="text-lg text-gray-600 dark:text-gray-400">기록과 생각을 공유합니다.</p>
+        <a
+          href="/rss.xml"
+          class="inline-flex items-center gap-1 text-sm text-orange-500 hover:text-orange-600 transition-colors"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z" />
+          </svg>
+          RSS
+        </a>
       </div>
-    )}
+    </div>
+
+    <BlogList posts={postsData} client:load />
   </section>
 </MainLayout>
