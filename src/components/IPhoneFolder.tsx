@@ -35,7 +35,7 @@ export function IPhoneFolder({ label, links }: Props) {
 
   const close = useCallback(() => {
     setIsVisible(false);
-    setTimeout(() => setIsOpen(false), 350);
+    setTimeout(() => setIsOpen(false), 380);
   }, []);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function IPhoneFolder({ label, links }: Props) {
 
   return (
     <>
-      {/* Folder closed icon */}
+      {/* ── Folder closed icon ── */}
       <button
         type="button"
         onClick={open}
@@ -62,7 +62,7 @@ export function IPhoneFolder({ label, links }: Props) {
         className={cn(
           'flex w-14 flex-col justify-center items-center gap-y-2',
           'group relative',
-          'transition-transform duration-100 active:scale-90'
+          'transition-transform duration-100 ease-out active:scale-[0.86]'
         )}
       >
         <div
@@ -73,13 +73,13 @@ export function IPhoneFolder({ label, links }: Props) {
             'border border-white/70 dark:border-white/20',
             'shadow-[0_4px_24px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(0,0,0,0.05)]',
             'dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.2)]',
-            'transition-all duration-300',
-            'group-hover:bg-white/40 dark:group-hover:bg-white/15',
-            'group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.8)]',
-            'dark:group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]'
+            'transition-[transform,box-shadow,background-color] duration-300 ease-out',
+            'group-hover:bg-white/45 dark:group-hover:bg-white/16',
+            'group-hover:scale-[1.05]',
+            'group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.85)]',
+            'dark:group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.50),inset_0_1px_0_rgba(255,255,255,0.22)]'
           )}
         >
-          {/* 2×2 mini icon grid */}
           <div className="grid grid-cols-2 gap-0.75 p-2.25 w-full h-full">
             {links.slice(0, 4).map((link) => {
               const Icon = ICON_MAP[link.iconName];
@@ -92,146 +92,231 @@ export function IPhoneFolder({ label, links }: Props) {
           </div>
         </div>
 
-        {/* Static label */}
+        {/* Label — fades out on hover */}
         <div
           className={cn(
             'text-xs text-foreground break-keep text-center line-clamp-1',
-            'transition-all duration-300 ease-out',
-            'group-hover:opacity-0 group-hover:translate-y-1'
+            'transition-[transform,opacity] duration-200 ease-out',
+            'group-hover:opacity-0 group-hover:translate-y-1.5'
           )}
         >
           {label}
         </div>
 
-        {/* Hover tooltip — matches other icons on the page */}
+        {/* Hover tooltip */}
         <div
           className={cn(
             'absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap',
-            'text-xs text-foreground px-2.5 py-[5px] rounded-lg',
+            'text-xs text-foreground px-2.5 py-1.25 rounded-lg',
             'backdrop-blur-md backdrop-saturate-150',
             'bg-white/25 dark:bg-white/10',
             'border border-white/60 dark:border-white/20',
             'shadow-[0_2px_16px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.5)]',
             'dark:shadow-[0_2px_16px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.1)]',
             'pointer-events-none z-10',
-            'opacity-0 -translate-y-1',
+            'opacity-0 translate-y-2',
             'group-hover:opacity-100 group-hover:translate-y-0',
-            'transition-all duration-300 ease-out'
+            'transition-[transform,opacity] duration-200 ease-out'
           )}
         >
           {label}
         </div>
       </button>
 
-      {/* Folder overlay */}
+      {/* ── Folder overlay ── */}
       {isOpen && (
-        <button
-          className={cn(
-            'fixed inset-0 z-50 flex items-center justify-center',
-            'transition-opacity duration-300',
-            isVisible ? 'opacity-100 backdrop-blur-xs' : 'opacity-0',
-            'bg-transparent border-0 p-0 cursor-auto'
-          )}
-          onClick={close}
-          type="button"
-        >
-          {/* Liquid Glass backdrop — uniform blur + dim, no gradient (matches real iOS) */}
-          <div className="absolute inset-0 backdrop-blur-2xl backdrop-brightness-[78%] backdrop-saturate-[85%]" />
-          <div className="absolute inset-0 bg-black/12 dark:bg-black/25" />
-
-          {/*
-           * ── Liquid Glass panel ──
-           * Outer div: carries only the shadow (no overflow-hidden = shadow not clipped)
-           * Glass layer: absolute-positioned material (backdrop + tint + border)
-           * Sheen layer: absolute-positioned light interaction effects
-           * Content: z-10 so it sits above all glass layers
-           */}
-          <button
-            type='button'
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop — light blur only; heavy blur kills colors the glass needs to refract */}
+          <div
             className={cn(
-              'relative z-10 rounded-[28px] min-w-67',
-              'backdrop-blur-xs backdrop-saturate-150',
-              'shadow-[0_2px_0_0.5px_rgba(255,255,255,0.55),0_32px_80px_rgba(0,0,0,0.22),0_0_40px_rgba(255,255,255,0.10)]',
-              'dark:shadow-[0_2px_0_0.5px_rgba(255,255,255,0.13),0_32px_80px_rgba(0,0,0,0.65),0_0_40px_rgba(255,255,255,0.04)]',
-              'transition-[transform,opacity] duration-380',
-              isVisible ? 'scale-100 translate-y-0 opacity-100' : 'scale-[0.72] translate-y-6 opacity-0'
+              'absolute inset-0 transition-opacity',
+              isVisible ? 'opacity-100' : 'opacity-0',
             )}
             style={{
-              transitionTimingFunction: isVisible
-                ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
-                : 'cubic-bezier(0.4, 0, 0.8, 1)',
-            }}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                e.stopPropagation();
-              }
+              transitionDuration: isVisible ? '280ms' : '320ms',
+              transitionTimingFunction: 'ease-out',
             }}
           >
-            {/* Glass material — backdrop filter + tint + hairline border */}
+            <div
+              className="absolute inset-0"
+              style={{
+                backdropFilter: 'blur(6px) brightness(90%) saturate(105%)',
+                WebkitBackdropFilter: 'blur(6px) brightness(90%) saturate(105%)',
+              }}
+            />
+            <div className="absolute inset-0 bg-black/18 dark:bg-black/28" />
+          </div>
+
+          {/* Click-away zone (behind panel) */}
+          <button
+            type="button"
+            className="absolute inset-0 cursor-auto border-0 bg-transparent"
+            onClick={close}
+            aria-label="Close folder"
+            tabIndex={-1}
+          />
+
+          {/* Title + panel — pointer-events-none so clicks fall through to close button */}
+          <div className="relative z-10 flex flex-col items-center gap-4 pointer-events-none">
+            {/* Folder title */}
+            <p
+              className="text-xl font-bold text-center text-white tracking-tight select-none"
+              style={{
+                transitionProperty: 'transform, opacity',
+                transitionDuration: isVisible ? '400ms' : '220ms',
+                transitionTimingFunction: isVisible
+                  ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'cubic-bezier(0.4, 0, 1, 1)',
+                transitionDelay: isVisible ? '40ms' : '0ms',
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(-12px)',
+              }}
+            >
+              {label}
+            </p>
+
+            {/*
+             * ── Liquid Glass panel ──
+             * Outer div: shadow only (overflow visible so shadow isn't clipped)
+             * Layer 1: backdrop blur + tint (glass base)
+             * Layer 2: specular gradient (top highlight — glass curvature)
+             * Layer 3: hairline border + inner glow
+             * Content: z-10
+             */}
             <div
               className={cn(
-                'absolute inset-0 rounded-[28px]',
-                'backdrop-blur-xs backdrop-saturate-200 backdrop-brightness-112',
-                'bg-white/38 dark:bg-white/12',
-                'border border-white/75 dark:border-white/20',
+                'relative rounded-[28px] min-w-67',
+                // Bright top rim (glass edge) + large drop shadow
+                'shadow-[0_2.5px_0_1px_rgba(255,255,255,0.75),0_24px_72px_rgba(0,0,0,0.28),0_8px_20px_rgba(0,0,0,0.10)]',
+                'dark:shadow-[0_2.5px_0_1px_rgba(255,255,255,0.30),0_24px_72px_rgba(0,0,0,0.70),0_8px_20px_rgba(0,0,0,0.40)]',
+                'will-change-transform',
+                'pointer-events-auto',
               )}
-            />
+              style={{
+                transitionProperty: 'transform, opacity',
+                transitionDuration: isVisible ? '500ms' : '300ms',
+                transitionTimingFunction: isVisible
+                  ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'cubic-bezier(0.4, 0, 1, 1)',
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'scale(1) translateY(0)' : 'scale(0.70) translateY(32px)',
+              }}
+            >
+              {/* Layer 1: glass base — moderate saturate to avoid color bleeding on neutral backgrounds */}
+              <div
+                className="absolute inset-0 rounded-[28px] overflow-hidden bg-white/10 dark:bg-white/8"
+                style={{
+                  backdropFilter: 'blur(32px) saturate(180%) brightness(132%) contrast(1.06)',
+                  WebkitBackdropFilter: 'blur(32px) saturate(180%) brightness(132%) contrast(1.06)',
+                }}
+              />
 
-            {/* Content */}
-            <div className="relative z-10 px-8 py-6">
-              {/* Folder title */}
-              <p className="text-sm font-medium text-center text-foreground/65 mb-5 tracking-wide select-none">
-                {label}
-              </p>
+              {/*
+               * Layer 2: specular gradient (glass curvature — top bright, fades quickly)
+               * Reduced top opacity vs before so white doesn't wash out background colors.
+               */}
+              <div
+                className="absolute inset-0 rounded-[28px] overflow-hidden pointer-events-none"
+                style={{
+                  background:
+                    'linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.07) 28%, rgba(255,255,255,0) 100%)',
+                }}
+              />
 
-              {/* App icons with staggered entrance */}
-              <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-                {links.map((link, i) => {
-                  const Icon = ICON_MAP[link.iconName];
-                  return (
-                    <a
-                      key={link.id}
-                      href={link.to}
-                      target={link.target}
-                      rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
-                      onClick={close}
-                      className={cn(
-                        'flex flex-col items-center gap-y-2 group/app',
-                        'transition-[transform,opacity] duration-300',
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3',
-                        'active:scale-90'
-                      )}
-                      style={{ transitionDelay: isVisible ? `${60 + i * 40}ms` : '0ms' }}
-                    >
+              {/* Layer 3: hairline border + bright inner rim */}
+              <div
+                className={cn(
+                  'absolute inset-0 rounded-[28px] pointer-events-none',
+                  'border border-white/72 dark:border-white/28',
+                  'shadow-[inset_0_2px_0_rgba(255,255,255,0.88),inset_0_-1.5px_0_rgba(255,255,255,0.28),inset_1.5px_0_0_rgba(255,255,255,0.18),inset_-1.5px_0_0_rgba(255,255,255,0.18)]',
+                  'dark:shadow-[inset_0_2px_0_rgba(255,255,255,0.38),inset_0_-1.5px_0_rgba(255,255,255,0.10),inset_1.5px_0_0_rgba(255,255,255,0.08),inset_-1.5px_0_0_rgba(255,255,255,0.08)]',
+                )}
+              />
+
+              {/* Content */}
+              <div className="relative z-10 px-8 py-6">
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5">
+                  {links.map((link, i) => {
+                    const Icon = ICON_MAP[link.iconName];
+                    return (
+                      /* Stagger entrance wrapper — owns the enter/exit animation */
                       <div
-                        className={cn(
-                          'size-14 rounded-xl flex items-center justify-center',
-                          'backdrop-blur-md backdrop-saturate-150',
-                          'bg-white/35 dark:bg-white/12',
-                          'border border-white/70 dark:border-white/20',
-                          'shadow-[0_4px_24px_rgba(0,0,0,0.10),inset_0_1px_0_rgba(255,255,255,0.78)]',
-                          'dark:shadow-[0_4px_24px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]',
-                          'transition-all duration-200',
-                          'group-hover/app:bg-white/50 dark:group-hover/app:bg-white/20',
-                          'group-hover/app:scale-110',
-                          'group-hover/app:shadow-[0_8px_32px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.9)]',
-                          'dark:group-hover/app:shadow-[0_8px_32px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]'
-                        )}
+                        key={link.id}
+                        style={{
+                          transitionProperty: 'transform, opacity',
+                          transitionDuration: isVisible ? '380ms' : '160ms',
+                          transitionTimingFunction: isVisible
+                            ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+                            : 'ease-in',
+                          transitionDelay: isVisible ? `${90 + i * 55}ms` : '0ms',
+                          opacity: isVisible ? 1 : 0,
+                          transform: isVisible ? 'translateY(0)' : 'translateY(14px)',
+                        }}
                       >
-                        {Icon && <Icon size={28} className="text-foreground" />}
+                        {/* Interactive link — owns hover/press states */}
+                        <a
+                          href={link.to}
+                          target={link.target}
+                          rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                          onClick={close}
+                          className={cn(
+                            'flex flex-col items-center gap-y-2 group/app',
+                            'transition-transform duration-100 ease-out',
+                            'active:scale-[0.88]',
+                          )}
+                        >
+                          {/*
+                           * App icon tile — Liquid Glass (3-layer)
+                           * Outer: no overflow-hidden so box-shadow isn't clipped
+                           */}
+                          <div
+                            className={cn(
+                              'size-14 rounded-xl relative flex items-center justify-center',
+                              // Top rim + drop shadow
+                              'shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.70),0_4px_16px_rgba(0,0,0,0.14)]',
+                              'dark:shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.25),0_4px_16px_rgba(0,0,0,0.42)]',
+                              'transition-[transform,box-shadow] duration-220 ease-out',
+                              'group-hover/app:scale-[1.12]',
+                              'group-hover/app:shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.82),0_10px_30px_rgba(0,0,0,0.20)]',
+                              'dark:group-hover/app:shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.32),0_10px_30px_rgba(0,0,0,0.55)]',
+                            )}
+                          >
+                            {/* Fixed tint — no per-tile backdrop-filter to avoid color drift during animation */}
+                            <div className="absolute inset-0 rounded-xl overflow-hidden bg-white/22 dark:bg-white/14" />
+                            {/* Radial specular — top-left sphere bubble effect, brightens on hover */}
+                            <div
+                              className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none opacity-75 group-hover/app:opacity-100 transition-opacity duration-220"
+                              style={{
+                                background:
+                                  'radial-gradient(circle at 30% 26%, rgba(255,255,255,0.60) 0%, rgba(255,255,255,0.07) 46%, rgba(255,255,255,0) 100%)',
+                              }}
+                            />
+                            {/* Hairline border + inner rim */}
+                            <div
+                              className={cn(
+                                'absolute inset-0 rounded-xl pointer-events-none',
+                                'border border-white/68 dark:border-white/26',
+                                'shadow-[inset_0_1.5px_0_rgba(255,255,255,0.85),inset_0_-1px_0_rgba(255,255,255,0.22)]',
+                                'dark:shadow-[inset_0_1.5px_0_rgba(255,255,255,0.36),inset_0_-1px_0_rgba(255,255,255,0.08)]',
+                              )}
+                            />
+                            {Icon && (
+                              <Icon size={28} className="text-foreground relative z-10" />
+                            )}
+                          </div>
+
+                          <span className="text-xs text-foreground/90 text-center select-none font-medium">
+                            {link.label}
+                          </span>
+                        </a>
                       </div>
-                      <span className="text-xs text-foreground/90 text-center select-none">
-                        {link.label}
-                      </span>
-                    </a>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </button>
-        </button>
+          </div>
+        </div>
       )}
     </>
   );
