@@ -204,12 +204,17 @@ export function IPhoneFolder({ label, links }: Props) {
                 transform: isVisible ? 'scale(1) translateY(0)' : 'scale(0.70) translateY(32px)',
               }}
             >
-              {/* Layer 1: glass base — moderate saturate to avoid color bleeding on neutral backgrounds */}
+              {/* Layer 1: glass base — backdrop-filter transitions alongside panel so color change is gradual */}
               <div
-                className="absolute inset-0 rounded-[28px] overflow-hidden bg-white/10 dark:bg-white/8"
+                className="absolute inset-0 rounded-[28px] overflow-hidden"
                 style={{
-                  backdropFilter: 'blur(32px) saturate(180%) brightness(132%) contrast(1.06)',
-                  WebkitBackdropFilter: 'blur(32px) saturate(180%) brightness(132%) contrast(1.06)',
+                  backdropFilter: isVisible
+                    ? 'blur(32px) saturate(160%) brightness(108%)'
+                    : 'blur(0px) saturate(100%) brightness(100%)',
+                  WebkitBackdropFilter: isVisible
+                    ? 'blur(32px) saturate(160%) brightness(108%)'
+                    : 'blur(0px) saturate(100%) brightness(100%)',
+                  transition: `backdrop-filter ${isVisible ? '500ms' : '300ms'} ease-out, -webkit-backdrop-filter ${isVisible ? '500ms' : '300ms'} ease-out`,
                 }}
               />
 
