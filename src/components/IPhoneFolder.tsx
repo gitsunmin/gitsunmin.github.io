@@ -271,38 +271,14 @@ export function IPhoneFolder({ label, links }: Props) {
                            */}
                           <div
                             className={cn(
-                              'size-14 rounded-xl relative flex items-center justify-center',
-                              // Top rim + drop shadow
-                              'shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.70),0_4px_16px_rgba(0,0,0,0.14)]',
-                              'dark:shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.25),0_4px_16px_rgba(0,0,0,0.42)]',
-                              'transition-[transform,box-shadow] duration-220 ease-out',
+                              'size-14 rounded-xl flex items-center justify-center',
+                              'border border-white/55 dark:border-white/20',
+                              'shadow-[inset_0_1.5px_0_rgba(255,255,255,0.70)] dark:shadow-[inset_0_1.5px_0_rgba(255,255,255,0.22)]',
+                              'transition-transform duration-220 ease-out',
                               'group-hover/app:scale-[1.12]',
-                              'group-hover/app:shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.82),0_10px_30px_rgba(0,0,0,0.20)]',
-                              'dark:group-hover/app:shadow-[0_2.5px_0_0.5px_rgba(255,255,255,0.32),0_10px_30px_rgba(0,0,0,0.55)]',
                             )}
                           >
-                            {/* Fixed tint — no per-tile backdrop-filter to avoid color drift during animation */}
-                            <div className="absolute inset-0 rounded-xl overflow-hidden bg-white/22 dark:bg-white/14" />
-                            {/* Radial specular — top-left sphere bubble effect, brightens on hover */}
-                            <div
-                              className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none opacity-75 group-hover/app:opacity-100 transition-opacity duration-220"
-                              style={{
-                                background:
-                                  'radial-gradient(circle at 30% 26%, rgba(255,255,255,0.60) 0%, rgba(255,255,255,0.07) 46%, rgba(255,255,255,0) 100%)',
-                              }}
-                            />
-                            {/* Hairline border + inner rim */}
-                            <div
-                              className={cn(
-                                'absolute inset-0 rounded-xl pointer-events-none',
-                                'border border-white/68 dark:border-white/26',
-                                'shadow-[inset_0_1.5px_0_rgba(255,255,255,0.85),inset_0_-1px_0_rgba(255,255,255,0.22)]',
-                                'dark:shadow-[inset_0_1.5px_0_rgba(255,255,255,0.36),inset_0_-1px_0_rgba(255,255,255,0.08)]',
-                              )}
-                            />
-                            {Icon && (
-                              <Icon size={28} className="text-foreground relative z-10" />
-                            )}
+                            {Icon && <Icon size={28} className="text-foreground" />}
                           </div>
 
                           <span className="text-xs text-foreground/90 text-center select-none font-medium">
