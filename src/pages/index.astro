@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import {
   Building2,
   FileText,
+  Layers,
   MessageSquareCode,
   Settings,
   Github,
@@ -60,6 +61,15 @@ const LINKS: Link[] = [
   },
   {
     __type: 'INNER',
+    id: 'works',
+    label: 'Works',
+    status: 'ENABLED',
+    target: '_self',
+    to: '/works',
+    icon: 'Layers',
+  },
+  {
+    __type: 'INNER',
     id: 'interview',
     label: 'Interview',
     status: 'DISABLED',
@@ -101,6 +111,7 @@ const iconMap = {
   MessageSquareCode: MessageSquareCode,
   FileText: FileText,
   Github: Github,
+  Layers: Layers,
   Linkedin: Linkedin,
   Settings: Settings,
   Quote: Quote,

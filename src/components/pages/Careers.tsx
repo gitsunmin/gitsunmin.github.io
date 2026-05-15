@@ -1,6 +1,7 @@
 import { Career } from '@/data/careers';
+import { Works } from '@/data/works';
 import { cn } from '@/lib/utils';
-import { Award, Briefcase, Building2, Calendar, Code2, ExternalLink } from 'lucide-react';
+import { Award, BookOpen, Briefcase, Building2, Calendar, ChevronDown, ChevronRight, Code2, ExternalLink } from 'lucide-react';
 import {
   type CSSProperties,
   type RefObject,
@@ -16,6 +17,7 @@ import {
 
 const VISIBLE_CAREERS = Career.filter((c) => !c.isDraft);
 const ALL_TECHS = [...new Set(VISIBLE_CAREERS.flatMap((c) => c.techs))].sort();
+const FEATURED_WORKS = Works.filter((w) => !w.isDraft && w.isFeatured);
 
 // --- Helpers ---
 
@@ -487,6 +489,191 @@ const Content = ({
   );
 };
 
+// --- WorksHighlight ---
+
+const TECH_COLORS: Record<string, string> = {
+  TypeScript: '#3178c6',
+  JavaScript: '#f1e05a',
+  React: '#149eca',
+  'React Native': '#61dafb',
+  Expo: '#4630eb',
+  GraphQL: '#e10098',
+  Relay: '#f26b00',
+  'Cloudflare Workers': '#f38020',
+  Prisma: '#5a67d8',
+  'Tailwind CSS': '#06b6d4',
+  Astro: '#ff5d01',
+  'Three.js': '#6b7280',
+  Vite: '#646cff',
+  Bun: '#c8a97e',
+  'Vue.js': '#42b883',
+  'Next.js': '#1a1a1a',
+  'Node.js': '#339933',
+  'AWS Amplify': '#ff9900',
+  DataDog: '#632ca6',
+};
+
+const getTechColor = (tech: string) => TECH_COLORS[tech] ?? '#8b949e';
+
+const WorksHighlightListItem = ({
+  work,
+  index,
+  isLast,
+}: {
+  work: (typeof Works)[number];
+  index: number;
+  isLast: boolean;
+}) => {
+  const itemRef = useRef<HTMLDivElement>(null);
+  const isVisible = useInView(itemRef as RefObject<HTMLElement | null>);
+  const displayTechs = work.techs.slice(0, 4);
+
+  return (
+    <div
+      ref={itemRef}
+      className={cn(
+        'group px-5 py-4 hover:bg-muted/30 transition-colors duration-150',
+        !isLast && 'border-b border-border/50',
+        'transition-all duration-700 ease-out',
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+      )}
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      {/* 제목 행 */}
+      <div className="flex items-center justify-between gap-3 mb-1.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <BookOpen className="size-3.5 text-muted-foreground shrink-0" />
+          <img
+            src={work.icon}
+            alt={`${work.title} 아이콘`}
+            className="size-4 rounded object-contain bg-white border border-border/40 shrink-0"
+          />
+          <h3 className="text-sm font-semibold text-primary truncate">{work.title}</h3>
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0">
+          {work.links.map(({ label, url }) => (
+            <a
+              key={url}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                'inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium',
+                'border border-border/60 bg-background text-muted-foreground',
+                'hover:bg-primary hover:text-primary-foreground hover:border-primary',
+                'transition-all duration-150',
+              )}
+            >
+              {label}
+              <ExternalLink className="size-2.5" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* 설명 */}
+      <p className="text-xs leading-relaxed text-muted-foreground line-clamp-1 mb-2">
+        {work.description.split('\n')[0]}
+      </p>
+
+      {/* 기술 점 + 날짜 */}
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 flex-wrap">
+          {displayTechs.map((tech) => (
+            <span key={tech} className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+              <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: getTechColor(tech) }} />
+              {tech}
+            </span>
+          ))}
+          {work.techs.length > 4 && (
+            <span className="text-[11px] text-muted-foreground/60">+{work.techs.length - 4}</span>
+          )}
+        </div>
+        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground ml-auto shrink-0">
+          <Calendar className="size-3 shrink-0" />
+          {work.range}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+const WorksHighlight = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isVisible = useInView(sectionRef as RefObject<HTMLElement | null>, 0.1);
+
+  const previewWorks = FEATURED_WORKS.slice(0, 2);
+  const hiddenCount = FEATURED_WORKS.length - previewWorks.length;
+
+  if (FEATURED_WORKS.length === 0) return null;
+
+  return (
+    <section className="px-4 md:px-0 pt-10 pb-10">
+      <div className="w-full h-px bg-linear-to-r from-transparent via-border to-transparent mb-10" />
+      <div
+        ref={sectionRef}
+        className={cn(
+          'transition-all duration-700 ease-out',
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+        )}
+      >
+        <div className="flex items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-2">
+            <div className="h-5 w-0.5 bg-primary rounded-full shrink-0" />
+            <span className="text-sm font-bold text-foreground">개인 작업물</span>
+            <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full shrink-0">
+              태그 필터 미적용
+            </span>
+          </div>
+          <a
+            href="/works"
+            className={cn(
+              'inline-flex items-center gap-1 text-xs font-medium text-muted-foreground shrink-0',
+              'transition-all duration-200 hover:text-primary hover:gap-2',
+            )}
+          >
+            모든 작업물 보기
+            <ChevronRight className="size-3.5" />
+          </a>
+        </div>
+
+        <div className="relative">
+          <div className="rounded-xl border border-border/70 bg-card overflow-hidden">
+            {previewWorks.map((work, index) => (
+              <WorksHighlightListItem
+                key={work.id}
+                work={work}
+                index={index}
+                isLast={index === previewWorks.length - 1}
+              />
+            ))}
+          </div>
+
+          {hiddenCount > 0 && (
+            <div className="absolute bottom-0 left-0 right-0 h-10 bg-linear-to-t from-card to-transparent rounded-b-xl pointer-events-none" />
+          )}
+        </div>
+
+        {hiddenCount > 0 && (
+          <a
+            href="/works"
+            className={cn(
+              'group mt-2 flex w-full items-center justify-center gap-1.5',
+              'py-2.5 rounded-lg border border-dashed border-border/60',
+              'text-xs font-medium text-muted-foreground',
+              'hover:border-primary/40 hover:bg-primary/5 hover:text-primary',
+              'transition-all duration-200',
+            )}
+          >
+            {hiddenCount}개 더 있음
+            <ChevronDown className="size-3.5 animate-bounce" />
+          </a>
+        )}
+      </div>
+    </section>
+  );
+};
+
 // --- CareersPage ---
 
 export const CareersPage = () => {
@@ -511,6 +698,7 @@ export const CareersPage = () => {
           activeFilter={activeFilter}
           onTechClick={handleTechClick}
         />
+        <WorksHighlight />
       </div>
     </Suspense>
   );
