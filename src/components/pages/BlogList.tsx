@@ -102,6 +102,7 @@ const FeaturedCard = ({ post }: { post: PostItem }) => {
           <img
             src={post.heroImage}
             alt={post.title}
+            style={{ viewTransitionName: `blog-image-${post.slug}` }}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = '/assets/blog/default-thumbnail.svg';
             }}
@@ -144,6 +145,7 @@ const GridCard = ({ post, index }: { post: PostItem; index: number }) => {
           <img
             src={post.heroImage}
             alt={post.title}
+            style={{ viewTransitionName: `blog-image-${post.slug}` }}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = '/assets/blog/default-thumbnail.svg';
             }}

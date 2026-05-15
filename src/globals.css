@@ -296,6 +296,39 @@
   }
 }
 
+/* ─── View Transitions ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  /* 이전 페이지: 살짝 축소되며 페이드 아웃 */
+  ::view-transition-old(root) {
+    animation: 300ms cubic-bezier(0.4, 0, 1, 1) both vt-fade-scale-out;
+  }
+
+  /* 새 페이지: 아래에서 올라오며 페이드 인 */
+  ::view-transition-new(root) {
+    animation: 400ms cubic-bezier(0, 0, 0.2, 1) 80ms both vt-fade-slide-in;
+  }
+
+  /* 공유 이미지 요소(blog-image-*)의 모프 타이밍 */
+  ::view-transition-group(*) {
+    animation-duration: 450ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes vt-fade-scale-out {
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@keyframes vt-fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
 @layer base {
   .prose ul, .prose ol {
     list-style-position: outside;
