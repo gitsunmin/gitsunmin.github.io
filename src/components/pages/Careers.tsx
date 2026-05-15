@@ -102,6 +102,10 @@ const useCountUp = (target: number, duration = 1200, trigger = false): number =>
   return count;
 };
 
+const isTouchDevice = (): boolean =>
+  typeof window !== 'undefined' &&
+  ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
 const useTilt = (maxTilt = 6) => {
   const ref = useRef<HTMLDivElement>(null);
   const [tiltStyle, setTiltStyle] = useState<CSSProperties>({
@@ -111,6 +115,35 @@ const useTilt = (maxTilt = 6) => {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    if (isTouchDevice()) {
+      const handleTouchMove = (e: TouchEvent) => {
+        const touch = e.touches[0];
+        const rect = el.getBoundingClientRect();
+        const x = ((touch.clientX - rect.left) / rect.width - 0.5) * maxTilt;
+        const y = ((touch.clientY - rect.top) / rect.height - 0.5) * -maxTilt;
+        setTiltStyle({
+          transform: `perspective(900px) rotateX(${y}deg) rotateY(${x}deg) translateY(-2px)`,
+          transition: 'transform 0.05s ease-out',
+        });
+      };
+
+      const handleTouchEnd = () => {
+        setTiltStyle({
+          transform: 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0px)',
+          transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        });
+      };
+
+      el.addEventListener('touchmove', handleTouchMove, { passive: true });
+      el.addEventListener('touchend', handleTouchEnd, { passive: true });
+      el.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+      return () => {
+        el.removeEventListener('touchmove', handleTouchMove);
+        el.removeEventListener('touchend', handleTouchEnd);
+        el.removeEventListener('touchcancel', handleTouchEnd);
+      };
+    }
 
     const handleMove = (e: MouseEvent) => {
       const rect = el.getBoundingClientRect();
@@ -138,6 +171,40 @@ const useTilt = (maxTilt = 6) => {
   }, [maxTilt]);
 
   return { ref: ref as RefObject<HTMLDivElement | null>, tiltStyle };
+};
+
+const useScrollSkew = (maxSkew = 2.5): CSSProperties => {
+  const [skewStyle, setSkewStyle] = useState<CSSProperties>({});
+  const lastScrollY = useRef(0);
+  const rafId = useRef<number>(0);
+  const timeoutId = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => {
+    if (!isTouchDevice()) return;
+
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId.current);
+      rafId.current = requestAnimationFrame(() => {
+        const delta = window.scrollY - lastScrollY.current;
+        lastScrollY.current = window.scrollY;
+        const skew = Math.max(-maxSkew, Math.min(maxSkew, delta * 0.3));
+        setSkewStyle({ transform: `skewY(${skew}deg)`, transition: 'transform 0.1s linear' });
+        clearTimeout(timeoutId.current);
+        timeoutId.current = setTimeout(() => {
+          setSkewStyle({ transform: 'skewY(0deg)', transition: 'transform 0.5s ease-out' });
+        }, 150);
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId.current);
+      clearTimeout(timeoutId.current);
+    };
+  }, [maxSkew]);
+
+  return skewStyle;
 };
 
 // --- Sub-components ---
@@ -277,6 +344,7 @@ const CareerCard = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const isVisible = useInView(cardRef as RefObject<HTMLElement | null>);
   const { ref: tiltRef, tiltStyle } = useTilt(6);
+  const skewStyle = useScrollSkew(2.5);
   const isCurrentRole = career.range.trim().endsWith('~');
   const isFiltered = activeFilter !== null && !career.techs.includes(activeFilter);
   const fromLeft = index % 2 === 0;
@@ -303,7 +371,7 @@ const CareerCard = ({
                 ? 'opacity-0 -translate-x-8 translate-y-2'
                 : 'opacity-0 translate-x-8 translate-y-2',
           )}
-          style={{ transitionDelay: `${index * 150}ms` }}
+          style={{ ...skewStyle, transitionDelay: `${index * 150}ms` }}
         >
           {/* 타임라인 도트 */}
           <div className="absolute left-1.75 md:left-3.75 top-7 z-10 pt-12 md:pt-16">
