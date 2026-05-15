@@ -1,15 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Blend, Mic, Frame, QrCode } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const ICON_MAP = {
-  Blend,
-  Mic,
-  Frame,
-  QrCode,
-} as const;
-
-type IconName = keyof typeof ICON_MAP;
+import { ICON_MAP } from '@/lib/iconMap';
+import type { IconName } from '@/lib/iconMap';
 
 export type FolderLink = {
   id: string;

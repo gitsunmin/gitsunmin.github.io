@@ -1,37 +1,32 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { cn } from '@/lib/utils';
-import {
-  Building2,
-  FileText,
-  Layers,
-  MessageSquareCode,
-  Settings,
-  Github,
-  Linkedin,
-  Quote,
-} from 'lucide-react';
+import { ICON_MAP } from '@/lib/iconMap';
+import type { IconName } from '@/lib/iconMap';
 import { IPhoneFolder } from '@/components/IPhoneFolder';
 import type { FolderLink } from '@/components/IPhoneFolder';
 
-type Link = {
+type LinkItem = {
   __type: 'INNER' | 'OUTER';
   id: string;
   label: string;
   status: 'ENABLED' | 'DISABLED';
   target: '_self' | '_blank';
   to: string;
-  icon: string;
+  icon: IconName;
 };
 
-const FOLDER_LINKS: FolderLink[] = [
-  { id: 'loom',         label: 'Loom',         to: '/loom',         target: '_self', iconName: 'Blend' },
-  { id: 'rec-room',     label: 'Rec Room',     to: '/rec-room',     target: '_self', iconName: 'Mic'   },
-  { id: 'frame-studio', label: 'Frame Studio', to: '/frame-studio', target: '_self', iconName: 'Frame' },
-  { id: 'qr-code',      label: 'QR Code',      to: '/qr-code',      target: '_self', iconName: 'QrCode'},
-];
+type FolderItem = {
+  __type: 'FOLDER';
+  id: string;
+  label: string;
+  status: 'ENABLED' | 'DISABLED';
+  links: FolderLink[];
+};
 
-const LINKS: Link[] = [
+type Item = LinkItem | FolderItem;
+
+const LINKS: Item[] = [
   {
     __type: 'INNER',
     id: 'blog',
@@ -69,6 +64,18 @@ const LINKS: Link[] = [
     icon: 'Layers',
   },
   {
+    __type: 'FOLDER',
+    id: 'tools',
+    label: 'Tools',
+    status: 'ENABLED',
+    links: [
+      { id: 'loom',         label: 'Loom',         to: '/loom',         target: '_self', iconName: 'Blend'  },
+      { id: 'rec-room',     label: 'Rec Room',     to: '/rec-room',     target: '_self', iconName: 'Mic'    },
+      { id: 'frame-studio', label: 'Frame Studio', to: '/frame-studio', target: '_self', iconName: 'Frame'  },
+      { id: 'qr-code',      label: 'QR Code',      to: '/qr-code',      target: '_self', iconName: 'QrCode' },
+    ],
+  },
+  {
     __type: 'INNER',
     id: 'interview',
     label: 'Interview',
@@ -78,22 +85,14 @@ const LINKS: Link[] = [
     icon: 'MessageSquareCode',
   },
   {
-    __type: 'OUTER',
-    id: 'github',
-    label: 'Github',
-    target: '_blank',
+    __type: 'FOLDER',
+    id: 'social',
+    label: 'Social',
     status: 'ENABLED',
-    to: 'https://github.com/gitsunmin',
-    icon: 'Github',
-  },
-  {
-    __type: 'OUTER',
-    id: 'linkedin',
-    label: 'linkedin',
-    target: '_blank',
-    status: 'ENABLED',
-    to: 'https://www.linkedin.com/in/gitsunmin/',
-    icon: 'Linkedin',
+    links: [
+      { id: 'github',   label: 'Github',   to: 'https://github.com/gitsunmin',            target: '_blank', iconName: 'GithubIcon'   },
+      { id: 'linkedin', label: 'LinkedIn', to: 'https://www.linkedin.com/in/gitsunmin/', target: '_blank', iconName: 'LinkedinIcon' },
+    ],
   },
   {
     __type: 'INNER',
@@ -105,17 +104,6 @@ const LINKS: Link[] = [
     icon: 'Settings',
   },
 ];
-
-const iconMap = {
-  Building2: Building2,
-  MessageSquareCode: MessageSquareCode,
-  FileText: FileText,
-  Github: Github,
-  Layers: Layers,
-  Linkedin: Linkedin,
-  Settings: Settings,
-  Quote: Quote,
-};
 ---
 
 <BaseLayout
@@ -145,13 +133,17 @@ const iconMap = {
   >
     <ul class="grid grid-cols-[repeat(auto-fit,minmax(64px,1fr))] gap-4">
       {
-        (() => {
-          const renderLink = (link: Link) => (
+        LINKS.filter(item => item.status === 'ENABLED').map(item =>
+          item.__type === 'FOLDER' ? (
+            <li class="flex flex-col justify-center items-center">
+              <IPhoneFolder client:load label={item.label} links={item.links} />
+            </li>
+          ) : (
             <li class="flex flex-col justify-center items-center">
               <a
-                href={link.to}
-                target={link.target}
-                rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                href={item.to}
+                target={item.target}
+                rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
                 class={cn(
                   'flex w-14 flex-col justify-center items-center gap-x-1 gap-y-2 active:transform active:duration-300 active:scale-150 active:opacity-80 hover:opacity-90 relative group'
                 )}
@@ -171,10 +163,8 @@ const iconMap = {
                   )}
                 >
                   {(() => {
-                    const Icon = iconMap[link.icon as keyof typeof iconMap];
-                    return Icon ? (
-                      <Icon size={28} className="text-foreground" />
-                    ) : null;
+                    const Icon = ICON_MAP[item.icon];
+                    return Icon ? <Icon size={28} className="text-foreground" /> : null;
                   })()}
                 </div>
                 <div
@@ -183,12 +173,12 @@ const iconMap = {
                     'transition-all duration-300 ease-out group-hover:opacity-0 group-hover:translate-y-1'
                   )}
                 >
-                  {link.label}
+                  {item.label}
                 </div>
                 <div
                   class={cn(
                     'absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap',
-                    'text-xs text-foreground px-2.5 py-[5px] rounded-lg',
+                    'text-xs text-foreground px-2.5 py-1.25 rounded-lg',
                     'backdrop-blur-md backdrop-saturate-150',
                     'bg-white/25 dark:bg-white/10',
                     'border border-white/60 dark:border-white/20',
@@ -200,25 +190,12 @@ const iconMap = {
                     'transition-all duration-300 ease-out'
                   )}
                 >
-                  {link.label}
+                  {item.label}
                 </div>
               </a>
             </li>
-          );
-
-          const enabled = LINKS.filter(l => l.status === 'ENABLED');
-          const careersIdx = enabled.findIndex(l => l.id === 'careers');
-          const before = enabled.slice(0, careersIdx + 1);
-          const after = enabled.slice(careersIdx + 1);
-
-          return [
-            ...before.map(renderLink),
-            <li class="flex flex-col justify-center items-center">
-              <IPhoneFolder client:load label="Tools" links={FOLDER_LINKS} />
-            </li>,
-            ...after.map(renderLink),
-          ];
-        })()
+          )
+        )
       }
     </ul>
   </main>
