@@ -1,6 +1,7 @@
 import type { MDXComponents } from 'mdx/types';
 import { match, P } from 'ts-pattern';
 import { SafeImage } from '@/components/SafeImage';
+import { cn } from '@/lib/utils';
 
 type Props = {
   components?: MDXComponents;
@@ -66,22 +67,26 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
         {...props}
       />
     ),
-    pre: (props) => (
-      <div className="relative my-6 w-full group code-block-wrapper">
-        <pre
-          className="overflow-x-auto p-5 rounded-xl bg-gray-50 dark:bg-gray-900 text-foreground shadow-md border border-gray-200 dark:border-gray-800"
-          {...props}
-        />
+    pre: ({ className, ...rest }) => (
+      <div className="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md">
+        <div className="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600">
+          <pre
+            {...rest}
+            className={cn("p-5 min-w-max bg-transparent text-foreground", className)}
+          />
+        </div>
         <button
           className="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md"
           aria-label="Copy code"
           type="button"
         >
           <svg className="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <title>Copy</title>
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
           </svg>
           <svg className="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <title>Copied</title>
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </button>
@@ -107,17 +112,17 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
           />
         )),
     img: (props) => <SafeImage {...props} />,
-    table: (props) => (
-      <div className="w-full overflow-x-auto my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
+    table: ({ className, ...rest }) => (
+      <div className="max-w-[calc(100vw-40px)] mx-1 overflow-hidden overflow-x-auto my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
         <table
-          className="w-full text-sm text-left border-collapse"
-          {...props}
+          className={cn("min-w-full text-sm text-left border-collapse", className)}
+          {...rest}
         />
       </div>
     ),
     thead: (props) => (
       <thead
-        className="sticky top-0 bg-gray-50/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"
+        className="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"
         {...props}
       />
     ),

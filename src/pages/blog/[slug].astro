@@ -61,14 +61,14 @@ const jsonLd = JSON.stringify({
   canonicalURL={canonicalURL}
   jsonLd={jsonLd}
 >
-  <div class="max-w-6xl mx-auto px-4 py-18 md:px-8 md:py-24">
+  <div class="max-w-6xl mx-auto px-4 py-12 md:px-8 md:py-24 overflow-x-hidden">
     <!-- Mobile TOC -->
     <div class="lg:hidden mb-6">
       <TableOfContents headings={headings} />
     </div>
 
     <div class="flex gap-10 items-start">
-      <article class="prose dark:prose-invert prose-lg min-w-0 flex-1" data-pagefind-body data-pagefind-meta={`title:${post.data.title}, tags:${post.data.tags.join(',')}`}>
+      <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-hidden" data-pagefind-body data-pagefind-meta={`title:${post.data.title}, tags:${post.data.tags.join(',')}`}>
         <img src={heroImage} onerror={`this.src='${DEFAULT_HERO_IMAGE}';`} alt={post.data.title} class="w-full h-auto rounded-lg mb-8 shadow-lg" />
         <h1 class="text-3xl md:text-4xl font-extrabold mb-4">{post.data.title}</h1>
         <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
@@ -173,18 +173,6 @@ const jsonLd = JSON.stringify({
 
     .code-block-wrapper:hover .copy-button {
       opacity: 1 !important;
-    }
-    
-    .code-block-wrapper pre {
-      transition: border-color 0.2s ease;
-    }
-    
-    .code-block-wrapper:hover pre {
-      border-color: rgb(156 163 175 / 0.5) !important;
-    }
-    
-    .dark .code-block-wrapper:hover pre {
-      border-color: rgb(75 85 99 / 0.5) !important;
     }
   </style>
 </MainLayout>
