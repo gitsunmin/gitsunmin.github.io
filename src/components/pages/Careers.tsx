@@ -1,10 +1,11 @@
 import { Career } from '@/data/careers';
 import { Works } from '@/data/works';
 import { cn } from '@/lib/utils';
-import { Award, BookOpen, Briefcase, Building2, Calendar, ChevronDown, ChevronRight, Code2, ExternalLink } from 'lucide-react';
+import { Award, Briefcase, Building2, Calendar, ChevronDown, ChevronRight, Code2, ExternalLink } from 'lucide-react';
 import { TechFilterBar } from '@/components/TechFilterBar';
+import { TechTag } from '@/components/TechTag';
+import { WorkItem } from '@/components/WorkItem';
 import { useInView } from '@/hooks/useInView';
-import { getTechColor } from '@/lib/techColors';
 import {
   type CSSProperties,
   type RefObject,
@@ -393,30 +394,13 @@ const CareerCard = ({
 
               {/* 기술 스택 */}
               {career.techs.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-5">
-                  {career.techs.map((tech, badgeIndex) => (
-                    <button
-                      type='button'
-                      key={tech}
-                      onClick={() => onTechClick(tech)}
-                      className={cn(
-                        'px-2.5 py-1 rounded-md text-[11px] font-medium cursor-pointer',
-                        'transition-all duration-300',
-                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
-                        activeFilter === tech
-                          ? 'bg-primary/20 text-primary ring-1 ring-primary/40 scale-[1.02]'
-                          : 'bg-muted/60 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary/80 hover:scale-105',
-                      )}
-                      style={{
-                        transitionDelay: isVisible
-                          ? `${index * 150 + badgeIndex * 35 + 200}ms`
-                          : '0ms',
-                      }}
-                    >
-                      {tech}
-                    </button>
-                  ))}
-                </div>
+                <TechTag
+                  techs={career.techs}
+                  activeFilter={activeFilter}
+                  onTechClick={onTechClick}
+                  isVisible={isVisible}
+                  animationDelay={(i) => index * 150 + i * 35 + 200}
+                />
               )}
 
               {/* 링크 */}
@@ -496,89 +480,6 @@ const Content = ({
 
 // --- WorksHighlight ---
 
-const WorksHighlightListItem = ({
-  work,
-  index,
-  isLast,
-}: {
-  work: (typeof Works)[number];
-  index: number;
-  isLast: boolean;
-}) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const isVisible = useInView(itemRef as RefObject<HTMLElement | null>);
-  const displayTechs = work.techs.slice(0, 4);
-
-  return (
-    <div
-      ref={itemRef}
-      className={cn(
-        'group px-5 py-4 hover:bg-muted/30 transition-colors duration-150',
-        !isLast && 'border-b border-border/50',
-        'transition-all duration-700 ease-out',
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
-      )}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      {/* 제목 행 */}
-      <div className="flex items-center justify-between gap-3 mb-1.5">
-        <div className="flex items-center gap-2 min-w-0">
-          <BookOpen className="size-3.5 text-muted-foreground shrink-0" />
-          <img
-            src={work.icon}
-            alt={`${work.title} 아이콘`}
-            className="size-4 rounded object-contain bg-white border border-border/40 shrink-0"
-          />
-          <h3 className="text-sm font-semibold text-primary truncate">{work.title}</h3>
-        </div>
-        <div className="flex items-center gap-1.5 shrink-0">
-          {work.links.map(({ label, url }) => (
-            <a
-              key={url}
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                'inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium',
-                'border border-border/60 bg-background text-muted-foreground',
-                'hover:bg-primary hover:text-primary-foreground hover:border-primary',
-                'transition-all duration-150',
-              )}
-            >
-              {label}
-              <ExternalLink className="size-2.5" />
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* 설명 */}
-      <p className="text-xs leading-relaxed text-muted-foreground line-clamp-1 mb-2">
-        {work.description.split('\n')[0]}
-      </p>
-
-      {/* 기술 점 + 날짜 */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3 flex-wrap">
-          {displayTechs.map((tech) => (
-            <span key={tech} className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-              <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: getTechColor(tech) }} />
-              {tech}
-            </span>
-          ))}
-          {work.techs.length > 4 && (
-            <span className="text-[11px] text-muted-foreground/60">+{work.techs.length - 4}</span>
-          )}
-        </div>
-        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground ml-auto shrink-0">
-          <Calendar className="size-3 shrink-0" />
-          {work.range}
-        </span>
-      </div>
-    </div>
-  );
-};
-
 const WorksHighlight = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useInView(sectionRef as RefObject<HTMLElement | null>, 0.1);
@@ -621,7 +522,7 @@ const WorksHighlight = () => {
         <div className="relative">
           <div className="rounded-xl border border-border/70 bg-card overflow-hidden">
             {previewWorks.map((work, index) => (
-              <WorksHighlightListItem
+              <WorkItem
                 key={work.id}
                 work={work}
                 index={index}
