@@ -1,4 +1,4 @@
-export const SKIL_ID_LIST = [
+export const SKILL_ID_LIST = [
   'react',
   'next',
   'vue',
@@ -25,16 +25,16 @@ export const SKIL_ID_LIST = [
   'aws_amplify',
 ] as const;
 
-export type SkilId = (typeof SKIL_ID_LIST)[number];
+export type SkillId = (typeof SKILL_ID_LIST)[number];
 
-export type Skil = {
-  [key in SkilId]: {
+export type SkillMap = {
+  [key in SkillId]: {
     readonly name: string;
     readonly iconUrl: string;
   };
 };
 
-export const SKILS_MAP: Skil = {
+export const SKILLS_MAP: SkillMap = {
   react: {
     name: 'React',
     iconUrl: 'https://simpleicons.org/icons/react.svg',

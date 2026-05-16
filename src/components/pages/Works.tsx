@@ -1,59 +1,13 @@
+import { TechFilterBar } from '@/components/TechFilterBar';
 import { Works } from '@/data/works';
+import { useInView } from '@/hooks/useInView';
+import { getTechColor } from '@/lib/techColors';
 import { cn } from '@/lib/utils';
 import { BookOpen, Calendar, ExternalLink } from 'lucide-react';
-import { type RefObject, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { type RefObject, Suspense, useCallback, useRef, useState } from 'react';
 
 const VISIBLE_WORKS = Works.filter((w) => !w.isDraft);
 const ALL_TECHS = [...new Set(VISIBLE_WORKS.flatMap((w) => w.techs))].sort();
-
-// GitHub linguist 색상 기반
-const TECH_COLORS: Record<string, string> = {
-  TypeScript: '#3178c6',
-  JavaScript: '#f1e05a',
-  React: '#149eca',
-  'React Native': '#61dafb',
-  Expo: '#4630eb',
-  GraphQL: '#e10098',
-  Relay: '#f26b00',
-  'Cloudflare Workers': '#f38020',
-  Prisma: '#5a67d8',
-  'Tailwind CSS': '#06b6d4',
-  Astro: '#ff5d01',
-  'Three.js': '#6b7280',
-  Vite: '#646cff',
-  Turborepo: '#ef4444',
-  Bun: '#c8a97e',
-  'Vue.js': '#42b883',
-  'Next.js': '#1a1a1a',
-  'Node.js': '#339933',
-  'AWS Amplify': '#ff9900',
-  DataDog: '#632ca6',
-  pnpm: '#f69220',
-};
-
-const getTechColor = (tech: string) => TECH_COLORS[tech] ?? '#8b949e';
-
-const useInView = (ref: RefObject<HTMLElement | null>, threshold = 0.15) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref, threshold]);
-
-  return isVisible;
-};
 
 const TechTopics = ({
   techs,
@@ -80,52 +34,6 @@ const TechTopics = ({
         {tech}
       </button>
     ))}
-  </div>
-);
-
-const TechFilterBar = ({
-  techs,
-  activeFilter,
-  onFilterChange,
-}: {
-  techs: string[];
-  activeFilter: string | null;
-  onFilterChange: (tech: string | null) => void;
-}) => (
-  <div className="px-4 md:px-0 mb-8">
-    <div className="flex flex-wrap gap-1.5 items-center">
-      <button
-        type="button"
-        onClick={() => onFilterChange(null)}
-        className={cn(
-          'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-          activeFilter === null
-            ? 'bg-primary text-primary-foreground shadow-sm'
-            : 'bg-muted/60 text-muted-foreground hover:bg-primary/10 hover:text-primary',
-        )}
-      >
-        전체
-      </button>
-      {techs.map((tech) => (
-        <button
-          key={tech}
-          type="button"
-          onClick={() => onFilterChange(activeFilter === tech ? null : tech)}
-          className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all duration-200',
-            activeFilter === tech
-              ? 'bg-primary text-primary-foreground shadow-sm scale-105'
-              : 'bg-muted/60 text-muted-foreground hover:bg-primary/10 hover:text-primary',
-          )}
-        >
-          <span
-            className="size-2 rounded-full shrink-0"
-            style={{ backgroundColor: getTechColor(tech) }}
-          />
-          {tech}
-        </button>
-      ))}
-    </div>
   </div>
 );
 
@@ -247,6 +155,7 @@ export const WorksPage = () => {
           techs={ALL_TECHS}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
+          showColorDot
         />
         <div className="rounded-xl border border-border/70 bg-card overflow-hidden">
           {VISIBLE_WORKS.map((work, index) => (

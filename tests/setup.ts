@@ -5,10 +5,8 @@ class MockResizeObserver {
   disconnect() {}
 }
 
-// 전역 객체에 ResizeObserver 추가
 global.ResizeObserver = MockResizeObserver;
 
-// 추가로 필요한 경우 DOMRect 모킹
 global.DOMRect = {
   fromRect: () => ({
     top: 0,
@@ -21,3 +19,37 @@ global.DOMRect = {
     y: 0,
   }),
 } as unknown as typeof DOMRect;
+
+// bun test 환경에서 localStorage/window가 없으므로 목 설정
+if (typeof globalThis.localStorage === 'undefined') {
+  let store: Record<string, string> = {};
+
+  Object.defineProperty(globalThis, 'localStorage', {
+    configurable: true,
+    value: {
+      getItem(key: string): string | null {
+        return Object.hasOwn(store, key) ? store[key] : null;
+      },
+      setItem(key: string, value: string): void {
+        store[key] = String(value);
+      },
+      removeItem(key: string): void {
+        delete store[key];
+      },
+      clear(): void {
+        store = {};
+      },
+      get length() {
+        return Object.keys(store).length;
+      },
+    },
+  });
+}
+
+// LocalStorage.ts의 isBrowser 체크(typeof window !== 'undefined')가 true가 되도록 설정
+if (typeof globalThis.window === 'undefined') {
+  Object.defineProperty(globalThis, 'window', {
+    configurable: true,
+    value: globalThis,
+  });
+}

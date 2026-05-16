@@ -2,6 +2,9 @@ import { Career } from '@/data/careers';
 import { Works } from '@/data/works';
 import { cn } from '@/lib/utils';
 import { Award, BookOpen, Briefcase, Building2, Calendar, ChevronDown, ChevronRight, Code2, ExternalLink } from 'lucide-react';
+import { TechFilterBar } from '@/components/TechFilterBar';
+import { useInView } from '@/hooks/useInView';
+import { getTechColor } from '@/lib/techColors';
 import {
   type CSSProperties,
   type RefObject,
@@ -54,30 +57,6 @@ const computeStats = (careers: (typeof Career)[number][]) => {
 };
 
 // --- Hooks ---
-
-const useInView = (ref: RefObject<HTMLElement | null>, threshold = 0.15) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref, threshold]);
-
-  return isVisible;
-};
 
 const useCountUp = (target: number, duration = 1200, trigger = false): number => {
   const [count, setCount] = useState(0);
@@ -286,48 +265,6 @@ const StatsHeader = ({ careers }: { careers: (typeof Career)[number][] }) => {
   );
 };
 
-const TechFilterBar = ({
-  techs,
-  activeFilter,
-  onFilterChange,
-}: {
-  techs: string[];
-  activeFilter: string | null;
-  onFilterChange: (tech: string | null) => void;
-}) => (
-  <div className="px-4 md:px-0 mb-8">
-    <div className="flex flex-wrap gap-1.5 items-center">
-      <button
-        type="button"
-        onClick={() => onFilterChange(null)}
-        className={cn(
-          'px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200',
-          activeFilter === null
-            ? 'bg-primary text-primary-foreground shadow-sm'
-            : 'bg-muted/60 text-muted-foreground hover:bg-primary/10 hover:text-primary',
-        )}
-      >
-        전체
-      </button>
-      {techs.map((tech) => (
-        <button
-          key={tech}
-          type="button"
-          onClick={() => onFilterChange(activeFilter === tech ? null : tech)}
-          className={cn(
-            'px-2.5 py-1 rounded-md text-[11px] font-medium transition-all duration-200',
-            activeFilter === tech
-              ? 'bg-primary text-primary-foreground shadow-sm scale-105'
-              : 'bg-muted/60 text-muted-foreground hover:bg-primary/10 hover:text-primary',
-          )}
-        >
-          {tech}
-        </button>
-      ))}
-    </div>
-  </div>
-);
-
 // --- CareerCard ---
 
 const CareerCard = ({
@@ -438,7 +375,7 @@ const CareerCard = ({
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5">
                     <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
                       <Briefcase className="size-3.5 shrink-0" />
-                      {career.positoin}
+                      {career.position}
                     </span>
                     <span className="hidden sm:inline text-border">|</span>
                     <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -558,30 +495,6 @@ const Content = ({
 };
 
 // --- WorksHighlight ---
-
-const TECH_COLORS: Record<string, string> = {
-  TypeScript: '#3178c6',
-  JavaScript: '#f1e05a',
-  React: '#149eca',
-  'React Native': '#61dafb',
-  Expo: '#4630eb',
-  GraphQL: '#e10098',
-  Relay: '#f26b00',
-  'Cloudflare Workers': '#f38020',
-  Prisma: '#5a67d8',
-  'Tailwind CSS': '#06b6d4',
-  Astro: '#ff5d01',
-  'Three.js': '#6b7280',
-  Vite: '#646cff',
-  Bun: '#c8a97e',
-  'Vue.js': '#42b883',
-  'Next.js': '#1a1a1a',
-  'Node.js': '#339933',
-  'AWS Amplify': '#ff9900',
-  DataDog: '#632ca6',
-};
-
-const getTechColor = (tech: string) => TECH_COLORS[tech] ?? '#8b949e';
 
 const WorksHighlightListItem = ({
   work,

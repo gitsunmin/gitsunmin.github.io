@@ -1,6 +1,7 @@
+import { useInView } from '@/hooks/useInView';
 import { cn } from '@/lib/utils';
 import { Calendar, Clock } from 'lucide-react';
-import { type RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 export type PostItem = {
   slug: string;
@@ -10,30 +11,6 @@ export type PostItem = {
   tags: string[];
   heroImage: string;
   readingTime: number;
-};
-
-const useInView = (ref: RefObject<HTMLElement | null>, threshold = 0.1) => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [ref, threshold]);
-
-  return isVisible;
 };
 
 const FeaturedCard = ({ post }: { post: PostItem }) => {

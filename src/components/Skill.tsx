@@ -1,7 +1,7 @@
-import type { Skil, SkilId } from '@/data/skils';
+import type { SkillId, SkillMap } from '@/data/skills';
 
 type Props = {
-  skill: Skil[SkilId];
+  skill: SkillMap[SkillId];
 };
 export const Skill = ({ skill }: Props) => {
   return (
