@@ -5,5 +5,8 @@
 		{
 			"text": "커밋 메시지는 반드시 한국어로 작성한다."
 		}
-	]
+	],
+	"chat.tools.terminal.autoApprove": {
+		"bunx": true
+	}
 }

@@ -1,8 +1,9 @@
 import {
   Blend, Mic, Frame, QrCode,
   Building2, FileText, Layers, MessageSquareCode,
-  Settings, GithubIcon, LinkedinIcon, Quote,
+  Settings, Quote,
 } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from './brandIcons';
 
 export const ICON_MAP = {
   Blend,

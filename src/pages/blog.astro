@@ -14,7 +14,7 @@ const posts: CollectionEntry<'blog'>[] = (
 );
 
 const postsData: PostItem[] = posts.map((post) => ({
-  slug: post.slug,
+  slug: post.id.replace(/\.mdx$/, ''),
   title: post.data.title,
   description: post.data.description,
   pubDate: post.data.pubDate.toISOString(),

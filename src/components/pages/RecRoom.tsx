@@ -223,11 +223,11 @@ export const RecRoom = () => {
     isRecording: false,
     activeRecordingId: null as string | null,
     // handlers assigned below after function declarations
-    handlePlay: () => {},
-    handlePause: () => {},
-    handleStop: () => {},
-    startRecording: () => {},
-    stopRecording: () => {},
+    handlePlay: () => { },
+    handlePause: () => { },
+    handleStop: () => { },
+    startRecording: () => { },
+    stopRecording: () => { },
   });
 
   // Sync state → refs
@@ -379,8 +379,21 @@ export const RecRoom = () => {
 
   // Draw idle canvas on mount
   useEffect(() => {
-    stopVisualization();
-  }, [stopVisualization]);
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#111827';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+      }
+    }
+  }, []);
 
   // ── Audio source management ────────────────────────────────────────────────
 
@@ -674,17 +687,19 @@ export const RecRoom = () => {
 
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
 
-  // Update actionsRef every render — read inside the single stable listener
-  actionsRef.current = {
-    audioStatus,
-    isRecording,
-    activeRecordingId,
-    handlePlay,
-    handlePause,
-    handleStop,
-    startRecording,
-    stopRecording,
-  };
+  // Update actionsRef after every render — read inside the single stable listener
+  useEffect(() => {
+    actionsRef.current = {
+      audioStatus,
+      isRecording,
+      activeRecordingId,
+      handlePlay,
+      handlePause,
+      handleStop,
+      startRecording,
+      stopRecording,
+    };
+  });
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -708,7 +723,7 @@ export const RecRoom = () => {
           if (rec) actionsRef.current.stopRecording();
           else actionsRef.current.handleStop();
         })
-        .otherwise(() => {});
+        .otherwise(() => { });
     };
 
     window.addEventListener('keydown', onKeyDown);
