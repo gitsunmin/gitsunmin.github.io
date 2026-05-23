@@ -1,7 +1,66 @@
 import type { MDXComponents } from 'mdx/types';
+import type { ReactNode } from 'react';
+import { Children, isValidElement } from 'react';
 import { match, P } from 'ts-pattern';
 import { SafeImage } from '@/components/SafeImage';
 import { cn } from '@/lib/utils';
+
+type CalloutType = 'tip' | 'warning' | 'insight' | 'note';
+
+const CALLOUT_STYLES: Record<CalloutType, { container: string; icon: string; label: string }> = {
+  tip: {
+    container: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-600',
+    icon: '💡',
+    label: 'Tip',
+  },
+  warning: {
+    container: 'bg-amber-50 dark:bg-amber-950/40 border-amber-400 dark:border-amber-600',
+    icon: '⚠️',
+    label: 'Warning',
+  },
+  insight: {
+    container: 'bg-blue-50 dark:bg-blue-950/40 border-blue-400 dark:border-blue-600',
+    icon: '✨',
+    label: 'Insight',
+  },
+  note: {
+    container: 'bg-gray-50 dark:bg-gray-800/60 border-gray-400 dark:border-gray-600',
+    icon: '📝',
+    label: 'Note',
+  },
+};
+
+function parseCalloutType(children: ReactNode): { type: CalloutType | null; rest: ReactNode } {
+  const childArray = Children.toArray(children);
+  const first = childArray[0];
+
+  if (!isValidElement(first)) return { type: null, rest: children };
+
+  const pChildren = Children.toArray((first as React.ReactElement<{ children: ReactNode }>).props.children);
+  const firstText = pChildren[0];
+
+  if (typeof firstText !== 'string') return { type: null, rest: children };
+
+  const match = firstText.match(/^\[!(tip|warning|insight|note)\]\s*/i);
+  if (!match) return { type: null, rest: children };
+
+  const type = match[1].toLowerCase() as CalloutType;
+  const remaining = firstText.slice(match[0].length);
+
+  const newFirstP = {
+    ...(first as React.ReactElement),
+    props: {
+      ...(first as React.ReactElement<{ children: ReactNode }>).props,
+      children: remaining ? [remaining, ...pChildren.slice(1)] : pChildren.slice(1),
+    },
+  };
+
+  const restChildren = [newFirstP, ...childArray.slice(1)].filter(
+    (c) => !(isValidElement(c) && (c as React.ReactElement<{ children: ReactNode }>).props.children?.toString().trim() === '')
+  );
+
+  return { type, rest: restChildren };
+}
 
 type Props = {
   components?: MDXComponents;
@@ -92,12 +151,28 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
         </button>
       </div>
     ),
-    blockquote: (props) => (
-      <blockquote
-        className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4"
-        {...props}
-      />
-    ),
+    blockquote: ({ children }) => {
+      const { type, rest } = parseCalloutType(children);
+      if (!type) {
+        return (
+          <blockquote className="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+            {children}
+          </blockquote>
+        );
+      }
+      const style = CALLOUT_STYLES[type];
+      return (
+        <div className={cn('border-l-4 rounded-r-lg px-4 py-3 my-6 not-italic', style.container)}>
+          <div className="flex items-center gap-1.5 font-semibold text-sm mb-2">
+            <span aria-hidden="true">{style.icon}</span>
+            <span>{style.label}</span>
+          </div>
+          <div className="text-sm leading-relaxed [&>p]:mb-1 [&>p:last-child]:mb-0">
+            {rest}
+          </div>
+        </div>
+      );
+    },
     a: (props) =>
       match(props.href)
         .with(P.string.startsWith('/'), (href) => (
