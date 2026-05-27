@@ -76,7 +76,7 @@ const jsonLd = JSON.stringify({
     </div>
 
     <div class="flex gap-10 items-start">
-      <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-hidden" data-pagefind-body data-pagefind-meta={`title:${post.data.title}, tags:${post.data.tags.join(',')}`}>
+      <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-clip" data-pagefind-body data-pagefind-meta={`title:${post.data.title}, tags:${post.data.tags.join(',')}`}>
         <img src={heroImage} onerror={`this.src='${DEFAULT_HERO_IMAGE}';`} alt={post.data.title} transition:name={`blog-image-${postSlug}`} class="w-full h-auto rounded-lg mb-8 shadow-lg" />
         <h1 class="text-3xl md:text-4xl font-extrabold mb-4">{post.data.title}</h1>
         <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
@@ -195,6 +195,155 @@ const jsonLd = JSON.stringify({
 
     // Re-initialize on view transitions
     document.addEventListener('astro:page-load', initCopyButtons);
+  </script>
+
+  <script is:inline>
+    function animatePromptBlock(block) {
+      if (block.getAttribute('data-animated')) return;
+      block.setAttribute('data-animated', 'true');
+      var text = block.getAttribute('data-text') || '';
+      var speed = parseInt(block.getAttribute('data-speed') || '15', 10);
+      var textEl = block.querySelector('[data-prompt-text]');
+      var cursorEl = block.querySelector('[data-prompt-cursor]');
+      if (!textEl || !text) return;
+      textEl.textContent = '';
+      var i = 0;
+      var timer = setInterval(function() {
+        i++;
+        textEl.textContent = text.slice(0, i);
+        if (i >= text.length) {
+          clearInterval(timer);
+          if (cursorEl) cursorEl.style.display = 'none';
+        }
+      }, speed);
+    }
+
+    function initFlipCompare() {
+      document.querySelectorAll('[data-component="flip-compare"]').forEach(function(container) {
+        var buttons = container.querySelectorAll('[data-flip-btn]');
+        var isAnimating = false;
+
+        // 초기 상태(then)의 prompt block 애니메이션 — 뷰포트 진입 시
+        var thenObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            thenObserver.unobserve(entry.target);
+            entry.target.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+          });
+        }, { threshold: 0.1 });
+        var thenPanel = container.querySelector('[data-flip-role="then"]');
+        if (thenPanel) thenObserver.observe(thenPanel);
+
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (isAnimating) return;
+            var target = btn.getAttribute('data-flip-btn');
+            var current = container.getAttribute('data-view');
+            if (current === target) return;
+
+            isAnimating = true;
+
+            // 모바일에서 토글이 sticky 상태일 때(컨테이너 상단이 헤더 아래로 올라간 경우)
+            // 클릭 후 컨테이너 상단이 헤더 바로 아래 오도록 스크롤
+            if (window.innerWidth < 1024) {
+              var headerEl = document.querySelector('header');
+              var headerH = headerEl ? headerEl.getBoundingClientRect().height : 48;
+              var containerRect = container.getBoundingClientRect();
+              if (containerRect.top < headerH) {
+                window.scrollTo({ top: window.scrollY + containerRect.top - headerH, behavior: 'smooth' });
+              }
+            }
+
+            var outPanel = container.querySelector('[data-flip-role="' + current + '"]');
+            var inPanel = container.querySelector('[data-flip-role="' + target + '"]');
+
+            // 버튼 상태 즉시 업데이트
+            buttons.forEach(function(b) {
+              b.setAttribute('data-active', b.getAttribute('data-flip-btn') === target ? 'true' : 'false');
+            });
+
+            var direction = target === 'now' ? 1 : -1;
+
+            // 나가는 패널: 슬라이드 아웃
+            if (outPanel) {
+              outPanel.style.transition = 'opacity 180ms ease, transform 180ms ease';
+              outPanel.style.opacity = '0';
+              outPanel.style.transform = 'translateX(' + (-direction * 20) + 'px)';
+            }
+
+            setTimeout(function() {
+              // CSS가 패널 display를 제어하도록 data-view 전환
+              container.setAttribute('data-view', target);
+
+              if (inPanel) {
+                // 들어오는 패널: 초기 위치 설정 후 슬라이드 인
+                inPanel.style.transition = 'none';
+                inPanel.style.opacity = '0';
+                inPanel.style.transform = 'translateX(' + (direction * 20) + 'px)';
+
+                // 다음 프레임에서 애니메이션 시작
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    inPanel.style.transition = 'opacity 250ms ease, transform 250ms ease';
+                    inPanel.style.opacity = '1';
+                    inPanel.style.transform = 'translateX(0)';
+
+                    setTimeout(function() {
+                      inPanel.style.transition = '';
+                      inPanel.style.opacity = '';
+                      inPanel.style.transform = '';
+                      isAnimating = false;
+
+                      // 새 패널의 prompt block 애니메이션 시작
+                      inPanel.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+                    }, 260);
+                  });
+                });
+              } else {
+                isAnimating = false;
+              }
+
+              // 나가는 패널 인라인 스타일 정리 (CSS display:none이 처리)
+              if (outPanel) {
+                outPanel.style.transition = '';
+                outPanel.style.opacity = '';
+                outPanel.style.transform = '';
+              }
+            }, 180);
+          });
+        });
+      });
+    }
+
+    function initPromptBlocks() {
+      // FlipCompare 밖에 있는 독립 prompt block 처리 (IntersectionObserver)
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          animatePromptBlock(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('[data-component="prompt-block"]').forEach(function(block) {
+        // FlipCompare 내부 block은 탭 전환 시 처리하므로 제외
+        if (!block.closest('[data-component="flip-compare"]')) {
+          observer.observe(block);
+        }
+      });
+    }
+
+    function initBlogInteractions() {
+      initFlipCompare();
+      initPromptBlocks();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBlogInteractions);
+    } else {
+      initBlogInteractions();
+    }
+    document.addEventListener('astro:page-load', initBlogInteractions);
   </script>
 
   <style is:global>

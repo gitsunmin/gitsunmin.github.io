@@ -65,6 +65,65 @@
   }
 }
 
+/* FlipCompare toggle — sticky on mobile so it stays visible while reading */
+@media (max-width: 1023px) {
+  [data-component="flip-compare"] [data-flip-toggle] {
+    position: sticky;
+    top: 48px; /* mobile header height */
+    z-index: 10;
+    /* background-color: color-mix(in srgb, var(--color-background) 80%, transparent); */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin-bottom: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 4px 6px -2px rgb(0 0 0 / 0.07);
+  }
+}
+
+/* FlipCompare panel visibility — controlled by data-view attribute on the container */
+[data-component="flip-compare"][data-view="then"] [data-flip-role="now"] {
+  display: none;
+}
+
+[data-component="flip-compare"][data-view="now"] [data-flip-role="then"] {
+  display: none;
+}
+
+/* FlipCompare toggle button active/inactive states */
+.flip-btn {
+  color: rgb(107 114 128); /* gray-500 */
+}
+
+.flip-btn[data-active="true"] {
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.flip-btn[data-flip-btn="then"][data-active="true"] {
+  color: rgb(17 24 39); /* gray-900 */
+}
+
+.flip-btn[data-flip-btn="now"][data-active="true"] {
+  color: rgb(37 99 235); /* blue-600 */
+}
+
+:where(.dark, .dark *) .flip-btn {
+  color: rgb(156 163 175); /* gray-400 */
+}
+
+:where(.dark, .dark *) .flip-btn[data-active="true"] {
+  background-color: rgb(17 24 39); /* gray-900 */
+}
+
+:where(.dark, .dark *) .flip-btn[data-flip-btn="then"][data-active="true"] {
+  color: white;
+}
+
+:where(.dark, .dark *) .flip-btn[data-flip-btn="now"][data-active="true"] {
+  color: rgb(96 165 250); /* blue-400 */
+}
+
 .text-heading-1 {
   @apply text-3xl md:text-6xl font-bold my-6
 }
