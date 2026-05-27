@@ -1,6 +1,7 @@
-import { Button } from './Button';
 import { cn } from '@/lib/utils';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Settings } from 'lucide-react';
+
+import { Button } from './Button';
 
 type Props = {
   title?: string;
@@ -50,7 +51,13 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
           </h1>
         </span>
       </a>
-      <div className="size-10" />
+      <a
+        href="/settings"
+        aria-label="설정"
+        className="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"
+      >
+        <Settings className="size-5" />
+      </a>
     </header>
   );
 };
