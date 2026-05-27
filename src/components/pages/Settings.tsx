@@ -6,6 +6,8 @@ export const SettingsPage = () => {
     const { darkMode, setDarkMode } = useDarkMode();
     const { fontSize, changeFontSize } = useFontSize();
 
+    console.log('fontSize:', fontSize);
+
     return (
         <div className="max-w-3xl mx-auto mt-12 px-4 py-8 w-full">
             <div className="bg-card rounded-lg shadow-sm dark:shadow-gray-600 divide-y">
@@ -55,8 +57,8 @@ export const SettingsPage = () => {
                                 type="button"
                                 onClick={() => changeFontSize(size)}
                                 className={`px-3 py-1.5 rounded-md text-sm ${fontSize === size
-                                        ? 'bg-primary text-primary-foreground'
-                                        : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                                     }`}
                             >
                                 {size === 'small' ? '작게' : size === 'medium' ? '보통' : '크게'}
