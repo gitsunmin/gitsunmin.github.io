@@ -13,6 +13,7 @@ interface Props {
   ogType?: 'website' | 'article';
   canonicalURL?: string;
   jsonLd?: string;
+  preloadImage?: string;
 }
 
 const {
@@ -24,10 +25,11 @@ const {
   ogType,
   canonicalURL,
   jsonLd,
+  preloadImage,
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} ogImage={ogImage} ogType={ogType} canonicalURL={canonicalURL} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} ogImage={ogImage} ogType={ogType} canonicalURL={canonicalURL} jsonLd={jsonLd} preloadImage={preloadImage}>
   <Header title={headerTitle} client:load />
   <main
     class={cn(

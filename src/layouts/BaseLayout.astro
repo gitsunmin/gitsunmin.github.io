@@ -10,6 +10,7 @@ interface Props {
   ogType?: 'website' | 'article';
   canonicalURL?: string;
   jsonLd?: string;
+  preloadImage?: string;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   ogType = 'website',
   canonicalURL = Astro.url.href,
   jsonLd,
+  preloadImage,
 } = Astro.props;
 
 const siteURL = 'https://gitsunmin.github.io';
@@ -55,8 +57,11 @@ const pageTitle = title === 'Gitsunmin' ? title : `${title} | Gitsunmin`;
     <!-- JSON-LD Structured Data -->
     {jsonLd && <script is:inline type="application/ld+json" set:html={jsonLd} />}
 
-    <!-- Google tag (gtag.js) -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script>
+    <!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 -->
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+
+    <!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 -->
+    <script is:inline defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}

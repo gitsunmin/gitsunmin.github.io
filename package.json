@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "bun .scripts/optimize-blog-images.ts && astro check && astro build",
     "preview": "astro preview",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "biome format --write .",
