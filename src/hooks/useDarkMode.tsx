@@ -2,21 +2,13 @@ import { useEffect, useState } from 'react';
 import { LocalStorage } from '@/utils/LocalStorage';
 
 
-
-
-
 export function useDarkMode() {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
-
-  useEffect(() => {
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
     const savedMode = LocalStorage.get('darkMode');
-    if (savedMode !== null) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDarkMode(savedMode === 'true');
-    } else {
-      setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
-    }
-  }, []);
+    if (savedMode !== null) return savedMode === 'true';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
 
   useEffect(() => {
     if (darkMode) {
