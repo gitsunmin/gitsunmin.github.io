@@ -1,10 +1,9 @@
 import { Career } from '@/data/careers';
 import { Works } from '@/data/works';
 import { cn } from '@/lib/utils';
-import { Award, Briefcase, Building2, Calendar, ChevronDown, ChevronRight, Code2, ExternalLink } from 'lucide-react';
+import { Award, Briefcase, Building2, Calendar, Code2, ExternalLink } from 'lucide-react';
 import { TechFilterBar } from '@/components/TechFilterBar';
 import { TechTag } from '@/components/TechTag';
-import { WorkItem } from '@/components/WorkItem';
 import { useInView } from '@/hooks/useInView';
 import {
   type CSSProperties,
@@ -21,7 +20,6 @@ import {
 
 const VISIBLE_CAREERS = Career.filter((c) => !c.isDraft);
 const ALL_TECHS = [...new Set(VISIBLE_CAREERS.flatMap((c) => c.techs))].sort();
-const FEATURED_WORKS = Works.filter((w) => !w.isDraft && w.isFeatured);
 
 // --- Helpers ---
 
@@ -427,6 +425,46 @@ const CareerCard = ({
                   </a>
                 ))}
               </div>
+
+              {/* 관련 프로젝트 */}
+              {(() => {
+                const careerWorks = Works.filter((w) => !w.isDraft && w.careerId === career.id);
+                if (careerWorks.length === 0) return null;
+                return (
+                  <div className="mt-5 pt-5 border-t border-border/40">
+                    <p className="text-[11px] font-semibold text-muted-foreground tracking-wide uppercase mb-3">
+                      관련 프로젝트
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      {careerWorks.map((work) => (
+                        <a
+                          key={work.id}
+                          href={`/work/${work.id}`}
+                          className={cn(
+                            'group/work flex items-center gap-3 px-3 py-2.5 rounded-lg',
+                            'border border-border/50 bg-muted/20',
+                            'hover:border-primary/30 hover:bg-primary/5',
+                            'transition-all duration-200',
+                          )}
+                        >
+                          <img
+                            src={work.icon}
+                            alt={work.title}
+                            className="size-6 rounded object-contain bg-white border border-border/40 shrink-0 p-0.5"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-medium text-foreground truncate group-hover/work:text-primary transition-colors duration-200">
+                              {work.title}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground">{work.range}</p>
+                          </div>
+                          <ExternalLink className="size-3 text-muted-foreground/40 group-hover/work:text-primary/60 shrink-0 transition-colors duration-200" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>
@@ -478,84 +516,6 @@ const Content = ({
   );
 };
 
-// --- WorksHighlight ---
-
-const WorksHighlight = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isVisible = useInView(sectionRef as RefObject<HTMLElement | null>, 0.1);
-
-  const previewWorks = FEATURED_WORKS.slice(0, 2);
-  const hiddenCount = FEATURED_WORKS.length - previewWorks.length;
-
-  if (FEATURED_WORKS.length === 0) return null;
-
-  return (
-    <section className="px-4 md:px-0 pt-10 pb-10">
-      <div className="w-full h-px bg-linear-to-r from-transparent via-border to-transparent mb-10" />
-      <div
-        ref={sectionRef}
-        className={cn(
-          'transition-all duration-700 ease-out',
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
-        )}
-      >
-        <div className="flex items-center justify-between gap-3 mb-6">
-          <div className="flex items-center gap-2">
-            <div className="h-5 w-0.5 bg-primary rounded-full shrink-0" />
-            <span className="text-sm font-bold text-foreground">개인 작업물</span>
-            <span className="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full shrink-0">
-              태그 필터 미적용
-            </span>
-          </div>
-          <a
-            href="/works"
-            className={cn(
-              'inline-flex items-center gap-1 text-xs font-medium text-muted-foreground shrink-0',
-              'transition-all duration-200 hover:text-primary hover:gap-2',
-            )}
-          >
-            모든 작업물 보기
-            <ChevronRight className="size-3.5" />
-          </a>
-        </div>
-
-        <div className="relative">
-          <div className="rounded-xl border border-border/70 bg-card overflow-hidden">
-            {previewWorks.map((work, index) => (
-              <WorkItem
-                key={work.id}
-                work={work}
-                index={index}
-                isLast={index === previewWorks.length - 1}
-              />
-            ))}
-          </div>
-
-          {hiddenCount > 0 && (
-            <div className="absolute bottom-0 left-0 right-0 h-10 bg-linear-to-t from-card to-transparent rounded-b-xl pointer-events-none" />
-          )}
-        </div>
-
-        {hiddenCount > 0 && (
-          <a
-            href="/works"
-            className={cn(
-              'group mt-2 flex w-full items-center justify-center gap-1.5',
-              'py-2.5 rounded-lg border border-dashed border-border/60',
-              'text-xs font-medium text-muted-foreground',
-              'hover:border-primary/40 hover:bg-primary/5 hover:text-primary',
-              'transition-all duration-200',
-            )}
-          >
-            {hiddenCount}개 더 있음
-            <ChevronDown className="size-3.5 animate-bounce" />
-          </a>
-        )}
-      </div>
-    </section>
-  );
-};
-
 // --- CareersPage ---
 
 export const CareersPage = () => {
@@ -580,7 +540,6 @@ export const CareersPage = () => {
           activeFilter={activeFilter}
           onTechClick={handleTechClick}
         />
-        <WorksHighlight />
       </div>
     </Suspense>
   );

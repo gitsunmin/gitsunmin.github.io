@@ -38,4 +38,15 @@ const blogCollection = defineCollection({
   }),
 });
 
-export const collections = { til, blog: blogCollection };
+const worksCollection = defineCollection({
+  loader: glob({
+    pattern: '**/*.mdx',
+    base: './src/content/works',
+  }),
+  schema: z.object({
+    title: z.string(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { til, blog: blogCollection, works: worksCollection };

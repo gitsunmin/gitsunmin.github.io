@@ -54,7 +54,7 @@ Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리
         url: 'https://forest.seonhamlabs.com',
       },
     ],
-    isDraft: true, // draft 처리
+    isDraft: false, // draft 처리
   },
   {
     id: 'marketboro',

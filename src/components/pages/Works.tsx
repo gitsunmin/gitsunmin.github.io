@@ -1,7 +1,7 @@
+import { Suspense, useCallback, useMemo, useState } from 'react';
 import { TechFilterBar } from '@/components/TechFilterBar';
-import { WorkItem } from '@/components/WorkItem';
+import { WorkCard } from '@/components/WorkCard';
 import { Works } from '@/data/works';
-import { Suspense, useCallback, useState } from 'react';
 
 const VISIBLE_WORKS = Works.filter((w) => !w.isDraft);
 const ALL_TECHS = [...new Set(VISIBLE_WORKS.flatMap((w) => w.techs))].sort();
@@ -14,27 +14,46 @@ export const WorksPage = () => {
     [],
   );
 
+  const hasVisible = useMemo(
+    () => activeFilter == null || VISIBLE_WORKS.some((w) => w.techs.includes(activeFilter)),
+    [activeFilter],
+  );
+
   return (
     <Suspense>
-      <div className="w-full md:max-w-(--breakpoint-md) mx-auto pt-10 px-4 md:px-0">
+      <div className="w-full md:max-w-(--breakpoint-md) mx-auto pt-16 md:pt-20 px-4 md:px-0 pb-16">
         <TechFilterBar
           techs={ALL_TECHS}
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
           showColorDot
         />
-        <div className="rounded-xl border border-border/70 bg-card overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
           {VISIBLE_WORKS.map((work, index) => (
-            <WorkItem
+            <WorkCard
               key={work.id}
               work={work}
               index={index}
-              isLast={index === VISIBLE_WORKS.length - 1}
               activeFilter={activeFilter}
               onTechClick={handleTechClick}
             />
           ))}
         </div>
+
+        {!hasVisible && (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{activeFilter}</span> 기술 스택의 프로젝트가 없습니다.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveFilter(null)}
+              className="mt-3 text-xs text-primary hover:underline"
+            >
+              전체 보기
+            </button>
+          </div>
+        )}
       </div>
     </Suspense>
   );

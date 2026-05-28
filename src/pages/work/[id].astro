@@ -1,0 +1,191 @@
+---
+import { type GetStaticPaths } from 'astro';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import MainLayout from '@/layouts/MainLayout.astro';
+import { Works } from '@/data/works';
+import { MDXReplacer } from '@/components/MDXReplacer';
+
+export const getStaticPaths = (async () => {
+  const entries: CollectionEntry<'works'>[] = await getCollection('works', ({ data }: CollectionEntry<'works'>) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+
+  return entries.map((entry) => {
+    const workId = entry.id.replace(/\.mdx$/, '');
+    const work = Works.find((w) => w.id === workId);
+    return {
+      params: { id: workId },
+      props: { entry, work },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+type Props = {
+  entry: CollectionEntry<'works'>;
+  work: (typeof Works)[number] | undefined;
+};
+
+const { entry, work } = Astro.props;
+const { id } = Astro.params;
+const { Content } = await render(entry);
+
+const title = work?.title ?? entry.data.title;
+const description = work?.description.split('\n')[0] ?? '';
+const ogImage = work?.icon ?? '/assets/blog/default-thumbnail.svg';
+
+const COMPANY_LABELS: Record<string, string> = {
+  seonhamlabs: '선함연구소',
+  marketboro: '마켓보로',
+  korens: '코렌스',
+};
+---
+
+<MainLayout
+  title={`${title} - Gitsunmin`}
+  headerTitle={title}
+  description={description}
+  ogImage={ogImage}
+>
+  <div class="w-full max-w-3xl mx-auto pt-20 md:pt-24 px-4 md:px-0 pb-20">
+    <!-- 뒤로 가기 -->
+    <a
+      href="/works"
+      aria-label="Works 목록으로 돌아가기"
+      class="inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-8 hover:text-primary transition-colors duration-200"
+    >
+      ← Works
+    </a>
+
+    <!-- 헤더 카드 (view-transition morphing 대상) -->
+    {work && (
+      <div
+        class="work-header-card rounded-xl border border-border/70 bg-card p-6 mb-8"
+        style={`view-transition-name: work-card-${id}`}
+      >
+        <div class="flex items-start gap-4 mb-4">
+          <img
+            src={work.icon}
+            alt={`${work.title} 아이콘`}
+            class="size-12 rounded-xl object-contain bg-white border border-border/40 p-1 shrink-0"
+          />
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <h1 class="text-xl font-bold text-primary">{work.title}</h1>
+              {work.careerId && (
+                <span class="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/50">
+                  {COMPANY_LABELS[work.careerId] ?? work.careerId}
+                </span>
+              )}
+            </div>
+            <p class="text-sm text-muted-foreground">{work.range}</p>
+          </div>
+        </div>
+
+        <p class="text-sm leading-[1.8] text-muted-foreground mb-4 whitespace-pre-line">{work.description}</p>
+
+        <!-- 기술 태그 -->
+        <div class="flex flex-wrap gap-1.5">
+          {work.techs.map((tech) => (
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground">
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <!-- 외부 링크 -->
+        {work.links.length > 0 && (
+          <div class="flex flex-wrap gap-2 mt-4">
+            {work.links.map(({ label, url }) => (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/60 bg-background text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-150"
+              >
+                {label} ↗
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- 서브레포 목록 (진입 애니메이션) -->
+    {work?.subRepos && work.subRepos.length > 0 && (
+      <div class="mb-8 work-detail-section">
+        <h2 class="text-sm font-semibold text-primary mb-3">레포지토리 구성</h2>
+        <div class="space-y-2">
+          {work.subRepos.map((repo) => (
+            <div class="rounded-lg border border-border/50 bg-muted/20 px-4 py-3">
+              <p class="text-sm font-medium text-foreground mb-1">{repo.name}</p>
+              <p class="text-xs text-muted-foreground mb-2">{repo.description}</p>
+              <div class="flex flex-wrap gap-1">
+                {repo.techs.map((tech) => (
+                  <span class="px-2 py-0.5 rounded-full text-[10px] bg-muted/60 text-muted-foreground">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- MDX 본문 (진입 애니메이션) -->
+    <article class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium">
+      <Content components={MDXReplacer({})} />
+    </article>
+  </div>
+</MainLayout>
+
+<style>
+  @keyframes work-detail-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .work-detail-section {
+    animation: work-detail-in 420ms cubic-bezier(0, 0, 0.2, 1) 260ms both;
+  }
+
+  /* 테이블 overflow는 MDXReplacer wrapper div가 처리 */
+
+  /* h2 구분선 */
+  :global(.prose h2) {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* 인라인 코드 */
+  :global(.prose :not(pre) > code) {
+    background: hsl(var(--muted) / 0.6);
+    padding: 0.1em 0.375em;
+    border-radius: 0.3em;
+    font-size: 0.875em;
+    font-weight: 500;
+    color: hsl(var(--foreground) / 0.9);
+    border: 1px solid hsl(var(--border) / 0.4);
+  }
+
+  /* 코드 블록 */
+  :global(.prose pre) {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* 모바일 헤더 카드 패딩 */
+  @media (max-width: 480px) {
+    :global(.work-header-card) {
+      padding: 1rem;
+    }
+  }
+</style>

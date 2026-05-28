@@ -188,11 +188,13 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
         )),
     img: (props) => <SafeImage {...props} />,
     table: ({ className, ...rest }) => (
-      <div className="max-w-[calc(100vw-40px)] mx-1 overflow-hidden overflow-x-auto my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700">
-        <table
-          className={cn("min-w-full text-sm text-left border-collapse", className)}
-          {...rest}
-        />
+      <div className="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden">
+        <div className="overflow-x-auto w-full">
+          <table
+            className={cn("w-full table-fixed text-sm text-left border-collapse", className)}
+            {...rest}
+          />
+        </div>
       </div>
     ),
     thead: (props) => (
@@ -215,13 +217,13 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
     ),
     th: (props) => (
       <th
-        className="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 whitespace-nowrap"
+        className="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all"
         {...props}
       />
     ),
     td: (props) => (
       <td
-        className="px-4 py-3 text-gray-700 dark:text-gray-300 align-top"
+        className="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"
         {...props}
       />
     ),
