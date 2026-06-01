@@ -21,35 +21,24 @@ type Props = {
 export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
   const cardRef = useRef<HTMLAnchorElement>(null);
   const isVisible = useInView(cardRef as RefObject<HTMLElement | null>);
-  const isFiltered = activeFilter != null && !work.techs.includes(activeFilter);
 
   return (
-    <div
+    <a
+      href={`/work/${work.id}`}
+      ref={cardRef}
+      aria-label={`${work.title} 상세 보기`}
+      className={cn(
+        'group block rounded-xl border border-border/70 bg-card p-5',
+        'hover:border-primary/40 hover:shadow-md hover:shadow-primary/5',
+        'transition-all duration-300 ease-out',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+      )}
       style={{
-        display: 'grid',
-        gridTemplateRows: isFiltered ? '0fr' : '1fr',
-        opacity: isFiltered ? 0 : 1,
-        transition: 'grid-template-rows 0.5s ease, opacity 0.3s ease',
-        pointerEvents: isFiltered ? 'none' : undefined,
+        transitionDelay: `${index * 80}ms`,
+        viewTransitionName: `work-card-${work.id}`,
       }}
     >
-      <div style={{ minHeight: 0, overflow: 'hidden' }}>
-        <a
-          href={`/work/${work.id}`}
-          ref={cardRef}
-          aria-label={`${work.title} 상세 보기`}
-          className={cn(
-            'group block rounded-xl border border-border/70 bg-card p-5',
-            'hover:border-primary/40 hover:shadow-md hover:shadow-primary/5',
-            'transition-all duration-300 ease-out',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
-          )}
-          style={{
-            transitionDelay: `${index * 80}ms`,
-            viewTransitionName: `work-card-${work.id}`,
-          }}
-        >
           {/* 헤더 행 */}
           <div className="flex items-start justify-between gap-3 mb-3">
             <div className="flex items-center gap-2.5 min-w-0">
@@ -106,8 +95,6 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
               상세 보기 →
             </span>
           </div>
-        </a>
-      </div>
-    </div>
+    </a>
   );
 };

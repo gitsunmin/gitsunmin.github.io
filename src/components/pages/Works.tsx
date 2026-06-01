@@ -14,8 +14,9 @@ export const WorksPage = () => {
     [],
   );
 
-  const hasVisible = useMemo(
-    () => activeFilter == null || VISIBLE_WORKS.some((w) => w.techs.includes(activeFilter)),
+  const filteredWorks = useMemo(
+    () =>
+      activeFilter == null ? VISIBLE_WORKS : VISIBLE_WORKS.filter((w) => w.techs.includes(activeFilter)),
     [activeFilter],
   );
 
@@ -29,7 +30,7 @@ export const WorksPage = () => {
           showColorDot
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-          {VISIBLE_WORKS.map((work, index) => (
+          {filteredWorks.map((work, index) => (
             <WorkCard
               key={work.id}
               work={work}
@@ -40,7 +41,7 @@ export const WorksPage = () => {
           ))}
         </div>
 
-        {!hasVisible && (
+        {filteredWorks.length === 0 && activeFilter != null && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <p className="text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{activeFilter}</span> 기술 스택의 프로젝트가 없습니다.
