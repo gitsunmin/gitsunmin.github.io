@@ -355,6 +355,59 @@
   }
 }
 
+/* ─── Living Background ──────────────────────────────────────────── */
+.living-bg-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  will-change: transform;
+}
+
+.living-bg-blob-1 {
+  width: 60vw;
+  height: 60vw;
+  top: -20%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.28) 0%, transparent 70%);
+}
+
+.living-bg-blob-2 {
+  width: 50vw;
+  height: 50vw;
+  bottom: -15%;
+  right: -5%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.22) 0%, transparent 70%);
+}
+
+.living-bg-blob-3 {
+  width: 40vw;
+  height: 40vw;
+  top: 30%;
+  left: 40%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.20) 0%, transparent 70%);
+}
+
+:where(.dark, .dark *) .living-bg-blob-1 {
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.16) 0%, transparent 70%);
+}
+
+:where(.dark, .dark *) .living-bg-blob-2 {
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.13) 0%, transparent 70%);
+}
+
+:where(.dark, .dark *) .living-bg-blob-3 {
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.11) 0%, transparent 70%);
+}
+
+.living-bg-grid {
+  background-image: radial-gradient(circle, rgba(79, 70, 229, 0.13) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+:where(.dark, .dark *) .living-bg-grid {
+  background-image: radial-gradient(circle, rgba(147, 180, 255, 0.08) 1px, transparent 1px);
+}
+
 /* ─── View Transitions ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
   /* 이전 페이지: 살짝 축소되며 페이드 아웃 */

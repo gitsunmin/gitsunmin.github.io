@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import { Providers } from '@/components/Providers';
+import { LivingBackground } from '@/components/LivingBackground';
 import '@/globals.css';
 
 interface Props {
@@ -72,6 +73,7 @@ const pageTitle = title === 'Gitsunmin' ? title : `${title} | Gitsunmin`;
     <ClientRouter />
   </head>
   <body>
+    <LivingBackground client:load />
     <Providers client:load>
       <slot />
     </Providers>
