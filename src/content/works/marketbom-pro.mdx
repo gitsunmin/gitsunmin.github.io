@@ -1,0 +1,29 @@
+---
+title: 마켓봄 (구 마켓봄 프로)
+draft: false
+---
+
+import MarketbomProStory from '../../components/MarketbomProStory.tsx';
+
+<MarketbomProStory client:load />
+
+## 배경
+
+마켓봄(구 마켓봄 프로)은 식자재 유통사(도매상)를 위한 B2B SaaS 플랫폼입니다. 유통사가 다수의 거래처(음식점)를 관리하고, 발주를 수신·처리하며, 정산까지 할 수 있는 올인원 플랫폼입니다. 웹·앱·관리자까지 프론트엔드 전 레이어에 걸쳐 개발했습니다.
+
+마켓봄은 단일 서비스가 아니라 여러 프로덕트가 연계된 에코시스템입니다. 웹 서비스, 두 개의 하이브리드 앱, 정산 관리자, 전사 디자인 시스템이 각각 독립 레포지토리로 운영됩니다. 각 레포지토리별 상세 내용은 위 탭에서 확인할 수 있습니다.
+
+## 전체 기술 스택
+
+| 레이어 | 기술 |
+|--------|------|
+| 마켓봄 웹 | Nuxt.js, Vue.js, TypeScript, GraphQL, Apollo Client |
+| 거래처 발주 앱 (웹뷰) | Nuxt.js, Vue.js, TypeScript, GraphQL, Apollo Client |
+| 유통사 앱 (웹뷰) | React, TypeScript, Emotion, GraphQL, Apollo Client |
+| 통합 운영 관리자 | React, TypeScript, Vite, Tailwind CSS, GraphQL |
+| 디자인 시스템 | React, TypeScript, Emotion, Storybook |
+| 모니터링 | Datadog RUM |
+
+## 관련 링크
+
+- [마켓봄 웹사이트](https://www.marketbom.com)

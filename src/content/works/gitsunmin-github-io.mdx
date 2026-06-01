@@ -3,58 +3,105 @@ title: gitsunmin.github.io
 draft: false
 ---
 
+import GitsunminStory from '../../components/GitsunminStory.tsx';
+
+<GitsunminStory client:load />
+
 ## 배경
 
-단순한 이력서 페이지가 아닌, 다양한 실험적 UI·인터랙션을 직접 만들어보는 공간으로 활용하고 있습니다. Astro를 기반으로 블로그, 포트폴리오, TIL(Today I Learned) 등 다양한 콘텐츠를 운영하며, Three.js·View Transitions API 등 새로운 기술을 실험하는 사이드 프로젝트입니다.
+이력서·포트폴리오 사이트가 필요했지만, 단순히 정보를 나열하는 정적 페이지는 만들고 싶지 않았습니다. 실제로 써보고 싶은 기술을 직접 실험하고, 그 결과물 자체가 포트폴리오가 되는 공간을 목표로 2023년부터 운영하고 있습니다.
+
+Astro를 중심으로 블로그·TIL·Works·Careers 등 다양한 콘텐츠를 운영하면서, View Transitions API·Three.js·IPhoneFolder 컴포넌트 같은 실험적 UI를 지속적으로 추가해왔습니다. 새로운 브라우저 API나 라이브러리가 등장하면 이 사이트에서 가장 먼저 써보는 것이 운영 방침입니다.
+
+## 사이트 구조
+
+```
+gitsunmin.github.io
+├── 블로그          — MDX 포스팅, 코드 하이라이팅, 목차(TOC), 뷰 전환
+├── TIL             — git submodule로 관리되는 Today I Learned
+├── Works           — 프로젝트 포트폴리오 (기술 스택 필터링)
+├── Careers         — 경력 카드 (기술 스택 필터링)
+├── Settings        — 다크모드 / 폰트 크기 접근성 설정
+└── 실험실
+    ├── Frame Studio — 이미지 프레임 편집 도구
+    ├── Rec Room     — 음성 녹음 + 오디오 웨이브폼 시각화
+    ├── Loom         — 링크 컬렉션 큐레이션
+    ├── QR Code      — QR 코드 생성기
+    └── Interview    — AI 면접 질문 생성 도구
+```
 
 ## 주요 기능
 
-- 블로그 (MDX 기반 포스팅, 코드 하이라이팅)
-- TIL (Today I Learned) 섹션
-- Works & Careers 포트폴리오
-- 다크모드 / 폰트 크기 조절 접근성 기능
-- View Transitions API로 페이지 전환 애니메이션
-- Three.js 실험적 인터랙션
-- RSS 피드 및 사이트맵 자동 생성
+### Astro Islands (Partial Hydration)
+전체 페이지를 SPA로 만들지 않고, 인터랙션이 필요한 컴포넌트에만 React를 `client:load` 또는 `client:visible`로 하이드레이션합니다. 정적 콘텐츠는 빌드 타임에 HTML로 생성되어 JS 번들 크기를 최소화합니다.
+
+### View Transitions API
+Astro의 `<ViewTransitions />` 컴포넌트와 브라우저 네이티브 View Transitions API를 조합해 SPA 없이 페이지 전환 애니메이션을 구현했습니다. 블로그 썸네일 이미지는 `view-transition-name`을 동적으로 부여해 목록→상세 전환 시 공유 요소 애니메이션이 작동합니다.
+
+### IPhoneFolder 컴포넌트
+iOS의 앱 폴더 열기·닫기 제스처를 웹에서 재현한 실험적 컴포넌트입니다. 배경 블러 효과(`backdrop-filter`)의 트랜지션과 폴더 아이콘 그리드를 CSS로 구현했으며, 메인 페이지 네비게이션에 활용되고 있습니다.
+
+### TechFilterBar
+Works·Careers 페이지에서 기술 스택 태그를 클릭해 프로젝트·경력을 필터링하는 컴포넌트입니다. 필터 상태를 React 상태로 관리하고, 선택된 기술이 포함된 항목만 표시합니다.
+
+### 접근성 설정 (Settings)
+- **다크모드**: `useDarkMode` 훅으로 `prefers-color-scheme` 미디어쿼리와 사용자 선택을 동기화
+- **폰트 크기**: `useFontSize` 훅으로 `--font-size` CSS 커스텀 프로퍼티를 동적 변경, localStorage에 영속
+
+### WebP 이미지 최적화
+`bun run build` 시 `.scripts/optimize-blog-images.ts` 스크립트가 실행되어 블로그 에셋을 Sharp로 WebP 변환·압축합니다. 빌드 파이프라인에 자동화되어 있어 별도 작업 없이 이미지 최적화가 적용됩니다.
+
+### TIL (Today I Learned)
+별도 git submodule(`src/content/til`)로 TIL 콘텐츠를 관리합니다. Astro의 Content Collections로 마크다운 파일을 로드하고 동적 라우팅(`[...slug].astro`)으로 각 항목 페이지를 생성합니다.
+
+### 실험실 페이지들
+| 페이지 | 설명 |
+|--------|------|
+| Frame Studio | Canvas 기반 이미지 프레임 편집 도구 |
+| Rec Room | 브라우저 MediaRecorder API + 오디오 웨이브폼 시각화 |
+| Interview | GitHub Issues 템플릿 연동 AI 면접 질문 도구 |
+| QR Code | `qrcode` 라이브러리 기반 QR 생성기 |
+| Loom | 배경색·글자색 대비를 동적으로 변경하는 색상 대비 실험 도구 |
 
 ## 담당 역할 & 기여
 
-- **전체 설계 및 개발** — 1인 개발, 기획·디자인·구현·배포 전담
-- **Astro 기반 정적 사이트** — GitHub Pages 배포 최적화
-- **React Island 아키텍처** — 필요한 부분만 React로 동적 처리 (Partial Hydration)
-- **커스텀 UI 컴포넌트** — TechFilterBar, WorkCard, CareerCard 등 직접 구현
-- **WebP 이미지 최적화** — Sharp 기반 빌드 타임 이미지 변환 스크립트
+- **전체 설계 및 개발** — 1인 기획·디자인·구현·배포 전담
+- **Astro Islands 아키텍처** — 정적 HTML 최대화, React는 필요한 섬에만 하이드레이션
+- **커스텀 컴포넌트 구현** — IPhoneFolder, TechFilterBar, WorkCard, CareerCard, CompareBlock, MDXReplacer 등 직접 구현
+- **빌드 자동화** — Sharp 기반 WebP 최적화 스크립트, Husky pre-commit 훅, Biome 포맷팅, Vitest 테스트
+- **GitHub Pages CI/CD** — `gh-pages` 패키지로 `dist/` 정적 빌드를 자동 배포
 
 ## 기술 스택
 
+
 | 레이어 | 기술 |
 |--------|------|
-| 프레임워크 | Astro, React |
-| 언어 | TypeScript |
-| 스타일 | Tailwind CSS |
-| 콘텐츠 | MDX |
-| 3D | Three.js |
-| 배포 | GitHub Pages |
+| 프레임워크 | Astro 6, React 19 |
+| 언어 | TypeScript 6 |
+| 스타일 | Tailwind CSS 4 |
+| 콘텐츠 | MDX (Content Collections) |
+| 3D / 인터랙션 | Three.js, @react-three/fiber, @react-three/drei |
+| 애니메이션 | View Transitions API, CSS Transitions |
+| 이미지 최적화 | Sharp (빌드 타임 WebP 변환) |
+| 테스트 | Vitest, @testing-library/react |
+| 린팅/포맷팅 | ESLint, Biome |
+| 패키지 매니저 | Bun |
+| 배포 | GitHub Pages (gh-pages) |
 
 ### 기술 선택 이유
 
-- **Astro**: 콘텐츠 중심 사이트에 최적화. Partial Hydration으로 JavaScript 최소화
-- **Tailwind CSS v4**: 유틸리티 클래스 기반 빠른 UI 구현 및 다크모드 지원
-- **View Transitions API**: 네이티브 브라우저 API를 활용한 부드러운 페이지 전환 (SPA 없이)
+- **Astro**: 콘텐츠 중심 사이트에 최적화. Island Architecture로 JS를 최소화하면서 React 생태계를 유지
+- **Tailwind CSS v4**: CSS-first 설정 방식으로 별도 config 파일 없이 빠른 UI 구현 및 다크모드 대응
+- **View Transitions API**: SPA 전환 없이 네이티브 브라우저 기능만으로 부드러운 공유 요소 애니메이션 구현
+- **Bun**: Node 대비 빠른 스크립트 실행으로 빌드 타임 이미지 최적화 속도 향상
+- **TypeScript 6**: 최신 타입 시스템 기능 실험 및 컴파일 타임 안전성 확보
 
 ## 성과 & 수치
 
 - GitHub Pages 정적 배포로 운영 비용 $0
 - Lighthouse 성능 점수 90+
-- 2023년부터 지속적으로 운영·업데이트 중
-
-## 프로젝트 타임라인
-
-- **2023.01** — 초기 버전 구축 (Jekyll → Astro 마이그레이션)
-- **2024.01** — React Island 도입 및 인터랙티브 컴포넌트 추가
-- **2024.06** — TIL 섹션 추가, View Transitions 적용
-- **2025.01** — Tailwind CSS v4 업그레이드, 접근성 기능 추가
-- **2025.05** — Works & Careers 전면 재작업
+- 총 커밋 518+, 2023년부터 지속적으로 운영·업데이트 중
+- 블로그 포스트, TIL, Works, Careers 등 다양한 콘텐츠 운영
 
 ## 관련 링크
 

@@ -4,10 +4,13 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import MainLayout from '@/layouts/MainLayout.astro';
 import { Works } from '@/data/works';
 import { MDXReplacer } from '@/components/MDXReplacer';
+import { WorkTabBar } from '@/components/WorkTabBar';
 
 export const getStaticPaths = (async () => {
-  const entries: CollectionEntry<'works'>[] = await getCollection('works', ({ data }: CollectionEntry<'works'>) => {
-    return import.meta.env.PROD ? !data.draft : true;
+  const entries: CollectionEntry<'works'>[] = await getCollection('works', ({ data, id }: CollectionEntry<'works'>) => {
+    const cleanId = id.replace(/\.mdx$/, '');
+    const isTopLevel = !cleanId.includes('/');
+    return isTopLevel && (import.meta.env.PROD ? !data.draft : true);
   });
 
   return entries.map((entry) => {
@@ -28,6 +31,29 @@ type Props = {
 const { entry, work } = Astro.props;
 const { id } = Astro.params;
 const { Content } = await render(entry);
+
+// Load sub-repo MDX files
+const allEntries = await getCollection('works');
+type SubRepoContent = { slug: string; name: string; Content: Awaited<ReturnType<typeof render>>['Content'] };
+const subRepoContents: SubRepoContent[] = [];
+
+if (work?.subRepos) {
+  for (const repo of work.subRepos) {
+    const subEntry = allEntries.find((e: CollectionEntry<'works'>) => {
+      const cleanId = e.id.replace(/\.mdx$/, '');
+      return cleanId === `${id}/${repo.slug}`;
+    });
+    if (subEntry) {
+      const { Content: SubContent } = await render(subEntry);
+      subRepoContents.push({ slug: repo.slug, name: repo.name, Content: SubContent });
+    }
+  }
+}
+
+const hasTabs = subRepoContents.length > 0;
+const tabs = hasTabs
+  ? [{ id: 'overview', label: '개요' }, ...subRepoContents.map((r) => ({ id: r.slug, label: r.name }))]
+  : [];
 
 const title = work?.title ?? entry.data.title;
 const description = work?.description.split('\n')[0] ?? '';
@@ -59,7 +85,7 @@ const COMPANY_LABELS: Record<string, string> = {
     <!-- 헤더 카드 (view-transition morphing 대상) -->
     {work && (
       <div
-        class="work-header-card rounded-xl border border-border/70 bg-card p-6 mb-8"
+        class="work-header-card rounded-xl border border-border/70 bg-card p-6 mb-6"
         style={`view-transition-name: work-card-${id}`}
       >
         <div class="flex items-start gap-4 mb-4">
@@ -110,32 +136,33 @@ const COMPANY_LABELS: Record<string, string> = {
       </div>
     )}
 
-    <!-- 서브레포 목록 (진입 애니메이션) -->
-    {work?.subRepos && work.subRepos.length > 0 && (
-      <div class="mb-8 work-detail-section">
-        <h2 class="text-sm font-semibold text-primary mb-3">레포지토리 구성</h2>
-        <div class="space-y-2">
-          {work.subRepos.map((repo) => (
-            <div class="rounded-lg border border-border/50 bg-muted/20 px-4 py-3">
-              <p class="text-sm font-medium text-foreground mb-1">{repo.name}</p>
-              <p class="text-xs text-muted-foreground mb-2">{repo.description}</p>
-              <div class="flex flex-wrap gap-1">
-                {repo.techs.map((tech) => (
-                  <span class="px-2 py-0.5 rounded-full text-[10px] bg-muted/60 text-muted-foreground">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+    <!-- 탭바 (서브 레포가 있을 때만) -->
+    {hasTabs && (
+      <div data-work-tab-bar>
+        <WorkTabBar tabs={tabs} client:load />
       </div>
     )}
 
-    <!-- MDX 본문 (진입 애니메이션) -->
-    <article class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium">
+    <!-- 개요 탭 (또는 단일 본문) -->
+    <article
+      data-tab-content="overview"
+      class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
+    >
       <Content components={MDXReplacer({})} />
+      <div data-tab-sentinel="overview" style="height: 1px" aria-hidden="true" />
     </article>
+
+    <!-- 서브 레포 탭들 -->
+    {subRepoContents.map((repo) => (
+      <article
+        data-tab-content={repo.slug}
+        style="display: none"
+        class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
+      >
+        <repo.Content components={MDXReplacer({})} />
+        <div data-tab-sentinel={repo.slug} style="height: 1px" aria-hidden="true" />
+      </article>
+    ))}
   </div>
 </MainLayout>
 
@@ -151,8 +178,22 @@ const COMPANY_LABELS: Record<string, string> = {
     }
   }
 
+  @keyframes tab-underline-in {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
   .work-detail-section {
     animation: work-detail-in 420ms cubic-bezier(0, 0, 0.2, 1) 260ms both;
+  }
+
+  [data-tab-content][data-entering] {
+    animation: work-detail-in 320ms cubic-bezier(0, 0, 0.2, 1) both;
+  }
+
+  .tab-underline {
+    animation: tab-underline-in 150ms ease-out both;
+    transform-origin: left center;
   }
 
   /* 테이블 overflow는 MDXReplacer wrapper div가 처리 */

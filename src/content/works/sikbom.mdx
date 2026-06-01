@@ -1,0 +1,32 @@
+---
+title: 식봄
+draft: false
+---
+
+import SikbomStory from '../../components/SikbomStory.tsx';
+
+<SikbomStory client:load />
+
+## 배경
+
+마켓보로는 식자재 유통 시장의 디지털 전환을 목표로 식봄 서비스를 운영합니다. 식봄은 음식점 사장님들이 식자재를 온라인으로 주문할 수 있는 B2B 플랫폼입니다. 기존 전화·팩스 중심의 발주 방식에서 벗어나 실시간 가격 확인, 즉시 발주, 배송 추적이 가능한 디지털 플랫폼을 제공합니다.
+
+식봄 서비스는 소비자용 웹(PHP → Next.js 전환 중), 관리자 웹(PHP → React 전환 중), 판매자용 웹(PHP), 인쇄 템플릿 라이브러리까지 복수의 프로젝트로 구성되어 있으며, 각 프로젝트는 병행 운영되면서 점진적으로 현대화되고 있습니다.
+
+## 전체 기술 스택
+
+| 레이어 | 기술 |
+|--------|------|
+| 소비자 웹 (Next.js) | Next.js, TypeScript, Tailwind CSS, GraphQL, Relay |
+| 소비자 웹 (레거시) | PHP |
+| 관리자 웹 (React) | React, TanStack Router, TypeScript, Tailwind CSS, Relay |
+| 관리자 웹 (레거시) | PHP |
+| 판매자 웹 | PHP |
+| 마케팅 페이지 | PHP, HTML, CSS, JavaScript |
+| 인쇄 라이브러리 | React, TypeScript |
+| 모니터링 | Datadog RUM/Logs |
+| CI/CD | 사내 파이프라인 |
+
+## 관련 링크
+
+- [식봄 웹사이트](https://www.foodspring.co.kr)

@@ -14,6 +14,7 @@ type SubRepo = {
   name: string;
   description: string;
   techs: string[];
+  slug: string;
 };
 
 type Work = {
@@ -68,28 +69,32 @@ export const Works: Work[] = [
     icon: '/assets/logos/marketboro_logo.webp',
     description: `식자재 유통 플랫폼 식봄의 프론트엔드 전반을 담당했습니다.
 Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹, 인쇄 템플릿 라이브러리까지 다양한 레이어를 개발했습니다.`,
-    techs: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'GraphQL', 'Relay', 'PHP', 'Radix UI', 'Storybook', 'Datadog'],
+    techs: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'GraphQL', 'Relay', 'PHP', 'Storybook', 'Datadog'],
     links: [],
-    range: '2021.06 ~ 2025.12',
+    range: '2024.01 ~ 2025.12',
     careerId: 'marketboro',
     subRepos: [
       {
-        name: '식봄 주문 웹 (Next.js)',
+        slug: 'consumer-web',
+        name: '식봄 웹 (Next.js)',
         description: 'Next.js 기반 식자재 주문 웹 서비스. GraphQL + Relay로 데이터 레이어를 구성하고 Tailwind CSS로 UI를 구현했습니다.',
         techs: ['Next.js', 'TypeScript', 'GraphQL', 'Relay', 'Tailwind CSS', 'Datadog'],
       },
       {
-        name: '식봄 마케팅 페이지 (PHP)',
-        description: '랜딩 페이지 및 마케팅 채널용 PHP 웹 서비스. SEO 최적화와 빠른 초기 로딩을 목표로 구성했습니다.',
-        techs: ['PHP', 'HTML', 'CSS', 'JavaScript'],
+        slug: 'php-web',
+        name: '식봄 레거시 웹 (PHP)',
+        description: 'Next.js로 전환 중인 CodeIgniter 3 기반 레거시 소비자 웹. 검색·주문·결제 전 플로우를 운영하며 신규 Next.js 앱과 병행 운영 중입니다.',
+        techs: ['PHP', 'CodeIgniter', 'Redis', 'Elasticsearch', 'MySQL'],
       },
       {
+        slug: 'admin-web',
         name: '식봄 관리자 웹',
-        description: '식봄 서비스 운영을 위한 내부 관리자 웹 서비스. React + Radix UI 기반으로 다양한 운영 도구를 제공합니다.',
-        techs: ['React', 'TypeScript', 'Radix UI', 'Datadog'],
+        description: '식봄 서비스 운영을 위한 내부 관리자 웹 서비스. React 기반으로 다양한 운영 도구를 제공합니다.',
+        techs: ['React', 'TypeScript', 'Datadog'],
       },
       {
-        name: '인쇄 템플릿 라이브러리 (boronter-template)',
+        slug: 'boronter-template',
+        name: '인쇄 템플릿 라이브러리',
         description: '식봄 주문서·거래명세서 등 다양한 인쇄 문서를 React 컴포넌트로 제공하는 내부 라이브러리입니다.',
         techs: ['React', 'TypeScript'],
       },
@@ -98,39 +103,44 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
   },
   {
     id: 'marketbom-pro',
-    title: '마켓봄 프로',
+    title: '마켓봄 (구 마켓봄 프로)',
     icon: '/assets/logos/marketboro_logo.webp',
-    description: `식자재 유통사를 위한 B2B SaaS 플랫폼 마켓봄 프로의 프론트엔드를 담당했습니다.
+    description: `식자재 유통사를 위한 B2B SaaS 플랫폼 마켓봄(구 마켓봄 프로)의 프론트엔드를 담당했습니다.
 웹 서비스, 하이브리드 앱, 정산 관리자, 디자인 시스템까지 전 레이어에 걸쳐 개발했습니다.`,
-    techs: ['React', 'Vue.js', 'Nuxt.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'Flutter', 'Firebase', 'MUI', 'Emotion', 'Storybook'],
+    techs: ['React', 'Vue.js', 'Nuxt.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Storybook'],
     links: [],
-    range: '2020.10 ~ 2025.12',
+    range: '2020.10 ~ 2023.07',
     careerId: 'marketboro',
     subRepos: [
       {
-        name: '마켓봄 프로 웹 (macaron-front)',
-        description: 'Nuxt.js + Vue.js 기반 유통사용 B2B 웹 서비스. Apollo Client + GraphQL로 데이터 레이어를 구성했습니다.',
-        techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client'],
+        slug: 'macaron-front',
+        name: '마켓봄 웹',
+        description: 'Nuxt.js + Vue.js 기반 유통사용 B2B 웹 서비스. 자료 일괄 등록, 세금계산서 비교, 거래전표 등 핵심 업무 화면을 개발했습니다.',
+        techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'RealGrid'],
       },
       {
-        name: '식자재 발주 하이브리드 앱',
-        description: '식자재 발주를 위한 Flutter 하이브리드 앱. 플레이버 시스템을 활용해 다중 환경을 지원합니다.',
-        techs: ['Flutter', 'Firebase', 'Dart'],
+        slug: 'order-app',
+        name: '거래처 주문 앱',
+        description: '거래처(음식점)가 모바일·PC에서 식자재를 발주하는 웹 앱. Flutter WebView Shell 안에서 실행되며, PC 버전 신규 개발 및 부가세 금액 계산 로직을 담당했습니다.',
+        techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'RealGrid', 'Vuex'],
       },
       {
-        name: '유통사 전용 하이브리드 앱',
-        description: 'React 기반 웹뷰를 Flutter Shell로 감싼 유통사 전용 하이브리드 앱. Apollo + GraphQL로 데이터를 관리합니다.',
-        techs: ['React', 'TypeScript', 'GraphQL', 'Apollo Client', 'MUI'],
+        slug: 'vendor-app',
+        name: '유통사 전용 앱',
+        description: 'React 기반 웹뷰를 Flutter Shell로 감싼 유통사 전용 하이브리드 앱. BoronUI 디자인 시스템을 기반으로 수주 관리·바코드 환경설정을 담당했습니다.',
+        techs: ['React', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Recoil'],
       },
       {
-        name: '마켓보로 정산 관리자',
-        description: '정산 처리 및 운영을 위한 Nuxt.js 기반 내부 관리자 웹 서비스입니다.',
-        techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client'],
+        slug: 'settlement-admin',
+        name: '통합 운영 관리자',
+        description: '마켓봄·마켓봄프로·도매 세 서비스의 운영 업무를 통합한 내부 관리자 웹. React 18 + Vite로 신규 구축하고 ag-Grid로 대용량 정산 데이터를 처리했습니다.',
+        techs: ['React', 'TypeScript', 'Vite', 'MUI', 'Tailwind CSS', 'GraphQL', 'ag-Grid', 'Recoil'],
       },
       {
-        name: '디자인 시스템 (@marketboro/boronui)',
-        description: '유통사 전용 앱을 위한 React 컴포넌트 라이브러리. MUI + Emotion 기반으로 Storybook을 통해 문서화했습니다.',
-        techs: ['React', 'TypeScript', 'MUI', 'Emotion', 'Storybook'],
+        slug: 'boronui',
+        name: '디자인 시스템',
+        description: '유통사 앱 전용 React 컴포넌트 라이브러리(@marketboro/boronui). Emotion 기반 테마 시스템과 Storybook 문서화, ESM·CJS 듀얼 빌드를 구축했습니다.',
+        techs: ['React', 'TypeScript', 'Emotion', 'Storybook', 'Vite'],
       },
     ],
     isFeatured: true,

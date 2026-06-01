@@ -60,7 +60,7 @@ Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리
     id: 'marketboro',
     name: '(주) 마켓보로',
     logo: '/assets/logos/marketboro_logo.webp',
-    introduce: `(주) 마켓보로는 B2B 식자재 유통 푸드테크 기업으로, ‘마켓봄 프로’와 ‘식봄’을 운영하는 회사입니다.
+    introduce: `(주) 마켓보로는 B2B 식자재 유통 푸드테크 기업으로, ‘마켓봄(구 마켓봄 프로)’와 ‘식봄’을 운영하는 회사입니다.
 프론트엔드 개발자로서 두 서비스의 개발·운영에 참여했으며, PHP 기반 ‘식봄’을 React.js·Next.js로 전환하는 작업을 주로 수행했습니다.
 성능 최적화, 접근성 개선, UX 향상 등의 경험을 쌓았습니다.`,
     range: '2020.10 ~ 2025.12',
@@ -76,7 +76,7 @@ Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리
         url: 'https://www.foodspring.co.kr',
       },
       {
-        label: '마켓봄 프로',
+        label: '마켓봄 (구 마켓봄 프로)',
         url: 'https://pro.marketbom.com',
       },
     ],
