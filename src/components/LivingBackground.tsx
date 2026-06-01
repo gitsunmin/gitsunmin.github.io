@@ -40,10 +40,11 @@ export function LivingBackground() {
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile = window.innerWidth < 768;
+    const nodeCount = mobile ? 25 : NODE_COUNT;
     const blobRefs = [blob1Ref, blob2Ref, blob3Ref];
 
-    if (!reduced && !mobile) {
-      nodesRef.current = Array.from({ length: NODE_COUNT }, () => ({
+    if (!reduced) {
+      nodesRef.current = Array.from({ length: nodeCount }, () => ({
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
         vx: (Math.random() - 0.5) * 0.5,
@@ -69,6 +70,19 @@ export function LivingBackground() {
 
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('click', onClick);
+
+    const onTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const now = Date.now();
+      if (now - lastMove < 16) return;
+      lastMove = now;
+      mouseNorm.current = {
+        x: touch.clientX / window.innerWidth,
+        y: touch.clientY / window.innerHeight,
+      };
+    };
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
 
     const setupCanvas = (canvas: HTMLCanvasElement) => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -127,7 +141,7 @@ export function LivingBackground() {
         }
       }
 
-      if (!reduced && !mobile && nCtx) {
+      if (!reduced && nCtx) {
         nCtx.clearRect(0, 0, w, h);
         const nodeRgb = dark ? '160,190,255' : '37,99,235';
         const cmx = mouseNorm.current.x * w;
@@ -179,6 +193,7 @@ export function LivingBackground() {
       cancelAnimationFrame(rafId.current);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('click', onClick);
+      window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('resize', onResize);
     };
   }, []);
