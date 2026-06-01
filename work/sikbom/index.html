@@ -1,0 +1,556 @@
+<!DOCTYPE html><html lang="ko"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="식자재 유통 플랫폼 식봄의 프론트엔드 전반을 담당했습니다."><title>식봄 - Gitsunmin | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/work/sikbom/"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="식봄 - Gitsunmin | Gitsunmin"><meta property="og:description" content="식자재 유통 플랫폼 식봄의 프론트엔드 전반을 담당했습니다."><meta property="og:type" content="website"><meta property="og:url" content="https://gitsunmin.github.io/work/sikbom/"><meta property="og:image" content="https://gitsunmin.github.io/assets/logos/marketboro_logo.webp"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="식봄 - Gitsunmin | Gitsunmin"><meta name="twitter:description" content="식자재 유통 플랫폼 식봄의 프론트엔드 전반을 담당했습니다."><meta name="twitter:image" content="https://gitsunmin.github.io/assets/logos/marketboro_logo.webp"><!-- JSON-LD Structured Data --><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CHCGLXSCJN');
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/utils.D09lBBry.css">
+<style>@keyframes work-detail-in{0%{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}@keyframes tab-underline-in{0%{transform:scaleX(0)}to{transform:scaleX(1)}}.work-detail-section[data-astro-cid-qs2jd4y6]{animation:work-detail-in .42s cubic-bezier(0,0,.2,1) .26s both}[data-astro-cid-qs2jd4y6][data-tab-content][data-entering]{animation:work-detail-in .32s cubic-bezier(0,0,.2,1) both}.tab-underline[data-astro-cid-qs2jd4y6]{animation:tab-underline-in .15s ease-out both;transform-origin:left center}.prose h2{padding-bottom:.5rem;border-bottom:1px solid hsl(var(--border) / .5)}.prose :not(pre)>code{background:hsl(var(--muted) / .6);padding:.1em .375em;border-radius:.3em;font-size:.875em;font-weight:500;color:hsl(var(--foreground) / .9);border:1px solid hsl(var(--border) / .4)}.prose pre{font-size:.8125rem;line-height:1.7;overflow-x:auto;border:1px solid hsl(var(--border) / .5)}@media(max-width:480px){.work-header-card{padding:1rem}}
+</style></head> <body> <astro-island uid="27LVSJ" prefix="r873" component-url="/_astro/Providers.DdHLk1vY.js" component-export="Providers" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="13JmoC" prefix="r5" component-url="/_astro/Header.eENPaFPQ.js" component-export="Header" renderer-url="/_astro/client.CS0MyPN4.js" props="{&quot;title&quot;:[0,&quot;식봄&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" await-children><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">식봄</h1></span></a><a href="/settings" aria-label="설정" class="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></a></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="w-full max-w-3xl mx-auto pt-20 md:pt-24 px-4 md:px-0 pb-20" data-astro-cid-qs2jd4y6> <!-- 뒤로 가기 --> <a href="/works" aria-label="Works 목록으로 돌아가기" class="inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-8 hover:text-primary transition-colors duration-200" data-astro-cid-qs2jd4y6>
+← Works
+</a> <!-- 헤더 카드 (view-transition morphing 대상) --> <div class="work-header-card rounded-xl border border-border/70 bg-card p-6 mb-6" style="view-transition-name: work-card-sikbom" data-astro-cid-qs2jd4y6> <div class="flex items-start gap-4 mb-4" data-astro-cid-qs2jd4y6> <img src="/assets/logos/marketboro_logo.webp" alt="식봄 아이콘" class="size-12 rounded-xl object-contain bg-white border border-border/40 p-1 shrink-0" data-astro-cid-qs2jd4y6> <div class="min-w-0 flex-1" data-astro-cid-qs2jd4y6> <div class="flex items-center gap-2 flex-wrap mb-1" data-astro-cid-qs2jd4y6> <h1 class="text-xl font-bold text-primary" data-astro-cid-qs2jd4y6>식봄</h1> <span class="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/50" data-astro-cid-qs2jd4y6> 마켓보로 </span> </div> <p class="text-sm text-muted-foreground" data-astro-cid-qs2jd4y6>2024.01 ~ 2025.12</p> </div> </div> <p class="text-sm leading-[1.8] text-muted-foreground mb-4 whitespace-pre-line" data-astro-cid-qs2jd4y6>식자재 유통 플랫폼 식봄의 프론트엔드 전반을 담당했습니다.
+Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹, 인쇄 템플릿 라이브러리까지 다양한 레이어를 개발했습니다.</p> <!-- 기술 태그 --> <div class="flex flex-wrap gap-1.5" data-astro-cid-qs2jd4y6> <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> Next.js </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> React </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> TypeScript </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> Tailwind CSS </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> GraphQL </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> Relay </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> PHP </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> Storybook </span><span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground" data-astro-cid-qs2jd4y6> Datadog </span> </div> <!-- 외부 링크 -->  </div> <!-- 탭바 (서브 레포가 있을 때만) --> <div data-work-tab-bar data-astro-cid-qs2jd4y6> <astro-island uid="Z2iGleb" prefix="r1" component-url="/_astro/WorkTabBar.BOMAYr6V.js" component-export="WorkTabBar" renderer-url="/_astro/client.CS0MyPN4.js" props="{&quot;tabs&quot;:[1,[[0,{&quot;id&quot;:[0,&quot;overview&quot;],&quot;label&quot;:[0,&quot;개요&quot;]}],[0,{&quot;id&quot;:[0,&quot;consumer-web&quot;],&quot;label&quot;:[0,&quot;식봄 웹 (Next.js)&quot;]}],[0,{&quot;id&quot;:[0,&quot;php-web&quot;],&quot;label&quot;:[0,&quot;식봄 레거시 웹 (PHP)&quot;]}],[0,{&quot;id&quot;:[0,&quot;admin-web&quot;],&quot;label&quot;:[0,&quot;식봄 관리자 웹&quot;]}],[0,{&quot;id&quot;:[0,&quot;boronter-template&quot;],&quot;label&quot;:[0,&quot;인쇄 템플릿 라이브러리&quot;]}]]],&quot;data-astro-cid-qs2jd4y6&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;WorkTabBar&quot;,&quot;value&quot;:true}" await-children><div class="sticky z-10 -mx-4 md:mx-0 bg-background/95 backdrop-blur-sm border-b border-border/60 mb-6" style="top:48px"><div class="flex overflow-x-auto px-4 md:px-0" style="scroll-snap-type:x mandatory;scrollbar-width:none"><button type="button" data-tab-btn="overview" class="shrink-0 relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 outline-none rounded-t focus-visible:ring-2 focus-visible:ring-primary text-primary">개요<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-t-sm tab-underline"></span></button><button type="button" data-tab-btn="consumer-web" class="shrink-0 relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 outline-none rounded-t focus-visible:ring-2 focus-visible:ring-primary text-muted-foreground hover:text-foreground">식봄 웹 (Next.js)</button><button type="button" data-tab-btn="php-web" class="shrink-0 relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 outline-none rounded-t focus-visible:ring-2 focus-visible:ring-primary text-muted-foreground hover:text-foreground">식봄 레거시 웹 (PHP)</button><button type="button" data-tab-btn="admin-web" class="shrink-0 relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 outline-none rounded-t focus-visible:ring-2 focus-visible:ring-primary text-muted-foreground hover:text-foreground">식봄 관리자 웹</button><button type="button" data-tab-btn="boronter-template" class="shrink-0 relative px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-150 outline-none rounded-t focus-visible:ring-2 focus-visible:ring-primary text-muted-foreground hover:text-foreground">인쇄 템플릿 라이브러리</button></div></div><!--astro:end--></astro-island> </div> <!-- 개요 탭 (또는 단일 본문) --> <article data-tab-content="overview" class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium" data-astro-cid-qs2jd4y6> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(c,s,d)=>s in c?g(c,s,{enumerable:!0,configurable:!0,writable:!0,value:d}):c[s]=d;var l=(c,s,d)=>w(c,typeof s!="symbol"?s+"":s,d);var E=new Set(["__proto__","constructor","prototype"]);{let c={0:t=>y(t),1:t=>d(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(d(t)),5:t=>new Set(d(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in c?c[p](e):void 0},d=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let n=this.querySelectorAll("astro-slot"),r={},i=this.querySelectorAll("template[data-astro-template]");for(let o of i){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of n){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let a=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(a+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${a}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,r,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),n.disconnect(),this.childrenConnectedCallback()},n=new MutationObserver(()=>{var r;((r=this.lastChild)==null?void 0:r.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});n.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let n=new URL(e,document.baseURI),r=`astro-retry=${Date.now()}`,i=n.hash.replace(/^#/,"");return n.hash=i?`${i}&${r}`:r,n.toString()}async importWithRetry(e){try{return await import(e)}catch(n){return await new Promise(r=>setTimeout(r,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let n=this.getAttribute("component-url"),r=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:n}});this.dispatchEvent(r)&&console.error(`[astro-island] Error hydrating ${n}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),n=this.getAttribute("client");if(Astro[n]===void 0){window.addEventListener(`astro:${n}`,()=>this.start(),{once:!0});return}try{await Astro[n](async()=>{let r=this.getAttribute("renderer-url");try{let[i,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),r?this.importWithRetry(r):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=i;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=i[h]}return this.hydrator=u,this.hydrate}catch(i){return this.handleHydrationError(i),()=>{}}},e,this)}catch(r){this.handleHydrationError(r)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="Z1vYtUY" prefix="r293" component-url="/_astro/SikbomStory.BR0Nzy02.js" component-export="default" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;SikbomStory&quot;,&quot;value&quot;:true}" await-children><section aria-label="식봄 B2B 식자재 유통 플랫폼 인터랙티브 설명" style="margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);width:100vw"><div style="height:calc(3 * 100svh);min-height:calc(3 * 560px)"><div class="sticky top-0 overflow-hidden flex flex-col items-center justify-center" style="height:100svh;min-height:560px;background:radial-gradient(ellipse 65% 55% at 12% 50%, rgba(74,222,128,0.07) 0%, transparent 60%),
+              radial-gradient(ellipse 65% 55% at 88% 50%, rgba(251,146,60,0.06) 0%, transparent 60%),
+              hsl(var(--background));border-top:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border))"><div class="sikbom-inner flex items-center" style="width:100%;max-width:60rem;padding:0 2rem;gap:4rem"><div class="sikbom-diagram shrink-0 flex flex-col" style="max-width:440px;width:44%;gap:1.25rem"><div style="font-size:0.7rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:hsl(var(--muted-foreground));opacity:0.45">B2B 식자재 유통 플랫폼</div><div style="display:flex;align-items:center;gap:0.75rem"><div class="sikbom-node" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1rem 0.75rem;border-radius:1rem;background:#4ade8012;border:1px solid #4ade8040;transition:background 0.5s ease, border-color 0.5s ease;flex-shrink:0"><svg viewBox="0 0 32 28" fill="none" class="sikbom-node-icon"><title>유통사 창고</title><polygon points="16,2 30,10 30,26 2,26 2,10" stroke="#4ade80" stroke-width="1.2" fill="#4ade8014" stroke-linejoin="round"></polygon><rect x="11" y="16" width="10" height="10" rx="0.5" fill="#4ade8020" stroke="#4ade80" stroke-width="0.9"></rect><line x1="16" y1="16" x2="16" y2="26" stroke="#4ade80" stroke-width="0.9"></line><rect x="5" y="14" width="5" height="5" rx="0.4" fill="#4ade8015" stroke="#4ade80" stroke-width="0.7"></rect><rect x="22" y="14" width="5" height="5" rx="0.4" fill="#4ade8015" stroke="#4ade80" stroke-width="0.7"></rect></svg><span style="font-size:0.875rem;font-weight:700;color:#4ade80;transition:color 0.5s ease;white-space:nowrap">유통사</span><span style="font-size:0.7rem;color:rgba(255,255,255,0.28);text-align:center;line-height:1.3;white-space:nowrap">식자재 공급</span></div><div class="sikbom-track" style="flex:1;position:relative"><div style="position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(255,255,255,0.07);border-radius:2px;transform:translateY(-50%)"></div><div style="position:absolute;top:50%;left:0;width:0%;height:2px;background:linear-gradient(to right, rgba(74,222,128,0.7), rgba(251,146,60,0.6));border-radius:2px;transform:translateY(-50%)"></div><div style="position:absolute;top:calc(50% - 2rem);left:50%;transform:translateX(-50%);font-size:0.65rem;font-weight:700;letter-spacing:0.05em;color:hsl(var(--foreground));white-space:nowrap">식봄</div><div class="sikbom-food" style="position:absolute;top:50%;left:0%;transform:translate(-50%, calc(-50% + -2.2rem));transition:left 0.1s linear;opacity:0.3;filter:drop-shadow(0 0 0px rgba(74,222,128,0.65));z-index:1;line-height:1">🥬</div><div class="sikbom-food" style="position:absolute;top:50%;left:0%;transform:translate(-50%, calc(-50% + -0.73rem));transition:left 0.1s linear;opacity:0.3;filter:drop-shadow(0 0 0px rgba(74,222,128,0.65));z-index:1;line-height:1">🥩</div><div class="sikbom-food" style="position:absolute;top:50%;left:0%;transform:translate(-50%, calc(-50% + 0.73rem));transition:left 0.1s linear;opacity:0.3;filter:drop-shadow(0 0 0px rgba(74,222,128,0.65));z-index:1;line-height:1">🐟</div><div class="sikbom-food" style="position:absolute;top:50%;left:0%;transform:translate(-50%, calc(-50% + 2.2rem));transition:left 0.1s linear;opacity:0.3;filter:drop-shadow(0 0 0px rgba(74,222,128,0.65));z-index:1;line-height:1">🥚</div></div><div class="sikbom-node" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;padding:1rem 0.75rem;border-radius:1rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);transition:background 0.5s ease, border-color 0.5s ease;flex-shrink:0"><svg viewBox="0 0 32 28" fill="none" class="sikbom-node-icon"><title>식당</title><path d="M2,26 L2,11 L16,3 L30,11 L30,26 Z" stroke="#fb923c" stroke-width="1.2" fill="#fb923c14" stroke-linejoin="round"></path><rect x="11" y="16" width="10" height="10" rx="0.5" fill="#fb923c20" stroke="#fb923c" stroke-width="0.9"></rect><line x1="9" y1="7" x2="9" y2="12" stroke="#fb923c" stroke-width="0.9" stroke-linecap="round"></line><path d="M7,7 Q9,5 11,7" stroke="#fb923c" stroke-width="0.8" fill="none" stroke-linecap="round"></path><line x1="9" y1="12" x2="9" y2="15" stroke="#fb923c" stroke-width="0.9" stroke-linecap="round"></line><line x1="22" y1="7" x2="22" y2="15" stroke="#fb923c" stroke-width="0.9" stroke-linecap="round"></line><line x1="20" y1="7" x2="20" y2="10" stroke="#fb923c" stroke-width="0.7" stroke-linecap="round"></line><line x1="24" y1="7" x2="24" y2="10" stroke="#fb923c" stroke-width="0.7" stroke-linecap="round"></line></svg><span style="font-size:0.875rem;font-weight:700;color:rgba(255,255,255,0.4);transition:color 0.5s ease;white-space:nowrap">식당</span><span style="font-size:0.7rem;color:rgba(255,255,255,0.28);text-align:center;line-height:1.3;white-space:nowrap">음식점 사장님</span></div></div><div style="display:flex;justify-content:center;gap:0.5rem"><div style="font-size:0.75rem;font-weight:700;padding:0.3em 0.9em;border-radius:2em;background:#4ade8018;color:#4ade80;border:1px solid #4ade8038;transition:all 0.45s ease">발주</div><div style="font-size:0.75rem;font-weight:700;padding:0.3em 0.9em;border-radius:2em;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.07);transition:all 0.45s ease">배송</div><div style="font-size:0.75rem;font-weight:700;padding:0.3em 0.9em;border-radius:2em;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.07);transition:all 0.45s ease">수령</div></div><div style="height:2px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden"><div style="height:100%;width:0%;background:linear-gradient(to right, #4ade80, #facc15, #fb923c);border-radius:2px;transition:width 0.1s linear"></div></div></div><div class="flex-1 min-w-0 relative sikbom-callout" style="min-height:260px"><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0.875rem;opacity:1;transform:none;transition:opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);pointer-events:auto"><div class="inline-block sikbom-badge" style="font-size:0.7rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.25em 0.75em;border-radius:2em;width:fit-content;background:rgba(74,222,128,0.12);color:#4ade80">발주</div><h3 class="sikbom-callout-title" style="font-size:1.25rem;font-weight:700;line-height:1.25;margin:0;letter-spacing:-0.025em;color:hsl(var(--foreground))">클릭 한 번으로 실시간 식자재 발주</h3><p class="sikbom-callout-desc" style="font-size:0.875rem;line-height:1.75;margin:0;color:hsl(var(--muted-foreground))">음식점 사장님이 전화·팩스 없이 식봄 앱에서 식자재를 바로 주문합니다. 실시간 가격 확인과 즉시 발주로 기존 발주 방식의 불편함을 해소합니다.</p><ul class="flex flex-col m-0 p-0 list-none" style="gap:0.5rem"><li class="flex items-start sikbom-callout-li" style="font-size:0.8rem;line-height:1.6;color:hsl(var(--muted-foreground));gap:0.5rem"><span class="shrink-0 rounded-full" style="width:0.3rem;height:0.3rem;margin-top:0.45em;background:currentColor;opacity:0.4"></span>식자재 카탈로그 실시간 가격 조회</li><li class="flex items-start sikbom-callout-li" style="font-size:0.8rem;line-height:1.6;color:hsl(var(--muted-foreground));gap:0.5rem"><span class="shrink-0 rounded-full" style="width:0.3rem;height:0.3rem;margin-top:0.45em;background:currentColor;opacity:0.4"></span>장바구니 기반 간편 주문</li><li class="flex items-start sikbom-callout-li" style="font-size:0.8rem;line-height:1.6;color:hsl(var(--muted-foreground));gap:0.5rem"><span class="shrink-0 rounded-full" style="width:0.3rem;height:0.3rem;margin-top:0.45em;background:currentColor;opacity:0.4"></span>필터기반 상품 검색 지원</li></ul></div><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0.875rem;opacity:0;transform:translateY(1rem);transition:opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);pointer-events:none"><div class="inline-block sikbom-badge" style="font-size:0.7rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.25em 0.75em;border-radius:2em;width:fit-content;background:rgba(250,204,21,0.12);color:#facc15">배송</div><h3 class="sikbom-callout-title" style="font-size:1.25rem;font-weight:700;line-height:1.25;margin:0;letter-spacing:-0.025em;color:hsl(var(--foreground))">유통사에서 식당까지, 식봄이 연결합니다</h3><p class="sikbom-callout-desc" style="font-size:0.875rem;line-height:1.75;margin:0;color:hsl(var(--muted-foreground))">주문 완료 즉시 유통사에 발주가 전달되고 배송이 시작됩니다. Datadog RUM으로 수집한 실사용 지표를 기반으로 사용자 경험을 지속 개선합니다.</p><ul class="flex flex-col m-0 p-0 list-none" style="gap:0.5rem"><li class="flex items-start sikbom-callout-li" style="font-size:0.8rem;line-height:1.6;color:hsl(var(--muted-foreground));gap:0.5rem"><span class="shrink-0 rounded-full" style="width:0.3rem;height:0.3rem;margin-top:0.45em;background:currentColor;opacity:0.4"></span>GraphQL + Relay로 데이터 오버페칭 방지</li><li class="flex items-start sikbom-callout-li" style="font-size:0.8rem;line-height:1.6;color:hsl(var(--muted-foreground));gap:0.5rem"><span class="shrink-0 rounded-full" style="width:0.3rem;height:0.3rem;margin-top:0.45em;background:currentColor;opacity:0.4"></span>Datadog RUM 기반 모니터링</li></ul></div><div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:0.875rem;opacity:0;transform:translateY(1rem);transition:opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);pointer-events:none"><div class="inline-block sikbom-badge" style="font-size:0.7rem;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:0.25em 0.75em;border-radius:2em;width:fit-content;background:rgba(251,146,60,0.12);color:#fb923c">수령</div><h3 class="sikbom-callout-title" style="font-size:1.25rem;font-weight:700;line-height:1.25;margin:0;letter-spacing:-0.025em;color:hsl(var(--foreground))">식자재 도착, 투명한 디지털 거래</h3><p class="sikbom-callout-desc" style="font-size:0.875rem;line-height:1.75;margin:0;color:hsl(var(--muted-foreground))">식당에 식자재가 안전하게 도착하거나 문제가 발생하면 즉시 배송 상태로 상품의 상태를 확인할 수 있습니다.</p><ul class="flex flex-col m-0 p-0 list-none" style="gap:0.5rem"></ul></div></div></div><div aria-hidden="true" class="absolute pointer-events-none flex flex-col items-center" style="bottom:2rem;left:50%;transform:translateX(-50%);gap:0.3rem;opacity:1;transition:opacity 0.4s ease"><span style="font-size:0.7rem;color:hsl(var(--muted-foreground));opacity:0.5;letter-spacing:0.05em">스크롤하여 탐색</span><span style="font-size:0.875rem;color:hsl(var(--muted-foreground));opacity:0.4;animation:sikbom-hint-bounce 1.6s ease-in-out infinite">↓</span></div></div></div><noscript><p style="padding:1rem;font-size:0.875rem;color:#71717a;border:1px solid #27272a;border-radius:0.5rem;margin-top:1rem">식봄 B2B 식자재 유통 플랫폼: 유통사 발주 → 식봄 배송 → 식당 수령. Next.js, GraphQL Relay, Datadog RUM 기반.</p></noscript></section><!--astro:end--></astro-island>
+<h2 id="배경" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">배경</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">마켓보로는 식자재 유통 시장의 디지털 전환을 목표로 식봄 서비스를 운영합니다. 식봄은 음식점 사장님들이 식자재를 온라인으로 주문할 수 있는 B2B 플랫폼입니다. 기존 전화·팩스 중심의 발주 방식에서 벗어나 실시간 가격 확인, 즉시 발주, 배송 추적이 가능한 디지털 플랫폼을 제공합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">식봄 서비스는 소비자용 웹(PHP → Next.js 전환 중), 관리자 웹(PHP → React 전환 중), 판매자용 웹(PHP), 인쇄 템플릿 라이브러리까지 복수의 프로젝트로 구성되어 있으며, 각 프로젝트는 병행 운영되면서 점진적으로 현대화되고 있습니다.</p>
+<h2 id="전체-기술-스택" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">전체 기술 스택</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">레이어</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">기술</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">소비자 웹 (Next.js)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Next.js, TypeScript, Tailwind CSS, GraphQL, Relay</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">소비자 웹 (레거시)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">PHP</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">관리자 웹 (React)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React, TanStack Router, TypeScript, Tailwind CSS, Relay</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">관리자 웹 (레거시)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">PHP</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">판매자 웹</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">PHP</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">마케팅 페이지</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">PHP, HTML, CSS, JavaScript</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">인쇄 라이브러리</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React, TypeScript</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">모니터링</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Datadog RUM/Logs</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">CI/CD</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">사내 파이프라인</td></tr></tbody></table></div></div>
+<h2 id="관련-링크" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">관련 링크</h2>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.foodspring.co.kr">식봄 웹사이트</a></li>
+</ul> <div data-tab-sentinel="overview" style="height: 1px" aria-hidden="true" data-astro-cid-qs2jd4y6></div> </article> <!-- 서브 레포 탭들 --> <article data-tab-content="consumer-web" style="display: none" class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium" data-astro-cid-qs2jd4y6> <h2 id="이-레포의-역할" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">이 레포의 역할</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">음식점 사장님이 식자재를 검색·비교하고 발주하는 메인 소비자 채널입니다. 레거시 PHP 웹을 기능 단위로 Next.js로 전환하는 마이그레이션 목표지로, 두 서비스를 동시에 운영하면서 AWS CloudFront의 path 규칙으로 Next.js 라우팅과 PHP 라우팅을 분기 처리합니다. (예: <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">/search</code> → Next.js, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">/seller/*/</code> → PHP)</p>
+
+<h2 id="기술-스택" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">기술 스택</h2>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">기술스택은 퇴사 시점 기준으로 작성되었습니다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">기술</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">버전</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">역할</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Next.js</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">14.2.25</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">SSR/SSG 혼합 렌더링, 파일 시스템 라우팅</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">18.3.1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">UI 렌더링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">TypeScript</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5.8.2</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">정적 타입</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">react-relay</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">17.0.0</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GraphQL 클라이언트 (데이터 페칭·캐싱)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">relay-compiler</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">18.0.0</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">빌드 타임 GraphQL 타입 생성</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Jotai</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2.9.3</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">원자적 글로벌 상태 관리</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Tailwind CSS</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">3.4.10</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">유틸리티 기반 스타일링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Datadog RUM</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">6.24.1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">실사용자 모니터링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GrowthBook</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">1.3.1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">기능 플래그 / A·B 테스트</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">NextAuth</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">4.24.8</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">인증</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React Hook Form + Zod</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">7.53 / 3.23</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">폼 상태 및 스키마 검증</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Biome + ESLint</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2.1.4 / 8.57</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">린팅·포매팅 (이중 검증)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Playwright</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">1.54.2</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">E2E 테스트</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Storybook</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">9.1.13</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포넌트 문서화</td></tr></tbody></table></div></div>
+<h2 id="컴포넌트-아키텍처" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">컴포넌트 아키텍처</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">Atomic Design 계층 구조로 컴포넌트를 관리합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>src/components/</span></span>
+<span class="line"><span>├── atom/        원자 컴포넌트 (버튼, 인풋, 배지)</span></span>
+<span class="line"><span>├── ds/          디자인 시스템 토큰 기반 컴포넌트</span></span>
+<span class="line"><span>├── molecules/   조합 컴포넌트 (검색바, 상품 카드)</span></span>
+<span class="line"><span>├── organisms/   페이지 단위 섹션 (헤더, 장바구니 시트)</span></span>
+<span class="line"><span>└── pages/       레이아웃 컴포넌트</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>34개 페이지 영역</strong>: main, goods, search, cart, checkout, mypage, seller, signup, category, plan, benefit, notifications 등 전체 쇼핑 플로우 담당.</p>
+<h2 id="담당-역할--기여" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">담당 역할 &amp; 기여</h2>
+<h3 id="쿠폰-시스템" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">쿠폰 시스템</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">장바구니 내 쿠폰 기능을 전담 개발했습니다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>장바구니 쿠폰가 노출</strong>: 쿠폰 적용 시 가격 변동을 실시간으로 계산하여 상품별·주문 전체의 할인가를 표시하는 UI 구현</li>
+<li class="mb-2 ml-0"><strong>앱 전용 쿠폰 배지</strong>: 앱 환경에서만 다운로드 가능한 쿠폰에 배지를 노출하고, 웹 환경에서 클릭 시 앱 유도 인터페이스 처리</li>
+<li class="mb-2 ml-0"><strong>쿠폰 다운로드 후 수량 재조회</strong>: 쿠폰 다운로드 완료 시 남은 수량을 refetch하여 최신 상태를 즉시 반영</li>
+<li class="mb-2 ml-0"><strong>추가주문 케이스 대응</strong>: 기존 주문에 상품을 추가하는 플로우에서도 쿠폰이 올바르게 적용되도록 엣지 케이스 처리</li>
+</ul>
+<h3 id="장바구니-성능-최적화" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">장바구니 성능 최적화</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">대형 장바구니(다수의 판매자·상품)에서 발생하던 렌더링 지연을 해결했습니다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">useMemo</code>·<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">useCallback</code>으로 쿠폰 계산 함수와 파생 상태를 메모이제이션</li>
+<li class="mb-2 ml-0">판매자별 소계 계산을 순차 처리에서 <strong>병렬 처리</strong>로 변경하여 계산 시간 단축</li>
+<li class="mb-2 ml-0">SessionStorage 제어 로직 개선으로 새로고침 후 장바구니 상태 복원 안정화</li>
+</ul>
+<h3 id="상품-상세-페이지-모바일-ui" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">상품 상세 페이지 모바일 UI</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">가격 레코드 섹션의 모바일 표시 방식을 전면 개선했습니다. 261줄 변경·156줄 추가 규모의 작업으로, 데스크탑·모바일 각 해상도에서 가격 정보(시세·비교·대량 판매)가 명확하게 표시되도록 레이아웃을 재설계했습니다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">시세 차트 컬러 시스템 변경</li>
+<li class="mb-2 ml-0">가격 비교 섹션 UI 개선</li>
+<li class="mb-2 ml-0">대량 판매 섹션 및 배송 정보 팝업 조정</li>
+</ul>
+<h3 id="추가주문-2차-기능" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">추가주문 2차 기능</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">기존 주문에 상품을 추가하는 “추가주문” 플로우의 2차 기능을 구현했습니다. 기존 주문 컨텍스트를 유지한 채 새 상품을 선택하고 결제까지 이어지는 UI 플로우를 담당했습니다.</p>
+<h3 id="업종-정보-수집" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">업종 정보 수집</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">신규 가입 사용자의 업종 정보를 수집·저장하는 기능과, 기존 사용자의 업종 정보 조회 최적화를 구현했습니다.</p>
+<h2 id="커스텀-개발-도구" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">커스텀 개발 도구</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">코드 품질과 팀 생산성을 위해 Bun 기반 자동화 스크립트를 프로젝트 내에서 운영합니다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">스크립트</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">역할</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">deadModuleDetector</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">사용되지 않는 모듈 탐지</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">schemaImpactTracker</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GraphQL 스키마 변경 영향도 분석</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">impactTracker</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">코드 변경이 영향을 주는 컴포넌트 범위 분석</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">envFormatChecker</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">환경 변수 포맷 검증</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">fileNameConvention</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">파일명 규칙 위반 감지</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>커스텀 ESLint 플러그인</strong>:</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">eslint-plugin-relay</code>: Relay fragment 규칙 강제</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">eslint-plugin-strict-pattern-matching</code>: ts-pattern 엄격 사용 강제</li>
+<li class="mb-2 ml-0"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">eslint-plugin-no-boolean-ts-pattern</code>: 불린 패턴 매칭 경고</li>
+</ul>
+<h2 id="기술-선택-이유" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">기술 선택 이유</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Relay</strong>: GraphQL 데이터 의존성을 컴포넌트 레벨 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">fragment</code>로 선언합니다. Relay Compiler가 빌드 타임에 스키마와 쿼리를 검증하므로 런타임 타입 불일치가 원천 차단됩니다. 오버페칭 없이 컴포넌트가 필요한 필드만 정확히 요청하는 구조입니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Jotai</strong>: 장바구니·쿠폰처럼 여러 컴포넌트가 공유하는 상태를 원자(atom) 단위로 관리합니다. Context API 대비 불필요한 리렌더링 범위가 좁아 성능에 유리합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>GrowthBook</strong>: 신규 기능 출시 시 사용자 세그먼트별로 기능 플래그를 켜고 끄거나, 두 가지 UI 변형을 A/B 테스트합니다. 코드 재배포 없이 플래그 상태를 변경할 수 있어 안전한 점진적 롤아웃이 가능합니다.</p>
+<h2 id="성과" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">성과</h2>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Relay Compiler 도입으로 GraphQL 타입 불일치 버그를 빌드 단계에서 검출</li>
+<li class="mb-2 ml-0">Datadog RUM으로 Core Web Vitals 상시 모니터링 체계 구축</li>
+<li class="mb-2 ml-0">장바구니 판매자별 summary 병렬 처리로 대형 장바구니 렌더링 지연 개선</li>
+<li class="mb-2 ml-0">GrowthBook 기반 기능 플래그로 코드 배포 없는 점진적 기능 출시 구현</li>
+</ul> <div data-tab-sentinel="consumer-web" style="height: 1px" aria-hidden="true" data-astro-cid-qs2jd4y6></div> </article><article data-tab-content="php-web" style="display: none" class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium" data-astro-cid-qs2jd4y6> <h2 id="이-레포의-역할" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">이 레포의 역할</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">식봄 소비자 채널의 레거시 구현체입니다. CodeIgniter 3 기반 PHP 애플리케이션으로, 식자재 검색·주문·결제·마이페이지 전 플로우를 운영합니다. 현재 Next.js 기반 신규 웹으로 점진적 마이그레이션 중이며, 두 서비스를 라우팅 레이어에서 병행 운영합니다.</p>
+<h2 id="기술-스택" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">기술 스택</h2>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">기술스택은 퇴사 시점 기준으로 작성되었습니다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">기술</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">역할</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">PHP 7.x</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">애플리케이션 런타임</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">CodeIgniter 3</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">MVC 프레임워크</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">MySQL</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">주 데이터베이스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Redis</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">세션 캐싱, 분산 락</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Elasticsearch</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">상품 검색</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Nginx + PHP-FPM</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">웹 서버</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">CI/CD 파이프라인</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">자동화 빌드 및 배포</td></tr></tbody></table></div></div>
+<h2 id="서비스-규모" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">서비스 규모</h2>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>다수의 웹 컨트롤러</strong>: 상품 탐색, 장바구니, 주문, 결제, 마이페이지 등 소비자 플로우 전반</li>
+<li class="mb-2 ml-0"><strong>다수의 API 컨트롤러</strong>: 구현 로직과 응답 스키마를 분리한 2-레이어 구조</li>
+<li class="mb-2 ml-0"><strong>다양한 결제 수단</strong> 연동 (간편결제, 신용카드, 가상계좌 등)</li>
+</ul>
+<h2 id="담당-역할--기여" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">담당 역할 &amp; 기여</h2>
+<h3 id="알림센터" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">알림센터</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">알림센터 메인 페이지를 신규 구현했습니다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">알림 목록 조회 쿼리 최적화로 응답 속도 개선</li>
+<li class="mb-2 ml-0">알림 타입별 아이콘 애니메이션 추가</li>
+<li class="mb-2 ml-0">미로그인 사용자 접근 시 로그인 페이지로 리다이렉트 처리</li>
+<li class="mb-2 ml-0">알림 JS 모듈 분리 및 구조화</li>
+</ul>
+<h3 id="검색-기능-개선" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">검색 기능 개선</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">검색 결과 페이지와 검색 입력 UX를 개선했습니다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>PC/모바일 상품 리스트 차별화</strong>: 화면 크기에 따라 노출 상품 구성 분기 처리</li>
+<li class="mb-2 ml-0"><strong>검색어 볼드 강조</strong>: 검색 결과 상품명 내 일치하는 검색어를 강조(bold) 표시</li>
+<li class="mb-2 ml-0"><strong>검색 Placeholder 이벤트</strong>: 검색창 포커스 시 이벤트성 Placeholder 노출</li>
+<li class="mb-2 ml-0"><strong>검색 UX 버그 수정</strong>: 검색 입력창 커서 위치 이슈·뒤로가기 시 검색어 초기화 문제 해결</li>
+</ul>
+<h3 id="메인-헤더-ux-개선" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">메인 헤더 UX 개선</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">메인 화면 헤더의 사용성을 개선했습니다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">배송지·장바구니 버튼 위치 조정 및 헤더 탭 메뉴 추가</li>
+<li class="mb-2 ml-0">모바일·PC 통합 반응형 대응</li>
+</ul>
+<h3 id="최근-본-상품" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">최근 본 상품</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">모바일·PC 공통으로 최근 본 상품을 노출하는 기능을 구현했습니다. 로컬 스토리지 기반으로 세션 간 히스토리를 유지합니다.</p>
+<h3 id="기획전-노출-기간-관리" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">기획전 노출 기간 관리</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">하드코딩된 기획전 노출 조건을 DB 기반 동적 관리로 전환했습니다. 운영자가 관리자 화면에서 기획전의 시작·종료일을 직접 설정할 수 있도록 개선했습니다.</p>
+<h2 id="nextjs-전환과의-관계" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">Next.js 전환과의 관계</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">레거시 PHP 웹은 여전히 일부 페이지를 서빙하며, 사용자는 두 서비스를 구별하지 않고 동일한 도메인에서 이용합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>동일 도메인 진입</span></span>
+<span class="line"><span>  ├── 신규 기능 (Next.js 전환 완료) → 신규 웹</span></span>
+<span class="line"><span>  └── 레거시 기능 (미전환)          → 이 레포</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">PHP 레포에서의 경험은 레거시 코드베이스의 복잡성, 점진적 마이그레이션 전략, 그리고 운영 중인 서비스를 중단 없이 개선하는 방법에 대한 실전 이해를 제공했습니다.</p> <div data-tab-sentinel="php-web" style="height: 1px" aria-hidden="true" data-astro-cid-qs2jd4y6></div> </article><article data-tab-content="admin-web" style="display: none" class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium" data-astro-cid-qs2jd4y6> <h2 id="이-레포의-역할" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">이 레포의 역할</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">식봄 서비스 운영팀이 사용하는 내부 관리 도구입니다. 쿠폰 관리, 포인트 프로모션, 상품 관리, 사용자 조회 등 운영 업무를 처리합니다. 기존 PHP 기반 관리 도구를 React + TanStack Router 기반의 SPA로 점진적 전환하는 프로젝트입니다.</p>
+<h2 id="기술-스택" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">기술 스택</h2>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">기술스택은 퇴사 시점 기준으로 작성되었습니다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">기술</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">버전</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">역할</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">18.3.1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">UI 렌더링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">TypeScript</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5.8.2</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">정적 타입</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Vite (rolldown-vite)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">—</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">번들러</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">TanStack Router</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">1.116.0+</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">파일 기반 타입 안전 라우팅</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">TanStack Table</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">8.21.3</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">데이터 테이블</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">react-relay</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">17.0.0</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GraphQL 클라이언트</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">relay-compiler</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">17.0.0</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">빌드 타임 GraphQL 타입 생성</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Tailwind CSS</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">3.4.17</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">유틸리티 기반 스타일링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Shadcn/ui</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">1.1+</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">접근성 내장 헤드리스 컴포넌트</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React Hook Form + Zod</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">7.56 / 3.24</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">폼 상태 및 스키마 검증</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Datadog RUM</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5.35.1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">실사용자 모니터링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Biome</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2.1.2</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">린팅·포매팅</td></tr></tbody></table></div></div>
+<h2 id="아키텍처" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">아키텍처</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>파일 기반 라우팅 + 인증 가드 레이아웃:</strong></p>
+<p class="text-foreground leading-relaxed mb-4 w-full">인증 가드 레이아웃(<code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">_withTokenScaffold</code>)이 토큰 유효성을 검사하고, 미인증 시 로그인으로 리다이렉트합니다. 인증이 필요한 모든 페이지는 이 레이아웃 하위에 배치되어 라우트 단위로 보호됩니다. TanStack Router의 타입 안전 라우팅으로 URL 파라미터·쿼리 스트링이 컴파일 타임에 검증됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>명령 팔레트</strong>: 46KB 규모의 <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">CommandMenu.tsx</code>로 전체 메뉴를 검색·이동할 수 있는 인터페이스를 제공합니다.</p>
+<h2 id="담당-역할--기여" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">담당 역할 &amp; 기여</h2>
+<h3 id="쿠폰-관리-기능" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">쿠폰 관리 기능</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">쿠폰 목록 조회와 쿠폰 템플릿 관리 기능을 개발했습니다. Relay를 통해 쿠폰 목록의 페이지네이션과 필터링을 서버 주도로 처리하고, TanStack Table로 다양한 정렬·필터 조합을 지원하는 테이블 UI를 구성했습니다.</p>
+<h3 id="php-관리자-웹에서-react-spa로-전환-참여" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">PHP 관리자 웹에서 React SPA로 전환 참여</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">기존 PHP 관리자 웹의 기능을 기능 단위로 독립 React 모듈로 분리하는 전환 방식에 참여했습니다. 각 기능이 자체 라우트와 데이터 레이어를 갖고 독립적으로 개발·배포됩니다.</p>
+<h2 id="기술-선택-이유" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">기술 선택 이유</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>TanStack Router</strong>: 파일 시스템 기반 라우팅 없이 코드로 라우트를 선언합니다. URL 파라미터와 쿼리 스트링이 TypeScript 타입으로 강제되어, 라우트 이동 시 파라미터 누락이나 타입 불일치를 컴파일 단계에서 잡습니다. PHP 전환 과도기에 유연한 구조 확보에 유리합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Shadcn/ui</strong>: 접근성(ARIA)이 내장된 헤드리스 컴포넌트를 베이스로 스타일만 얹는 패턴입니다. 모달, 드롭다운, 팝오버 등 관리자 UI에서 빈번하게 사용하는 인터랙티브 컴포넌트의 키보드·스크린 리더 대응을 직접 구현하지 않아도 됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Relay</strong>: 소비자 웹과 동일한 GraphQL 타입 시스템을 공유합니다. 팀 내 기술 스택 일관성을 유지하면서 fragment 기반 데이터 선언으로 오버페칭을 방지합니다.</p> <div data-tab-sentinel="admin-web" style="height: 1px" aria-hidden="true" data-astro-cid-qs2jd4y6></div> </article><article data-tab-content="boronter-template" style="display: none" class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium" data-astro-cid-qs2jd4y6> <h2 id="이-레포의-역할" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">이 레포의 역할</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">식봄 물류 현장에서 사용하는 <strong>배송 라벨</strong>과 <strong>거래명세서</strong>를 React 컴포넌트로 구현한 인쇄 전용 라이브러리입니다. 판매자(유통사) 담당자가 상품을 출고할 때 프린터로 출력하는 모든 서류를 이 라이브러리 하나로 생성합니다.</p>
+
+<h2 id="템플릿-목록" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">템플릿 목록</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">템플릿</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">용지</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">용도</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">일반배송 라벨</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">100×100 mm</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">일반 식자재 배송 라벨</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 라벨 (비이력·비축산)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">100×100 mm</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 라벨 (비이력 추적, 비축산)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 라벨 (이력·비축산)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">100×100 mm</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 라벨 (이력 추적, 비축산)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 라벨 (이력·축산물)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">100×100 mm</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 라벨 (이력 추적, 축산물)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">거래명세서 (일반배송)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">A4</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">일반 배송 거래명세서</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">거래명세서 (저장품배송)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">A4</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">저장품 배송 거래명세서</td></tr></tbody></table></div></div>
+<h2 id="기술-스택" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">기술 스택</h2>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">기술스택은 퇴사 시점 기준으로 작성되었습니다.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">기술</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">버전</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">역할</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">React</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">18.3.1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">템플릿 렌더링</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">TypeScript</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5.5.3</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">정적 타입</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Vite</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5.4.8</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">번들러 (UMD 빌드 포함)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Tailwind CSS</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">3.4.14</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">인쇄 레이아웃 스타일</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Boronter</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">git submodule</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">인쇄 그리드 렌더링 엔진</td></tr></tbody></table></div></div>
+<h2 id="아키텍처" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">아키텍처</h2>
+<h3 id="배포-방식" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">배포 방식</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">TypeScript 소스가 아닌 <strong>UMD 번들</strong>로 빌드되어 사내 CDN에 배포됩니다. PHP 레거시 웹을 포함한 모든 서비스가 CDN을 통해 동일한 버전을 불러옵니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>빌드  → UMD 번들 (.umd.cjs)</span></span>
+<span class="line"><span>배포  → 사내 CDN</span></span>
+<span class="line"><span>사용  → window.Boronter.template(payload)</span></span>
+<span class="line"><span>        window.Boronter.print(payload)</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<h3 id="그리드-기반-레이아웃" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">그리드 기반 레이아웃</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">각 템플릿은 <strong>mm 단위 행(ROWS)·열(COLS) 배열</strong>로 용지를 격자 분할하고, <code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">area</code> 맵으로 각 셀에 필드를 배치합니다. 이 방식으로 픽셀 단위 절대 좌표 없이 인쇄 결과를 정밀하게 제어합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// 일반배송 라벨 레이아웃 예시</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> ROWS</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">12</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">]; </span><span style="color:#6A737D">// mm 단위 행 높이</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> COLS</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">11</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">48</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">11</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">22</span><span style="color:#E1E4E8">];                        </span><span style="color:#6A737D">// mm 단위 열 너비</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> area</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">  [</span><span style="color:#9ECBFF">&#39;좌측바코드&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;납품처명&#39;</span><span style="color:#E1E4E8">,   </span><span style="color:#9ECBFF">&#39;납품처명&#39;</span><span style="color:#E1E4E8">,   </span><span style="color:#9ECBFF">&#39;QR_CODE&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#E1E4E8">  [</span><span style="color:#9ECBFF">&#39;좌측바코드&#39;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&#39;품명&#39;</span><span style="color:#E1E4E8">,       </span><span style="color:#9ECBFF">&#39;품명&#39;</span><span style="color:#E1E4E8">,       </span><span style="color:#9ECBFF">&#39;QR_CODE&#39;</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#6A737D">  // ... 11행</span></span>
+<span class="line"><span style="color:#E1E4E8">];</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<h3 id="provider-패턴" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">Provider 패턴</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">각 필드는 데이터를 받아 Boronter 컴포넌트 구조로 변환하는 <strong>Provider 함수</strong>로 정의됩니다. 템플릿은 Provider 함수들을 조합하여 완성됩니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#F97583">const</span><span style="color:#B392F0"> 좌측바코드Provider</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">값</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#B392F0"> FieldBarcode</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> ({</span></span>
+<span class="line"><span style="color:#E1E4E8">  type: </span><span style="color:#9ECBFF">&#39;BARCODE&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">  props: {</span></span>
+<span class="line"><span style="color:#E1E4E8">    value: 값,</span></span>
+<span class="line"><span style="color:#E1E4E8">    vertical: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    format: </span><span style="color:#9ECBFF">&#39;CODE128&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    renderer: </span><span style="color:#9ECBFF">&#39;img&#39;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    style: { width: </span><span style="color:#9ECBFF">&#39;70mm&#39;</span><span style="color:#E1E4E8">, height: </span><span style="color:#79B8FF">40</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">  },</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<h3 id="바코드-생성-로직" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">바코드 생성 로직</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">배송 라벨의 바코드는 물류 시스템과 1:1로 대응하는 고유 값을 인코딩합니다. 기준일로부터 경과 일수를 계산하고, 주문번호·수량·라벨 차수를 조합하여 CODE128 바코드를 생성합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="typescript" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span style="color:#6A737D">// 기준일 기반 경과 일수 계산</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#B392F0"> calculateDays</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">rd_date</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">)</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#F97583"> =&gt;</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">y</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">m</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">d</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [rd_date.</span><span style="color:#B392F0">slice</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">,</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">), rd_date.</span><span style="color:#B392F0">slice</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">,</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">), rd_date.</span><span style="color:#B392F0">slice</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">,</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">)];</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> inputDate</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Date</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">+</span><span style="color:#E1E4E8">y, </span><span style="color:#F97583">+</span><span style="color:#E1E4E8">m </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">+</span><span style="color:#E1E4E8">d);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> baseDate</span><span style="color:#F97583">  =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Date</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1900</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  const</span><span style="color:#79B8FF"> diffDays</span><span style="color:#F97583">  =</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">ceil</span><span style="color:#E1E4E8">((inputDate.</span><span style="color:#B392F0">getTime</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> baseDate.</span><span style="color:#B392F0">getTime</span><span style="color:#E1E4E8">()) </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> 86400000</span><span style="color:#F97583"> +</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> diffDays.</span><span style="color:#B392F0">toString</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<h2 id="주요-개발-작업" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">주요 개발 작업</h2>
+<h3 id="저장품-라벨-신규-템플릿-추가" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">저장품 라벨 신규 템플릿 추가</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">축산물 이력제 의무 표시 규정에 대응하여 저장품 라벨을 세 가지 유형(이력·비축산, 이력·축산물, 비이력·비축산)으로 분리 구현했습니다. 각 유형별로 표시해야 하는 항목(원산지, 이력 번호, 이력 QR 코드 등)이 달라 별도 템플릿으로 관리합니다.</p>
+<h3 id="바코드-값-개선" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">바코드 값 개선</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">물류팀 요청에 따라 바코드 구성 값과 자릿수를 조정했습니다. 바코드 값이 바뀌면 물류 시스템 스캐너와의 연동이 깨지므로, 변경 전 실제 프린터·스캐너로 검증하는 QA 프로세스를 거쳤습니다.</p>
+<h3 id="playground-개발-도구" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">Playground 개발 도구</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm">json-edit-react</code> 라이브러리 기반의 인터랙티브 Playground를 직접 구현했습니다. MOCK 데이터를 실시간으로 편집하면 템플릿 미리보기가 즉시 갱신되어, 백엔드 연동 없이 인쇄 결과를 확인하고 검증할 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><img src="/assets/works/sikbom/boronter-template/boronter-playground.webp" alt="Playground 개발 도구 스크린샷" class="rounded-lg shadow-md mx-auto my-2 max-w-full h-auto" loading="lazy" decoding="async"/></p>
+<h3 id="한글-도메인-코드-유비쿼터스-언어" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">한글 도메인 코드 (유비쿼터스 언어)</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">파일명, 변수명, 함수명을 백엔드 도메인 용어와 동일한 한글로 작성했습니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code class="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"><span class="line"><span>src/templates/식봄/일반배송_라벨.ts</span></span>
+<span class="line"><span>src/utils/바코드.ts</span></span>
+<span class="line"><span>src/utils/날짜포맷팅.ts</span></span>
+<span class="line"><span>src/utils/원산지.ts</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">프론트엔드 코드가 비즈니스 용어를 그대로 반영함으로써, 커뮤니케이션 비용이 줄고 도메인 전문가(물류 담당자 등)와의 협업이 원활해졌습니다.</p>
+<h2 id="성과" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">성과</h2>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">라이브러리 단일 배포로 기술 스택에 관계없이 모든 서비스에서 동일한 인쇄 결과 보장</li>
+<li class="mb-2 ml-0">Playground 도구로 QA 팀이 백엔드 없이 템플릿 변경 사항을 즉시 검증 가능</li>
+<li class="mb-2 ml-0">한글 도메인 코드로 물류·운영 도메인 전문가와의 커뮤니케이션 비용 감소</li>
+</ul> <div data-tab-sentinel="boronter-template" style="height: 1px" aria-hidden="true" data-astro-cid-qs2jd4y6></div> </article> </div>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island></body></html>
