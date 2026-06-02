@@ -120,12 +120,19 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
       <ol className="list-decimal list-outside mb-4 w-full pl-6" {...props} />
     ),
     li: (props) => <li className="mb-2 ml-0" {...props} />,
-    code: (props) => (
-      <code
-        className="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"
-        {...props}
-      />
-    ),
+    code: ({ children, ...props }) => {
+      if (typeof children !== 'string') {
+        return <code {...props}>{children}</code>;
+      }
+      return (
+        <code
+          className="bg-gray-100 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded font-mono text-sm"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    },
     pre: ({ className, ...rest }) => (
       <div className="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md">
         <div className="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600">

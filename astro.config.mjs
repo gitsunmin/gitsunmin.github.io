@@ -16,6 +16,10 @@ export default defineConfig({
         '@': '/src',
         '@til': '/modules/til',
       },
+      dedupe: ['react', 'react-dom'],
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'lucide-react'],
     },
   },
   markdown: {
