@@ -43,7 +43,7 @@ export const Works: Work[] = [
   {
     id: 'doldeuls-forest',
     title: '돌들의 숲',
-    icon: '/assets/logos/seonhamlabs_logo.webp',
+    icon: '/assets/logos/forest-of-stones.webp',
     category: 'service',
     description: `디지털 환경에서의 정서적 고립을 해소하고 싶어 만든 익명 P2P 힐링 커뮤니티입니다.
 누군가와 연결되고 싶지만 신분을 드러내기 어려운 순간을 위해, 완전한 익명성을 보장하면서도 진심 어린 대화가 가능한 공간을 만들었습니다.`,
