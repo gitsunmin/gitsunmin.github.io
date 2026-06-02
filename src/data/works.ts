@@ -122,7 +122,7 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
     icon: '/assets/logos/marketboro_logo.webp',
     description: `식자재 유통사를 위한 B2B SaaS 플랫폼 마켓봄(구 마켓봄 프로)의 프론트엔드를 담당했습니다.
 웹 서비스, 하이브리드 앱, 정산 관리자, 디자인 시스템까지 전 레이어에 걸쳐 개발했습니다.`,
-    techs: ['React', 'Vue.js', 'Nuxt.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Storybook'],
+    techs: ['React', 'Vue.js', 'Nuxt.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Storybook', 'Datadog', 'ag-Grid', 'Vite'],
     links: [],
     range: '2020.10 ~ 2023.07',
     careerId: 'marketboro',
@@ -131,7 +131,7 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
         slug: 'macaron-front',
         name: '마켓봄 웹',
         description: 'Nuxt.js + Vue.js 기반 유통사용 B2B 웹 서비스. 자료 일괄 등록, 세금계산서 비교, 거래전표 등 핵심 업무 화면을 개발했습니다.',
-        techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'RealGrid'],
+        techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'RealGrid', 'Datadog'],
       },
       {
         slug: 'order-app',
