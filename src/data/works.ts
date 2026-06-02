@@ -3,6 +3,7 @@ import type { CareerId } from '@/data/careers';
 export const WORK_IDS = [
   'doldeuls-forest',
   'gitsunmin-github-io',
+  'k-number',
   'sikbom',
   'marketbom-pro',
   'hybrid-app-framework',
@@ -47,6 +48,20 @@ export const Works: Work[] = [
     ],
     range: '2025.01 ~',
     careerId: 'seonhamlabs',
+    isFeatured: true,
+  },
+  {
+    id: 'k-number',
+    title: '@gitsunmin/k-number',
+    icon: '/assets/logos/github_logo.webp',
+    description: `정수를 한글 수사로 변환하는 TypeScript 라이브러리입니다.
+korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대수, 10⁶⁸까지) 지원, 예외 없는 에러 처리를 제공하며 ESM·CJS 이중 빌드로 npm에 배포되어 있습니다.`,
+    techs: ['TypeScript', 'Vitest', 'Bun'],
+    links: [
+      { label: 'npm', url: 'https://www.npmjs.com/package/@gitsunmin/k-number' },
+      { label: 'GitHub', url: 'https://github.com/gitsunmin/k-number' },
+    ],
+    range: '2024.01 ~',
     isFeatured: true,
   },
   {

@@ -1,0 +1,126 @@
+---
+title: '@gitsunmin/k-number'
+draft: false
+---
+
+## 배경
+
+국내 서비스를 개발하다 보면 가격·수량·금액 등을 한글 수사로 표기해야 하는 상황이 자주 생깁니다. "39,393,382원"을 "삼천구백삼십구만삼천삼백팔십이 원"으로, 또는 "3939만3382 원"처럼 가독성 높은 형태로 변환하는 로직이 필요한데, 매번 직접 구현하는 것이 비효율적이었습니다.
+
+처음에는 사내 유틸로 관리하다가, 동일한 문제를 반복적으로 마주치는 동료와 커뮤니티를 위해 2024년 1월 npm 라이브러리로 공개했습니다. 이후 `bigint` 지원, 세 가지 출력 포맷, 커스텀 에러 핸들러 등을 꾸준히 추가하며 버전 1.0.0까지 발전시켰습니다.
+
+## 라이브러리 구조
+
+```
+@gitsunmin/k-number
+├── src/
+│   ├── k-number/    — 핵심 변환 로직
+│   ├── constants/   — 한글 단위 상수 (만·억·조 … 무량대수)
+│   ├── errors/      — 에러 코드 컬렉션
+│   ├── types/       — 공개 타입 정의
+│   └── utils/       — isInteger 등 공유 유틸
+├── dist/
+│   ├── cjs/         — CommonJS 빌드
+│   └── esm/         — ESM 빌드 (기본)
+└── src/test/        — Vitest 테스트 스위트
+```
+
+ESM·CJS 이중 빌드와 `package.json`의 `exports` 필드로 어떤 번들러·런타임에서도 올바른 모듈을 로드합니다. TypeScript 타입 정의는 각 빌드에 함께 제공됩니다.
+
+## 주요 기능
+
+### 세 가지 출력 포맷
+
+```ts
+import { kNumber } from '@gitsunmin/k-number';
+
+kNumber(39_393_382);
+// → '삼천구백삼십구만삼천삼백팔십이'   (korean-only, 기본값)
+
+kNumber(39_393_382, { format: 'unit-only' });
+// → '3천9백3십9만3천3백8십2'
+
+kNumber(39_393_382, { format: 'mixed' });
+// → '3939만3382'
+```
+
+| 입력 | `korean-only` | `unit-only` | `mixed` |
+|-----:|---------------|-------------|---------|
+| `10000` | `'일만'` | `'1만'` | `'1만'` |
+| `123456` | `'십이만삼천사백오십육'` | `'12만3천4백5십6'` | `'12만3456'` |
+| `1_234_567_890` | `'십이억삼천사백오십육만칠천팔백구십'` | `'12억3천4백5십6만7천8백9십'` | `'12억3456만7890'` |
+
+- **`korean-only`**: 국립국어원 표준에 따라 십·백·천 앞 계수가 1이면 `일`을 생략합니다 (예: `일천` → `천`).
+- **`unit-only`**: 아라비아 숫자에 한글 단위를 붙입니다.
+- **`mixed`**: 만·억·조·경·해 등 큰 단위만 한글로 표기하고 나머지는 숫자로 유지합니다.
+
+### BigInt 지원
+
+`Number.MAX_SAFE_INTEGER`를 초과하는 큰 수는 `bigint`로 입력할 수 있습니다. **무량대수(10⁶⁸)**까지 총 17개의 대단위를 지원합니다.
+
+```ts
+kNumber(10_000_000_000_000_000n);   // → '일경'
+kNumber(BigInt(10) ** 68n);         // → '일무량대수'
+```
+
+지원 단위: 만(10⁴) · 억(10⁸) · 조(10¹²) · 경(10¹⁶) · 해(10²⁰) · 자(10²⁴) · 양(10²⁸) · 구(10³²) · 간(10³⁶) · 정(10⁴⁰) · 재(10⁴⁴) · 극(10⁴⁸) · 항하사(10⁵²) · 아승기(10⁵⁶) · 나유타(10⁶⁰) · 불가사의(10⁶⁴) · 무량대수(10⁶⁸)
+
+### 예외 없는 에러 처리
+
+에러 발생 시 예외를 던지지 않고 에러 코드 문자열을 반환합니다. `onError` 핸들러로 반환 값을 직접 제어할 수도 있습니다.
+
+```ts
+import { kNumber, ErrorCollection } from '@gitsunmin/k-number';
+
+kNumber(3.14);    // → ErrorCollection.NOT_INTEGER
+kNumber(NaN);     // → ErrorCollection.NOT_NUMBER
+
+kNumber(3.14, {
+  onError: (error) => {
+    if (error === ErrorCollection.NOT_INTEGER) return '정수만 입력 가능합니다.';
+  },
+});
+// → '정수만 입력 가능합니다.'
+```
+
+## 담당 역할 & 기여
+
+- **전체 설계 및 개발** — 1인 기획·구현·배포·유지보수 전담
+- **세 가지 출력 포맷 설계** — `korean-only` / `unit-only` / `mixed` 포맷 정의 및 구현
+- **BigInt 지원 추가** — 무량대수(10⁶⁸)까지 지원하는 bigint 전용 변환 경로 구현
+- **에러 처리 체계 설계** — 예외 대신 에러 코드 반환 + 커스텀 `onError` 핸들러
+- **ESM·CJS 이중 빌드** — `tsc-alias` 적용으로 경로 별칭 정상 해석, `exports` 필드로 모듈 호환성 확보
+- **테스트 인프라 구성** — Jest → Vitest 마이그레이션, 커버리지 리포트 (`@vitest/coverage-v8`)
+- **CI 파이프라인 구성** — GitHub Actions로 push·PR 시 타입 체크 및 전체 테스트 자동 실행
+- **국립국어원 표준 준수** — `일` 생략 규칙(십·백·천 앞 계수 1 생략) 구현 및 테스트 보강
+
+## 기술 스택
+
+| 구분 | 기술 |
+|------|------|
+| 언어 | TypeScript 6 |
+| 빌드 | tsc (ESM + CJS 이중 빌드), tsc-alias |
+| 테스트 | Vitest, @vitest/coverage-v8 |
+| 패키지 매니저 | Bun |
+| 코드 품질 | Husky (pre-commit 훅) |
+| CI | GitHub Actions |
+| 배포 | npm (`@gitsunmin/k-number`) |
+
+### 기술 선택 이유
+
+- **TypeScript 6**: 최신 타입 시스템으로 `number | bigint` 오버로드를 타입 안전하게 표현
+- **ESM·CJS 이중 빌드**: 다양한 프로젝트 환경(Vite, Webpack, Node.js CJS)에서 설치 즉시 사용 가능
+- **예외 미발생(No-throw) 설계**: 호출부에서 `try-catch` 없이도 안전하게 사용, `onError`로 UX 제어권 유지
+- **Vitest**: TypeScript·ESM 친화적 설정, 커버리지 리포트까지 단일 도구로 해결
+
+## 성과 & 수치
+
+- 2024년 1월 초기 릴리스(`0.0.1`) → 2026년 6월 v1.0.0 출시, 총 17개 릴리스
+- 총 커밋 63+, BigInt 지원·`mixed` 포맷·onError 핸들러·CI 파이프라인 단계적 추가
+- ESM·CJS 이중 패키지 최적화로 npm 배포 크기 7.3kB → 5.3kB 감소
+- BigInt 전용 테스트 28건, `일` 생략 규칙 테스트 16건 포함 전체 테스트 커버리지 확보
+
+## 관련 링크
+
+- [npm](https://www.npmjs.com/package/@gitsunmin/k-number)
+- [GitHub](https://github.com/gitsunmin/k-number)
