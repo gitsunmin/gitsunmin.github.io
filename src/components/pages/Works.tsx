@@ -1,7 +1,20 @@
+import { AppWindow, Globe, Layers, Package } from 'lucide-react';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { TechFilterBar } from '@/components/TechFilterBar';
-import { WorkCard } from '@/components/WorkCard';
-import { Works } from '@/data/works';
+import { WorkSection, type CategoryMeta } from '@/components/WorkSection';
+import { Works, type WorkCategory } from '@/data/works';
+
+type SectionDef = {
+  categories: WorkCategory[];
+  meta: CategoryMeta;
+};
+
+const SECTIONS: SectionDef[] = [
+  { categories: ['service'], meta: { id: 'service', label: '서비스 · 앱', icon: AppWindow } },
+  { categories: ['library', 'vscode-extension'], meta: { id: 'tool', label: '라이브러리 · 확장 도구', icon: Package } },
+  { categories: ['framework'], meta: { id: 'framework', label: '프레임워크', icon: Layers } },
+  { categories: ['website'], meta: { id: 'website', label: '웹사이트', icon: Globe } },
+];
 
 const VISIBLE_WORKS = Works.filter((w) => !w.isDraft);
 const ALL_TECHS = [...new Set(VISIBLE_WORKS.flatMap((w) => w.techs))].sort();
@@ -16,8 +29,21 @@ export const WorksPage = () => {
 
   const filteredWorks = useMemo(
     () =>
-      activeFilter == null ? VISIBLE_WORKS : VISIBLE_WORKS.filter((w) => w.techs.includes(activeFilter)),
+      activeFilter == null
+        ? VISIBLE_WORKS
+        : VISIBLE_WORKS.filter((w) => w.techs.includes(activeFilter)),
     [activeFilter],
+  );
+
+  const groupedSections = useMemo(
+    () =>
+      SECTIONS
+        .map(({ categories, meta }) => ({
+          category: meta,
+          works: filteredWorks.filter((w) => categories.includes(w.category)),
+        }))
+        .filter(({ works }) => works.length > 0),
+    [filteredWorks],
   );
 
   return (
@@ -29,19 +55,19 @@ export const WorksPage = () => {
           onFilterChange={setActiveFilter}
           showColorDot
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-          {filteredWorks.map((work, index) => (
-            <WorkCard
-              key={work.id}
-              work={work}
-              index={index}
-              activeFilter={activeFilter}
-              onTechClick={handleTechClick}
-            />
-          ))}
-        </div>
 
-        {filteredWorks.length === 0 && activeFilter != null && (
+        {groupedSections.map(({ category, works }, sectionIndex) => (
+          <WorkSection
+            key={category.id}
+            category={category}
+            works={works}
+            sectionIndex={sectionIndex}
+            activeFilter={activeFilter}
+            onTechClick={handleTechClick}
+          />
+        ))}
+
+        {groupedSections.length === 0 && activeFilter != null && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <p className="text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{activeFilter}</span> 기술 스택의 프로젝트가 없습니다.
