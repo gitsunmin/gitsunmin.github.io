@@ -1,0 +1,124 @@
+---
+title: Graph Man
+draft: false
+---
+
+## 배경
+
+GraphQL API를 개발하다 보면 쿼리·뮤테이션을 빠르게 테스트해야 하는 상황이 반복됩니다. Postman이나 Insomnia 같은 외부 도구로 컨텍스트를 전환하거나, 프로젝트마다 별도로 환경 설정을 반복하는 비효율이 불편했습니다.
+
+그래서 VSCode 안에서 GraphQL 파일을 열고 버튼 하나로 쿼리를 전송하고, 환경(dev·staging·prod)을 전환하며, Fragment를 인라이닝하는 확장 프로그램을 직접 만들었습니다. 2024년 6월 초기 릴리스 이후 스키마 로드, Fragment 병합, 스타터팩 등을 단계적으로 추가해 v0.3.3까지 발전시켰습니다.
+
+## 프로젝트 구조
+
+```
+graph-man
+├── src/
+│   ├── commands/        — 커맨드 팔레트 명령 구현
+│   │   ├── send-graphql.ts          — GraphQL 전송
+│   │   ├── merge-fragments-into-query.ts — Fragment 인라이닝
+│   │   ├── load-schema.ts           — URL로부터 스키마 로드
+│   │   ├── create-config-file.ts    — 설정 파일 생성
+│   │   ├── create-example-graphql-file.ts
+│   │   └── create-starter-pack.ts
+│   ├── views/
+│   │   ├── environmentTree.ts       — 환경 목록 TreeView
+│   │   └── graphqlsTree.ts          — GraphQL 파일 목록 TreeView
+│   ├── lib/
+│   │   ├── fp/                      — Either / Option 모나드
+│   │   └── gql/                     — GraphQL 요청 유틸
+│   ├── utils/
+│   │   ├── config.ts                — config.json 파서
+│   │   └── file.ts                  — 파일 I/O 유틸
+│   └── constants/                   — 경로·시스템 상수
+└── .graph-man/
+    ├── config.json                  — 환경별 URL·헤더 설정
+    └── **/*.graphql                 — 저장된 쿼리·뮤테이션 파일
+```
+
+## 주요 기능
+
+### 멀티 환경 관리
+
+`.graph-man/config.json`에 환경별 URL과 헤더를 정의하면 사이드바 TreeView에서 클릭 한 번으로 활성 환경을 전환할 수 있습니다.
+
+```json
+{
+  "environment": {
+    "local":   { "url": "http://localhost:4000/graphql", "headers": {} },
+    "staging": { "url": "https://staging.example.com/graphql",
+                 "headers": { "Authorization": "Bearer <token>" } }
+  }
+}
+```
+
+선택된 환경은 `vscode.ExtensionContext.globalState`에 유지되어 VSCode를 재시작해도 보존됩니다.
+
+### GraphQL 전송 & 결과 출력
+
+`.graph-man/` 하위의 `.graphql` / `.gql` 파일을 열면 에디터 상단 툴바에 전송 버튼이 나타납니다. 버튼을 누르면 현재 파일의 내용을 활성 환경의 엔드포인트로 전송하고, Output 채널에 응답 JSON을 포맷팅해서 출력합니다.
+
+### Fragment 인라이닝 (Merge Fragments into Query)
+
+GraphQL 스키마를 URL에서 로드한 뒤, `graphql` 라이브러리의 AST API로 현재 파일의 모든 Fragment를 인라인 Fragment로 전개합니다.
+
+- **중복 제거**: 같은 필드가 여러 Fragment에 등장할 때 선택 셋을 병합하고 중복을 제거합니다.
+- **타입 조건 처리**: 스키마를 기반으로 Union·Interface 타입의 Fragment는 타입 조건을 유지합니다.
+- **디렉티브 보존**: `@skip`, `@include` 등 디렉티브가 있는 필드는 인라이닝 대상에서 제외해 의미 변경을 방지합니다.
+
+### 함수형 프로그래밍 패턴
+
+에러 처리에 Either 모나드, 값의 존재 여부에 Option 모나드를 직접 구현해 사용했습니다. `ts-pattern`으로 태그 유니온을 exhaustive하게 매칭해 런타임 누락 케이스를 컴파일 타임에 방지합니다.
+
+```ts
+match(config)
+  .with(E.LEFT, ({ value: errorMessage }) => {
+    vscode.window.showErrorMessage(errorMessage);
+  })
+  .with({ ...E.RIGHT, value: { environment: P.when(/* ... */) } }, 
+    ({ value: { environment } }) => { /* 전송 로직 */ })
+  .otherwise(() => vscode.window.showErrorMessage("Environment not found"));
+```
+
+## 담당 역할 & 기여
+
+- **전체 설계 및 개발** — 1인 기획·구현·배포·유지보수 전담
+- **VSCode Extension API 설계** — TreeDataProvider 2종(환경·파일 목록), 9개 커맨드, 에디터 툴바·사이드바 메뉴 구성
+- **GraphQL AST 처리** — `graphql` 라이브러리로 Fragment 인라이닝, 중복 제거, 타입 조건 처리 구현
+- **함수형 에러 처리** — Either·Option 모나드 직접 구현 및 `ts-pattern` 기반 exhaustive 패턴 매칭 도입
+- **멀티 환경 시스템** — JSON 설정 기반 환경 전환 + globalState 영속화
+- **번들링 파이프라인** — esbuild로 단일 파일 번들링, `vscode:prepublish` 훅으로 게시 자동화
+- **테스트 인프라** — Vitest 단위 테스트 + `@vscode/test-cli` 통합 테스트
+
+## 기술 스택
+
+| 구분 | 기술 |
+|------|------|
+| 플랫폼 | VSCode Extension API |
+| 언어 | TypeScript |
+| GraphQL 처리 | graphql (AST parse · visit · print) |
+| 패턴 매칭 | ts-pattern |
+| 번들러 | esbuild |
+| 코드 품질 | Biome |
+| 테스트 | Vitest, @vscode/test-cli |
+| 패키지 매니저 | Bun |
+| 배포 | VS Code Marketplace (vsce) |
+
+### 기술 선택 이유
+
+- **VSCode Extension API**: 개발자가 이미 사용 중인 편집기 안에서 GraphQL 테스트를 완결해 컨텍스트 전환 비용 제거
+- **graphql 라이브러리 AST API**: 정규식 문자열 처리 대신 공식 AST 트리를 순회해 타입 안전성과 정확도 확보
+- **ts-pattern**: 태그 유니온의 exhaustive 매칭으로 에러·성공 케이스 누락을 컴파일 타임에 방지
+- **Either / Option 모나드**: `try-catch` 없는 에러 전파로 호출 체인을 선언적으로 표현
+- **esbuild**: 빠른 번들링으로 `vscode:prepublish` 단계 최소화
+
+## 성과 & 수치
+
+- 2024년 6월 초기 릴리스(`0.0.1`)
+- 멀티 환경 전환, 스키마 로드, Fragment 병합 등 핵심 기능 단계적 추가
+- VSCode Marketplace 게시 완료 (publisher: gitsunmin)
+
+## 관련 링크
+
+- [GitHub](https://github.com/gitsunmin/graph-man)
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=gitsunmin.graph-man)
