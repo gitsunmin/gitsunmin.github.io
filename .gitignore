@@ -31,3 +31,5 @@ dist-ssr
 src/routes/_layout/til/**/*
 src/docs/til/**/*
 src/assets/til/**/*
+
+fullstack.json

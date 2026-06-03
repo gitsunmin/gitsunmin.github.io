@@ -343,17 +343,9 @@ const CareerCard = ({
             )}
           >
             {/* 호버 그라디언트 오버레이 */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-br from-primary/3 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
             <div className="relative">
-              {/* 현재 재직 중 배지 */}
-              {isCurrentRole && (
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-4 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide">
-                  <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-                  현재 재직 중
-                </div>
-              )}
-
               {/* 헤더 */}
               <div className="flex items-start gap-4">
                 <div className="shrink-0">
@@ -377,9 +369,14 @@ const CareerCard = ({
                       {career.position}
                     </span>
                     <span className="hidden sm:inline text-border">|</span>
-                    <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <span className="inline-flex items-baseline gap-1.5 text-sm text-muted-foreground">
                       <Calendar className="size-3.5 shrink-0" />
                       {career.range}
+                      {isCurrentRole && (
+                        <span className="inline-flex items-center gap-1 text-primary font-medium animate-pulse">
+                          재직중
+                        </span>
+                      )}
                     </span>
                   </div>
                 </div>

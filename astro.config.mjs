@@ -20,6 +20,10 @@ export default defineConfig({
     },
     optimizeDeps: {
       include: ['react', 'react-dom', 'lucide-react'],
+      exclude: ['@resvg/resvg-js'],
+    },
+    ssr: {
+      external: ['@resvg/resvg-js'],
     },
   },
   markdown: {
