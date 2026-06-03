@@ -453,7 +453,7 @@ export default function DoldeulsForestStory() {
             </div>
 
             {/* ── Callout Side ── */}
-            <div className="flex-1 min-w-0 relative dolsup-callout" style={{ minHeight: '260px' }}>
+            <div className="hidden md:block flex-1 min-w-0 relative dolsup-callout" style={{ minHeight: '260px' }}>
 
               {/* Callout 1: 원석 & 조약돌 */}
               <div style={calloutStyle(1)}>
@@ -533,7 +533,7 @@ export default function DoldeulsForestStory() {
             aria-hidden="true"
             className="absolute pointer-events-none flex flex-col items-center"
             style={{
-              bottom: '2rem',
+              bottom: '1rem',
               left: '50%',
               transform: 'translateX(-50%)',
               gap: '0.3rem',

@@ -1,14 +1,39 @@
+import {
+  ArrowUpRight,
+  Calendar,
+  ExternalLink,
+  Globe,
+  Layers,
+  Package,
+  Puzzle,
+} from 'lucide-react';
+import {
+  type ComponentType,
+  type RefObject,
+  type SVGProps,
+  useRef,
+} from 'react';
+
 import { TechTag } from '@/components/TechTag';
+import type { Works } from '@/data/works';
 import { useInView } from '@/hooks/useInView';
+import { GithubIcon } from '@/lib/brandIcons';
 import { cn } from '@/lib/utils';
-import { Works } from '@/data/works';
-import { Calendar } from 'lucide-react';
-import { type RefObject, useRef } from 'react';
 
 const COMPANY_LABELS: Record<string, string> = {
   seonhamlabs: '선함연구소',
   marketboro: '마켓보로',
   korens: '코렌스',
+};
+
+
+type IconProps = SVGProps<SVGSVGElement> & { size?: number | string };
+const LINK_ICON_MAP: Record<string, ComponentType<IconProps>> = {
+  GitHub: GithubIcon,
+  npm: Package,
+  'VS Code Marketplace': Puzzle,
+  사이트: Globe,
+  '돌들의 숲': Globe,
 };
 
 type Props = {
@@ -19,19 +44,16 @@ type Props = {
 };
 
 export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
-  const cardRef = useRef<HTMLAnchorElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const isVisible = useInView(cardRef as RefObject<HTMLElement | null>);
 
   return (
-    <a
-      href={`/work/${work.id}`}
+    <div
       ref={cardRef}
-      aria-label={`${work.title} 상세 보기`}
       className={cn(
-        'group block rounded-xl border border-border/70 bg-card p-5',
-        'hover:border-primary/40 hover:shadow-md hover:shadow-primary/5',
+        'group relative rounded-xl border border-border/70 bg-card h-full',
+        'hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/15',
         'transition-all duration-300 ease-out',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
       )}
       style={{
@@ -39,62 +61,114 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         viewTransitionName: `work-card-${work.id}`,
       }}
     >
-          {/* 헤더 행 */}
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <img
-                src={work.icon}
-                alt={`${work.title} 아이콘`}
-                className="size-8 rounded-lg object-contain bg-white border border-border/40 shrink-0 p-0.5"
-              />
-              <div className="min-w-0">
-                <h2
-                  className={cn(
-                    'text-sm font-semibold text-primary truncate',
-                    'group-hover:text-primary/80 transition-colors duration-200',
-                  )}
-                >
-                  {work.title}
-                </h2>
-                {work.careerId && (
-                  <span className="text-[11px] text-muted-foreground">
-                    {COMPANY_LABELS[work.careerId] ?? work.careerId}
-                  </span>
-                )}
-              </div>
-            </div>
-            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground shrink-0 mt-0.5">
-              <Calendar className="size-3" />
-              {work.range}
-            </span>
-          </div>
+      {/* 피처드 강조 바 */}
+      {work.isFeatured && (
+        <div className="absolute top-0 left-4 right-4 h-0.75 rounded-b-full bg-primary/40 z-10" />
+      )}
 
-          {/* 설명 */}
-          <p className="text-xs leading-relaxed text-muted-foreground line-clamp-2 mb-1">
-            {work.description.split('\n')[0]}
-          </p>
+      {/* 오버레이 네비게이션 링크 */}
+      <a
+        href={`/work/${work.id}`}
+        className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      >
+        <span className="sr-only">{work.title} 상세 보기</span>
+      </a>
 
-          {/* 서브레포 수 */}
-          {work.subRepos && work.subRepos.length > 0 && (
-            <p className="text-[11px] text-muted-foreground/70 mt-1 mb-1">
-              {work.subRepos.length}개 레포지토리
-            </p>
-          )}
+      {/* 방향 힌트 아이콘 (하단 우측 고정) */}
+      <ArrowUpRight
+        className={cn(
+          'absolute bottom-4 right-4 z-10 pointer-events-none size-4',
+          'text-muted-foreground/20 transition-all duration-300',
+          'group-hover:text-primary/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+        )}
+      />
 
-          {/* 기술 태그 */}
-          <TechTag techs={work.techs} activeFilter={activeFilter} onTechClick={onTechClick} />
+      {/* 콘텐츠 레이어 */}
+      <div className="relative z-10 pointer-events-none flex flex-col px-5 pt-5 pb-9">
 
-          {/* 상세 보기 힌트 */}
-          <div className="flex justify-end mt-3">
-            <span
+        {/* 헤더 행 */}
+        <div className="flex items-center gap-2.5 mb-3 pr-16">
+          <img
+            src={work.icon}
+            alt={`${work.title} 아이콘`}
+            className={cn(
+              'size-10 rounded-xl object-contain bg-white border border-border/40 shrink-0 p-1',
+              'shadow-sm shadow-black/10',
+              'group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out',
+            )}
+          />
+          <div className="min-w-0">
+            <h2
               className={cn(
-                'text-[11px] text-muted-foreground/50 group-hover:text-primary/60',
-                'transition-colors duration-200',
+                'text-xl font-bold text-primary truncate leading-snug',
+                'group-hover:text-primary/80 transition-colors duration-200',
               )}
             >
-              상세 보기 →
-            </span>
+              {work.title}
+            </h2>
+            {work.careerId && (
+              <span className="inline-block mt-0.5 text-sm px-1.5 py-0.5 rounded-full bg-muted/80 text-muted-foreground/80 border border-border/40">
+                {COMPANY_LABELS[work.careerId] ?? work.careerId}
+              </span>
+            )}
           </div>
-    </a>
+        </div>
+
+        {/* 날짜 */}
+        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground mb-2">
+          <Calendar className="size-3" />
+          {work.range}
+        </span>
+
+        {/* 설명 */}
+        <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1">
+          {work.description.split('\n')[0]}
+        </p>
+
+        {/* 서브레포 수 */}
+        {work.subRepos && work.subRepos.length > 0 && (
+          <div className="inline-flex items-center gap-1 text-[11px] text-muted-foreground/60 mt-1 mb-1">
+            <Layers className="size-3" />
+            <span>{work.subRepos.length}개 레포지토리</span>
+          </div>
+        )}
+
+        {/* 기술 태그 */}
+        <div className="pointer-events-auto">
+          <TechTag
+            techs={work.techs}
+            activeFilter={activeFilter}
+            onTechClick={onTechClick}
+          />
+        </div>
+
+        {/* 푸터: 외부 링크 */}
+        {work.links.length > 0 && (
+          <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border/40 pointer-events-auto">
+            {work.links.map(({ label, url }) => {
+              const Icon = LINK_ICON_MAP[label] ?? ExternalLink;
+              return (
+                <a
+                  key={url}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={label}
+                  onClick={(e) => e.stopPropagation()}
+                  className={cn(
+                    'p-1.5 rounded-md',
+                    'text-muted-foreground/60 hover:text-foreground',
+                    'hover:bg-muted/60 transition-all duration-200',
+                  )}
+                >
+                  <Icon size={14} />
+                  <span className="sr-only">{label}</span>
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
