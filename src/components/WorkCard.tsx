@@ -61,11 +61,6 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         viewTransitionName: `work-card-${work.id}`,
       }}
     >
-      {/* 피처드 강조 바 */}
-      {work.isFeatured && (
-        <div className="absolute top-0 left-4 right-4 h-0.75 rounded-b-full bg-primary/40 z-10" />
-      )}
-
       {/* 오버레이 네비게이션 링크 */}
       <a
         href={`/work/${work.id}`}
@@ -74,51 +69,53 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         <span className="sr-only">{work.title} 상세 보기</span>
       </a>
 
-      {/* 방향 힌트 아이콘 (하단 우측 고정) */}
-      <ArrowUpRight
-        className={cn(
-          'absolute bottom-4 right-4 z-10 pointer-events-none size-4',
-          'text-muted-foreground/20 transition-all duration-300',
-          'group-hover:text-primary/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
-        )}
-      />
-
       {/* 콘텐츠 레이어 */}
       <div className="relative z-10 pointer-events-none flex flex-col px-5 pt-5 pb-9">
 
         {/* 헤더 행 */}
-        <div className="flex items-center gap-2.5 mb-3 pr-16">
-          <img
-            src={work.icon}
-            alt={`${work.title} 아이콘`}
+        <div className="flex items-start justify-between pb-2">
+          <div className="flex items-center justify-between gap-2.5 ">
+            <img
+              src={work.icon}
+              alt={`${work.title} 아이콘`}
+              className={cn(
+                'size-10 rounded-xl object-contain bg-white border border-border/40 shrink-0 p-1',
+                'shadow-sm shadow-black/10',
+                'group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out',
+              )}
+            />
+            <div className="min-w-0">
+              <h2
+                className={cn(
+                  'text-xl font-bold text-primary truncate leading-snug',
+                  'group-hover:text-primary/80 transition-colors duration-200',
+                )}
+              >
+                {work.title}
+              </h2>
+              {work.careerId && (
+                <span className="inline-block text-xs py-0.5 text-muted-foreground/80">
+                  {COMPANY_LABELS[work.careerId] ?? work.careerId}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* 방향 힌트 아이콘 (하단 우측 고정) */}
+          <ArrowUpRight
             className={cn(
-              'size-10 rounded-xl object-contain bg-white border border-border/40 shrink-0 p-1',
-              'shadow-sm shadow-black/10',
-              'group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out',
+              'pointer-events-none size-5',
+              'text-muted-foreground/20 transition-all duration-300',
+              'group-hover:text-primary/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
             )}
           />
-          <div className="min-w-0">
-            <h2
-              className={cn(
-                'text-xl font-bold text-primary truncate leading-snug',
-                'group-hover:text-primary/80 transition-colors duration-200',
-              )}
-            >
-              {work.title}
-            </h2>
-            {work.careerId && (
-              <span className="inline-block mt-0.5 text-sm px-1.5 py-0.5 rounded-full bg-muted/80 text-muted-foreground/80 border border-border/40">
-                {COMPANY_LABELS[work.careerId] ?? work.careerId}
-              </span>
-            )}
-          </div>
         </div>
 
         {/* 날짜 */}
-        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground mb-2">
-          <Calendar className="size-3" />
-          {work.range}
-        </span>
+        <div className="flex items-baseline justify-start gap-2 text-muted-foreground pb-2">
+          <Calendar className="size-4" />
+          <div className='text-sm h-fit flex items-center'>{work.range}</div>
+        </div>
 
         {/* 설명 */}
         <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1">
@@ -127,8 +124,8 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
 
         {/* 서브레포 수 */}
         {work.subRepos && work.subRepos.length > 0 && (
-          <div className="inline-flex items-center gap-1 text-[11px] text-muted-foreground/60 mt-1 mb-1">
-            <Layers className="size-3" />
+          <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1">
+            <Layers className="size-4" />
             <span>{work.subRepos.length}개 레포지토리</span>
           </div>
         )}
