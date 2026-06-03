@@ -81,7 +81,7 @@ const FeaturedCard = ({ post }: { post: PostItem }) => {
             alt={post.title}
             style={{ viewTransitionName: `blog-image-${post.slug}` }}
             onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = '/assets/blog/default-thumbnail.svg';
+              (e.currentTarget as HTMLImageElement).src = '/og/blog.png';
             }}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             loading="eager"
@@ -126,7 +126,7 @@ const GridCard = ({ post, index }: { post: PostItem; index: number }) => {
             alt={post.title}
             style={{ viewTransitionName: `blog-image-${post.slug}` }}
             onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = '/assets/blog/default-thumbnail.svg';
+              (e.currentTarget as HTMLImageElement).src = '/og/blog.png';
             }}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
