@@ -31,9 +31,10 @@ const title =
   'TIL';
 
 const category = entry.id.split('/')[0];
+const ogImage = entry.data.image || `/og/til/${entry.id.replace(/\.mdx$/, '')}.png`;
 ---
 
-<MainLayout title={`${title} - TIL - Gitsunmin`} headerTitle="TIL">
+<MainLayout title={`${title} - TIL - Gitsunmin`} headerTitle="TIL" ogImage={ogImage}>
   <TILPage title={title} category={category}>
     <article class="prose dark:prose-invert max-w-none">
       <Content components={MDXReplacer({})} />

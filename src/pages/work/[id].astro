@@ -57,7 +57,7 @@ const tabs = hasTabs
 
 const title = work?.title ?? entry.data.title;
 const description = work?.description.split('\n')[0] ?? '';
-const ogImage = work?.icon ?? '/assets/blog/default-thumbnail.svg';
+const ogImage = `/og/works/${id}.png`;
 
 const COMPANY_LABELS: Record<string, string> = {
   seonhamlabs: '선함연구소',

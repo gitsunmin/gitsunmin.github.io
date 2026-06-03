@@ -22,12 +22,10 @@ type Props = CollectionEntry<'blog'>;
 const post = Astro.props;
 const { Content, headings } = await render(post);
 const readingTime = calcReadingTime(post.body ?? '');
-const DEFAULT_HERO_IMAGE = '/assets/blog/default-thumbnail.svg';
-const heroImage = post.data.heroImage || DEFAULT_HERO_IMAGE;
-
 const siteURL = 'https://gitsunmin.github.io';
 const postSlug = post.id.replace(/\.mdx$/, '');
 const canonicalURL = `${siteURL}/blog/${postSlug}`;
+const heroImage = post.data.heroImage || `/og/blog/${postSlug}.png`;
 const ogImageURL = heroImage.startsWith('http') ? heroImage : `${siteURL}${heroImage}`;
 
 const jsonLd = JSON.stringify({
@@ -61,7 +59,7 @@ const jsonLd = JSON.stringify({
   ogType="article"
   canonicalURL={canonicalURL}
   jsonLd={jsonLd}
-  preloadImage={heroImage}
+  preloadImage={post.data.heroImage}
 >
   <!-- Reading progress bar -->
   <div
@@ -78,7 +76,7 @@ const jsonLd = JSON.stringify({
 
     <div class="flex gap-10 items-start">
       <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-clip" data-pagefind-body data-pagefind-meta={`title:${post.data.title}, tags:${post.data.tags.join(',')}`}>
-        <img src={heroImage} onerror={`this.src='${DEFAULT_HERO_IMAGE}';`} alt={post.data.title} transition:name={`blog-image-${postSlug}`} class="w-full h-auto rounded-lg mb-8 shadow-lg" fetchpriority="high" loading="eager" />
+        <img src={heroImage} onerror="this.src='/og/blog.png';" alt={post.data.title} transition:name={`blog-image-${postSlug}`} class="w-full h-auto rounded-lg mb-8 shadow-lg" fetchpriority="high" loading="eager" />
         <h1 class="text-3xl md:text-4xl font-extrabold mb-4">{post.data.title}</h1>
         <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
           <span>작성일: {post.data.pubDate.toLocaleDateString('ko-KR')}</span>
