@@ -11,8 +11,8 @@ type SectionDef = {
 
 const SECTIONS: SectionDef[] = [
   { categories: ['service'], meta: { id: 'service', label: '서비스 · 앱', icon: AppWindow } },
-  { categories: ['library', 'vscode-extension'], meta: { id: 'tool', label: '라이브러리 · 확장 도구', icon: Package } },
   { categories: ['framework'], meta: { id: 'framework', label: '프레임워크', icon: Layers } },
+  { categories: ['library', 'vscode-extension'], meta: { id: 'tool', label: '라이브러리 · 확장 도구', icon: Package } },
   { categories: ['website'], meta: { id: 'website', label: '웹사이트', icon: Globe } },
 ];
 

@@ -299,7 +299,7 @@ const CareerCard = ({
         <div
           ref={cardRef}
           className={cn(
-            'relative pl-12 md:pl-20 pt-12 md:pt-16 pb-4 pr-3',
+            'relative pl-0 md:pl-20 pt-6 md:pt-16 pb-4 pr-3',
             'transition-all duration-700 ease-out',
             isVisible
               ? 'opacity-100 translate-x-0 translate-y-0'
@@ -310,7 +310,7 @@ const CareerCard = ({
           style={{ ...skewStyle, transitionDelay: `${index * 150}ms` }}
         >
           {/* 타임라인 도트 */}
-          <div className="absolute left-1.75 md:left-3.75 top-7 z-10 pt-12 md:pt-16">
+          <div className="hidden md:block absolute left-1.75 md:left-3.75 top-7 z-10 pt-12 md:pt-16">
             <div
               className={cn(
                 'group/dot relative size-4 md:size-5 rounded-full border-2',
@@ -491,7 +491,7 @@ const Content = ({
     <article className="py-10 px-4 md:px-0 w-full">
       <div ref={timelineContainerRef} className="relative flex flex-col gap-8">
         {/* 타임라인 라인 */}
-        <div className="absolute left-3.75 md:left-5.75 top-7 bottom-7 w-px overflow-hidden">
+        <div className="hidden md:block absolute left-3.75 md:left-5.75 top-7 bottom-7 w-px overflow-hidden">
           <div
             className="w-full h-full bg-linear-to-b from-primary/40 via-border to-transparent"
             style={{
