@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { ChevronDown, ChevronRight, Folder } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileText, Folder } from 'lucide-react';
 import { useState } from 'react';
 
 type CategoryEntry = { url: string; title: string };
@@ -129,9 +129,9 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
                     'hover:bg-accent/50 transition-all duration-150',
                   )}
                 >
-                  <ChevronRight
+                  <FileText
                     size={14}
-                    className="text-muted-foreground shrink-0 group-hover:translate-x-0.5 group-hover:text-primary transition-transform duration-150"
+                    className="text-muted-foreground shrink-0 group-hover:text-primary transition-colors duration-150"
                   />
                   <span className="group-hover:translate-x-0.5 transition-transform duration-150">
                     {entry.title}
@@ -192,7 +192,7 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
               <div
                 className={cn(
                   'overflow-hidden transition-all duration-300 ease-out',
-                  isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0',
+                  isOpen ? 'max-h-500 opacity-100' : 'max-h-0 opacity-0',
                 )}
               >
                 <ul className="px-2 py-2 space-y-0.5">
@@ -206,7 +206,7 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
                           'transition-colors duration-150',
                         )}
                       >
-                        <ChevronRight
+                        <FileText
                           size={13}
                           className="text-muted-foreground shrink-0 group-hover:text-primary transition-colors duration-150"
                         />
