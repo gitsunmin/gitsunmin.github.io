@@ -33,3 +33,5 @@ src/docs/til/**/*
 src/assets/til/**/*
 
 fullstack.json
+
+.ignore-docs/
