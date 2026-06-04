@@ -473,6 +473,19 @@
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Header/Footer: 페이지 전환 중 고정 (움직임 없음) */
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header),
+  ::view-transition-old(site-footer),
+  ::view-transition-new(site-footer) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-group(site-header),
+  ::view-transition-group(site-footer) {
+    animation-duration: 0s;
+  }
+
   /* work-card-* 모프: 목록 카드 → 상세 헤더 카드 */
   ::view-transition-group(work-card-doldeuls-forest),
   ::view-transition-group(work-card-gitsunmin-github-io),
@@ -496,7 +509,7 @@
 @keyframes vt-fade-slide-in {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(10px);
   }
 }
 

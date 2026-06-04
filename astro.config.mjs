@@ -8,6 +8,10 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://gitsunmin.github.io',
   base: '/',
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
