@@ -30,97 +30,21 @@ Response ←                                                                    
 
 **versionCheckLink** — 서버 응답 헤더의 배포 버전과 현재 클라이언트 버전을 비교합니다. 불일치 시 CDN을 추가로 조회하여 "클라이언트 갱신 필요"와 "백엔드 배포 문제"를 구분합니다.
 
-**errorLink** — GraphQL 에러 유형별로 공통 처리를 중앙화했습니다.
-
-| 에러 유형 | 처리 |
-|-----------|------|
-| 토큰 만료 | localStorage의 인증 파라미터로 자동 재로그인 |
-| 상품 마감·삭제 | 호출 지점에서 개별 처리 (pass-through) |
-| 배송 불가 요일 | 서버 메시지를 그대로 Alert 표시 |
-| 비활성 거래처 | 안내 후 로그아웃 |
-| 기타 | 서버 메시지 Alert 표시 |
+**errorLink** — GraphQL 에러 유형별로 공통 처리를 중앙화했습니다. 토큰 만료 시 자동 재로그인, 비활성 계정 안내 후 로그아웃 등 에러 코드별 처리를 파이프라인에서 일관되게 처리합니다.
 
 ### 3. 유통사별 가격 표기 시스템
 
-거래처마다 부가세 표시 방식과 금액 반올림 단위가 다릅니다. 서버가 `vendorEnvironment`로 내려주는 코드(`vatDisplayCode`, `sumAmountDisplayCode` 등)를 프론트엔드 계산 로직에 적용합니다.
-
-```typescript
-// utils/calc/valueAddedTax.ts
-// 부가세 포함가 → 부가세 별도가 변환
-export const getExcludeVATFromIncludeVAT = (price: number): number =>
-  roundTwoExceptionZero(price / 1.1);
-
-// vatDisplayCode에 따라 실제 표시 단가 결정
-export const getItemUnitPriceApplyVat = (
-  price: number,
-  { taxClassificationCode, vatDisplayCode }
-): number => {
-  if (taxClassificationCode === 'EXCP') return price;                         // 면세: 그대로
-  if (vatDisplayCode === 'SEPARATE') return getExcludeVATFromIncludeVAT(price); // 별도: /1.1
-  return price;                                                               // 포함: 그대로
-};
-```
-
-금액 반올림은 서버가 지정한 13가지 표기법 코드(`R_P0`, `T_P0`, `R_0P` 등)를 `applyNotation`이 해석합니다.
-
-```typescript
-// utils/calc/notation.ts
-export const applyNotation = (value: number, notation: NumDisplaySet): number => {
-  switch (notation) {
-    case 'R_P0':  return Math.round(value);             // 1원 단위 반올림
-    case 'T_P0':  return Math.floor(value);             // 1원 단위 버림
-    case 'R_0P':  return Math.round(value / 10) * 10;   // 10원 단위 반올림
-    case 'T_00P': return Math.floor(value / 100) * 100; // 100원 단위 버림
-    // ... 총 13가지
-  }
-};
-```
+거래처마다 부가세 표시 방식과 금액 반올림 단위가 다릅니다. 서버가 내려주는 환경 설정 코드를 프론트엔드 계산 로직에 적용하여, 유통사별로 다른 정책(부가세 포함/별도, 원 단위/10원 단위 반올림 등)을 클라이언트에서 처리합니다.
 
 `Big.js`로 모든 금액 연산을 처리하여 부동소수점 오차를 원천 차단합니다.
-
-```typescript
-// utils/calc/numberDisplay.ts
-const numberDisplayFormat = (code: DisplayFormat, value: number) => {
-  let result = new Big(value);
-  switch (code) {
-    case 'R_P0':   result = result.round(0, Big.roundHalfUp); break;
-    case 'T_P0':   result = result.round(0, Big.roundDown);   break;
-    case 'R_P000': result = result.round(2, Big.roundHalfUp); break;
-    // ...
-  }
-  return result.toNumber();
-};
-```
 
 ### 4. 주문 수량 유효성 검증
 
 상품마다 최소 주문 수량, 최대 일별 주문 수량, 재고 한도를 프론트엔드에서 독립적으로 검증합니다. 서버 왕복 없이 즉각 피드백을 주고, 최종 제출 시 서버에서 한 번 더 검증하는 이중 구조입니다.
 
-```typescript
-// utils/calc/quantity.ts
-export const isOverMaxOrderQuantity = ({ maxOrderQuantity, itemOrderQuantity, dayOrderQuantity = 0 }) => {
-  if (maxOrderQuantity && maxOrderQuantity - dayOrderQuantity < itemOrderQuantity) return true;
-  return false;
-};
-
-export const checkStockQuantity = ({ itemOrderQuantity, itemStockQuantity, isStock0Permission, isStockDisregard }) => {
-  if (isStock0Permission || isStockDisregard) return false; // 재고 초과 허용 설정
-  return itemStockQuantity < itemOrderQuantity;
-};
-```
-
 ### 5. 주문 마감 시간 클라이언트 검증
 
-`isClosingOrderDate`로 각 상품의 주문 마감 시간을 클라이언트에서 먼저 검증합니다. 마감된 상품은 장바구니에서 "주문 가능 상품"과 분리하여 별도 섹션으로 표시합니다.
-
-```typescript
-// utils/calc/date.ts
-export const isClosingOrderDate = ({ itemOrderClosingDate }: { itemOrderClosingDate: string }): boolean => {
-  if (itemOrderClosingDate === undefined) return false; // 이력 조회 등 마감일 없는 경우
-  const fmt = 'YYYY-MM-DD HH:mm:ss';
-  return moment().format(fmt) > moment(itemOrderClosingDate).format(fmt);
-};
-```
+각 상품의 주문 마감 시간을 클라이언트에서 먼저 검증합니다. 마감된 상품은 장바구니에서 "주문 가능 상품"과 분리하여 별도 섹션으로 표시합니다.
 
 ### 6. 서비스 워커 (Workbox)
 
@@ -175,36 +99,16 @@ registerRoute(
 ```
 거래처 주문 앱 (Nuxt.js 2 SPA)
 │
-├── middleware/
-│   ├── auth.ts          → URL 쿼리 파라미터 인증 / JWT 갱신
-│   ├── agent.ts         → UA 기반 모바일·PC 분기
-│   ├── serviceNotice.ts → 전체 공지 체크
-│   └── datadog.ts       → Datadog RUM 초기화 (idempotent)
+├── middleware/     → 인증·UA 분기·공지 체크·모니터링 초기화
 │
-├── apollo/link/
-│   ├── authLink         → Bearer 토큰 주입
-│   ├── versionCheckLink → CDN 이중 버전 검증
-│   ├── logLink          → 쿼리명·변수 로깅
-│   ├── errorLink        → 에러 코드별 공통 처리
-│   └── httpLink         → GraphQL 엔드포인트
+├── apollo/link/    → 인증·버전 체크·로깅·에러 처리 파이프라인
 │
-├── store/ (Vuex, 10개 모듈)
-│   ├── global           → isReload 플래그, Datadog 초기화 여부
-│   ├── vendorEnvironment → vatDisplayCode, sumAmountDisplayCode, 마감시간, 배송요일
-│   ├── orderCommon      → currentDeliveryRequestDate (배송 요청일)
-│   ├── transactionBook  → 거래내역 날짜 범위 필터
-│   └── ...
+├── store/ (Vuex)   → 유통사 환경 설정·주문 상태·거래내역 필터
 │
-├── utils/calc/
-│   ├── valueAddedTax.ts → VAT 포함/별도 변환
-│   ├── price.ts         → 합계금액·부가세·공급가액 계산
-│   ├── notation.ts      → 서버 코드 기반 반올림/버림 전략
-│   ├── numberDisplay.ts → Big.js 기반 금액 표시
-│   ├── quantity.ts      → 최소·최대·재고 수량 검증
-│   └── date.ts          → 주문 마감 시간 클라이언트 검증
+├── utils/calc/     → 금액 계산·수량 검증·날짜 처리
 │
 └── Flutter WebView Shell (별도 레포)
-    └── window.nativeBridge (JS Bridge)
+    └── JS Bridge
 ```
 
 ## 주요 화면 & 도메인

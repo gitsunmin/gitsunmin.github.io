@@ -1,11 +1,11 @@
 ---
-title: 디자인 시스템 (BoronUI)
+title: 사내 디자인 시스템
 draft: false
 ---
 
 ## 이 레포의 역할
 
-유통사 전용 앱을 위한 React 컴포넌트 라이브러리입니다. `@marketboro/boronui`라는 npm 패키지로 배포되며, ESM·CJS 듀얼 빌드를 지원합니다.
+유통사 전용 앱을 위한 React 컴포넌트 라이브러리입니다. 사내 npm 패키지로 배포되며, ESM·CJS 듀얼 빌드를 지원합니다.
 
 ## 배경 & 문제 의식
 
@@ -26,19 +26,7 @@ draft: false
 
 초기에는 MUI를 내부 의존성으로 사용했으나, 번들 크기 최적화를 위해 MUI를 Emotion 기반의 자체 테마 시스템을 전환했습니다. 소비측 서비스는 `BoronThemeProvider`로 감싸기만 하면 전체 스타일이 자동 적용됩니다.
 
-```tsx
-// 소비측 사용 예시
-import { BoronThemeProvider, Button, DatePicker } from '@marketboro/boronui';
-
-function App() {
-  return (
-    <BoronThemeProvider>
-      <Button variant="primary">발주 확인</Button>
-      <DatePicker value={date} onChange={setDate} />
-    </BoronThemeProvider>
-  );
-}
-```
+소비측 서비스는 `ThemeProvider`로 앱을 감싸기만 하면 전체 스타일이 자동 적용되는 구조로 설계했습니다. 버튼, DatePicker 등 컴포넌트를 선언적으로 사용할 수 있습니다.
 
 ### Storybook 문서화
 
@@ -46,7 +34,7 @@ function App() {
 
 ### npm 패키지 배포 및 버전 관리
 
-Semantic Versioning으로 패키지를 관리합니다(현재 v0.1.36). 브레이킹 체인지 없는 업데이트는 패치·마이너 버전을, API 변경이 있으면 메이저 버전을 올려 소비측 서비스가 안전하게 업데이트 시점을 결정할 수 있습니다.
+Semantic Versioning으로 패키지를 관리합니다. 브레이킹 체인지 없는 업데이트는 패치·마이너 버전을, API 변경이 있으면 메이저 버전을 올려 소비측 서비스가 안전하게 업데이트 시점을 결정할 수 있습니다.
 
 ### ESM·CJS 듀얼 빌드
 

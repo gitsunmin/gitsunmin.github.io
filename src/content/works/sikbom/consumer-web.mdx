@@ -5,7 +5,7 @@ draft: false
 
 ## 이 레포의 역할
 
-음식점 사장님이 식자재를 검색·비교하고 발주하는 메인 소비자 채널입니다. 레거시 PHP 웹을 기능 단위로 Next.js로 전환하는 마이그레이션 목표지로, 두 서비스를 동시에 운영하면서 AWS CloudFront의 path 규칙으로 Next.js 라우팅과 PHP 라우팅을 분기 처리합니다. (예: `/search` → Next.js, `/seller/*/` → PHP)
+음식점 사장님이 식자재를 검색·비교하고 발주하는 메인 소비자 채널입니다. 레거시 PHP 웹을 기능 단위로 Next.js로 현대화한 프로젝트로, CDN 레벨 라우팅을 활용해 신·구 서비스를 병행 운영하면서 점진적으로 전환했습니다.
 
 {/* 총 1,996개의 커밋을 작성하며, 587개 컴포넌트·34개 페이지로 구성된 대규모 프로덕션 서비스를 공동 개발했습니다. */}
 
@@ -81,20 +81,9 @@ src/components/
 
 ## 커스텀 개발 도구
 
-코드 품질과 팀 생산성을 위해 Bun 기반 자동화 스크립트를 프로젝트 내에서 운영합니다.
+코드 품질과 팀 생산성을 위해 Bun 기반 자동화 스크립트를 프로젝트 내에서 직접 제작하여 운영했습니다. 미사용 모듈 탐지, GraphQL 스키마 변경 영향도 분석, 환경 변수 포맷 검증, 파일명 규칙 감지 등을 자동화했습니다.
 
-| 스크립트 | 역할 |
-|---------|------|
-| `deadModuleDetector` | 사용되지 않는 모듈 탐지 |
-| `schemaImpactTracker` | GraphQL 스키마 변경 영향도 분석 |
-| `impactTracker` | 코드 변경이 영향을 주는 컴포넌트 범위 분석 |
-| `envFormatChecker` | 환경 변수 포맷 검증 |
-| `fileNameConvention` | 파일명 규칙 위반 감지 |
-
-**커스텀 ESLint 플러그인**:
-- `eslint-plugin-relay`: Relay fragment 규칙 강제
-- `eslint-plugin-strict-pattern-matching`: ts-pattern 엄격 사용 강제
-- `eslint-plugin-no-boolean-ts-pattern`: 불린 패턴 매칭 경고
+커스텀 ESLint 플러그인도 제작하여 Relay fragment 규칙 강제, ts-pattern 엄격 사용 강제 등 팀 코드 규칙을 자동으로 적용했습니다.
 
 ## 기술 선택 이유
 

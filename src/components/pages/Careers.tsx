@@ -16,6 +16,24 @@ import {
   useState,
 } from 'react';
 
+// --- Helpers ---
+
+const getInitials = (name: string): string => {
+  const cleaned = name.replace(/^\(주\)\s*/, '');
+  return cleaned.slice(0, 2);
+};
+
+const LogoFallback = ({ name, className }: { name: string; className?: string }) => (
+  <div
+    className={cn(
+      'flex items-center justify-center rounded-xl bg-muted border border-border/50 font-semibold text-muted-foreground text-sm select-none',
+      className,
+    )}
+  >
+    {getInitials(name)}
+  </div>
+);
+
 // --- Module-level constants ---
 
 const VISIBLE_CAREERS = Career.filter((c) => !c.isDraft);
@@ -349,15 +367,22 @@ const CareerCard = ({
               {/* 헤더 */}
               <div className="flex items-start gap-4">
                 <div className="shrink-0">
-                  <img
-                    src={career.logo}
-                    alt={`${career.name} 로고`}
-                    className={cn(
-                      'size-12 md:size-14 rounded-xl border border-border/50 object-contain bg-white p-1',
-                      'transition-all duration-300 ease-out',
-                      'group-hover:scale-105 group-hover:shadow-md',
-                    )}
-                  />
+                  {career.logo ? (
+                    <img
+                      src={career.logo}
+                      alt={`${career.name} 로고`}
+                      className={cn(
+                        'size-12 md:size-14 rounded-xl border border-border/50 object-contain bg-white p-1',
+                        'transition-all duration-300 ease-out',
+                        'group-hover:scale-105 group-hover:shadow-md',
+                      )}
+                    />
+                  ) : (
+                    <LogoFallback
+                      name={career.name}
+                      className="size-12 md:size-14 transition-all duration-300 ease-out group-hover:scale-105 group-hover:shadow-md"
+                    />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h2 className="text-lg md:text-xl font-bold text-foreground tracking-tight">
@@ -444,11 +469,6 @@ const CareerCard = ({
                             'transition-all duration-200',
                           )}
                         >
-                          <img
-                            src={work.icon}
-                            alt={work.title}
-                            className="size-6 rounded object-contain bg-white border border-border/40 shrink-0 p-0.5"
-                          />
                           <div className="min-w-0 flex-1">
                             <p className="text-xs font-medium text-foreground truncate group-hover/work:text-primary transition-colors duration-200">
                               {work.title}

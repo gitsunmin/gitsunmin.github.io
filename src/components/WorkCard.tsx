@@ -20,6 +20,19 @@ import { useInView } from '@/hooks/useInView';
 import { GithubIcon } from '@/lib/brandIcons';
 import { cn } from '@/lib/utils';
 
+const getInitials = (name: string): string => name.replace(/^\(주\)\s*/, '').slice(0, 2);
+
+const WorkIconFallback = ({ title, className }: { title: string; className?: string }) => (
+  <div
+    className={cn(
+      'flex items-center justify-center rounded-xl bg-muted border border-border/40 font-semibold text-muted-foreground text-sm select-none',
+      className,
+    )}
+  >
+    {getInitials(title)}
+  </div>
+);
+
 const COMPANY_LABELS: Record<string, string> = {
   seonhamlabs: '선함연구소',
   marketboro: '마켓보로',
@@ -75,15 +88,22 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         {/* 헤더 행 */}
         <div className="flex items-start justify-between pb-2">
           <div className="flex items-center justify-between gap-2.5 ">
-            <img
-              src={work.icon}
-              alt={`${work.title} 아이콘`}
-              className={cn(
-                'size-10 rounded-xl object-contain bg-white border border-border/40 shrink-0 p-1',
-                'shadow-sm shadow-black/10',
-                'group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out',
-              )}
-            />
+            {work.icon ? (
+              <img
+                src={work.icon}
+                alt={`${work.title} 아이콘`}
+                className={cn(
+                  'size-10 rounded-xl object-contain bg-white border border-border/40 shrink-0 p-1',
+                  'shadow-sm shadow-black/10',
+                  'group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out',
+                )}
+              />
+            ) : (
+              <WorkIconFallback
+                title={work.title}
+                className="size-10 shadow-sm shadow-black/10 group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out"
+              />
+            )}
             <div className="min-w-0">
               <h2
                 className={cn(
