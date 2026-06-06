@@ -136,6 +136,10 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
           <Calendar className="size-4" />
           <div className='text-sm h-fit flex items-center'>{work.range}</div>
         </div>
+        <div className="flex items-baseline justify-start gap-2 text-muted-foreground pb-2">
+          <Calendar className="size-4" />
+          <div className='text-sm h-fit flex items-center'>{work.range}</div>
+        </div>
 
         {/* 설명 */}
         <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1">
@@ -146,7 +150,10 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         {work.subRepos && work.subRepos.length > 0 && (
           <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1">
             <Layers className="size-4" />
-            <span>{work.subRepos.length}개 레포지토리</span>
+            <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1">
+              <Layers className="size-4" />
+              <span>{work.subRepos.length}개 레포지토리</span>
+            </div>
           </div>
         )}
 
