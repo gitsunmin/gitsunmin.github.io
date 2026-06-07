@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="ko"> <head><script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('darkMode');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'true' || (saved === null && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script><script>
+      document.addEventListener('astro:before-swap', function (e) {
+        if (document.documentElement.classList.contains('dark')) {
+          e.newDocument.documentElement.classList.add('dark');
+        } else {
+          e.newDocument.documentElement.classList.remove('dark');
+        }
+      });
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>a2ui - TIL - Gitsunmin | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/til/ai/a2ui/"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="a2ui - TIL - Gitsunmin | Gitsunmin"><meta property="og:description" content="Gitsunmin's website | 김선민의 웹사이트"><meta property="og:type" content="website"><meta property="og:url" content="https://gitsunmin.github.io/til/ai/a2ui/"><meta property="og:image" content="https://gitsunmin.github.io/og/til/ai/a2ui.png"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="a2ui - TIL - Gitsunmin | Gitsunmin"><meta name="twitter:description" content="Gitsunmin's website | 김선민의 웹사이트"><meta name="twitter:image" content="https://gitsunmin.github.io/og/til/ai/a2ui.png"><!-- JSON-LD Structured Data --><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CHCGLXSCJN');
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Co4N1b0E.js"></script><link rel="stylesheet" href="/_astro/utils.Dtmw95bw.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><script type="module" src="/_astro/page.BB_G4N2h.js"></script><style>[data-astro-transition-scope="astro-5kv4pklq-1"] { view-transition-name: site-header; }@layer astro { ::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bxrvaivx-2"] { view-transition-name: site-footer; }@layer astro { ::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(c,s,d)=>s in c?g(c,s,{enumerable:!0,configurable:!0,writable:!0,value:d}):c[s]=d;var l=(c,s,d)=>w(c,typeof s!="symbol"?s+"":s,d);var E=new Set(["__proto__","constructor","prototype"]);{let c={0:t=>y(t),1:t=>d(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(d(t)),5:t=>new Set(d(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in c?c[p](e):void 0},d=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let n=this.querySelectorAll("astro-slot"),r={},i=this.querySelectorAll("template[data-astro-template]");for(let o of i){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of n){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let a=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(a+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${a}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,r,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),n.disconnect(),this.childrenConnectedCallback()},n=new MutationObserver(()=>{var r;((r=this.lastChild)==null?void 0:r.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});n.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let n=new URL(e,document.baseURI),r=`astro-retry=${Date.now()}`,i=n.hash.replace(/^#/,"");return n.hash=i?`${i}&${r}`:r,n.toString()}async importWithRetry(e){try{return await import(e)}catch(n){return await new Promise(r=>setTimeout(r,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let n=this.getAttribute("component-url"),r=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:n}});this.dispatchEvent(r)&&console.error(`[astro-island] Error hydrating ${n}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),n=this.getAttribute("client");if(Astro[n]===void 0){window.addEventListener(`astro:${n}`,()=>this.start(),{once:!0});return}try{await Astro[n](async()=>{let r=this.getAttribute("renderer-url");try{let[i,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),r?this.importWithRetry(r):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=i;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=i[h]}return this.hydrator=u,this.hydrate}catch(i){return this.handleHydrationError(i),()=>{}}},e,this)}catch(r){this.handleHydrationError(r)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="2bsdcc" prefix="r5" component-url="/_astro/LivingBackground.Bj2MzXD6.js" component-export="LivingBackground" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;LivingBackground&quot;,&quot;value&quot;:true}" await-children><div aria-hidden="true" class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index:-1"><div class="living-bg-blob living-bg-blob-1"></div><div class="living-bg-blob living-bg-blob-2"></div><div class="living-bg-blob living-bg-blob-3"></div><div class="living-bg-grid absolute inset-0"></div><canvas class="absolute inset-0"></canvas><canvas class="absolute inset-0"></canvas></div><!--astro:end--></astro-island> <astro-island uid="Z1qBxbc" prefix="r131" component-url="/_astro/Providers.DdHLk1vY.js" component-export="Providers" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="Z2vseYF" prefix="r3" component-url="/_astro/Header.eENPaFPQ.js" component-export="Header" renderer-url="/_astro/client.CS0MyPN4.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;],&quot;data-astro-transition-persist&quot;:[0,&quot;site-header&quot;],&quot;data-astro-transition-scope&quot;:[0,&quot;astro-5kv4pklq-1&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" data-astro-transition-scope="astro-5kv4pklq-1" data-astro-transition-persist="site-header" await-children><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">TIL</h1></span></a><a href="/settings" aria-label="설정" class="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></a></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 pt-16 pb-4 md:pt-24 md:pb-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><nav class="flex items-center gap-1 text-sm text-muted-foreground mb-8 flex-wrap"><a href="/til/README" class="hover:text-foreground transition-colors duration-150">TIL</a><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right shrink-0" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg><span class="capitalize text-muted-foreground">ai</span><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right shrink-0" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg><span class="text-foreground font-medium truncate max-w-[16rem] md:max-w-none">a2ui</span></nav><div class="til-detail-enter"> <article class="prose dark:prose-invert max-w-none"> <h1 id="a2uiagent-driven-user-interfaces" class="text-4xl font-bold text-foreground mb-4 w-full">A2UI(Agent-Driven User Interfaces)</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">최근 AI를 서비스에 도입하면서 단순한 텍스트 챗봇을 넘어, AI가 상황에 맞는 화면(UI)을 직접 생성해 주는 ‘Generative UI’에 대한 관심이 뜨겁다. 하지만 AI가 직접 HTML이나 JavaScript 코드를 짜서 클라이언트에 내려보내는 것은 보안상으로도, 유지보수 측면에서도 최악의 수다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">오늘 학습한 A2UI(Agent-Driven User Interfaces)는 바로 이 지점에서 “AI의 지능”과 “프론트엔드의 렌더링”을 가장 안전하고 효율적으로 이어주는 강력한 통신 프로토콜이다.</p>
+<h2 id="1-a2ui의-진짜-정체-ai가-아니다-파이프라인이다" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">1. A2UI의 진짜 정체: AI가 아니다, ‘파이프라인’이다</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">가장 먼저 짚고 넘어가야 할 오해는 “A2UI 자체는 AI 모델(LLM)이 아니다”라는 점이다.
+A2UI는 텍스트를 이해하고 답변을 추론하는 지능이 아니라, AI가 만들어낸 결과물을 클라이언트(React, Flutter 등)가 이해하고 화면에 그릴 수 있도록 규격화한 ‘공용 UI 통신 규격이자 렌더링 도구 모음’이다.</p>
+<h3 id="-전체-데이터-플로우" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">🔄 전체 데이터 플로우</h3>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>사용자 요청:</strong> “평점 4점 이상 근처 식당 보여줘”</li>
+<li class="mb-2 ml-0"><strong>에이전트(AI)의 UI 생성:</strong> 모델이 응답을 분석하고 화면을 구성할 요소들을 <strong>A2UI 규격의 JSON</strong>으로 스트리밍한다.</li>
+<li class="mb-2 ml-0"><strong>클라이언트 렌더링:</strong> 프론트엔드는 이 JSON 데이터를 받아 미리 정의해둔 네이티브 UI 컴포넌트(카드, 지도 등)로 조립해 화면에 띄운다.</li>
+<li class="mb-2 ml-0"><strong>액션 피드백:</strong> 사용자가 화면에서 버튼을 누르면 이 이벤트(Action)가 다시 AI에게 전달되어 다음 대화를 이어간다.</li>
+</ol>
+<h2 id="2-왜-코드가-아니라-json인가-핵심-철학" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">2. 왜 코드가 아니라 JSON인가? (핵심 철학)</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">AI가 <code>&lt;div&gt;</code> 같은 태그나 동작 코드를 직접 보내지 않고, 컴포넌트의 타입과 데이터만 담긴 ‘JSON’을 보내는 데에는 강력한 이유가 있다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>보안 (Secure by Design):</strong> 외부에서 임의의 실행 코드가 주입되는(XSS 등) 위험을 원천 차단한다. 앱에 미리 정의되지 않은 비정상적인 UI나 악성 스크립트는 절대 실행될 수 없다.</li>
+<li class="mb-2 ml-0"><strong>프레임워크 독립성 (Framework-Agnostic):</strong> AI는 오직 <code>{&quot;type&quot;: &quot;button&quot;}</code>과 같이 ‘무엇’을 그릴지만 지시한다. 이것을 React로 그릴지, iOS 네이티브로 그릴지(‘어떻게’ 그릴지)는 전적으로 클라이언트의 자유다.</li>
+</ul>
+<h2 id="3-스트리밍-렌더링을-위한-천재적-발상-평면적-구조-adjacency-list-model" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">3. 스트리밍 렌더링을 위한 천재적 발상: 평면적 구조 (Adjacency List Model)</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">대형 언어 모델(LLM)은 답변을 한 번에 주지 않고 타자를 치듯 스트리밍(Streaming)으로 내려보낸다. 점진적 렌더링(Progressive Rendering)을 통해 사용자 경험(UX)을 극대화하려면 UI 역시 도착하는 즉시 그려져야 한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">하지만 일반적인 <strong>중첩된(Nested) 트리 구조의 JSON</strong>은 치명적인 단점이 있다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="json" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">// ❌ 일반적인 방식: 스트리밍 중 괄호가 안 닫히면 전체 에러 발생!</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  &quot;type&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;card&quot;</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  &quot;children&quot;</span><span style="color:#E1E4E8">: [ { </span><span style="color:#79B8FF">&quot;type&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;title&quot;</span><span style="color:#E1E4E8"> } ]</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이를 해결하기 위해 A2UI는 데이터를 트리 구조가 아닌 <strong>평면적인 인접 리스트(Flat Adjacency List) 구조</strong>로 쪼개어 전송한다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="json" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">// ✅ A2UI 방식: 레고 블록에 번호표만 붙여서 하나씩 던지기</span></span>
+<span class="line"><span style="color:#E1E4E8">[</span></span>
+<span class="line"><span style="color:#E1E4E8">  { </span><span style="color:#79B8FF">&quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;block-1&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;type&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;card&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;parentId&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;root&quot;</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">  { </span><span style="color:#79B8FF">&quot;id&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;block-2&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;type&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;title&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">&quot;parentId&quot;</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">&quot;block-1&quot;</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">AI는 괄호의 깊이를 계산할 필요 없이 리스트에 아이템을 하나씩 추가하기만 하면 되고, 프론트엔드는 조각이 도착하는 즉시 해당 <code>parentId</code>를 찾아 화면의 제자리에 끼워 넣는다. 스트리밍 환경에서 파싱 에러를 막고 실시간 렌더링을 가능하게 하는 핵심 기술이다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>💡 A2UI Composer의 역할</strong>
+개발자가 이 평면적 JSON 문법을 모두 외워서 AI를 프롬프팅 할 필요는 없다. A2UI Composer라는 시각적 노코드 툴을 사용해 화면을 배치하면, 이 평면적 JSON 구조를 자동 생성해 준다. 이를 복사해 AI의 시스템 프롬프트(Few-Shot)에 넣기만 하면 AI 학습이 끝난다.</p>
+</blockquote>
+<h2 id="4-프론트엔드에서의-실제-동작-catalog와-renderer" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">4. 프론트엔드에서의 실제 동작: Catalog와 Renderer</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">이론을 알았으니 실제 코드(React 기준)에서 어떻게 적용되는지 살펴보자. 프론트엔드 개발자가 할 일은 매우 단순해진다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>1) 카탈로그(Catalog) 만들기</strong>
+AI가 내려주는 텍스트(<code>type</code>)와 내가 직접 만든 네이티브 UI 컴포넌트를 짝지어주는 ‘사전’을 정의한다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="tsx" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { CustomCard, ActionButton } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;./components&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> myCatalog</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">  &quot;restaurant-card&quot;</span><span style="color:#E1E4E8">: CustomCard,</span></span>
+<span class="line"><span style="color:#9ECBFF">  &quot;button&quot;</span><span style="color:#E1E4E8">: ActionButton</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span>
+<span class="line"></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>2) A2UI Renderer 배치</strong>
+복잡한 스트리밍 파싱이나 트리 구조 재조립 로직은 모두 A2UI 라이브러리(<code>&lt;A2uiRenderer /&gt;</code>)가 알아서 처리한다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="tsx" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { A2uiRenderer } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> &#39;@a2ui/react&#39;</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> default</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> ChatScreen</span><span style="color:#E1E4E8">({ </span><span style="color:#FFAB70">aiStreamData</span><span style="color:#E1E4E8"> }) {</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">    &lt;</span><span style="color:#79B8FF">A2uiRenderer</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#B392F0">      catalog</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{myCatalog} </span></span>
+<span class="line"><span style="color:#B392F0">      messages</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{aiStreamData} </span><span style="color:#6A737D">// AI가 실시간으로 쏴주는 평면적 JSON 조각들</span></span>
+<span class="line"><span style="color:#B392F0">      onAction</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{(</span><span style="color:#FFAB70">event</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=&gt;</span><span style="color:#E1E4E8"> { </span><span style="color:#B392F0">sendToAi</span><span style="color:#E1E4E8">(event); }}</span></span>
+<span class="line"><span style="color:#E1E4E8">    /&gt;</span></span>
+<span class="line"><span style="color:#E1E4E8">  );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">도착한 JSON의 데이터(예: <code>label</code>, <code>rating</code> 등)는 매핑된 컴포넌트의 <strong>Props</strong>로 그대로 주입된다.</p>
+<h2 id="5-결론-언제-도입해야-할까" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">5. 결론: 언제 도입해야 할까?</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">A2UI는 1인 개발자나 프론트엔드 리소스가 한정된 상황에서 엄청난 레버리지가 될 수 있다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>👍 권장되는 상황:</strong></p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full">사용자 의도에 따라 화면이 계속 변하는 다이나믹 폼(Dynamic Form)이나 대화형 AI 어시스턴트를 만들 때.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full">“이 상황엔 A화면, 저 상황엔 B화면”이라는 수많은 라우팅/상태 관리 로직을 하드코딩하기 벅찰 때. (컴포넌트만 만들어두고 화면 배치는 AI에게 위임)</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full">빠른 MVP 검증이 필요한 서비스.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>👎 피해야 할 상황:</strong></p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full">상호작용이 없는 정적인 블로그나 랜딩 페이지.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full">초정밀 애니메이션이나 결제/보안처럼 100% 결정론적(Deterministic)이고 엄격한 흐름 제어가 필요한 시스템.</p>
+</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>오늘의 깨달음:</strong> A2UI는 단순한 라이브러리가 아니라 프론트엔드 아키텍처의 패러다임을 바꿀 수 있는 개념이다. 프론트엔드는 본연의 ‘컴포넌트 디자인과 퀄리티’에 집중하고, 복잡한 비즈니스 로직과 화면 분기처리는 AI 에이전트에게 넘기는 우아한 역할을 분담할 수 있게 되었다.</p> </article> </div></div>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island></body></html>
