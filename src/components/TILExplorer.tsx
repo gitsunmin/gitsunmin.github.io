@@ -1,6 +1,7 @@
-import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronRight, FileText, Folder } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
 
 type CategoryEntry = { url: string; title: string };
 type Category = { category: string; entries: CategoryEntry[] };
@@ -10,16 +11,51 @@ type Props = {
   totalCount: number;
 };
 
+const resolveUrlCategory = (categories: Category[]): string | null => {
+  if (typeof window === 'undefined') return null;
+  const cat = new URLSearchParams(window.location.search).get('category');
+  return categories.find((c) => c.category === cat)?.category ?? null;
+};
+
 export const TILExplorer = ({ categories, totalCount }: Props) => {
   const [selectedCategory, setSelectedCategory] = useState(
-    categories[0]?.category ?? '',
+    () => resolveUrlCategory(categories) ?? categories[0]?.category ?? '',
   );
   const [openCategories, setOpenCategories] = useState<Set<string>>(
-    new Set([categories[0]?.category ?? '']),
+    () => new Set([resolveUrlCategory(categories) ?? categories[0]?.category ?? '']),
   );
+  const [highlightedCategory, setHighlightedCategory] = useState<string | null>(
+    () => resolveUrlCategory(categories),
+  );
+
+  const sidebarRef = useRef<HTMLUListElement>(null);
+  const mobileRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const initialHighlight = useRef(highlightedCategory);
+
+  useEffect(() => {
+    const highlighted = initialHighlight.current;
+    if (!highlighted) return;
+
+    const t1 = setTimeout(() => {
+      mobileRefs.current.get(highlighted)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+    const t2 = setTimeout(() => setHighlightedCategory(null), 1800);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, []);
 
   const selectedEntries =
     categories.find((c) => c.category === selectedCategory)?.entries ?? [];
+
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
+    const url = new URL(window.location.href);
+    url.searchParams.set('category', category);
+    window.history.replaceState({}, '', url.toString());
+  };
 
   const toggleMobileCategory = (category: string) => {
     setOpenCategories((prev) => {
@@ -47,54 +83,61 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
       <div className="hidden md:flex gap-8 items-start">
         {/* 좌측 사이드바 */}
         <nav className="w-44 shrink-0 sticky top-24 self-start">
-          <ul className="space-y-0.5">
-            {categories.map(({ category, entries }, index) => (
-              <li key={category}>
-                <button
-                  type='button'
-                  onClick={() => setSelectedCategory(category)}
-                  className={cn(
-                    'w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200',
-                    'hover:bg-accent/60',
-                    selectedCategory === category
-                      ? 'bg-accent text-accent-foreground font-semibold border-l-2 border-primary pl-2.5'
-                      : 'text-muted-foreground',
-                  )}
-                  style={{
-                    animationName: 'til-sidebar-enter',
-                    animationDuration: '300ms',
-                    animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                    animationFillMode: 'both',
-                    animationDelay: `${index * 40}ms`,
-                  }}
-                >
-                  <span className="flex items-center gap-1.5 min-w-0">
-                    <Folder
-                      size={14}
-                      className={cn(
-                        'shrink-0',
-                        selectedCategory === category
-                          ? 'text-primary'
-                          : 'text-muted-foreground',
-                      )}
-                    />
-                    <span className="truncate capitalize">
-                      {category.replace(/_/g, ' ')}
-                    </span>
-                  </span>
-                  <span
+          <ul className="space-y-0.5" ref={sidebarRef}>
+            {categories.map(({ category, entries }, index) => {
+              const isSelected = selectedCategory === category;
+              const isHighlighted = highlightedCategory === category;
+
+              return (
+                <li key={category}>
+                  <button
+                    type="button"
+                    onClick={() => handleSelectCategory(category)}
                     className={cn(
-                      'text-xs px-1.5 py-0.5 rounded-md shrink-0',
-                      selectedCategory === category
-                        ? 'bg-primary/15 text-primary'
-                        : 'bg-muted text-muted-foreground',
+                      'w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm',
+                      'transition-all duration-200',
+                      'hover:bg-accent/60',
+                      isSelected
+                        ? 'bg-accent text-accent-foreground font-semibold border-l-2 border-primary pl-2.5'
+                        : 'text-muted-foreground',
+                      isHighlighted && !isSelected && 'animate-pulse',
                     )}
+                    style={{
+                      animationName: 'til-sidebar-enter',
+                      animationDuration: '300ms',
+                      animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                      animationFillMode: 'both',
+                      animationDelay: `${index * 40}ms`,
+                    }}
                   >
-                    {entries.length}
-                  </span>
-                </button>
-              </li>
-            ))}
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <Folder
+                        size={14}
+                        className={cn(
+                          'shrink-0 transition-all duration-200',
+                          isSelected || isHighlighted
+                            ? 'text-primary scale-110'
+                            : 'text-muted-foreground',
+                        )}
+                      />
+                      <span className="truncate capitalize">
+                        {category.replace(/_/g, ' ')}
+                      </span>
+                    </span>
+                    <span
+                      className={cn(
+                        'text-xs px-1.5 py-0.5 rounded-md shrink-0 transition-all duration-200',
+                        isSelected
+                          ? 'bg-primary/15 text-primary'
+                          : 'bg-muted text-muted-foreground',
+                      )}
+                    >
+                      {entries.length}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -136,6 +179,10 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
                   <span className="group-hover:translate-x-0.5 transition-transform duration-150">
                     {entry.title}
                   </span>
+                  <ChevronRight
+                    size={12}
+                    className="ml-auto text-muted-foreground/0 group-hover:text-muted-foreground/60 transition-all duration-150 -translate-x-1 group-hover:translate-x-0 shrink-0"
+                  />
                 </a>
               </li>
             ))}
@@ -147,13 +194,23 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
       <div className="flex flex-col md:hidden gap-1">
         {categories.map(({ category, entries }) => {
           const isOpen = openCategories.has(category);
+          const isHighlighted = highlightedCategory === category;
+
           return (
             <div
               key={category}
-              className="border border-border rounded-lg overflow-hidden"
+              ref={(el) => {
+                if (el) mobileRefs.current.set(category, el);
+                else mobileRefs.current.delete(category);
+              }}
+              className={cn(
+                'border border-border rounded-lg overflow-hidden',
+                'transition-shadow duration-300',
+                isHighlighted && 'ring-2 ring-primary/40 shadow-md',
+              )}
             >
               <button
-                type='button'
+                type="button"
                 onClick={() => toggleMobileCategory(category)}
                 className={cn(
                   'w-full flex items-center justify-between gap-2 px-4 py-3',
@@ -166,14 +223,17 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
                 <span className="flex items-center gap-2">
                   <Folder
                     size={15}
-                    className={isOpen ? 'text-primary' : 'text-muted-foreground'}
+                    className={cn(
+                      'transition-all duration-200',
+                      isOpen || isHighlighted ? 'text-primary scale-110' : 'text-muted-foreground',
+                    )}
                   />
                   <span className="capitalize">{category.replace(/_/g, ' ')}</span>
                 </span>
                 <span className="flex items-center gap-2">
                   <span
                     className={cn(
-                      'text-xs px-1.5 py-0.5 rounded-md',
+                      'text-xs px-1.5 py-0.5 rounded-md transition-all duration-200',
                       isOpen
                         ? 'bg-primary/15 text-primary'
                         : 'bg-muted text-muted-foreground',
@@ -181,11 +241,13 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
                   >
                     {entries.length}
                   </span>
-                  {isOpen ? (
-                    <ChevronDown size={15} className="text-primary" />
-                  ) : (
-                    <ChevronRight size={15} className="text-muted-foreground" />
-                  )}
+                  <ChevronDown
+                    size={15}
+                    className={cn(
+                      'transition-all duration-300',
+                      isOpen ? 'text-primary rotate-0' : 'text-muted-foreground -rotate-90',
+                    )}
+                  />
                 </span>
               </button>
 
@@ -210,7 +272,13 @@ export const TILExplorer = ({ categories, totalCount }: Props) => {
                           size={13}
                           className="text-muted-foreground shrink-0 group-hover:text-primary transition-colors duration-150"
                         />
-                        {entry.title}
+                        <span className="group-hover:translate-x-0.5 transition-transform duration-150">
+                          {entry.title}
+                        </span>
+                        <ChevronRight
+                          size={12}
+                          className="ml-auto text-muted-foreground/0 group-hover:text-muted-foreground/60 transition-all duration-150 -translate-x-1 group-hover:translate-x-0 shrink-0"
+                        />
                       </a>
                     </li>
                   ))}
