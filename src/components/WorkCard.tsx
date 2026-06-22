@@ -136,10 +136,6 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
           <Calendar className="size-4" />
           <div className='text-sm h-fit flex items-center'>{work.range}</div>
         </div>
-        <div className="flex items-baseline justify-start gap-2 text-muted-foreground pb-2">
-          <Calendar className="size-4" />
-          <div className='text-sm h-fit flex items-center'>{work.range}</div>
-        </div>
 
         {/* 설명 */}
         <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1">
