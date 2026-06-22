@@ -137,6 +137,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
           <div className='text-sm h-fit flex items-center'>{work.range}</div>
         </div>
 
+
         {/* 설명 */}
         <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1">
           {work.description.split('\n')[0]}
