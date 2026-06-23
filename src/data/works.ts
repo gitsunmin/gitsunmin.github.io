@@ -164,7 +164,7 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
       {
         slug: 'vendor-app',
         name: '유통사 전용 앱',
-        description: 'React 기반 웹뷰를 Flutter Shell로 감싼 유통사 전용 하이브리드 앱. BoronUI 디자인 시스템을 기반으로 수주 관리·바코드 환경설정을 담당했습니다.',
+        description: 'React 기반 웹뷰를 네이티브 Shell로 감싼 유통사 전용 하이브리드 앱. BoronUI 디자인 시스템을 기반으로 수주 관리·바코드 환경설정을 담당했습니다.',
         techs: ['React', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Recoil'],
       },
       {

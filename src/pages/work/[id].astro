@@ -89,11 +89,17 @@ const COMPANY_LABELS: Record<string, string> = {
         style={`view-transition-name: work-card-${id}`}
       >
         <div class="flex items-start gap-4 mb-4">
-          <img
-            src={work.icon}
-            alt={`${work.title} 아이콘`}
-            class="size-12 rounded-xl object-contain bg-white border border-border/40 p-1 shrink-0"
-          />
+          {work.icon ? (
+            <img
+              src={work.icon}
+              alt={`${work.title} 아이콘`}
+              class="size-12 rounded-xl object-contain bg-white border border-border/40 p-1 shrink-0"
+            />
+          ) : (
+            <div class="size-12 rounded-xl bg-muted border border-border/40 shrink-0 flex items-center justify-center font-semibold text-muted-foreground text-sm select-none">
+              {work.title.replace(/^\(주\)\s*/, '').slice(0, 2)}
+            </div>
+          )}
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2 flex-wrap mb-1">
               <h1 class="text-xl font-bold text-primary">{work.title}</h1>
