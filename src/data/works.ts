@@ -158,7 +158,7 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
       {
         slug: 'order-app',
         name: '거래처 주문 앱',
-        description: '거래처(음식점)가 모바일·PC에서 식자재를 발주하는 웹 앱. Flutter WebView Shell 안에서 실행되며, PC 버전 신규 개발 및 부가세 금액 계산 로직을 담당했습니다.',
+        description: '거래처(음식점)가 모바일·PC에서 식자재를 발주하는 웹 앱. 네이티브 WebView Shell 안에서 실행되며, PC 버전 신규 개발 및 부가세 금액 계산 로직을 담당했습니다.',
         techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'RealGrid', 'Vuex'],
       },
       {
