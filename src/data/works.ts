@@ -4,6 +4,7 @@ export type WorkCategory = 'service' | 'library' | 'vscode-extension' | 'framewo
 
 export const WORK_IDS = [
   'doldeuls-forest',
+  'namat-deonga',
   'gitsunmin-github-io',
   'k-number',
   'graph-man',
@@ -52,6 +53,22 @@ export const Works: Work[] = [
       { label: '돌들의 숲', url: 'https://forest.seonhamlabs.com' },
     ],
     range: '2025.01 ~',
+    careerId: 'seonhamlabs',
+    isFeatured: true,
+  },
+  {
+    id: 'namat-deonga',
+    title: '남았던가',
+    icon: '/assets/logos/namat-deonga.webp',
+    category: 'service',
+    description: `냉장고 식재료를 사진으로 기록해 음식물 낭비를 줄이는 모바일 앱입니다.
+서버 없이 기기 로컬 스토리지만 사용하는 완전 프라이빗 아키텍처로, 찍고 닫는 2초가 전부입니다.`,
+    techs: ['React Native', 'Expo', 'TypeScript', 'SQLite', 'Zustand', 'Tailwind CSS', 'Astro', 'Turborepo', 'Bun'],
+    links: [
+      { label: 'App Store', url: 'https://apps.apple.com/kr/app/%EB%82%A8%EC%95%98%EB%8D%98%EA%B0%80/id6760313673' },
+      { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.seonhamlabs.namatdeonga&hl=ko' },
+    ],
+    range: '2026.03 ~',
     careerId: 'seonhamlabs',
     isFeatured: true,
   },
