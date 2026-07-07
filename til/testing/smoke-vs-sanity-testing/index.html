@@ -1,0 +1,216 @@
+<!DOCTYPE html><html lang="ko"> <head><script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('darkMode');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'true' || (saved === null && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script><script>
+      document.addEventListener('astro:before-swap', function (e) {
+        if (document.documentElement.classList.contains('dark')) {
+          e.newDocument.documentElement.classList.add('dark');
+        } else {
+          e.newDocument.documentElement.classList.remove('dark');
+        }
+      });
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>smoke vs sanity testing - TIL - Gitsunmin | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/til/testing/smoke-vs-sanity-testing/"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="smoke vs sanity testing - TIL - Gitsunmin | Gitsunmin"><meta property="og:description" content="Gitsunmin's website | 김선민의 웹사이트"><meta property="og:type" content="website"><meta property="og:url" content="https://gitsunmin.github.io/til/testing/smoke-vs-sanity-testing/"><meta property="og:image" content="https://gitsunmin.github.io/og/til/testing/smoke-vs-sanity-testing.png"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="smoke vs sanity testing - TIL - Gitsunmin | Gitsunmin"><meta name="twitter:description" content="Gitsunmin's website | 김선민의 웹사이트"><meta name="twitter:image" content="https://gitsunmin.github.io/og/til/testing/smoke-vs-sanity-testing.png"><!-- JSON-LD Structured Data --><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CHCGLXSCJN');
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Co4N1b0E.js"></script><link rel="stylesheet" href="/_astro/utils.Cd3WBaFc.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><script type="module" src="/_astro/page.BB_G4N2h.js"></script><style>[data-astro-transition-scope="astro-5kv4pklq-1"] { view-transition-name: site-header; }@layer astro { ::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-5kv4pklq-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-5kv4pklq-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bxrvaivx-2"] { view-transition-name: site-footer; }@layer astro { ::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bxrvaivx-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bxrvaivx-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(c,s,d)=>s in c?g(c,s,{enumerable:!0,configurable:!0,writable:!0,value:d}):c[s]=d;var l=(c,s,d)=>w(c,typeof s!="symbol"?s+"":s,d);var E=new Set(["__proto__","constructor","prototype"]);{let c={0:t=>y(t),1:t=>d(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(d(t)),5:t=>new Set(d(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in c?c[p](e):void 0},d=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let n=this.querySelectorAll("astro-slot"),r={},i=this.querySelectorAll("template[data-astro-template]");for(let o of i){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of n){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let a=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(a+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${a}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,r,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),n.disconnect(),this.childrenConnectedCallback()},n=new MutationObserver(()=>{var r;((r=this.lastChild)==null?void 0:r.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});n.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let n=new URL(e,document.baseURI),r=`astro-retry=${Date.now()}`,i=n.hash.replace(/^#/,"");return n.hash=i?`${i}&${r}`:r,n.toString()}async importWithRetry(e){try{return await import(e)}catch(n){return await new Promise(r=>setTimeout(r,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let n=this.getAttribute("component-url"),r=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:n}});this.dispatchEvent(r)&&console.error(`[astro-island] Error hydrating ${n}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),n=this.getAttribute("client");if(Astro[n]===void 0){window.addEventListener(`astro:${n}`,()=>this.start(),{once:!0});return}try{await Astro[n](async()=>{let r=this.getAttribute("renderer-url");try{let[i,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),r?this.importWithRetry(r):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=i;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=i[h]}return this.hydrator=u,this.hydrate}catch(i){return this.handleHydrationError(i),()=>{}}},e,this)}catch(r){this.handleHydrationError(r)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="2bsdcc" prefix="r5" component-url="/_astro/LivingBackground.Bj2MzXD6.js" component-export="LivingBackground" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;LivingBackground&quot;,&quot;value&quot;:true}" await-children><div aria-hidden="true" class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index:-1"><div class="living-bg-blob living-bg-blob-1"></div><div class="living-bg-blob living-bg-blob-2"></div><div class="living-bg-blob living-bg-blob-3"></div><div class="living-bg-grid absolute inset-0"></div><canvas class="absolute inset-0"></canvas><canvas class="absolute inset-0"></canvas></div><!--astro:end--></astro-island> <astro-island uid="Z9G5Kc" prefix="r179" component-url="/_astro/Providers.DdHLk1vY.js" component-export="Providers" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="Z2vseYF" prefix="r3" component-url="/_astro/Header.eENPaFPQ.js" component-export="Header" renderer-url="/_astro/client.CS0MyPN4.js" props="{&quot;title&quot;:[0,&quot;TIL&quot;],&quot;data-astro-transition-persist&quot;:[0,&quot;site-header&quot;],&quot;data-astro-transition-scope&quot;:[0,&quot;astro-5kv4pklq-1&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" data-astro-transition-scope="astro-5kv4pklq-1" data-astro-transition-persist="site-header" await-children><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">TIL</h1></span></a><a href="/settings" aria-label="설정" class="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></a></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">  <div class="px-6 pt-16 pb-4 md:pt-24 md:pb-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto"><nav class="flex items-center gap-1 text-sm text-muted-foreground mb-8 flex-wrap"><a href="/til/README" class="flex items-center gap-1 px-1.5 py-0.5 rounded-md hover:text-foreground hover:bg-accent/60 transition-all duration-150 group"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house shrink-0 group-hover:scale-110 transition-transform duration-150" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>TIL</span></a><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right shrink-0 text-muted-foreground/50" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg><a href="/til/README?category=testing" class="capitalize px-1.5 py-0.5 rounded-md hover:text-foreground hover:bg-accent/60 transition-all duration-150 relative after:absolute after:bottom-0 after:left-1.5 after:right-1.5 after:h-px after:bg-primary/60 after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-200">testing</a><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right shrink-0 text-muted-foreground/50" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg><span class="text-foreground font-medium truncate max-w-[16rem] md:max-w-none px-1.5 py-0.5">smoke vs sanity testing</span></nav><div class="til-detail-enter"> <article class="prose dark:prose-invert max-w-none"> <h1 id="smoke-test-vs-sanity-test" class="text-4xl font-bold text-foreground mb-4 w-full">Smoke Test vs Sanity Test</h1>
+<p class="text-foreground leading-relaxed mb-4 w-full">2026년 7월 7일</p>
+<h3 id="1-개요-및-핵심-요약" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1. 개요 및 핵심 요약</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>한 줄 요약 정의:</strong> 스모크 테스트는 빌드 직후 시스템 전체가 <strong>‘숨이 붙어 있는지’ 넓고 얕게</strong> 확인하는 생존 신고이며, 새니티 테스트는 버그 수정 후 해당 기능이 <strong>‘제정신(Sanity)으로 작동하는지’ 좁고 깊게</strong> 확인하는 집중 검사입니다.</li>
+</ul>
+<h3 id="2-스모크-테스트-smoke-test" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2. 스모크 테스트 (Smoke Test)</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>개념 및 유래 설명</strong></p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>유래:</strong> 하드웨어 수리 과정에서 유래한 용어입니다. 새 회로 기판을 조립한 뒤 전원을 넣었을 때 “연기(Smoke)가 나는가?”를 가장 먼저 확인하는 것에서 출발했습니다. 연기가 난다면 더 이상의 정밀 검사는 무의미하기 때문입니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>개념:</strong> 소프트웨어에서도 마찬가지로, 새로운 빌드가 나왔을 때 본격적인 QA 테스트 환경에 올리기 전 수행합니다. 시스템의 가장 핵심적이고 기본적인 기능들이 죽지 않고 제대로 동작하는지 <strong>‘넓고 얕게(Broad and Shallow)’</strong> 점검하는 빌드 검증(Build Verification) 과정입니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>비유하자면:</strong> 중고차를 살 때 에어컨이나 내비게이션이 잘 되는지 확인하기 전에, <strong>일단 시동부터 걸어보고 엔진이 켜지는지 확인하는 과정</strong>과 같습니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>실무 적용 예시 시나리오</strong></p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>상황:</strong> 배달 앱의 대규모 V2.0 업데이트 빌드가 막 배포되었습니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>시나리오:</strong> 세세한 기능 테스트에 들어가기 전, 다음과 같은 크리티컬 패스(Critical Path)만 빠르게 훑어봅니다.</p>
+</li>
+</ul>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">앱 아이콘을 눌렀을 때 크래시 없이 정상적으로 <strong>앱이 켜지는가?</strong></li>
+<li class="mb-2 ml-0">기존 계정으로 <strong>로그인이 되는가?</strong></li>
+<li class="mb-2 ml-0">메인 화면에 <strong>음식점 리스트가 정상적으로 노출되는가?</strong></li>
+</ol>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>결과:</strong> 만약 앱을 켜자마자 튕긴다면(연기가 난다면), QA팀은 즉각 테스트를 중단하고 개발팀에 빌드를 돌려보냅니다.</li>
+</ul>
+<h3 id="3-새니티-테스트-sanity-test" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">3. 새니티 테스트 (Sanity Test)</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>개념 및 목적 설명</strong></p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>개념:</strong> Sanity(제정신, 온전함)라는 단어 뜻 그대로, 시스템의 특정 부분이 <strong>‘제정신을 차렸는지’</strong> 확인하는 테스트입니다. 주로 자잘한 버그 수정이나 마이너 업데이트 직후에 수행됩니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>목적:</strong> 수정한 코드가 의도한 대로 잘 고쳐졌는지, 그리고 그 수정으로 인해 해당 기능 주변에 다른 문제가 발생하지는 않았는지 <strong>‘좁고 깊게(Narrow and Deep)’</strong> 파고들어 검증합니다. 스크립트에 얽매이기보다는 테스터의 직관과 경험에 의존하여 유연하게 진행되는 경우가 많습니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>비유하자면:</strong> 중고차의 ‘브레이크 패드’를 수리하고 난 뒤의 상황과 같습니다. 시동이 걸리는지(스모크)는 이미 예전에 확인했으니, 차를 끌고 나가 <strong>브레이크만 수십 번 밟아보며 해당 부품이 완벽하게 고쳐졌는지 집중적으로 확인하는 과정</strong>입니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>실무 적용 예시 시나리오</strong></p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>상황:</strong> 배달 앱 결제 단계에서 특정 ‘10% 할인 쿠폰’이 적용되지 않는 버그가 리포트되어, 개발팀이 핫픽스(Hotfix)를 진행했습니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>시나리오:</strong> 전체 앱을 테스트할 필요 없이, 문제가 되었던 ‘쿠폰 결제 기능’만 집중적으로 파고듭니다.</p>
+</li>
+</ul>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">수정한 10% 쿠폰이 정상적으로 <strong>잘 먹히는지 확인</strong>합니다.</li>
+<li class="mb-2 ml-0">중복 할인이 불가능한 쿠폰과 함께 썼을 때 에러를 잘 뱉어내는지 확인합니다.</li>
+<li class="mb-2 ml-0">만료된 쿠폰을 적용했을 때 예외 처리가 잘 되는지 확인합니다.</li>
+</ol>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>결과:</strong> 쿠폰 기능이 완벽하게 동작한다면 새니티 테스트를 통과한 것입니다.</li>
+</ul>
+<h3 id="4-한눈에-보는-핵심-차이점-비교표" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4. 한눈에 보는 핵심 차이점 (비교표)</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">구분</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">스모크 테스트 (Smoke Test)</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">새니티 테스트 (Sanity Test)</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>핵심 목적</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">빌드의 <strong>안정성(생존)</strong> 확인</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">특정 기능의 <strong>합리성(정상 작동)</strong> 확인</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>수행 시점</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>최초 빌드</strong> 직후 (본격적인 QA 이전)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>버그 수정 / 마이너 업데이트</strong> 직후</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>테스트 범위</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">시스템 전체 기능을 <strong>넓게</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">수정된 특정 기능을 <strong>좁게</strong></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>테스트 깊이</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">기능의 동작 여부만 보는 <strong>얕은 깊이</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">예외 상황까지 파고드는 <strong>깊은 깊이</strong></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>스크립트 유무</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">주로 문서화된 스크립트나 자동화 도구 기반</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">테스터의 직관에 의존하는 비스크립트(Unscripted) 기반</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>실무 비유</strong></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">”앱 켜자마자 안 튕기고 잘 켜지나요?&quot;</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">&quot;아까 고친 쿠폰 기능 확실히 잘 고쳐졌나요?“</td></tr></tbody></table></div></div>
+<h3 id="5-오늘의-회고--takeaway" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">5. 오늘의 회고 / Takeaway</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>실무 혼동 방지 팁:</strong> 새로운 환경(New Build)이 주어졌을 때 가장 먼저 해야 하는 것은 스모크(연기 확인)이고, 코드를 고치고 났을 때(Bug Fix) 해당 코드가 멀쩡한지 확인하는 것은 새니티(제정신 확인)라고 기억하자.</li>
+<li class="mb-2 ml-0">QA팀으로 빌드를 넘기기 전, 프론트엔드 개발자로서 로컬에서 내가 짠 코드가 전체 앱을 터뜨리진 않는지(스모크), 방금 수정한 버그가 엣지 케이스에서도 완벽히 동작하는지(새니티) 스스로 검증하는 습관을 들여야겠다.</li>
+</ul>
+<hr/> </article> </div></div>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island></body></html>
