@@ -147,10 +147,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         {work.subRepos && work.subRepos.length > 0 && (
           <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1">
             <Layers className="size-4" />
-            <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1">
-              <Layers className="size-4" />
-              <span>{work.subRepos.length}개 레포지토리</span>
-            </div>
+            <span>{work.subRepos.length}개 레포지토리</span>
           </div>
         )}
 
@@ -165,7 +162,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
 
         {/* 푸터: 외부 링크 */}
         {work.links.length > 0 && (
-          <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border/40 pointer-events-auto">
+          <div className="flex flex-wrap items-center gap-1 mt-3 pt-3 border-t border-border/40 pointer-events-auto">
             {work.links.map(({ label, url }) => {
               const Icon = LINK_ICON_MAP[label] ?? ExternalLink;
               return (
@@ -177,13 +174,16 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
                   title={label}
                   onClick={(e) => e.stopPropagation()}
                   className={cn(
-                    'p-1.5 rounded-md',
+                    'inline-flex items-center gap-1.5 rounded-md',
                     'text-muted-foreground/60 hover:text-foreground',
                     'hover:bg-muted/60 transition-all duration-200',
+                    'px-2 py-1',
                   )}
                 >
-                  <Icon size={14} />
-                  <span className="sr-only">{label}</span>
+                  <Icon size={14} className="shrink-0" />
+                  <span className="text-xs md:max-w-0 md:opacity-0 md:group-hover:max-w-32 md:group-hover:opacity-100 md:overflow-hidden md:transition-all md:duration-300 md:ease-out whitespace-nowrap">
+                    {label}
+                  </span>
                 </a>
               );
             })}
