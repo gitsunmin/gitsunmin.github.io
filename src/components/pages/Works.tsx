@@ -48,7 +48,7 @@ export const WorksPage = () => {
 
   return (
     <Suspense>
-      <div className="w-full md:max-w-(--breakpoint-md) mx-auto pt-16 md:pt-20 px-4 md:px-0 pb-16">
+      <div className="w-full md:max-w-(--breakpoint-md) mx-auto pt-16 md:pt-20 px-4 md:px-0 pb-16 print:pt-0 print:px-0 print:pb-0 print:max-w-none">
         <TechFilterBar
           techs={ALL_TECHS}
           activeFilter={activeFilter}

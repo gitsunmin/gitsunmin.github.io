@@ -527,3 +527,402 @@
     padding-inline-start: 1.5rem;
   }
 }
+
+/* 화면에서는 감추고 인쇄물에만 노출되는 요소 */
+.print-only {
+  display: none;
+}
+
+/* ─── Works 인쇄 스타일 (이력서 양식) ─────────────────────────── */
+@media print {
+  /* 다크 모드로 보고 있어도 인쇄는 항상 라이트 팔레트로 */
+  :root,
+  :root.dark,
+  .dark {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 25%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+  }
+
+  .print-only {
+    display: block;
+  }
+
+  /* 기본 설정: 흰 배경, 검정 텍스트, 배경 제거 */
+  body {
+    background: white !important;
+    background-image: none !important;
+    color: black !important;
+    font-size: 11pt !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 헤더, 푸터, 필터바, 배경 블롭 숨기기 */
+  [style*="view-transition-name: site-header"],
+  [style*="view-transition-name: site-footer"],
+  header,
+  footer,
+  nav,
+  .living-bg-blob,
+  .living-bg-grid,
+  canvas {
+    display: none !important;
+  }
+
+  /* 이미지, 아이콘 숨기기 */
+  [data-print-hide],
+  img,
+  svg {
+    display: none !important;
+  }
+
+  /* 메인 컨테이너: 여백 정리 */
+  main {
+    min-height: auto !important;
+    padding: 0 !important;
+  }
+
+  /* 링크 꾸미기 제거 */
+  a {
+    color: black !important;
+    text-decoration: none !important;
+  }
+
+  /* 그림자, 테두리, 호버 효과, 애니메이션 제거 */
+  * {
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* 카드 레이아웃: 테두리 없이 깔끔하게 */
+  .group.relative.rounded-xl {
+    border: none !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 8pt 0 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 그리드를 1열로 */
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  /* 섹션 헤더: 이력서 스타일 */
+  .work-section-enter {
+    margin-bottom: 4pt !important;
+  }
+
+  .work-section-enter .backdrop-blur-3xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: transparent !important;
+    border-bottom: 2px solid black !important;
+    border-radius: 0 !important;
+    padding: 4pt 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 섹션 레이블: 굵게 */
+  .work-section-enter .tracking-widest {
+    color: black !important;
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  /* 카드 내부 텍스트 */
+  h2 {
+    color: black !important;
+    font-size: 12pt !important;
+  }
+
+  /* 설명 텍스트: 라인 클램프 해제 */
+  .line-clamp-3 {
+    -webkit-line-clamp: unset !important;
+    overflow: visible !important;
+    display: block !important;
+    color: #333 !important;
+  }
+
+  /* 기술 태그: 인라인 텍스트로 */
+  [class*="tech-tag"],
+  .pointer-events-auto .flex.flex-wrap {
+    display: inline !important;
+  }
+
+  /* 외부 링크 영역: URL 표시 */
+  .border-t.border-border\/40 a::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* 서브레포 카운트 */
+  .inline-flex.items-baseline {
+    color: #555 !important;
+  }
+
+  /* 페이지 여백 */
+  @page {
+    margin: 15mm 12mm;
+    size: A4;
+  }
+
+  /* 인쇄 시 불필요한 호버 힌트 화살표 숨기기 */
+  .group-hover\:translate-x-0\.5,
+  .pointer-events-none.size-5 {
+    display: none !important;
+  }
+
+  /* ─── Work 상세 페이지 (/work/[id]) ──────────────────────────── */
+
+  /* 인쇄에 불필요한 UI: 탭바, 하단 힌트, 뒤로가기, 코드 복사 버튼 */
+  [data-work-detail] [data-work-tab-bar],
+  [data-work-detail] .work-print-back,
+  [data-work-detail] .copy-button,
+  .work-next-hint {
+    display: none !important;
+  }
+
+  /* 인터랙티브 스토리 컴포넌트: 인쇄 제외 */
+  [data-work-detail] [data-print-hide] {
+    display: none !important;
+  }
+
+  [data-work-detail] {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 헤더 카드: 이력서 헤더로 평면화 */
+  [data-work-detail] .work-header-card {
+    border: none !important;
+    border-bottom: 2px solid black !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 0 0 6pt !important;
+    margin-bottom: 10pt !important;
+    break-inside: avoid;
+  }
+
+  [data-work-detail] .work-header-card h1 {
+    font-size: 18pt !important;
+    color: black !important;
+  }
+
+  /* 회사 배지 / 기간 */
+  [data-work-detail] .work-print-company {
+    border: none !important;
+    background: transparent !important;
+    color: #444 !important;
+    font-size: 10pt !important;
+    padding: 0 !important;
+  }
+
+  [data-work-detail] .work-print-company::before {
+    content: "— ";
+  }
+
+  /* 기술 태그: 한 줄 텍스트로 */
+  [data-work-detail] .work-print-techs {
+    gap: 0 !important;
+  }
+
+  [data-work-detail] .work-print-techs > span {
+    background: transparent !important;
+    padding: 0 !important;
+    color: #333 !important;
+    font-size: 9.5pt !important;
+  }
+
+  [data-work-detail] .work-print-techs > span + span::before {
+    content: " · ";
+    color: #999;
+  }
+
+  /* 외부 링크: 버튼 대신 URL 텍스트로 */
+  [data-work-detail] .work-print-links {
+    gap: 0 !important;
+    margin-top: 6pt !important;
+    display: block !important;
+  }
+
+  [data-work-detail] .work-print-links a {
+    display: block !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 9pt !important;
+    color: #333 !important;
+  }
+
+  [data-work-detail] .work-print-links a::after {
+    content: " — " attr(href);
+    color: #666;
+    word-break: break-all;
+  }
+
+  /* 모든 탭 콘텐츠를 펼쳐서 순서대로 인쇄 (인라인 display:none 무력화) */
+  [data-work-detail] [data-tab-content] {
+    display: block !important;
+  }
+
+  /* 탭 구분 제목: 서브 레포는 새 페이지에서 시작 */
+  [data-work-detail] .work-print-tab-title {
+    font-size: 13pt !important;
+    font-weight: 700 !important;
+    color: black !important;
+    border-bottom: 1px solid #999;
+    padding-bottom: 3pt;
+    margin: 0 0 8pt !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  [data-work-detail] [data-tab-content] + [data-tab-content] {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  [data-work-detail] [data-tab-sentinel] {
+    display: none !important;
+  }
+
+  /* 본문 타이포: 인쇄 가독성 */
+  [data-work-detail] .prose {
+    max-width: none !important;
+    font-size: 10.5pt !important;
+  }
+
+  [data-work-detail] .prose h2,
+  [data-work-detail] .prose h3 {
+    color: black !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  [data-work-detail] .prose h2 {
+    font-size: 12pt !important;
+    margin-top: 12pt !important;
+  }
+
+  [data-work-detail] .prose h3 {
+    font-size: 11pt !important;
+    margin-top: 9pt !important;
+  }
+
+  [data-work-detail] .prose p,
+  [data-work-detail] .prose li {
+    color: #222 !important;
+    orphans: 2;
+    widows: 2;
+  }
+
+  /* 코드 블록: 가로 스크롤 대신 줄바꿈 */
+  [data-work-detail] .code-block-wrapper,
+  [data-work-detail] .code-block-wrapper > div {
+    max-width: none !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+  }
+
+  [data-work-detail] .prose pre {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow: visible !important;
+    min-width: 0 !important;
+    padding: 6pt !important;
+    font-size: 8.5pt !important;
+    background: #f4f4f5 !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+
+  /*
+    코드 블록은 shiki `github-dark` 테마라 토큰마다 밝은 색이 인라인 style로 박혀 있다.
+    인쇄용 밝은 배경에서는 전부 안 보이므로 하이라이팅을 포기하고 먹색으로 통일한다.
+  */
+  [data-work-detail] .prose pre,
+  [data-work-detail] .prose pre * {
+    color: #111 !important;
+    text-shadow: none !important;
+  }
+
+  [data-work-detail] .prose pre * {
+    background-color: transparent !important;
+  }
+
+  /* 인라인 코드: 연한 회색/빨강 대신 진한 먹색 + 옅은 배경 */
+  [data-work-detail] .prose :not(pre) > code {
+    color: #111 !important;
+    background: #f0f0f0 !important;
+    border: 1px solid #ccc !important;
+  }
+
+  /* 표: 페이지 중간에서 잘리지 않게 + 본문 대비 확보 */
+  [data-work-detail] .prose table {
+    max-width: none !important;
+    font-size: 9pt !important;
+  }
+
+  [data-work-detail] .prose table tr {
+    break-inside: avoid;
+    background: transparent !important;
+  }
+
+  [data-work-detail] .prose :is(th, td) {
+    color: #111 !important;
+    background: transparent !important;
+    border-color: #ccc !important;
+  }
+
+  [data-work-detail] .prose td {
+    border-bottom: 1px solid #ddd !important;
+  }
+
+  [data-work-detail] .prose thead {
+    color: #000 !important;
+    background: #eee !important;
+  }
+
+  [data-work-detail] .prose th {
+    border-bottom: 1px solid #999 !important;
+  }
+
+  /* 인용구·콜아웃도 같은 이유로 대비 보정 */
+  [data-work-detail] .prose blockquote {
+    color: #222 !important;
+    border-left-color: #999 !important;
+  }
+
+  [data-work-detail] .prose blockquote,
+  [data-work-detail] .prose figure {
+    break-inside: avoid;
+  }
+
+  /* 이미지 캡션 등 빈 컨테이너가 남기는 여백 정리 */
+  [data-work-detail] .prose :is(p:empty, div:empty) {
+    display: none !important;
+  }
+}

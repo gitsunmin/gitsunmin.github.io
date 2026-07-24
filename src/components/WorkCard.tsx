@@ -67,6 +67,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         'group relative rounded-xl border border-border/70 bg-card h-full',
         'hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/15',
         'transition-all duration-300 ease-out',
+        'print:border-0 print:border-b print:border-b-gray-300 print:rounded-none print:bg-transparent print:shadow-none print:translate-y-0 print:opacity-100 print:hover:translate-y-0',
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
       )}
       style={{
@@ -77,7 +78,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
       {/* 오버레이 네비게이션 링크 */}
       <a
         href={`/work/${work.id}`}
-        className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 print:hidden"
       >
         <span className="sr-only">{work.title} 상세 보기</span>
       </a>
@@ -96,12 +97,13 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
                   'size-10 rounded-xl object-contain bg-white border border-border/40 shrink-0 p-1',
                   'shadow-sm shadow-black/10',
                   'group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out',
+                  'print:hidden',
                 )}
               />
             ) : (
               <WorkIconFallback
                 title={work.title}
-                className="size-10 shadow-sm shadow-black/10 group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out"
+                className="size-10 shadow-sm shadow-black/10 group-hover:shadow-md group-hover:scale-[1.04] transition-all duration-300 ease-out print:hidden"
               />
             )}
             <div className="min-w-0">
@@ -109,12 +111,13 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
                 className={cn(
                   'text-xl font-bold text-primary truncate leading-snug',
                   'group-hover:text-primary/80 transition-colors duration-200',
+                  'print:text-black print:text-[13pt]',
                 )}
               >
                 {work.title}
               </h2>
               {work.careerId && (
-                <span className="inline-block text-xs py-0.5 text-muted-foreground/80">
+                <span className="inline-block text-xs py-0.5 text-muted-foreground/80 print:text-gray-600 print:text-[10pt]">
                   {COMPANY_LABELS[work.careerId] ?? work.careerId}
                 </span>
               )}
@@ -127,26 +130,27 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
               'pointer-events-none size-5',
               'text-muted-foreground/20 transition-all duration-300',
               'group-hover:text-primary/50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+              'print:hidden',
             )}
           />
         </div>
 
         {/* 날짜 */}
-        <div className="flex items-baseline justify-start gap-2 text-muted-foreground pb-2">
-          <Calendar className="size-4" />
+        <div className="flex items-baseline justify-start gap-2 text-muted-foreground pb-2 print:text-gray-500 print:text-[9pt]">
+          <Calendar className="size-4 print:hidden" />
           <div className='text-sm h-fit flex items-center'>{work.range}</div>
         </div>
 
 
         {/* 설명 */}
-        <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1">
+        <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3 mb-1 print:line-clamp-none print:text-black print:text-[10pt]">
           {work.description.split('\n')[0]}
         </p>
 
         {/* 서브레포 수 */}
         {work.subRepos && work.subRepos.length > 0 && (
-          <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1">
-            <Layers className="size-4" />
+          <div className="inline-flex items-baseline gap-2 text-sm text-muted-foreground/60 mt-1 mb-1 print:text-gray-500 print:text-[9pt]">
+            <Layers className="size-4 print:hidden" />
             <span>{work.subRepos.length}개 레포지토리</span>
           </div>
         )}
@@ -162,7 +166,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
 
         {/* 푸터: 외부 링크 */}
         {work.links.length > 0 && (
-          <div className="flex flex-wrap items-center gap-1 mt-3 pt-3 border-t border-border/40 pointer-events-auto">
+          <div className="flex flex-wrap items-center gap-1 mt-3 pt-3 border-t border-border/40 pointer-events-auto print:border-t-0 print:mt-1 print:pt-0 print:gap-2">
             {work.links.map(({ label, url }) => {
               const Icon = LINK_ICON_MAP[label] ?? ExternalLink;
               return (
@@ -180,8 +184,8 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
                     'px-2 py-1',
                   )}
                 >
-                  <Icon size={14} className="shrink-0" />
-                  <span className="text-xs md:max-w-0 md:opacity-0 md:group-hover:max-w-32 md:group-hover:opacity-100 md:overflow-hidden md:transition-all md:duration-300 md:ease-out whitespace-nowrap">
+                  <Icon size={14} className="shrink-0 print:hidden" />
+                  <span className="text-xs md:max-w-0 md:opacity-0 md:group-hover:max-w-32 md:group-hover:opacity-100 md:overflow-hidden md:transition-all md:duration-300 md:ease-out whitespace-nowrap print:max-w-none print:opacity-100 print:text-gray-600 print:text-[8pt]">
                     {label}
                   </span>
                 </a>

@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TechFilterBar = ({ techs, activeFilter, onFilterChange, showColorDot = false }: Props) => (
-  <div className="px-4 md:px-0 mb-8">
+  <div className="px-4 md:px-0 mb-8 print:hidden">
     <div className="flex flex-wrap gap-1.5 items-center">
       <button
         type="button"

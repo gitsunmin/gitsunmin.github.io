@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const TechTag = ({ techs, activeFilter, onTechClick, isVisible = true, animationDelay }: Props) => (
-  <div className="flex flex-wrap gap-1.5 mt-4">
+  <div className="flex flex-wrap gap-1.5 mt-4 print:mt-1 print:gap-0.5">
     {techs.map((tech, i) => (
       <button
         key={tech}
@@ -17,7 +17,7 @@ export const TechTag = ({ techs, activeFilter, onTechClick, isVisible = true, an
         onClick={() => onTechClick?.(tech)}
         disabled={!onTechClick}
         className={cn(
-          'px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all duration-300',
+          'px-2.5 py-0.5 rounded-full text-[11px] font-medium transition-all duration-300 print:bg-transparent print:text-gray-600 print:text-[8pt] print:px-0 print:py-0 print:rounded-none print:ring-0 print:after:content-[",_"] print:last:after:content-[""]',
           animationDelay !== undefined
             ? isVisible
               ? 'opacity-100 translate-y-0'

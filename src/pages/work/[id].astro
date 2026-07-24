@@ -72,12 +72,12 @@ const COMPANY_LABELS: Record<string, string> = {
   description={description}
   ogImage={ogImage}
 >
-  <div class="w-full max-w-3xl mx-auto pt-20 md:pt-24 px-4 md:px-0 pb-20">
+  <div data-work-detail class="w-full max-w-3xl mx-auto pt-20 md:pt-24 px-4 md:px-0 pb-20">
     <!-- 뒤로 가기 -->
     <a
       href="/works"
       aria-label="Works 목록으로 돌아가기"
-      class="inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-8 hover:text-primary transition-colors duration-200"
+      class="work-print-back inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-8 hover:text-primary transition-colors duration-200"
     >
       ← Works
     </a>
@@ -104,7 +104,7 @@ const COMPANY_LABELS: Record<string, string> = {
             <div class="flex items-center gap-2 flex-wrap mb-1">
               <h1 class="text-xl font-bold text-primary">{work.title}</h1>
               {work.careerId && (
-                <span class="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/50">
+                <span class="work-print-company text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/50">
                   {COMPANY_LABELS[work.careerId] ?? work.careerId}
                 </span>
               )}
@@ -116,7 +116,7 @@ const COMPANY_LABELS: Record<string, string> = {
         <p class="text-sm leading-[1.8] text-muted-foreground mb-4 whitespace-pre-line">{work.description}</p>
 
         <!-- 기술 태그 -->
-        <div class="flex flex-wrap gap-1.5">
+        <div class="work-print-techs flex flex-wrap gap-1.5">
           {work.techs.map((tech) => (
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground">
               {tech}
@@ -126,7 +126,7 @@ const COMPANY_LABELS: Record<string, string> = {
 
         <!-- 외부 링크 -->
         {work.links.length > 0 && (
-          <div class="flex flex-wrap gap-2 mt-4">
+          <div class="work-print-links flex flex-wrap gap-2 mt-4">
             {work.links.map(({ label, url }) => (
               <a
                 href={url}
@@ -154,6 +154,7 @@ const COMPANY_LABELS: Record<string, string> = {
       data-tab-content="overview"
       class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
     >
+      {hasTabs && <h2 class="print-only work-print-tab-title">개요</h2>}
       <Content components={MDXReplacer({})} />
       <div data-tab-sentinel="overview" style="height: 1px" aria-hidden="true" />
     </article>
@@ -165,6 +166,7 @@ const COMPANY_LABELS: Record<string, string> = {
         style="display: none"
         class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
       >
+        <h2 class="print-only work-print-tab-title">{repo.name}</h2>
         <repo.Content components={MDXReplacer({})} />
         <div data-tab-sentinel={repo.slug} style="height: 1px" aria-hidden="true" />
       </article>
