@@ -20,7 +20,7 @@ const contact = {
 const intro = {
   headline: '서로 존중하며 협업하는 개발자 김선민입니다.',
   body:
-    '6년간 B2B 커머스에서 주문·정산처럼 틀리면 안 되는 화면을 만들고 운영해 왔습니다. 재현되지 않는 문제는 측정 가능한 형태로 바꾸는 것에서 시작하고, 해결하지 못한 부분은 한계로 남겨 기록합니다.',
+    '5년간 B2B 식자재 도메인에서 주문·정산처럼 틀리면 안 되는 화면을 만들고 운영했으며, 재현되지 않는 문제는 측정 가능한 형태로 바꾸는 것에서 시작하고, 해결하지 못한 부분은 한계로 남겨 기록합니다.',
 };
 
 // 핵심 역량 (공고 요구사항 매핑)
@@ -136,8 +136,16 @@ const experiences: Experience[] = [
         range: '2023.08 ~ 2023.12',
         desc: 'iOS·Android 각 3개씩 존재하던 네이티브 하이브리드 앱을 단일 Flutter 코드베이스로 통합하는 프레임워크를 1인 설계·구현. (사업 우선순위 변경으로 배포 전 중단)',
         points: [
-          'Flutter 신규 학습 후 iOS·Android 앱 개발 — Dart 3.0 Sealed Class 기반 Flavor 시스템으로 서비스×환경별 빌드 타깃을 컴파일 타임에 분기 누락 없이 관리, 서비스별 빌드 스위칭 CLI 개발.',
-          'WebView Bridge · 원격 버전 게이팅 — 기존 웹 자산과 네이티브 기능을 잇는 Bridge 설계, Firebase Remote Config로 배포 없이 강제 업데이트·점검 모드를 원격 제어. Bitbucket Pipeline + Firebase App Distribution으로 테스트 배포 자동화.',
+          {
+            lead: 'Flutter 신규 학습 후 iOS·Android 앱 개발',
+            rest: 'Dart 3.0 Sealed Class 기반 Flavor 시스템으로 서비스×환경별 빌드 타깃을 컴파일 타임에 분기 누락 없이 관리, 서비스별 빌드 스위칭 CLI 개발.',
+            link: 'https://gitsunmin.github.io/work/hybrid-app-framework#같은-shell-코드가-앱-수만큼-복제돼-있었다',
+          },
+          {
+            lead: 'WebView Bridge · 원격 버전 게이팅',
+            rest: '기존 웹 자산과 네이티브 기능을 잇는 Bridge 설계, Firebase Remote Config로 배포 없이 강제 업데이트·점검 모드를 원격 제어. Bitbucket Pipeline + Firebase App Distribution으로 테스트 배포 자동화.',
+            link: 'https://gitsunmin.github.io/work/hybrid-app-framework#앱은-고치려면-심사를-기다려야-한다',
+          },
         ],
         skills: 'Flutter, Dart, iOS, Android, Firebase(Remote Config·App Distribution), Bitbucket Pipeline',
         link: 'https://gitsunmin.github.io/work/hybrid-app-framework',
