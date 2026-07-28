@@ -925,4 +925,72 @@
   [data-work-detail] .prose :is(p:empty, div:empty) {
     display: none !important;
   }
+
+  /* ─── works 섹션 구분 (WorkBrief / 케이스 / 접힌 보조 자료) ───────── */
+
+  /* 브리프 — 페이지 중간에서 쪼개지지 않게 */
+  [data-work-detail] .work-brief {
+    break-inside: avoid;
+  }
+
+  [data-work-detail] .work-brief-table td {
+    border: none !important;
+    padding: 1pt 8pt 1pt 0 !important;
+  }
+
+  /* 케이스 카드 — 인쇄에서는 테두리를 걷고 위쪽 구분선만 남긴다 */
+  [data-work-detail] .prose section[data-work-case] {
+    border: none !important;
+    border-top: 1px solid #ccc !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 8pt 0 0 !important;
+    margin-top: 12pt !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  [data-work-detail] .prose h2[data-work-section='case'] {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  [data-work-detail] .prose h2[data-work-section='aux'] {
+    color: #333 !important;
+  }
+
+  /* `그 밖의 …` 영역 — 화면의 점선 상자는 인쇄에서 구분선 하나로 줄인다 */
+  [data-work-detail] .prose section[data-work-aux] {
+    border: none !important;
+    border-top: 1px solid #ccc !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-top: 12pt !important;
+  }
+
+  [data-work-detail] .prose p[data-work-aux-more] {
+    color: #666 !important;
+    margin-top: 8pt !important;
+  }
+
+  /* 접어 둔 보조 자료는 인쇄에서 전부 펼친다 */
+  [data-work-detail] .prose details.work-aux-details {
+    border-top-color: #ccc !important;
+  }
+  [data-work-detail] .prose details.work-aux-details > * {
+    display: block !important;
+  }
+  /* 최신 크로미움은 닫힌 details를 ::details-content의 content-visibility로 숨긴다 */
+  [data-work-detail] .prose details.work-aux-details::details-content {
+    content-visibility: visible !important;
+    block-size: auto !important;
+  }
+  [data-work-detail] .prose details.work-aux-details > summary {
+    color: #333 !important;
+    list-style: none;
+  }
+  [data-work-detail] .prose details.work-aux-details > summary::before {
+    content: none !important;
+  }
 }

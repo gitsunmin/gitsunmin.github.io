@@ -68,7 +68,7 @@ export const Works: Work[] = [
       { label: 'App Store', url: 'https://apps.apple.com/kr/app/%EB%82%A8%EC%95%98%EB%8D%98%EA%B0%80/id6760313673' },
       { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.seonhamlabs.namatdeonga&hl=ko' },
     ],
-    range: '2026.03 ~',
+    range: '2026.02 ~',
     careerId: 'seonhamlabs',
     isFeatured: true,
   },
@@ -121,8 +121,8 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
     id: 'sikbom',
     title: '식봄',
     category: 'service',
-    description: `식자재 유통 플랫폼 식봄의 프론트엔드 전반을 담당했습니다.
-Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹, 인쇄 템플릿 라이브러리까지 다양한 레이어를 개발했습니다.`,
+    description: `전화·팩스로 이뤄지던 식자재 발주를 온라인으로 옮긴 B2B 커머스 식봄의 프론트엔드를 담당했습니다.
+레거시 PHP 웹과 Next.js 신규 웹이 같은 도메인에서 병행 운영되는 구조라, 양쪽을 함께 다루며 검색·상세·주문·쿠폰 등 핵심 사용자 흐름을 개발하고 대형 장바구니 성능을 측정 기반으로 최적화했습니다. 관리자 웹과 인쇄 템플릿 라이브러리까지 여러 레이어를 함께 맡았습니다.`,
     techs: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'GraphQL', 'Relay', 'PHP', 'Storybook', 'Datadog'],
     links: [],
     range: '2024.01 ~ 2025.12',
@@ -160,10 +160,10 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
     title: '마켓봄 (구 마켓봄 프로)',
     category: 'service',
     description: `식자재 유통사를 위한 B2B SaaS 플랫폼 마켓봄(구 마켓봄 프로)의 프론트엔드를 담당했습니다.
-웹 서비스, 하이브리드 앱, 정산 관리자, 디자인 시스템까지 전 레이어에 걸쳐 개발했습니다.`,
+네이티브 WebView 안에서 동작하는 인앱 하이브리드 앱을 개발하며 배포 버전 불일치 진단·금액 계산 정합성 등 운영 이슈를 해결했고, 웹 서비스·정산 관리자·디자인 시스템까지 전 레이어에 걸쳐 개발했습니다.`,
     techs: ['React', 'Vue.js', 'Nuxt.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Storybook', 'Datadog', 'ag-Grid', 'Vite'],
     links: [],
-    range: '2020.10 ~ 2023.07',
+    range: '2020.10 ~ 2023.08',
     careerId: 'marketboro',
     subRepos: [
       {
@@ -175,13 +175,13 @@ Next.js 기반 주문 웹 서비스부터 PHP 마케팅 페이지, 관리자 웹
       {
         slug: 'order-app',
         name: '거래처 주문 앱',
-        description: '거래처(음식점)가 모바일·PC에서 식자재를 발주하는 웹 앱. 네이티브 WebView Shell 안에서 실행되며, PC 버전 신규 개발 및 부가세 금액 계산 로직을 담당했습니다.',
+        description: '거래처(음식점)가 모바일·PC에서 식자재를 발주하는 웹 앱. 네이티브 WebView Shell 안에서 실행되며, PC 버전 신규 개발, 부가세 금액 계산 로직, 거래내역 대용량 그리드를 담당했습니다.',
         techs: ['Nuxt.js', 'Vue.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'RealGrid', 'Vuex'],
       },
       {
         slug: 'vendor-app',
         name: '유통사 전용 앱',
-        description: 'React 기반 웹뷰를 네이티브 Shell로 감싼 유통사 전용 하이브리드 앱. BoronUI 디자인 시스템을 기반으로 수주 관리·바코드 환경설정을 담당했습니다.',
+        description: 'React 기반 웹뷰를 네이티브 Shell로 감싼 유통사 전용 하이브리드 앱. 사내 디자인 시스템을 기반으로 수주 관리·바코드 환경설정을 담당했습니다.',
         techs: ['React', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Recoil'],
       },
       {

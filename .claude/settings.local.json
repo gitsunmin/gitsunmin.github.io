@@ -6,7 +6,8 @@
       "Bash(bun run build)",
       "Bash(node -e \":*)",
       "Bash(bun add -d @tailwindcss/vite)",
-      "Bash(npm install @astrojs/sitemap)"
+      "Bash(npm install @astrojs/sitemap)",
+      "Bash(python3 -c \"import pypdf; print\\(len\\(pypdf.PdfReader\\('김선민_이력서.pdf'\\).pages\\)\\)\")"
     ]
   }
 }

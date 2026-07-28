@@ -23,9 +23,12 @@ export const Career: Career[] = [
     id: 'seonhamlabs',
     name: '선함연구소',
     logo: '/assets/logos/seonhamlabs_logo.webp',
-    introduce: `선함연구소는 익명 P2P 힐링 커뮤니티 '돌들의 숲'을 기획·개발·운영하는 1인 스타트업입니다.
-디지털 환경에서의 정서적 고립 해소를 목표로 설립했으며, 대표 겸 개발자로서 설계부터 운영까지 전 과정을 수행하고 있습니다.
-Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리드 앱 등을 활용하고 있습니다.`,
+    introduce: `선함연구소는 '선함의 데이터화'를 슬로건으로 두 개의 서비스를 기획·개발·운영하는 1인 스타트업입니다. 대표 겸 개발자로서 기획·설계·개발·앱스토어 배포·운영까지 전 과정을 직접 수행하고 있습니다.
+
+· 돌들의 숲 — 익명 P2P 힐링 커뮤니티. 2026년 3월 iOS·Android 정식 출시. React 웹 앱을 Expo 네이티브 Shell로 감싼 하이브리드 구조이며, 백엔드는 Cloudflare Workers 서버리스로 운영합니다.
+· 남았던가 — 냉장고 식재료를 사진으로 기록해 음식물 낭비를 줄이는 앱. 2026년 3월 App Store 출시, 5월 v1.1.0 배포. 서버 없이 기기 로컬 SQLite만 사용하는 완전 프라이빗 아키텍처입니다.
+
+두 서비스 모두 하이브리드 앱·서버리스·모노레포 환경에서 출시부터 운영까지의 사이클을 직접 다루고 있습니다.`,
     position: '대표 / 개발자',
     range: '2025.01 ~',
     techs: [
@@ -41,6 +44,8 @@ Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리
       'Vite',
       'Astro',
       'Three.js',
+      'SQLite',
+      'Zustand',
       'Turborepo',
       'Bun',
     ],
@@ -54,14 +59,14 @@ Cloudflare Workers 기반 서버리스 아키텍처와 React Native 하이브리
         url: 'https://forest.seonhamlabs.com',
       },
     ],
-    isDraft: false, // draft 처리
+    isDraft: true, // draft 처리
   },
   {
     id: 'marketboro',
     name: '(주) 마켓보로',
     introduce: `(주) 마켓보로는 B2B 식자재 유통 푸드테크 기업으로, ‘마켓봄(구 마켓봄 프로)’와 ‘식봄’을 운영하는 회사입니다.
 프론트엔드 개발자로서 두 서비스의 개발·운영에 참여했으며, 레거시 서비스 현대화와 신규 서비스 개발을 주로 수행했습니다.
-성능 최적화, 접근성 개선, UX 향상 등의 경험을 쌓았습니다.`,
+React·Next.js 기반으로 핵심 사용자 흐름을 개발하고, 측정 기반 성능 개선, 인앱 WebView 하이브리드 앱, 금액 정합성·장애 대응 등 복잡한 커머스 도메인의 운영 이슈를 해결했습니다.`,
     range: '2020.10 ~ 2025.12',
     position: '프론트엔드 개발자',
     techs: ['Vue.js', 'React.js', 'Next.js', 'pnpm', 'Vite', 'Bun', 'Tailwind CSS', 'Relay', 'TypeScript', 'JavaScript', 'DataDog'],

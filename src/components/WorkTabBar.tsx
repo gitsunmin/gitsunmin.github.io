@@ -27,6 +27,13 @@ export function WorkTabBar({ tabs }: Props) {
   const scrollRef    = useRef<HTMLDivElement>(null);
   const timerRef     = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // 헤딩 딥링크 — 대상 탭이 화면에 표시된 뒤에 스크롤해야 하므로 ref로 넘긴다.
+  const pendingTargetRef = useRef<string | null>(null);
+  const activeRef = useRef(active);
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
+
   const activeIndex = tabs.findIndex((t) => t.id === active);
   const nextTab     = tabs[activeIndex + 1] ?? null;
   const isLastTab   = nextTab === null;
@@ -203,6 +210,44 @@ export function WorkTabBar({ tabs }: Props) {
     };
   }, []);
 
+  // ── hash 딥링크 — 탭 id 또는 탭 안쪽 헤딩 id를 모두 받는다 ────────────────────
+  // 가시성 effect보다 먼저 선언해, 마운트 시 hash가 재작성되기 전에 읽는다.
+
+  const focusTarget = useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const box = (el.closest('[data-work-case], [data-work-aux]') ?? el) as HTMLElement;
+    box.classList.remove('work-target-flash');
+    void box.offsetWidth; // 같은 대상 재진입 시 애니메이션 재시작
+    box.classList.add('work-target-flash');
+  }, []);
+
+  useEffect(() => {
+    const applyHash = () => {
+      const raw = decodeURIComponent(window.location.hash.slice(1));
+      if (!raw) return;
+      if (tabs.some((t) => t.id === raw)) {
+        setActive(raw);
+        return;
+      }
+      const tabId = document
+        .getElementById(raw)
+        ?.closest('[data-tab-content]')
+        ?.getAttribute('data-tab-content');
+      if (!tabId) return;
+      if (tabId === activeRef.current) {
+        requestAnimationFrame(() => focusTarget(raw));
+      } else {
+        pendingTargetRef.current = raw;
+        setActive(tabId);
+      }
+    };
+    applyHash();
+    window.addEventListener('hashchange', applyHash);
+    return () => window.removeEventListener('hashchange', applyHash);
+  }, [tabs, focusTarget]);
+
   // ── 탭 콘텐츠 가시성 + URL hash 동기화 ────────────────────────────────────────
 
   useEffect(() => {
@@ -222,24 +267,33 @@ export function WorkTabBar({ tabs }: Props) {
       }
     });
 
+    // 딥링크 대상이 이 탭에 있으면, 표시가 끝난 다음 프레임에 스크롤한다.
+    const target = pendingTargetRef.current;
+    if (target) {
+      const targetTab = document
+        .getElementById(target)
+        ?.closest('[data-tab-content]')
+        ?.getAttribute('data-tab-content');
+      if (targetTab === active) {
+        pendingTargetRef.current = null;
+        requestAnimationFrame(() => requestAnimationFrame(() => focusTarget(target)));
+      }
+      return; // 딥링크 진행 중에는 hash를 다시 쓰지 않는다
+    }
+
     const url = new URL(window.location.href);
+    const raw = decodeURIComponent(url.hash.slice(1));
+    const hashInActiveTab =
+      raw !== '' &&
+      document.getElementById(raw)?.closest('[data-tab-content]')?.getAttribute('data-tab-content') === active;
+    if (hashInActiveTab) return; // 활성 탭 안 헤딩 앵커는 보존
+
     if (active === tabs[0]?.id) {
       history.replaceState(null, '', url.pathname + url.search);
     } else {
       history.replaceState(null, '', `${url.pathname}#${active}`);
     }
-  }, [active, tabs]);
-
-  // ── hash 기반 딥링크 ──────────────────────────────────────────────────────────
-
-  useEffect(() => {
-    const onHashChange = () => {
-      const hash = window.location.hash.slice(1);
-      if (tabs.find((t) => t.id === hash)) setActive(hash);
-    };
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, [tabs]);
+  }, [active, tabs, focusTarget]);
 
   // ── 활성 탭 버튼 가로 스크롤 인뷰 ────────────────────────────────────────────
 

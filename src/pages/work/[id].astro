@@ -5,6 +5,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { Works } from '@/data/works';
 import { MDXReplacer } from '@/components/MDXReplacer';
 import { WorkTabBar } from '@/components/WorkTabBar';
+import WorkBrief from '@/components/WorkBrief.astro';
 
 export const getStaticPaths = (async () => {
   const entries: CollectionEntry<'works'>[] = await getCollection('works', ({ data, id }: CollectionEntry<'works'>) => {
@@ -34,7 +35,12 @@ const { Content } = await render(entry);
 
 // Load sub-repo MDX files
 const allEntries = await getCollection('works');
-type SubRepoContent = { slug: string; name: string; Content: Awaited<ReturnType<typeof render>>['Content'] };
+type SubRepoContent = {
+  slug: string;
+  name: string;
+  entry: CollectionEntry<'works'>;
+  Content: Awaited<ReturnType<typeof render>>['Content'];
+};
 const subRepoContents: SubRepoContent[] = [];
 
 if (work?.subRepos) {
@@ -45,10 +51,13 @@ if (work?.subRepos) {
     });
     if (subEntry) {
       const { Content: SubContent } = await render(subEntry);
-      subRepoContents.push({ slug: repo.slug, name: repo.name, Content: SubContent });
+      subRepoContents.push({ slug: repo.slug, name: repo.name, entry: subEntry, Content: SubContent });
     }
   }
 }
+
+/** 본문에 케이스가 있는지. WorkBrief가 케이스 안내 문구를 그릴지 판단하는 데 쓴다. */
+const hasCases = (e: CollectionEntry<'works'>) => /^## 문제 \d+\./m.test(e.body ?? '');
 
 const hasTabs = subRepoContents.length > 0;
 const tabs = hasTabs
@@ -155,6 +164,11 @@ const COMPANY_LABELS: Record<string, string> = {
       class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
     >
       {hasTabs && <h2 class="print-only work-print-tab-title">개요</h2>}
+      <WorkBrief
+        summary={entry.data.summary}
+        contributions={entry.data.contributions}
+        hasCases={hasCases(entry)}
+      />
       <Content components={MDXReplacer({})} />
       <div data-tab-sentinel="overview" style="height: 1px" aria-hidden="true" />
     </article>
@@ -167,6 +181,11 @@ const COMPANY_LABELS: Record<string, string> = {
         class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
       >
         <h2 class="print-only work-print-tab-title">{repo.name}</h2>
+        <WorkBrief
+          summary={repo.entry.data.summary}
+          contributions={repo.entry.data.contributions}
+          hasCases={hasCases(repo.entry)}
+        />
         <repo.Content components={MDXReplacer({})} />
         <div data-tab-sentinel={repo.slug} style="height: 1px" aria-hidden="true" />
       </article>
@@ -206,10 +225,119 @@ const COMPANY_LABELS: Record<string, string> = {
 
   /* 테이블 overflow는 MDXReplacer wrapper div가 처리 */
 
+  /* ─── 헤딩 딥링크 ─────────────────────────────────────────────
+     이력서 등 외부에서 #헤딩-id로 진입하면 WorkTabBar가 소속 탭을
+     활성화한 뒤 스크롤하고, 케이스 카드를 잠시 강조한다. */
+
+  /* sticky 헤더(48px) + 탭바 높이만큼 스크롤 지점을 내린다 */
+  :global(.work-detail-section [id]) {
+    scroll-margin-top: 7rem;
+  }
+
+  @keyframes work-target-flash {
+    0%   { background-color: hsl(var(--primary) / 0.1); box-shadow: 0 0 0 2px hsl(var(--primary) / 0.35); }
+    100% { background-color: transparent; box-shadow: 0 0 0 2px transparent; }
+  }
+
+  :global(.work-target-flash) {
+    /* 스크롤이 어느 정도 진행된 뒤 강조가 빠지도록 지연을 두고, 지연 중에도 0% 상태를 유지(both) */
+    animation: work-target-flash 1.8s ease-out 500ms both;
+    border-radius: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.work-target-flash) { animation-duration: 0.6s; }
+  }
+
   /* h2 구분선 */
   :global(.prose h2) {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* ─── 섹션 구분 ───────────────────────────────────────────────
+     rehype-work-sections.mjs가 붙인 data-* 표시를 스타일로 옮긴다.
+     케이스 경계만 표시하고, 그 안쪽은 기본 헤딩 스타일에 맡긴다. */
+
+  /* 케이스 — 문제 하나가 카드 한 장.
+     rehype가 h2와 본문을 <section data-work-case>로 묶어 준다. */
+  :global(.prose section[data-work-case]) {
+    margin-top: 1.5rem;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid hsl(var(--border) / 0.7);
+    border-radius: 0.75rem;
+    background: hsl(var(--card));
+  }
+
+  :global(.prose section[data-work-case] > h2[data-work-section='case']) {
+    margin-top: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    color: hsl(var(--foreground));
+  }
+
+  /* 카드 안쪽 위아래 여백은 카드 패딩이 담당한다 */
+  :global(.prose section[data-work-case] > *:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* 보조 섹션 — 대비를 낮춰 케이스에서 시선을 뺏지 않는다 */
+  :global(.prose h2[data-work-section='aux']) {
+    margin-top: 3.5rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* `그 밖의 …` — 케이스와 같은 영역이되 같은 무게는 아니게.
+     채운 카드가 아니라 점선으로 둘러싼 목록으로 두어, 깊이 쓴 케이스와 구분한다. */
+  :global(.prose section[data-work-aux]) {
+    margin-top: 3.5rem;
+    padding: 0.5rem 1.75rem 1.5rem;
+    border: 1px dashed hsl(var(--border));
+    border-radius: 0.75rem;
+    background: hsl(var(--muted) / 0.25);
+  }
+
+  :global(.prose section[data-work-aux] > h2[data-work-section='aux']) {
+    margin-top: 1rem;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  /* 말줄임 — "대표적인 것만 골라 뒀다"를 문장 대신 기호로 */
+  :global(.prose p[data-work-aux-more]) {
+    margin: 1.75rem 0 0;
+    text-align: center;
+    color: hsl(var(--muted-foreground) / 0.7);
+    letter-spacing: 0.4em;
+    line-height: 1;
+    user-select: none;
+  }
+
+  /* 보조 자료 접기 — 아키텍처·기술 선택은 기본으로 접어 케이스가 먼저 읽히게.
+     상자를 만들지 않고 구분선 하나로 처리한다. */
+  :global(.prose details.work-aux-details) {
+    margin-top: 3.5rem;
+    border-top: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  :global(.prose details.work-aux-details > summary) {
+    padding-top: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    color: hsl(var(--muted-foreground));
+    user-select: none;
+  }
+  :global(.prose details.work-aux-details > summary)::-webkit-details-marker {
+    display: none;
+  }
+  :global(.prose details.work-aux-details > summary)::before {
+    content: '▸';
+    display: inline-block;
+    margin-right: 0.4rem;
+    transition: transform 150ms ease;
+  }
+  :global(.prose details.work-aux-details[open] > summary)::before {
+    transform: rotate(90deg);
   }
 
   /* 인라인 코드 */
