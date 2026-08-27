@@ -193,7 +193,23 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
             {...props}
           />
         )),
-    img: (props) => <SafeImage {...props} />,
+    // 본문 이미지는 여백·배경을 두른 틀 안에 넣고, alt를 캡션으로 함께 보여준다.
+    // MDX의 `![]()`는 p 안에 들어오므로 figure 대신 block span으로 감싼다(p 안에 figure는 무효).
+    img: ({ alt, ...props }) => (
+      <span className="not-prose my-8 block overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-2 sm:p-3 dark:border-gray-700 dark:bg-gray-900/60">
+        <SafeImage
+          {...props}
+          alt={alt}
+          data-zoomable
+          className="my-0 block max-h-[70vh] w-full cursor-zoom-in rounded-lg object-contain shadow-none transition-opacity hover:opacity-90"
+        />
+        {alt && (
+          <span className="mt-2 block px-1 text-center text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+            {alt}
+          </span>
+        )}
+      </span>
+    ),
     table: ({ className, ...rest }) => (
       <div className="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden">
         <div className="overflow-x-auto w-full">

@@ -1,0 +1,372 @@
+---
+title: "10년 된 노트북으로 비서를 고용하기 (2) — 문을 잠그고 Docker 올리기"
+description: "SSH 키 인증과 방화벽의 기본을 잡고 Docker를 올렸습니다. 그 과정에서 비밀번호 로그인이 열려 있었고, Docker가 방화벽을 우회하고 있었으며, GPU는 인식만 되고 쓰이지 않고 있었다는 걸 알게 됐습니다."
+pubDate: "2026-08-25"
+updatedDate: "2026-08-25"
+tags: ["technology", "ubuntu", "homelab", "docker", "security", "nvidia"]
+heroImage: "/assets/blog/home-server/thumbnail.webp"
+draft: true
+---
+
+> **10년 된 노트북으로 비서를 고용하기**
+> 1. [서버 만들기](/blog/home-server-01-ubuntu-setup) — 오래된 노트북에 Ubuntu Server 올리기
+> 2. **문 잠그기와 Docker** — SSH·방화벽 기본과 Docker, 그리고 GPU ← 지금 글
+> 3. [Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n) — 로컬 모델과 자동화 도구
+> 4. 비서로 만들기 *(예정)* — 외부 접속 경로와 일정 판단 파이프라인
+
+## 서론
+
+[지난 편](/blog/home-server-01-ubuntu-setup)에서 10년 된 HP 노트북에 Ubuntu Server를 올렸습니다. 덮개를 닫아도 깨어 있고, SSH로 붙을 수 있는 상태까지 왔습니다.
+
+이번 편에서는 그 위에 **두 가지**를 올립니다. 하나는 **문을 잠그는 일**이고, 하나는 **서비스를 담을 그릇을 준비하는 일**입니다. 순서를 이렇게 잡은 이유는, 컨테이너를 띄우기 시작하면 열리는 포트가 늘어나기 때문입니다.
+
+그리고 이번 편에서 같은 종류의 착각을 두 번 하게 됩니다. **설정한 것과 실제로 적용된 것이 다른데, 아무도 에러를 내지 않는** 상황입니다.
+
+## 본론
+
+### 1. 보안 설정
+
+#### 어디까지 조일 것인가
+
+보안 설정을 하기 전에 정할 것이 있습니다. **무엇으로부터 무엇을 지키는가**입니다. 이걸 정하지 않으면 인터넷에서 찾은 설정을 전부 따라 하게 되고, 그중 상당수는 이 서버에서 아무 의미가 없습니다.
+
+지금 이 서버는 공유기에서 포트포워딩을 하지 않았습니다. **인터넷에서 들어올 경로가 없고**, 접속할 수 있는 것은 집 안 네트워크의 기기뿐이며, 로그인하는 사람은 저 한 명입니다.
+
+여기까지만 보면 할 일이 거의 없습니다. 그런데 한 가지가 더 있습니다. **마지막 편에서 이 서버를 외부에 열 예정입니다.** 비서가 일정을 챙겨주려면 밖에 있는 저에게 연락할 수 있어야 하기 때문입니다.
+
+그러니 지금의 안전함은 **문을 잠갔기 때문이 아니라 아직 문을 만들지 않았기 때문**입니다.
+
+#### 이번 편에서 해둔 것
+
+기본만 잡아두었습니다.
+
+| 항목 | 내용 |
+|---|---|
+| SSH 키 인증 | `ed25519` 키를 등록하고 키로 접속 |
+| root 로그인 차단 | `PermitRootLogin no` |
+| SSH 포트 변경 | 기본 포트에서 이동 |
+| fail2ban | 인증 실패가 반복되는 IP를 자동 차단 |
+| ufw | 기본 정책을 거부로 두고 필요한 포트만 개방 |
+| 자동 보안 업데이트 | `unattended-upgrades` 활성 |
+
+`ed25519`를 쓴 이유는 RSA보다 키가 짧고 빠르면서 보안 강도는 충분하기 때문입니다. 새로 만드는 키라면 특별한 이유가 없는 한 이쪽이 기본입니다.
+
+**순서가 중요합니다.** 키로 접속되는 것을 먼저 확인하고, 그다음에 나머지를 건드려야 합니다. 저는 설정을 바꾼 뒤에도 **기존 SSH 세션을 끊지 않은 채로** 새 터미널에서 접속을 시도했습니다. 새 접속이 실패하더라도 살아있는 세션에서 되돌릴 수 있기 때문입니다. 그리고 sshd를 재시작하기 전에는 항상 문법을 먼저 검사합니다.
+
+```bash
+sudo sshd -t
+sudo systemctl restart ssh
+```
+
+오타가 있는 채로 재시작하면 sshd가 뜨지 못하고, 원격 접속 경로가 그대로 사라집니다.
+
+#### fail2ban은 아직 아무것도 막지 못했습니다
+
+```
+Status for the jail: sshd
+|- Currently failed: 0    |- Total failed:  0
+`- Currently banned: 0    `- Total banned:  0
+```
+
+**전부 0입니다.** 당연한 결과입니다. 외부에서 들어올 경로가 없으니 두드릴 사람도 없습니다. 인터넷에 SSH를 열어두면 몇 시간 만에 수백 건의 실패 로그가 쌓이지만, 이 서버에는 그런 일이 일어나지 않습니다.
+
+그럼 왜 설치했느냐 하면, 마지막 편에서 문을 열 것이기 때문입니다. 그때 가서 설치하면 이미 늦습니다.
+
+#### 점검해보니 허술한 곳이 있었습니다
+
+이 글을 쓰면서 설정을 다시 확인해봤습니다. 두 군데가 생각과 달랐습니다.
+
+**하나, 비밀번호 로그인이 켜져 있었습니다.**
+
+```bash
+sudo sshd -T | grep -iE 'passwordauth|permitroot'
+```
+```
+permitrootlogin no
+passwordauthentication yes
+```
+
+설정 파일에 `PasswordAuthentication` 줄을 적지 않았고, sshd는 없는 항목을 기본값으로 처리합니다. 그리고 그 기본값이 `yes`입니다. 저는 키를 등록해 키로 접속하는 데 성공했으니 비밀번호 인증은 자연히 닫혔다고 생각했는데, **키가 되는 것과 비밀번호가 안 되는 것은 별개의 설정**이었습니다.
+
+**둘, 방화벽 규칙이 전부 `Anywhere`였습니다.**
+
+기본 정책은 거부로 두었지만, 정작 열어둔 포트들은 접근 범위 제한이 없었습니다. 게다가 옮겨둔 기본 SSH 포트를 닫지 않은 채였고, 인증이 없는 Ollama 포트도 그대로 열려 있었습니다. 더구나 **Docker가 이 규칙들을 우회한다는 사실**은 다음 절에서 알게 됩니다.
+
+둘 다 지금 당장 위험한 상태는 아닙니다. 외부에서 닿을 경로가 없기 때문입니다. 하지만 **문을 여는 순간 전부 문제가 됩니다.**
+
+그래서 이 두 가지는 **마지막 편에서 Cloudflare Tunnel을 붙이는 작업과 함께 제대로 다루려고 합니다.** 접근 경로가 정해지지 않은 상태에서 방화벽 규칙을 먼저 짜봐야, 문을 낸 다음에 다시 손대게 되기 때문입니다.
+
+공유기에서 포트를 여는 방식은 그 순간부터 서버가 인터넷 전체에 노출되지만, Tunnel은 **서버가 밖으로 연결을 걸어 나가는 구조**라 인바운드 포트를 하나도 열지 않아도 됩니다. 이미 도메인과 다른 서비스들을 Cloudflare에서 쓰고 있어서 붙이기도 수월합니다. Cloudflare의 인프라 서비스들을 어떻게 쓰고 있는지는 [이전 글](/blog/infra-in-cloudflare)에 정리해두었습니다.
+
+### 2. Docker 설치
+
+#### 공식 저장소로 설치하기
+
+Ubuntu 기본 저장소에도 `docker.io` 패키지가 있고, snap으로도 설치할 수 있습니다. 저는 Docker 공식 저장소를 등록하는 쪽을 택했습니다.
+
+snap은 특히 피했습니다. snap으로 설치한 Docker는 파일시스템 접근이 격리되어 있어서, 홈 디렉터리 밖의 경로를 볼륨으로 마운트할 때 문제가 생깁니다. 이 서버에는 931GB HDD가 `/data`에 붙어 있고 언젠가 거기에 데이터를 둘 생각이라, 처음부터 막힐 길로 갈 이유가 없었습니다.
+
+```bash
+sudo apt update
+sudo apt install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+설치된 버전입니다.
+
+```
+Docker            29.7.2
+Docker Compose    v5.5.0
+```
+
+여기서 알아둘 점은 **Compose V2는 별도 바이너리가 아니라 Docker CLI의 플러그인**이라는 것입니다. 예전에 쓰던 `docker-compose`(하이픈)는 Python으로 작성된 독립 도구였고, 지금은 `docker compose`(공백)가 표준입니다. 위 명령의 `docker-compose-plugin` 패키지가 그것입니다.
+
+#### `docker` 그룹에 들어간다는 것의 의미
+
+매번 `sudo`를 붙이기 번거로워서 사용자를 `docker` 그룹에 넣었습니다.
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+이 명령은 현재 세션에 바로 반영되지 않습니다. 로그아웃 후 다시 접속해야 합니다.
+
+그런데 이 한 줄에는 대부분의 설치 안내가 적지 않는 사실이 하나 있습니다. **`docker` 그룹에 속한다는 것은 사실상 root 권한을 갖는 것과 같습니다.**
+
+```bash
+# docker 그룹 사용자가 sudo 없이 실행 가능
+docker run -it -v /:/host alpine chroot /host sh
+```
+
+호스트의 루트 디렉터리를 컨테이너에 통째로 마운트하고 그 안으로 들어가는 명령입니다. 이 순간부터 호스트 파일시스템 전체를 root 권한으로 읽고 씁니다. Docker 데몬 자체가 root로 돌고 있고, **그 데몬에게 명령할 수 있는 권한이 곧 root 권한**이기 때문입니다. 막을 방법은 없습니다. 취약점이 아니라 설계가 그렇습니다.
+
+그래서 어떻게 했느냐 하면, **그대로 두었습니다.** 이 서버에 로그인하는 사람은 저 하나뿐이고, 그 계정은 이미 `sudo`도 가지고 있습니다. 실질적으로 달라지는 게 없습니다.
+
+다만 인식은 하고 넘어갔습니다. 보안 설정 절에서 SSH 키 인증과 fail2ban을 설정하면서 "계정 하나 뚫리는 것"을 막으려고 했는데, **그 계정이 뚫리면 서버 전체가 그 즉시 넘어간다**는 뜻이기 때문입니다. 마지막 편에서 외부에 문을 열 때, 이 사실이 SSH 설정을 더 조여야 하는 이유가 됩니다.
+
+#### compose 파일 한 곳에서 관리하기
+
+서비스는 `~/ai-services/docker-compose.yml` 하나로 관리합니다. Ollama와 n8n을 같은 파일에 넣었습니다.
+
+한 파일에 둔 이유는 **두 서비스가 서로를 필요로 하기 때문**입니다. n8n은 Ollama를 호출하고, 둘은 같은 네트워크 안에 있어야 합니다. Compose는 프로젝트마다 기본 네트워크를 자동으로 만들어주기 때문에, 같은 파일에 선언하기만 하면 **서비스 이름이 그대로 호스트명**이 됩니다.
+
+```
+http://ollama:11434
+```
+
+n8n 컨테이너 안에서 이 주소로 Ollama에 접근합니다. `localhost`가 아닙니다. 컨테이너 안에서 `localhost`는 그 컨테이너 자신을 가리킵니다. 이 부분에서 한 번쯤 헤매게 되는데, 호스트에서는 `curl http://localhost:11434`가 잘 되는데 n8n 안에서만 안 되는 상황이 나오면 대부분 이 문제입니다.
+
+#### Docker는 ufw를 우회합니다
+
+보안 설정 절에서 방화벽을 기본 거부로 설정했습니다. 그런데 컨테이너를 띄우고 나서 확인해보니 이런 상태였습니다.
+
+```
+CONTAINER   PORTS
+n8n         0.0.0.0:5678->5678/tcp
+ollama      0.0.0.0:11434->11434/tcp
+```
+
+`0.0.0.0` — **모든 네트워크 인터페이스에 열려 있습니다.** ufw에서 무엇을 막아두었든 상관없이 열려 있습니다.
+
+이유는 Docker가 포트를 게시하는 방식에 있습니다. `ports: - "5678:5678"`을 선언하면 Docker는 iptables의 `DOCKER` 체인에 규칙을 직접 넣습니다. 그리고 **이 체인은 ufw가 관리하는 체인보다 먼저 평가됩니다.** ufw는 자기가 모르는 규칙이 앞에 끼어든 것을 알지 못하고, 사용자는 `ufw status`만 보고 안전하다고 착각합니다.
+
+특히 문제가 되는 쪽은 Ollama입니다. **11434 포트에는 인증이 없습니다.** 집 안 네트워크의 아무 기기나 접속해서 모델을 부르고, 지우고, 새로 받을 수 있습니다.
+
+해결책은 ufw와 싸우는 것이 아니라, **포트를 게시할 때 바인딩 주소를 좁히는 것**입니다.
+
+```yaml
+  ollama:
+    ports:
+      - "127.0.0.1:11434:11434"    # 서버 자신에게만
+  n8n:
+    ports:
+      - "192.168.0.x:5678:5678"    # 집 안에서 브라우저로 접속
+```
+
+Ollama는 호스트에 열어둘 이유가 아예 없습니다. n8n이 같은 Docker 네트워크 안에서 `http://ollama:11434`로 부르기 때문입니다. 인터페이스를 특정하면 Docker가 iptables에 넣는 규칙 자체가 좁아지므로, ufw와 충돌할 일이 사라집니다.
+
+지금은 포트포워딩이 없어서 인터넷에 노출되지는 않습니다. 하지만 **마지막 편에서 Cloudflare Tunnel을 붙일 때 이 상태로 두면 안 됩니다.**
+
+#### GPU를 컨테이너에 넘기기
+
+여기서 이 노트북을 고른 이유를 확인하려다, 그동안 그 이유를 전혀 쓰지 않고 있었다는 걸 알게 됐습니다.
+
+컨테이너 안에서 GPU를 확인해봤습니다.
+
+```bash
+docker exec ollama nvidia-smi
+```
+```
+OCI runtime exec failed: "nvidia-smi": executable file not found in $PATH
+```
+
+컨테이너는 GPU의 존재조차 모르고 있었습니다. Ollama 로그를 보니 더 분명했습니다.
+
+```
+msg="inference compute" id=cpu library=cpu description=cpu total="7.1 GiB"
+```
+
+`library=cpu`. **설치한 날부터 계속 CPU로만 추론하고 있었습니다.** 에러도 경고도 없었습니다. Ollama는 GPU를 못 찾으면 조용히 CPU로 떨어지고, 그냥 느려질 뿐입니다. 확인하지 않으면 모르고 지나갑니다.
+
+원인은 두 겹이었습니다.
+
+**첫째, 호스트에 드라이버가 없었습니다.**
+
+```bash
+lsmod | grep -c nvidia
+# 0
+```
+
+`ubuntu-drivers`에게 물어보니 다행히 지원 목록에 남아 있었습니다.
+
+```
+model    : GM107M [GeForce GTX 960M]
+driver   : nvidia-driver-580 - distro non-free recommended
+driver   : nvidia-driver-580-server - distro non-free
+```
+
+여기서 눈여겨볼 것이 있습니다. 시스템 저장소에는 595 브랜치 드라이버도 있는데, **이 GPU에는 580만 제시됩니다.** 960M은 Maxwell 세대(2015년)이고, 580이 Maxwell을 지원하는 마지막 브랜치입니다. 10년 된 하드웨어가 지원 목록의 끝자락에 겨우 걸려 있는 셈입니다. 몇 년 뒤에는 이 노트북으로 이 글을 다시 쓸 수 없을 겁니다.
+
+추천은 `nvidia-driver-580`이지만 `-server` 변형을 골랐습니다. 이 노트북은 화면을 쓰지 않는 헤드리스 서버라 X 서버용 구성 요소가 필요 없습니다. **추천 로직은 일반 데스크탑을 가정합니다.** 용도가 다르면 추천을 따르지 않아도 됩니다.
+
+```bash
+sudo apt install -y nvidia-driver-580-server
+sudo reboot
+```
+
+재부팅 후:
+
+```
++-----------------------------------------------------------------------+
+| NVIDIA-SMI 580.173.02      Driver Version: 580.173.02  CUDA Version: 13.0 |
+|   0  NVIDIA GeForce GTX 960M      Off |    0MiB /   2048MiB |   0%      |
++-----------------------------------------------------------------------+
+```
+
+**VRAM 2048MiB.** 960M은 2GB 모델과 4GB 모델이 따로 있는데, 이 노트북은 2GB짜리였습니다. 이 숫자가 뒤에서 발목을 잡습니다.
+
+덧붙이면, 이 재부팅에서 얻은 것이 하나 더 있습니다. 자동 재부팅을 켜지 않은 이유로 "컨테이너가 제대로 다시 올라오는지 검증한 적이 없다"고 적었는데, 여기서 검증됐습니다.
+
+```
+CONTAINER ID   IMAGE                     STATUS
+5f1ec9a07797   docker.n8n.io/n8nio/n8n   Up 39 minutes
+81ec121d2e25   ollama/ollama:latest      Up 39 minutes
+```
+
+`restart: unless-stopped`가 제 몫을 했습니다.
+
+**둘째, 컨테이너가 GPU를 볼 수 없었습니다.**
+
+호스트에 드라이버가 있어도 컨테이너는 여전히 GPU를 못 봅니다. Docker는 기본적으로 장치 노드를 격리하고, 이 격리를 뚫어 GPU를 넘겨주는 것이 `nvidia-container-toolkit`의 역할입니다.
+
+```bash
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+
+curl -fsSL https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt update
+sudo apt install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+```
+
+`nvidia-ctk runtime configure`가 `/etc/docker/daemon.json`에 NVIDIA 런타임을 등록합니다. 그리고 compose에 한 줄을 더합니다.
+
+```yaml
+  ollama:
+    image: ollama/ollama:latest
+    gpus: all
+```
+
+이제 컨테이너 안에서 `nvidia-smi`가 뜹니다. 로그도 바뀌었습니다.
+
+```
+msg="gpu memory" id=0 library=CUDA available="1.5 GiB" free="1.9 GiB"
+```
+
+`library=cpu`에서 `library=CUDA`로. 성공한 것처럼 보였습니다.
+
+#### `nvidia-smi`가 뜬다고 끝이 아니었다
+
+같은 로그를 조금 더 내려 읽었습니다.
+
+```
+common_params_fit_impl: - CUDA0 (NVIDIA GeForce GTX 960M):  0 layers, 129 MiB used, 1831 MiB free
+load_tensors: offloading 0 repeating layers to GPU
+load_tensors: offloaded 0/36 layers to GPU
+```
+
+**36개 레이어 중 0개.** GPU를 인식했지만 실제로는 아무것도 올리지 않았습니다. 이유는 그 바로 위에 있었습니다.
+
+```
+msg="disabling multimodal projector offload" reason=limited-vram
+```
+
+당시 쓰던 `gemma4:e2b`는 이미지도 처리하는 멀티모달 모델입니다. 이미지 인코더(projector)가 따로 붙어 있는데, Ollama는 가용 VRAM 1.5GiB로는 이 구조가 들어가지 않는다고 판단해서 projector 오프로드를 끄고, 이어서 레이어도 하나도 올리지 않기로 결정했습니다.
+
+드라이버를 깔고, 재부팅하고, toolkit을 붙이고, `nvidia-smi`까지 확인했는데 **추론은 여전히 100% CPU에서 돌고 있었습니다.**
+
+측정해봤습니다. 같은 프롬프트로 각각 5회씩입니다.
+
+| | eval rate 평균 | 범위 |
+|---|---|---|
+| GPU 연결 전 | 12.95 tok/s | 12.72 ~ 13.20 |
+| GPU 연결 후 | 13.24 tok/s | 13.07 ~ 13.33 |
+
+**차이 2.2%.** 측정 오차입니다. `offloaded 0/36`이 숫자로 확인된 셈입니다.
+
+그런데 프롬프트 처리 속도를 보고 한 번 더 놀랐습니다.
+
+| | prompt eval rate |
+|---|---|
+| GPU 연결 전 | 168 ~ 179 tok/s |
+| GPU 연결 후 | 119 ~ 131 tok/s |
+
+5회가 전부 깔끔하게 갈립니다. **GPU를 연결했더니 프롬프트 처리가 30% 느려졌습니다.**
+
+단서는 아까 그 로그 줄에 있었습니다.
+
+```
+CUDA0 (GTX 960M): 0 layers, 129 MiB used, 1831 MiB free
+```
+
+레이어는 하나도 안 올렸는데 **129MiB를 쓰고 있습니다.** 연산 버퍼는 GPU에 잡아둔 상태입니다. 실제 계산은 전부 CPU가 하는데, CUDA 백엔드와 동기화하는 비용만 얹힌 것입니다. 얻은 것 없이 부담만 추가된, 가장 나쁜 조합이었습니다.
+
+여기서 배운 것은 하나입니다. **`nvidia-smi`가 출력되는 것과 모델이 GPU를 쓰는 것은 전혀 다른 문제입니다.** 대부분의 설치 안내는 `nvidia-smi`가 뜨면 끝난 것처럼 적고 넘어갑니다. 실제로 확인해야 할 줄은 이것입니다.
+
+```bash
+docker logs ollama 2>&1 | grep "offloaded"
+```
+
+`offloaded 0/36 layers to GPU`를 보기 전까지, 저는 GPU를 쓰고 있다고 믿고 있었습니다.
+
+그렇다면 2GB VRAM에 들어가는 모델은 무엇인가. 그것이 다음 편의 문제입니다.
+
+
+---
+
+## 결론
+
+문을 잠그고, 그릇을 준비했습니다. SSH는 키로만 붙는 것을 확인했고, fail2ban과 ufw를 올렸고, Docker 공식 저장소로 엔진과 Compose를 설치했습니다.
+
+그런데 이번 편에서 남은 건 설치 방법보다 **확인하는 방법**입니다. 같은 종류의 착각을 세 번 했습니다.
+
+- 키로 접속되니 비밀번호 인증이 닫힌 줄 알았습니다. 실제로는 `passwordauthentication yes`였습니다
+- `ufw status`가 `deny (incoming)`이라 안전한 줄 알았습니다. 실제로는 Docker가 그 규칙을 우회하고 있었습니다
+- `nvidia-smi`가 뜨니 GPU를 쓰고 있는 줄 알았습니다. 실제로는 `offloaded 0/36 layers`였습니다
+
+세 경우 모두 **에러를 내지 않았습니다.** 그냥 조용히 다르게 동작하고 있었을 뿐입니다. 관리형 서비스를 쓸 때는 이런 간극을 만날 일이 거의 없습니다. 대시보드에 초록불이 들어오면 된 것이었습니다. 직접 관리해보고 싶다고 했던 게 결국 이 간극을 들여다보는 일이었습니다.
+
+비밀번호 로그인과 방화벽 대역 제한은 **마지막 편에서 Cloudflare Tunnel과 함께** 마무리합니다. 어디로 들어올지 정해지지 않은 상태에서 규칙을 먼저 짜봐야 다시 손대게 되기 때문입니다.
+
+다음 편에서는 이 그릇 위에 **Ollama와 n8n을 올립니다.** 그리고 방금 확인한 **VRAM 1.5GiB**가 모델을 고르는 자리에서 다시 발목을 잡습니다.
+
+→ [(3) Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n)

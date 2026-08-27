@@ -162,6 +162,49 @@
   color: rgb(96 165 250); /* blue-400 */
 }
 
+/* KnowledgeNote — 펼칠 때 내용이 아래로 미끄러져 들어오도록.
+   <details>는 닫힌 동안 내용이 display:none이라 height 트랜지션이 불가능해,
+   열린 순간 본문에만 한 번 재생되는 키프레임으로 처리한다. */
+@keyframes knowledge-note-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-component="knowledge-note"][open] > .knowledge-note-body {
+  animation: knowledge-note-reveal 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-component="knowledge-note"][open] > .knowledge-note-body {
+    animation: none;
+  }
+}
+
+/* 인쇄할 때는 접혀 있어도 내용이 보이도록 전부 펼친다.
+   브라우저마다 닫힌 <details>를 숨기는 방식이 달라(구형은 자식 display:none,
+   최신은 ::details-content의 content-visibility) 두 경로를 모두 열어둔다. */
+@media print {
+  [data-component="knowledge-note"] > .knowledge-note-body {
+    display: block !important;
+    animation: none;
+  }
+
+  [data-component="knowledge-note"]::details-content {
+    content-visibility: visible !important;
+    block-size: auto !important;
+  }
+
+  [data-component="knowledge-note"] summary svg {
+    display: none;
+  }
+}
+
 .text-heading-1 {
   @apply text-3xl md:text-6xl font-bold my-6
 }

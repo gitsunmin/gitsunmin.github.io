@@ -114,6 +114,100 @@ const jsonLd = JSON.stringify({
     </div>
   </div>
 
+  <!-- 본문 이미지 전체화면 뷰어 -->
+  <div
+    id="image-lightbox"
+    class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-200"
+    role="dialog"
+    aria-modal="true"
+    aria-label="이미지 확대 보기"
+  >
+    <button
+      type="button"
+      data-lightbox-close
+      class="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 cursor-pointer"
+      aria-label="닫기"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <title>닫기</title>
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+    <figure class="flex max-h-full max-w-full flex-col items-center gap-3">
+      <img data-lightbox-image src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain" />
+      <figcaption data-lightbox-caption class="max-w-2xl text-center text-sm text-gray-300"></figcaption>
+    </figure>
+  </div>
+
+  <script is:inline>
+    function initImageLightbox() {
+      // document에 위임하므로 페이지 전환마다 리스너가 쌓이지 않도록 한 번만 등록한다
+      if (window.__lightboxBound) return;
+      window.__lightboxBound = true;
+
+      function el(selector) {
+        const lightbox = document.getElementById('image-lightbox');
+        return lightbox ? lightbox.querySelector(selector) : null;
+      }
+
+      function open(target) {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox) return;
+        const image = el('[data-lightbox-image]');
+        const caption = el('[data-lightbox-caption]');
+        image.src = target.currentSrc || target.src;
+        image.alt = target.alt || '';
+        caption.textContent = target.alt || '';
+        caption.classList.toggle('hidden', !target.alt);
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        // 다음 프레임에 opacity를 올려 페이드 인이 적용되게 한다
+        requestAnimationFrame(() => lightbox.classList.remove('opacity-0'));
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox || lightbox.classList.contains('hidden')) return;
+        lightbox.classList.add('opacity-0');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          lightbox.classList.add('hidden');
+          lightbox.classList.remove('flex');
+          const image = el('[data-lightbox-image]');
+          if (image) image.src = '';
+        }, 200);
+      }
+
+      // 본문 이미지는 MDX 렌더 결과라 개별 바인딩 대신 위임으로 처리한다
+      document.addEventListener('click', (e) => {
+        if (!(e.target instanceof Element)) return;
+        const zoomable = e.target.closest('[data-zoomable]');
+        if (zoomable) {
+          open(zoomable);
+          return;
+        }
+        // 라이트박스 안에서는 확대된 이미지 위가 아닌 곳을 누르면 닫는다
+        const lightbox = document.getElementById('image-lightbox');
+        if (lightbox && lightbox.contains(e.target) && !e.target.closest('[data-lightbox-image]')) {
+          close();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+
+      document.addEventListener('astro:before-swap', close);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initImageLightbox);
+    } else {
+      initImageLightbox();
+    }
+    document.addEventListener('astro:page-load', initImageLightbox);
+  </script>
 
   <script is:inline>
     function initReadingProgress() {
