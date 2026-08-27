@@ -1,0 +1,661 @@
+<!DOCTYPE html><html lang="ko"> <head><script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('darkMode');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'true' || (saved === null && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script><script>
+      document.addEventListener('astro:before-swap', function (e) {
+        if (document.documentElement.classList.contains('dark')) {
+          e.newDocument.documentElement.classList.add('dark');
+        } else {
+          e.newDocument.documentElement.classList.remove('dark');
+        }
+      });
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="서랍에서 10년을 보낸 HP 노트북에 Ubuntu Server를 올렸습니다. USB 굽기부터 디스크 나누기, 덮개를 닫아도 안 꺼지게 만들기까지, 비서가 살 집의 골조를 세우는 과정입니다."><title>10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기 | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/blog/home-server-01-ubuntu-setup"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기 | Gitsunmin"><meta property="og:description" content="서랍에서 10년을 보낸 HP 노트북에 Ubuntu Server를 올렸습니다. USB 굽기부터 디스크 나누기, 덮개를 닫아도 안 꺼지게 만들기까지, 비서가 살 집의 골조를 세우는 과정입니다."><meta property="og:type" content="article"><meta property="og:url" content="https://gitsunmin.github.io/blog/home-server-01-ubuntu-setup"><meta property="og:image" content="https://gitsunmin.github.io/assets/blog/home-server/thumbnail.webp"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기 | Gitsunmin"><meta name="twitter:description" content="서랍에서 10년을 보낸 HP 노트북에 Ubuntu Server를 올렸습니다. USB 굽기부터 디스크 나누기, 덮개를 닫아도 안 꺼지게 만들기까지, 비서가 살 집의 골조를 세우는 과정입니다."><meta name="twitter:image" content="https://gitsunmin.github.io/assets/blog/home-server/thumbnail.webp"><!-- JSON-LD Structured Data --><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기","description":"서랍에서 10년을 보낸 HP 노트북에 Ubuntu Server를 올렸습니다. USB 굽기부터 디스크 나누기, 덮개를 닫아도 안 꺼지게 만들기까지, 비서가 살 집의 골조를 세우는 과정입니다.","image":"https://gitsunmin.github.io/assets/blog/home-server/thumbnail.webp","datePublished":"2026-08-25T00:00:00.000Z","dateModified":"2026-08-25T00:00:00.000Z","author":{"@type":"Person","name":"Sunmin Kim","url":"https://gitsunmin.github.io"},"publisher":{"@type":"Person","name":"Sunmin Kim","url":"https://gitsunmin.github.io"},"url":"https://gitsunmin.github.io/blog/home-server-01-ubuntu-setup","keywords":"technology, ubuntu, homelab, llm","inLanguage":"ko-KR"}</script><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><link rel="preload" as="image" href="/assets/blog/home-server/thumbnail.webp" fetchpriority="high"><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CHCGLXSCJN');
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Co4N1b0E.js"></script><link rel="stylesheet" href="/_astro/BaseLayout.D-oV8UU_.css">
+<style>.giscus,.giscus-frame{width:100%!important}.code-block-wrapper:hover .copy-button{opacity:1!important}
+@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><script type="module" src="/_astro/page.BB_G4N2h.js"></script><style>[data-astro-transition-scope="astro-zskzs62h-1"] { view-transition-name: blog-image-home-server-01-ubuntu-setup; }@layer astro { ::view-transition-old(blog-image-home-server-01-ubuntu-setup) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(blog-image-home-server-01-ubuntu-setup) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(blog-image-home-server-01-ubuntu-setup) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(blog-image-home-server-01-ubuntu-setup) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-zskzs62h-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-zskzs62h-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-zskzs62h-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-zskzs62h-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-zskzs62h-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-zskzs62h-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-zskzs62h-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-zskzs62h-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-5kv4pklq-2"] { view-transition-name: site-header; }@layer astro { ::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-5kv4pklq-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-5kv4pklq-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-5kv4pklq-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-5kv4pklq-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-5kv4pklq-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-5kv4pklq-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-5kv4pklq-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-5kv4pklq-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bxrvaivx-3"] { view-transition-name: site-footer; }@layer astro { ::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bxrvaivx-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bxrvaivx-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bxrvaivx-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bxrvaivx-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bxrvaivx-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bxrvaivx-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bxrvaivx-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bxrvaivx-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(c,s,d)=>s in c?g(c,s,{enumerable:!0,configurable:!0,writable:!0,value:d}):c[s]=d;var l=(c,s,d)=>w(c,typeof s!="symbol"?s+"":s,d);var E=new Set(["__proto__","constructor","prototype"]);{let c={0:t=>y(t),1:t=>d(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(d(t)),5:t=>new Set(d(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in c?c[p](e):void 0},d=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let n=this.querySelectorAll("astro-slot"),r={},i=this.querySelectorAll("template[data-astro-template]");for(let o of i){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of n){let a=o.closest(this.tagName);a!=null&&a.isSameNode(this)&&(r[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let a=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(a+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${a}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,r,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),n.disconnect(),this.childrenConnectedCallback()},n=new MutationObserver(()=>{var r;((r=this.lastChild)==null?void 0:r.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});n.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let n=new URL(e,document.baseURI),r=`astro-retry=${Date.now()}`,i=n.hash.replace(/^#/,"");return n.hash=i?`${i}&${r}`:r,n.toString()}async importWithRetry(e){try{return await import(e)}catch(n){return await new Promise(r=>setTimeout(r,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let n=this.getAttribute("component-url"),r=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:n}});this.dispatchEvent(r)&&console.error(`[astro-island] Error hydrating ${n}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),n=this.getAttribute("client");if(Astro[n]===void 0){window.addEventListener(`astro:${n}`,()=>this.start(),{once:!0});return}try{await Astro[n](async()=>{let r=this.getAttribute("renderer-url");try{let[i,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),r?this.importWithRetry(r):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=i;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=i[h]}return this.hydrator=u,this.hydrate}catch(i){return this.handleHydrationError(i),()=>{}}},e,this)}catch(r){this.handleHydrationError(r)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="2bsdcc" prefix="r5" component-url="/_astro/LivingBackground.Bj2MzXD6.js" component-export="LivingBackground" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;LivingBackground&quot;,&quot;value&quot;:true}" await-children><div aria-hidden="true" class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index:-1"><div class="living-bg-blob living-bg-blob-1"></div><div class="living-bg-blob living-bg-blob-2"></div><div class="living-bg-blob living-bg-blob-3"></div><div class="living-bg-grid absolute inset-0"></div><canvas class="absolute inset-0"></canvas><canvas class="absolute inset-0"></canvas></div><!--astro:end--></astro-island> <script type="module">function r(){const n=document.getElementById("toc-mobile-toggle"),s=document.getElementById("toc-mobile-content"),l=document.getElementById("toc-chevron");if(n&&s&&l){const e=n.cloneNode(!0);n.parentNode?.replaceChild(e,n),e.addEventListener("click",()=>{const t=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",String(!t)),s.classList.toggle("hidden",t),e.querySelector("#toc-chevron")?.classList.toggle("rotate-180",!t)}),s.querySelectorAll(".toc-mobile-link").forEach(t=>{t.addEventListener("click",()=>{s.classList.add("hidden"),e.setAttribute("aria-expanded","false"),e.querySelector("#toc-chevron")?.classList.remove("rotate-180")})})}const c=document.querySelectorAll(".toc-link");if(c.length===0)return;const a=e=>{c.forEach(t=>{const o=t.dataset.slug===e;t.classList.toggle("text-blue-600",o),t.classList.toggle("dark:text-blue-400",o),t.classList.toggle("font-medium",o),t.classList.toggle("text-gray-500",!o),t.classList.toggle("dark:text-gray-400",!o)})},i=Array.from(c).map(e=>document.getElementById(e.dataset.slug)).filter(Boolean);if(i.length===0)return;const d=new IntersectionObserver(e=>{const t=e.filter(o=>o.isIntersecting).sort((o,g)=>o.boundingClientRect.top-g.boundingClientRect.top);t.length>0&&a(t[0].target.id)},{rootMargin:"-10% 0px -80% 0px"});i.forEach(e=>d.observe(e))}document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();document.addEventListener("astro:page-load",r);</script><astro-island uid="ZGYBSc" prefix="r595" component-url="/_astro/Providers.DdHLk1vY.js" component-export="Providers" renderer-url="/_astro/client.CS0MyPN4.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="23PqI7" prefix="r3" component-url="/_astro/Header.eENPaFPQ.js" component-export="Header" renderer-url="/_astro/client.CS0MyPN4.js" props="{&quot;title&quot;:[0],&quot;data-astro-transition-persist&quot;:[0,&quot;site-header&quot;],&quot;data-astro-transition-scope&quot;:[0,&quot;astro-5kv4pklq-2&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" data-astro-transition-scope="astro-5kv4pklq-2" data-astro-transition-persist="site-header" await-children><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">Gitsunmin</h1></span></a><a href="/settings" aria-label="설정" class="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></a></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">   <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-blue-500 dark:bg-blue-400 z-50 transition-none" style="width: 0%" aria-hidden="true"></div> <div class="max-w-6xl mx-auto px-4 py-12 md:px-8 md:py-24"> <!-- Mobile TOC --> <div class="lg:hidden mb-6"> <nav class="toc-desktop hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto" aria-label="목차"><p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+목차
+</p><ul class="space-y-1"><li style="padding-left: 0px"><a href="#서론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="서론">서론</a></li><li style="padding-left: 0px"><a href="#본론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="본론">본론</a></li><li style="padding-left: 12px"><a href="#ubuntu-server-설치" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="ubuntu-server-설치">Ubuntu Server 설치</a></li><li style="padding-left: 24px"><a href="#iso-내려받기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="iso-내려받기">ISO 내려받기</a></li><li style="padding-left: 24px"><a href="#설치-usb-만들기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="설치-usb-만들기">설치 USB 만들기</a></li><li style="padding-left: 24px"><a href="#usb로-부팅하기--이번-한-번만-순서를-바꾸기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="usb로-부팅하기--이번-한-번만-순서를-바꾸기">USB로 부팅하기 — 이번 한 번만 순서를 바꾸기</a></li><li style="padding-left: 24px"><a href="#설치-마법사--순서대로-무엇을-골랐나" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="설치-마법사--순서대로-무엇을-골랐나">설치 마법사 — 순서대로 무엇을 골랐나</a></li><li style="padding-left: 24px"><a href="#디스크--기본값이-엉뚱한-디스크를-골랐다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="디스크--기본값이-엉뚱한-디스크를-골랐다">디스크 — 기본값이 엉뚱한 디스크를 골랐다</a></li><li style="padding-left: 12px"><a href="#설치를-마치고--서버스럽게-만들기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="설치를-마치고--서버스럽게-만들기">설치를 마치고 — 서버스럽게 만들기</a></li><li style="padding-left: 24px"><a href="#hdd를-data로-붙이기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="hdd를-data로-붙이기">HDD를 /data로 붙이기</a></li><li style="padding-left: 24px"><a href="#덮개를-닫아도-안-꺼지게-만들기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="덮개를-닫아도-안-꺼지게-만들기">덮개를 닫아도 안 꺼지게 만들기</a></li><li style="padding-left: 0px"><a href="#결론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="결론">결론</a></li></ul></nav><div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"><button id="toc-mobile-toggle" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-expanded="false" aria-controls="toc-mobile-content"><span>목차</span><svg id="toc-chevron" class="w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-mobile-content" class="hidden px-4 py-3 bg-white dark:bg-gray-900"><ul class="space-y-1"><li style="padding-left: 0px"><a href="#서론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">서론</a></li><li style="padding-left: 0px"><a href="#본론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">본론</a></li><li style="padding-left: 12px"><a href="#ubuntu-server-설치" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">Ubuntu Server 설치</a></li><li style="padding-left: 24px"><a href="#iso-내려받기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">ISO 내려받기</a></li><li style="padding-left: 24px"><a href="#설치-usb-만들기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">설치 USB 만들기</a></li><li style="padding-left: 24px"><a href="#usb로-부팅하기--이번-한-번만-순서를-바꾸기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">USB로 부팅하기 — 이번 한 번만 순서를 바꾸기</a></li><li style="padding-left: 24px"><a href="#설치-마법사--순서대로-무엇을-골랐나" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">설치 마법사 — 순서대로 무엇을 골랐나</a></li><li style="padding-left: 24px"><a href="#디스크--기본값이-엉뚱한-디스크를-골랐다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">디스크 — 기본값이 엉뚱한 디스크를 골랐다</a></li><li style="padding-left: 12px"><a href="#설치를-마치고--서버스럽게-만들기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">설치를 마치고 — 서버스럽게 만들기</a></li><li style="padding-left: 24px"><a href="#hdd를-data로-붙이기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">HDD를 /data로 붙이기</a></li><li style="padding-left: 24px"><a href="#덮개를-닫아도-안-꺼지게-만들기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">덮개를 닫아도 안 꺼지게 만들기</a></li><li style="padding-left: 0px"><a href="#결론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">결론</a></li></ul></div></div> </div> <div class="flex gap-10 items-start"> <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-clip" data-pagefind-body data-pagefind-meta="title:10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기, tags:technology,ubuntu,homelab,llm"> <img src="/assets/blog/home-server/thumbnail.webp" onerror="this.src='/og/blog.png';" alt="10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기" class="w-full h-auto rounded-lg mb-8 shadow-lg" fetchpriority="high" loading="eager" data-astro-transition-scope="astro-zskzs62h-1"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">10년 된 노트북으로 비서를 고용하기 (1) — 서버 만들기</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 8. 25.</span> <span class="ml-2">(수정일: 2026. 8. 25.)</span> <span class="ml-2">· 약 21분 읽기</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># technology</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># ubuntu</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># homelab</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># llm</span> </div> </div> <blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>10년 된 노트북으로 비서를 고용하기</strong></p>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>서버 만들기</strong> — 오래된 노트북에 Ubuntu Server 올리기 ← 지금 글</li>
+<li class="mb-2 ml-0">문 잠그기와 Docker <em>(예정)</em> — SSH·방화벽 기본과 Docker, 그리고 GPU</li>
+<li class="mb-2 ml-0">Ollama와 n8n 올리기 <em>(예정)</em> — 로컬 모델과 자동화 도구</li>
+<li class="mb-2 ml-0">비서로 만들기 <em>(예정)</em> — 외부 접속 경로와 일정 판단 파이프라인</li>
+</ol>
+</blockquote>
+
+<h2 id="서론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">서론</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">대학교 재학 시절에 사용하던 HP 사의 노트북이 한 대 있었습니다. 개발 공부하면서부터는 맥북과 데스크탑만 사용하게 되면서 점차 사용하지 않게 된 노트북이었습니다. 가끔 동작하는지 켜보기만 했었는데, 어느덧 10년이 지나 버렸습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그래도 당시에는 여러 게임도 할 수 있는 사양이었는데, 쉬고 있는 모습을 보아하니 조금 아깝다는 생각이 들었습니다. 그래서 “한 번 다시 부활시켜보자!”라는 생각으로 위 노트북을 들여다보기 시작했습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">우선 노트북의 사양은 아래와 같았습니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>HP Pavilion Notebook (X9J93PA)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  CPU      Intel Core i7-6700HQ  (Skylake, 4코어 8스레드, 2.6GHz)</span></span>
+<span class="line"><span>  RAM      8GB DDR4 2400MHz      (4GB + 4GB, 슬롯 2개 모두 사용 중)</span></span>
+<span class="line"><span>  GPU      NVIDIA GeForce GTX 960M  (VRAM 2GB, Maxwell)</span></span>
+<span class="line"><span>           Intel HD Graphics 530 (내장)</span></span>
+<span class="line"><span>  SSD      Crucial MX300  275GB</span></span>
+<span class="line"><span>  HDD      HGST  931GB</span></span>
+<span class="line"><span>  NIC      Realtek 기가비트 유선 + Intel Wireless 7265</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">라즈베리파이로 RSS Bot을 만들어서 사용하던 저에게는 슈퍼컴퓨터였습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 정도 사양이라면 그래도 LLM을 설치해서 여러가지 실험도 해볼 수 있을 것 같고, 개인적인 업무들을 자동화하는 것도 가능할 것 같았습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">마침 LLM으로 해보고 싶은 것들이 쌓여 있던 참이었는데, 마음껏 굴려볼 자리가 생긴 셈이었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 시리즈에서는 제가 오래된 노트북에 LLM을 설치하고 실행해보면서 최종적으로는 AI 비서가 만들어지는 과정을 다루었습니다.</p>
+<h2 id="본론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">본론</h2>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">너무 오래 사용하기도 했고, 방치도 되었던 노트북이어서 그런지, 팬에 먼지가 쌓여 있어서 한 번 분해해서 먼지도 털고, 써멀 그리스도 새로 발라주었습니다. 오래된 기기로 작업하실 때에는 필요한 것 같습니다ㅎ</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">저는 가장 먼저 운영체제부터 바꾸어야겠다는 생각을 했습니다. 어찌되었든, 서버로서 사용될 노트북이었기 때문에, 편리한 UI를 제공받기 보다는 불필요한 요소는 제거되고, 필요한 것만 사용할 수 있으면 되겠다는 생각이 있었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">위와 같은 생각으로 Linux 계열로 생각을 했었고, 비교적 많이 사용되기도 하고, 업데이트도 꾸준히 되고 있는 Ubuntu Server를 선택하게 되었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이야기가 길어서 네 편으로 나누었습니다. 이번 편은 <strong>운영체제를 올려 서버의 골조를 세우는 것</strong>까지입니다. 보안 설정과 Docker는 2편에서, Ollama와 n8n은 3편에서 다룹니다.</p>
+<h3 id="ubuntu-server-설치" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">Ubuntu Server 설치</h3>
+<h4 id="iso-내려받기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">ISO 내려받기</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">오래된 노트북에 Ubuntu Server를 설치하기 위해 <strong>비어 있는 8GB 이상의 USB</strong>가 필요합니다. 그리고 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://ubuntu.com/download/server">Ubuntu Server Download</a>에 접속하셔서 Download를 클릭하여 iso 파일을 다운로드 해주었습니다. 저는 아래와 같은 버전을 다운로드했습니다. (이후에도 계속 릴리스될 겁니다.)</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>Distributor ID: Ubuntu</span></span>
+<span class="line"><span>Description:    Ubuntu 26.04 LTS</span></span>
+<span class="line"><span>Release:        26.04</span></span>
+<span class="line"><span>Codename:       resolute</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<section data-component="knowledge-list" class="not-prose my-6 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/30 px-3 pb-3 pt-2.5"><p class="mb-1.5 flex items-center gap-1.5 px-1 text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500"><span aria-hidden="true">✦</span>설치 전에 짚고 넘어가기</p><div class="flex flex-col"><details data-component="knowledge-note" data-kind="reason" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-sky-400 dark:before:bg-sky-500 open:bg-sky-50/40 dark:open:bg-sky-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-sky-50 text-sky-600 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:ring-sky-800"><span aria-hidden="true">🤔</span>왜</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">8GB 이상의 USB가 필요한 이유</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">Ubuntu Server ISO는 3GB 안팎입니다(정확한 크기는 다운로드 페이지에 표시됩니다). 산술적으로는 4GB USB로도 되지만, USB에 적힌 용량과 실제 쓸 수 있는 용량은 다릅니다. 제조사는 1GB를 10억 바이트로 계산하고 운영체제는 2^30바이트로 세기 때문에, 4GB짜리의 실사용 용량은 3.7GB 남짓입니다. 게다가 ISO는 릴리스를 거듭할수록 커집니다. 지금 겨우 들어간다면 다음 버전에서는 안 들어갑니다. 그리고 <strong>이 작업은 USB의 기존 내용을 전부 지웁니다.</strong> 파일을 추가하는 게 아니라 디스크 전체를 덮어쓰는 방식이라 안에 있던 자료는 복구할 수 없으니, 비어 있는 USB를 쓰시거나 미리 다른 곳에 옮겨두셔야 합니다.</p></div></details><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">ISO 파일이란</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><strong>이름의 유래.</strong> <code>.iso</code>라는 확장자는 국제표준화기구 **ISO(International Organization for Standardization)**가 1988년에 정한 <strong>ISO 9660</strong>, 즉 CD-ROM의 파일 시스템 표준에서 왔습니다. 그 표준대로 만들어진 디스크를 통째로 떠낸 파일이라 <code>.iso</code>가 붙었습니다. 요즘 배포되는 이미지는 대부분 DVD·블루레이용인 <strong>UDF</strong>나 리눅스용 확장(<strong>Rock Ridge</strong>, 긴 파일명과 권한 정보를 담기 위한 것)을 함께 쓰지만, 확장자는 관습으로 그대로 남았습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><strong>ZIP과 무엇이 다른가.</strong> ZIP은 “파일 여러 개를 묶은 것”입니다. ISO는 “디스크 한 장을 처음 바이트부터 끝 바이트까지 그대로 베낀 것”입니다. 그래서 ISO 안에는 파일들만이 아니라 <strong>파티션이 어떻게 나뉘어 있는지, 전원이 켜진 직후 어느 위치를 읽어 부팅을 시작해야 하는지 같은 디스크의 구조 정보</strong>가 함께 들어 있습니다. 부팅 위치를 표시하는 규약에는 <strong>El Torito</strong>라는 이름까지 따로 붙어 있습니다. 이 구조까지 USB에 그대로 옮겨져야 컴퓨터가 그 USB를 부팅 가능한 디스크로 인식합니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><strong>어디에 쓰이나.</strong></p><ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>운영체제 설치</strong> — Ubuntu, Windows, macOS 복구 이미지 등 대부분의 설치 매체</li>
+<li class="mb-2 ml-0"><strong>가상 머신</strong> — VMware·VirtualBox·UTM에서 “가상 CD 드라이브에 넣는 디스크”가 곧 ISO 파일입니다. 구울 필요 없이 파일 그대로 지정합니다</li>
+<li class="mb-2 ml-0"><strong>서버 원격 설치</strong> — IPMI/iDRAC 같은 원격 관리 콘솔이 ISO를 원격으로 물려 무인 설치를 진행합니다</li>
+<li class="mb-2 ml-0"><strong>보존·배포</strong> — 게임 원본 디스크나 오래된 소프트웨어를 원형 그대로 남길 때</li>
+</ul></div></details><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">LTS란</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">Long Term Support, 장기 지원 버전을 뜻합니다. Ubuntu는 6개월마다 새 버전을 내놓고 그중 <strong>2년마다 한 번, 짝수 해 4월에 나오는 것이 LTS</strong>입니다. 버전 번호가 연도와 월을 그대로 쓰기 때문에 26.04는 2026년 4월 릴리스이고, 짝수 해 4월이므로 LTS입니다. 차이는 지원 기간입니다. 일반 릴리스는 9개월 뒤에 보안 업데이트가 끊기지만 <strong>LTS는 5년간 지원됩니다.</strong> 홈서버는 자주 갈아엎을 대상이 아니라 켜두고 잊어버릴 대상이라, 잊고 있어도 보안 패치가 계속 들어오는 쪽이 맞습니다.</p></div></details></div></section>
+<h4 id="설치-usb-만들기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">설치 USB 만들기</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">노트북에 USB를 꽂아서 부팅 시 바로 USB에 저장되어 있는 iso 파일을 읽게 해서 Ubuntu Server를 설치해야 합니다. 하지만, 일반적으로 판매되는 USB는 부팅했을 때 바로 iso 파일을 실행할 수 없습니다. 부팅 시 바로 실행할 수 있도록 포맷을 진행합니다. 보통 무료 소프트웨어가 많으니 적절한 도구로 만들 수 있습니다. 저는 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://etcher.balena.io">balenaEtcher</a>로 포맷을 진행했습니다.</p>
+<details data-component="knowledge-note" data-kind="reason" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-sky-400 dark:before:bg-sky-500 open:bg-sky-50/40 dark:open:bg-sky-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-sky-50 text-sky-600 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:ring-sky-800"><span aria-hidden="true">🤔</span>왜</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">balenaEtcher 같은 도구가 필요한 이유</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">ISO 파일을 USB에 그냥 복사해 넣으면 부팅되지 않습니다. 그렇게 하면 USB 안에 <code>.iso</code> 파일 하나가 놓일 뿐, USB 자체가 부팅 디스크가 되는 것은 아니기 때문입니다. 컴퓨터가 전원이 켜진 직후 읽는 것은 파일 목록이 아니라 <strong>디스크의 맨 앞 영역에 적힌 부팅 정보</strong>인데, 파일을 복사하는 방식으로는 그 영역을 건드릴 수 없습니다. balenaEtcher는 파일 단위가 아니라 <strong>디스크 전체를 바이트 단위로 덮어쓰는</strong> 방식으로 동작합니다. ISO 안에 들어 있던 파티션 구조와 부팅 정보가 USB의 같은 위치에 그대로 복제되고, 그 결과 USB가 ISO와 동일한 디스크가 됩니다. <strong>파일을 넣는 게 아니라, USB를 그 디스크로 만드는 것</strong>입니다.</p></div></details>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>balenaEtcher 사용 방법</strong></p>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Download 받은 iso 파일을 balenaEtcher에 드래그하여 내려 놓습니다. 압축을 풀 필요 없이 <code>.iso</code> 파일을 그대로 올리면 됩니다. 드래그가 여의치 않다면 <code>Flash from file</code> 버튼으로 직접 선택해도 같습니다.</li>
+<li class="mb-2 ml-0"><code>Select target</code>을 눌러 설치 USB로 만들 장치를 선택합니다. <strong>이 단계가 유일하게 위험한 곳입니다.</strong> 잘못 고르면 그 디스크의 내용이 통째로 사라집니다. balenaEtcher는 시스템 디스크를 기본적으로 목록에서 숨기고 용량이 큰 드라이브에는 경고를 붙이지만, 외장 하드나 SD 카드를 함께 꽂아둔 상태라면 USB와 나란히 목록에 뜹니다. <strong>장치 이름과 용량을 눈으로 확인하시고, 가능하면 다른 외장 장치는 미리 빼두시는 편이 안전합니다.</strong></li>
+<li class="mb-2 ml-0"><code>Flash!</code>를 누릅니다. 디스크에 직접 쓰는 작업이라 관리자 권한이 필요합니다. Windows에서는 UAC 창이, macOS에서는 비밀번호 입력창이 뜹니다.</li>
+<li class="mb-2 ml-0">쓰기가 끝나면 balenaEtcher가 이어서 검증(Validating)을 진행합니다. 기록된 내용이 원본 ISO와 일치하는지 다시 읽어 확인하는 단계입니다. 이 과정을 건너뛸 수도 있지만, 여기서 걸러지지 않은 오류는 나중에 설치 도중 알 수 없는 에러로 나타납니다. 그냥 기다리시는 편이 낫습니다. USB 속도에 따라 다르지만 전체 과정은 보통 5~10분 안에 끝납니다.</li>
+<li class="mb-2 ml-0">완료되면 <code>Flash Complete!</code>가 표시됩니다. 이제 USB를 뽑아 노트북에 꽂으면 됩니다.</li>
+</ol>
+<p class="text-foreground leading-relaxed mb-4 w-full">그런데 4~5번 사이에 이런 경고창이 뜹니다.</p>
+<details data-component="knowledge-note" data-kind="caution" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-amber-400 dark:before:bg-amber-500 open:bg-amber-50/40 dark:open:bg-amber-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:ring-amber-800"><span aria-hidden="true">⚠️</span>주의</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">&quot;이 컴퓨터에서 읽을 수 없는 디스크입니다&quot; — 정상입니다</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>이 컴퓨터에서 읽을 수 없는 디스크입니다.</span></span>
+<span class="line"><span>[ 초기화... ]  [ 무시 ]  [ 추출 ]</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">놀라서 “초기화”를 누르면 방금 만든 설치 USB가 그대로 날아갑니다.</p><p class="text-foreground leading-relaxed mb-4 w-full">이 경고가 뜨는 이유는 USB가 이제 Linux용 파티션 구조를 갖게 되었기 때문입니다. Windows나 macOS는 이 형식을 읽지 못하니 고장 난 디스크로 판단하고 초기화를 제안합니다. 하지만 이 USB를 읽어야 할 대상은 지금 쓰고 있는 컴퓨터가 아니라 <strong>부팅하려는 그 노트북</strong>입니다. “무시”를 누르고 USB를 뽑으시면 됩니다.</p></div></details>
+<h4 id="usb로-부팅하기--이번-한-번만-순서를-바꾸기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">USB로 부팅하기 — 이번 한 번만 순서를 바꾸기</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">.iso 파일을 넣어 완성된 Ubuntu Server 설치 USB를 이제 노트북에 꽂아서 운영체제 설치를 할 수 있게 되었습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">일반적으로 PC는 전원이 켜지면, 펌웨어(UEFI)가 먼저 실행되어 정해진 저장장치를 훑으며 부팅을 합니다. 하지만, 기존에는 SSD가 USB보다 먼저 찾아지는 상태로 되어 있었기 때문에, 아무리 USB를 꽂고 전원을 켜도 Ubuntu Server가 설치되지 않습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">노트북 제조사별로 조금씩 차이가 있지만, 제가 사용한 HP 노트북은 <code>F9</code>키를 눌러서 Boot Device Options(Boot Menu)에 진입할 수 있었습니다. 노트북을 켜고 <code>F9</code>키를 광클하면 됩니다(1초에 2~3번 이상)</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">제조사마다 키가 다르니(<code>F12</code>, <code>F2</code>, <code>Del</code>을 쓰는 경우도 많습니다) 화면 하단에 잠깐 스쳐 지나가는 안내를 보시면 됩니다.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">부팅 메뉴에 진입했다면 목록에서 <code>USB Hard Drive</code> 항목을 고르면 됩니다. 이렇게 하면 <strong>이번 부팅만</strong> USB로 시작하고, 부팅 순서 자체는 건드리지 않습니다. 설치가 끝나면 USB는 뽑을 것이므로 순서를 영구히 바꿀 이유가 없습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">USB로 부팅되면 검은 화면에 메뉴가 뜹니다. <code>Try or Install Ubuntu Server</code>를 고르면 설치 마법사가 시작됩니다.</p>
+<h4 id="설치-마법사--순서대로-무엇을-골랐나" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">설치 마법사 — 순서대로 무엇을 골랐나</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">Ubuntu Server 설치 마법사는 아래 순서로 진행됩니다. 제가 고른 값을 함께 적었습니다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">#</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">단계</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">제가 고른 값</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Language</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>English</code></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Keyboard configuration</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>English (US)</code></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">3</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Choose type of install</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>Ubuntu Server</code></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">4</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Network connections</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">유선 DHCP 자동 할당 그대로</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Proxy address</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">비워둠</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">6</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Mirror address</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">기본값(국내 미러 자동 선택)</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">7</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Guided storage configuration</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong>SSD를 시스템 디스크로 직접 지정</strong> + LVM</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">8</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Storage configuration 확인</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>Confirm destructive action</code></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">9</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Profile setup</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">이름 / 호스트명 <code>carrier</code> / 계정 / 비밀번호</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">10</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Upgrade to Ubuntu Pro</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>Skip for now</code></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">11</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">SSH configuration</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><strong><code>Install OpenSSH server</code> 체크</strong></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">12</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Featured server snaps</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">아무것도 선택 안 함</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">판단이 필요했던 항목만 따로 적습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>3. 설치 유형</strong> — <code>Ubuntu Server</code>와 <code>Ubuntu Server (minimized)</code> 중에 고릅니다. minimized는 사람이 직접 로그인해 쓰는 것을 전제하지 않아 편집기·문서·진단 도구가 빠져 있습니다. 클라우드에서 이미지를 대량으로 찍어낼 때 쓰는 쪽에 가깝습니다. 저는 <strong>직접 붙어서 이것저것 만져볼 서버</strong>라 일반 <code>Ubuntu Server</code>를 골랐습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>4. 네트워크</strong> — 이 단계에서 인터넷이 되어야 설치 중 패키지를 받아옵니다. 유선을 꽂아두면 DHCP로 알아서 잡힙니다. 무선만 있다면 여기서 SSID와 비밀번호를 넣을 수 있지만, 서버로 쓸 기기라면 유선을 권합니다. 여기 보이는 IP는 공유기가 임시로 빌려준 주소입니다. <strong>이 주소가 나중에 바뀐다는 점이 4편에서 문제가 됩니다.</strong></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>5~6. 프록시 / 미러</strong> — 프록시는 비워둡니다. 미러는 기본값이면 충분하고, <code>Checking mirror</code>가 오래 걸린다면 대개 네트워크 문제입니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>7. 디스크 구성</strong> — 유일하게 손이 멈춘 곳입니다. 기본 제안을 그대로 두면 안 되는 이유가 있어 다음 절에서 따로 다룹니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>9. 프로필 설정</strong> — 이름, 호스트명, 사용자 계정, 비밀번호를 정합니다. Ubuntu Server는 root 직접 로그인이 처음부터 막혀 있고, 여기서 만든 계정이 <code>sudo</code> 권한을 갖습니다. 호스트명은 <code>carrier</code>로 지었습니다. 비서 하나만 태울 서버가 아니라 앞으로 이것저것 올려볼 판이라고 생각했기 때문입니다.</p>
+<details data-component="knowledge-note" data-kind="caution" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-amber-400 dark:before:bg-amber-500 open:bg-amber-50/40 dark:open:bg-amber-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:ring-amber-800"><span aria-hidden="true">⚠️</span>주의</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">계정 이름과 비밀번호는 공개하지 마세요</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">블로그나 스크린샷으로 설치 과정을 남길 때 <strong>사용자 계정명, 비밀번호, 내부 IP, 디스크 UUID는 가리는 편이 좋습니다.</strong> 계정명은 그 자체로 비밀은 아니지만, 뒤에서 SSH를 열게 되면 공격자가 시도해볼 아이디 하나를 공짜로 주는 셈입니다. 이 글의 설정 예시에서도 실제 값 대신 자리표시자를 썼습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full">여기서 정한 비밀번호는 어차피 임시입니다. 2편에서 SSH 키 인증으로 바꾸고 비밀번호 로그인 자체를 막습니다.</p></div></details>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>10. Ubuntu Pro</strong> — 건너뜁니다. 무료로 쓸 수 있는 확장 보안 지원이지만, LTS의 5년 지원 안에서는 아쉬울 일이 없습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>11. OpenSSH server</strong> — <strong>반드시 체크합니다.</strong> 모니터와 키보드를 계속 붙여둘 게 아니라면, 설치 후 접근할 수 있는 유일한 통로입니다. 이 화면에서 GitHub 공개키를 바로 가져오는 옵션도 있지만, 저는 2편에서 직접 등록했습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>12. Featured snaps</strong> — 아무것도 고르지 않았습니다. 나중에 필요할 때 받으면 되고, <strong>Docker는 특히 이 목록에서 고르면 안 됩니다.</strong> 이유는 2편의 Docker 설치 부분에서 다룹니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">선택이 끝나면 설치가 진행됩니다. 끝나면 <code>Reboot Now</code>가 뜨는데, 여기서 <strong>USB를 뽑아야 합니다.</strong> 꽂아둔 채로 재부팅하면 설치 마법사가 다시 시작됩니다. 뽑으라는 안내가 뜬 뒤에도 <code>Enter</code>를 한 번 더 눌러야 넘어가는 경우가 있습니다.</p>
+<h4 id="디스크--기본값이-엉뚱한-디스크를-골랐다" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">디스크 — 기본값이 엉뚱한 디스크를 골랐다</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">설치 과정 자체는 순조로웠습니다. 딱 한 군데, <strong>디스크 구성</strong>에서 손이 멈췄습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 노트북에는 SSD 275GB와 HDD 931GB가 함께 들어 있습니다. 아래 이미지는 설치 중 디스크 설정 화면을 찍은 것입니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><span class="not-prose my-8 block overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-2 sm:p-3 dark:border-gray-700 dark:bg-gray-900/60"><img data-zoomable="true" src="/assets/blog/home-server-01-ubuntu-setup/storage-before.webp" alt="기본 제안 — HDD 위에 볼륨 그룹이 잡히고 SSD는 통째로 비어 있다" class="mx-auto max-w-full h-auto my-0 block max-h-[70vh] w-full cursor-zoom-in rounded-lg object-contain shadow-none transition-opacity hover:opacity-90" loading="lazy" decoding="async"/><span class="mt-2 block px-1 text-center text-sm leading-relaxed text-gray-500 dark:text-gray-400">기본 제안 — HDD 위에 볼륨 그룹이 잡히고 SSD는 통째로 비어 있다</span></span></p>
+<p class="text-foreground leading-relaxed mb-4 w-full">두 가지가 눈에 걸렸습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>첫째, 시스템이 HDD로 갈 뻔했습니다.</strong> 볼륨 그룹 <code>ubuntu-vg</code>가 <strong>HDD(931GB) 위에</strong> 만들어져 있고, 정작 <strong>SSD는 손도 대지 않은 free space</strong>로 남아 있습니다. 용량이 큰 디스크를 우선하는 것이 마법사의 기본 동작입니다. 이대로 두면 OS와 Docker 이미지, 컨테이너 레이어가 전부 느린 HDD에 올라갑니다. 컨테이너를 띄우고 내리는 작업은 작은 파일을 많이 읽고 쓰기 때문에 체감 차이가 큽니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>둘째, 볼륨 그룹은 928GB인데 루트는 100GB뿐입니다.</strong> 나머지 828GB는 <code>free space</code>로 남습니다. 이것이 LVM 구성의 대표적인 함정입니다. 모르고 넘어가면 나중에 디스크가 꽉 찼을 때 “분명 931GB인데” 하면서 한참을 헤매게 됩니다.</p>
+<details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">LVM이란?</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><strong>L</strong>ogical <strong>V</strong>olume <strong>M</strong>anager, 논리 볼륨 관리자입니다. 디스크와 파일시스템 사이에 한 겹을 더 두어, 저장 공간을 디스크 위의 <strong>자리</strong>가 아니라 <strong>용량</strong>으로 다루는 방식입니다. 전통적인 파티션은 시작 위치와 크기가 물리적으로 못 박혀 있어서 바로 뒤에 빈 공간이 붙어 있지 않으면 늘릴 수 없지만, LVM은 남은 공간이 어디에 흩어져 있든 <strong>서버를 켜둔 채로</strong> 붙일 수 있습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full">그 한 겹은 세 층으로 나뉩니다.</p><ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>PV(물리 볼륨)</strong> — 실제 파티션. 위 화면의 <code>partition 3</code></li>
+<li class="mb-2 ml-0"><strong>VG(볼륨 그룹)</strong> — PV를 모아 만든 용량 창고. 화면의 <code>ubuntu-vg</code></li>
+<li class="mb-2 ml-0"><strong>LV(논리 볼륨)</strong> — 창고에서 떼어낸 사용 공간. 화면의 <code>ubuntu-lv</code>이고, 여기에 파일시스템이 올라가 <code>/</code>로 마운트됩니다</li>
+</ul><p class="text-foreground leading-relaxed mb-4 w-full">마법사는 <strong>VG는 928GB로 잡아두고 LV는 100GB만 떼어 줍니다.</strong> 남은 공간은 나중에 <code>lvextend</code>(LV를 늘리는 명령)와 <code>resize2fs</code>(늘어난 만큼 파일시스템을 넓히는 명령)로 켜둔 채 붙일 수 있습니다. 줄이는 쪽은 훨씬 번거롭습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>/boot</code>와 <code>/boot/efi</code>만 LVM 바깥의 일반 파티션으로 잡혀 있는 것은, 전원이 켜진 직후의 부트로더가 아직 LVM을 읽을 줄 모르기 때문입니다.</p></div></details>
+<p class="text-foreground leading-relaxed mb-4 w-full">그래서 시스템 디스크를 <strong>SSD로 직접 바꿨습니다.</strong> 결과는 이렇습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><span class="not-prose my-8 block overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-2 sm:p-3 dark:border-gray-700 dark:bg-gray-900/60"><img data-zoomable="true" src="/assets/blog/home-server-01-ubuntu-setup/storage-after.webp" alt="수정 후 — SSD에 ESP·/boot·PV가 잡히고 HDD는 건드리지 않은 상태" class="mx-auto max-w-full h-auto my-0 block max-h-[70vh] w-full cursor-zoom-in rounded-lg object-contain shadow-none transition-opacity hover:opacity-90" loading="lazy" decoding="async"/><span class="mt-2 block px-1 text-center text-sm leading-relaxed text-gray-500 dark:text-gray-400">수정 후 — SSD에 ESP·/boot·PV가 잡히고 HDD는 건드리지 않은 상태</span></span></p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><em>두 사진에서 회색으로 가린 부분은 디스크 시리얼 번호입니다.</em></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">SSD: <code>/boot/efi</code> 1.049G(fat32) + <code>/boot</code> 2G(ext4) + PV 253.121G</li>
+<li class="mb-2 ml-0">볼륨 그룹 <code>ubuntu-vg</code> 253.117G</li>
+<li class="mb-2 ml-0">HDD는 이 단계에서 손대지 않았습니다. 기존 NTFS 파티션이 마운트되지 않은 채 그대로 남아 있습니다</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">사진을 찍은 시점에는 아직 루트 논리 볼륨이 100G, 남은 153G가 <code>free space</code>인 상태입니다. <strong>여기서 논리 볼륨 크기를 볼륨 그룹 전체로 다시 지정하고 설치를 진행했습니다.</strong> 나중에 <code>lvextend</code>로 늘려도 되지만, 서버를 다 세워둔 뒤에 파일시스템을 확장하는 것보다 지금 몇 분 더 들이는 쪽이 낫다고 판단했습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">설치를 마친 서버에서 확인한 결과입니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>$ lsblk</span></span>
+<span class="line"><span>NAME                      SIZE TYPE MOUNTPOINTS</span></span>
+<span class="line"><span>sda                     256.2G disk</span></span>
+<span class="line"><span>├─sda1                      1G part /boot/efi</span></span>
+<span class="line"><span>├─sda2                      2G part /boot</span></span>
+<span class="line"><span>└─sda3                  253.1G part</span></span>
+<span class="line"><span>  └─ubuntu--vg-ubuntu--lv 253.1G lvm  /</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>$ sudo vgs</span></span>
+<span class="line"><span>  VG        #PV #LV VSize    VFree</span></span>
+<span class="line"><span>  ubuntu-vg   1   1 &lt;253.12g    0</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>VFree</code>가 0입니다. 볼륨 그룹에 남은 공간 없이 전부 루트로 들어갔다는 뜻입니다.</p>
+<h3 id="설치를-마치고--서버스럽게-만들기" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">설치를 마치고 — 서버스럽게 만들기</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">운영체제는 올라갔지만, 아직 서버라고 하기엔 이릅니다. 남은 디스크를 붙이고, 덮개를 닫아도 꺼지지 않게 만들어야 합니다.</p>
+<h4 id="hdd를-data로-붙이기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">HDD를 <code>/data</code>로 붙이기</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">HDD는 설치 마법사에서 건드리지 않고, 부팅을 마친 뒤 직접 포맷해 붙였습니다. 파티션을 따로 나누지 않고 디스크 전체를 하나의 ext4로 만들었습니다. 용도가 하나뿐이라면 파티션 테이블을 둘 이유가 크지 않습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>/data</code>는 로그와 장기 보관 데이터처럼 <strong>속도는 필요 없고 용량만 필요한 것</strong>을 몰아둘 자리입니다. 비서가 돌기 시작하면 실행 기록과 대화 이력이 쌓일 텐데, 자주 읽히지 않으면서 계속 늘어나기만 하는 종류의 데이터입니다.</p>
+<section data-component="knowledge-list" class="not-prose my-6 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/30 px-3 pb-3 pt-2.5"><p class="mb-1.5 flex items-center gap-1.5 px-1 text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500"><span aria-hidden="true">✦</span>붙이기 전에 짚고 넘어가기</p><div class="flex flex-col"><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">포맷이란</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">디스크에 <strong>파일시스템을 새로 까는 일</strong>입니다. 파일시스템은 “어느 위치에 어떤 파일이 몇 바이트로 들어 있는지”를 적어두는 장부인데, 포맷은 그 장부를 빈 장부로 갈아 끼웁니다. 아래에서 쓸 <code>mkfs.ext4</code>가 그 명령이고, <code>mkfs</code>는 <em>make filesystem</em>, <code>ext4</code>는 리눅스의 표준 파일시스템입니다.</p><p class="text-foreground leading-relaxed mb-4 w-full">여기서 중요한 것은 <strong>데이터를 지우는 작업이 아니라는 점</strong>입니다. 장부만 새로 쓰기 때문에 실제 내용은 디스크에 한동안 그대로 남아 있습니다. 다만 그것을 찾아갈 목차가 사라져서 운영체제 입장에서는 빈 디스크가 됩니다. 그래서 <strong>포맷은 빠르고, 복구 도구로 일부를 되살릴 수는 있지만, 정상적인 방법으로는 되돌릴 수 없습니다.</strong></p><p class="text-foreground leading-relaxed mb-4 w-full">파일시스템은 운영체제마다 다릅니다. Windows는 NTFS, macOS는 APFS를 씁니다. 이 HDD에 NTFS가 남아 있던 것도 예전에 Windows가 깔려 있었기 때문이고, 리눅스에서 계속 쓸 디스크라 ext4로 다시 만들었습니다.</p></div></details><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">마운트(mount)란</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><strong>디스크를 디렉터리 경로에 연결하는 일</strong>입니다. Windows는 디스크마다 <code>C:</code>, <code>D:</code> 같은 문자를 붙이지만, 리눅스에는 드라이브 문자가 없습니다. 모든 것이 <code>/</code> 하나에서 뻗어나가는 단일 트리이고, 새 디스크는 그 트리의 <strong>특정 폴더 자리에 끼워 넣어</strong> 씁니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>sudo mount /dev/sdb /data</code>는 “이제부터 <code>/data</code> 아래를 열면 그 디스크가 보이게 하라”는 뜻입니다. 마운트하기 전의 <code>/data</code>는 그냥 빈 폴더이고, 마운트한 뒤에 그 안에 파일을 쓰면 SSD가 아니라 HDD에 기록됩니다. 경로는 그대로인데 그 아래를 담당하는 장치만 바뀌는 것입니다.</p><p class="text-foreground leading-relaxed mb-4 w-full">마운트는 <strong>재부팅하면 풀립니다.</strong> 명령으로 붙인 연결은 메모리에만 있는 상태라, 다음 부팅 때 <code>/data</code>는 다시 빈 폴더가 됩니다. 그래서 <code>/etc/fstab</code>에 적어둡니다. 이 파일은 부팅할 때마다 읽히는 마운트 목록이고, 여기에 한 줄 적어두면 매번 자동으로 붙습니다.</p></div></details><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">UUID란</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><strong>U</strong>niversally <strong>U</strong>nique <strong>ID</strong>entifier, 디스크에 붙는 고유 식별자입니다. <code>mkfs</code>로 파일시스템을 만들 때 함께 발급되어 그 디스크 안에 기록되고, <code>blkid</code> 명령으로 확인할 수 있습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>/dev/sdb</code> 같은 장치 이름을 두고 굳이 UUID를 쓰는 이유가 있습니다. <strong>장치 이름은 그 디스크의 이름이 아니라 부팅할 때 인식된 순서</strong>이기 때문입니다. <code>sda</code>, <code>sdb</code>는 커널이 먼저 찾은 순서대로 붙는 임시 번호표라, USB를 하나 꽂아두거나 케이블을 다른 포트에 옮기면 순서가 뒤바뀔 수 있습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>/etc/fstab</code>에 <code>/dev/sdb</code>라고 적어두었는데 다음 부팅에서 그 이름이 다른 디스크에 붙으면, 엉뚱한 디스크가 <code>/data</code>로 마운트되거나 마운트가 실패해 서버가 응급 모드로 떨어집니다. UUID는 디스크 안에 적혀 있어 순서와 무관하게 따라다니므로, <strong>fstab에는 항상 UUID로 적는 것이 안전합니다.</strong></p></div></details><details data-component="knowledge-note" data-kind="caution" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-amber-400 dark:before:bg-amber-500 open:bg-amber-50/40 dark:open:bg-amber-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:ring-amber-800"><span aria-hidden="true">⚠️</span>주의</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">포맷은 되돌릴 수 없습니다</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">아래 작업은 <strong>대상 디스크의 내용을 전부 지웁니다.</strong> 이 HDD에는 예전 Windows 시절의 NTFS 파티션이 남아 있었고, 남길 자료가 없다는 것을 확인한 뒤에 진행했습니다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>lsblk</code>로 <strong>장치 이름과 용량을 반드시 눈으로 확인</strong>하세요. <code>/dev/sda</code>와 <code>/dev/sdb</code>는 한 글자 차이지만, 잘못 고르면 방금 설치한 시스템이 통째로 날아갑니다.</p></div></details></div></section>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">lsblk</span><span style="color:#6A737D">                      # 대상 디스크 확인 (용량으로 구분)</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> mkfs.ext4</span><span style="color:#9ECBFF"> /dev/sdb</span><span style="color:#6A737D">    # 디스크 전체를 ext4로</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> /data</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> blkid</span><span style="color:#9ECBFF"> /dev/sdb</span><span style="color:#6A737D">        # UUID 확인</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">마운트는 <code>/etc/fstab</code>에 등록해두어야 재부팅 후에도 유지됩니다. 장치 이름(<code>/dev/sdb</code>)이 아니라 UUID로 적어야 디스크 순서가 바뀌어도 안전합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>UUID=&lt;blkid로 확인한 UUID&gt;  /data  ext4  defaults  0  2</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> mount</span><span style="color:#79B8FF"> -a</span><span style="color:#6A737D">              # 재부팅 전에 fstab이 맞는지 확인</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>mount -a</code>가 오류 없이 끝나야 합니다. 여기서 오타를 넘기면 다음 재부팅 때 서버가 응급 모드로 떨어져 화면 앞에 다시 앉아야 합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="plaintext" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>$ df -h /dev/sdb</span></span>
+<span class="line"><span>Filesystem      Size  Used Avail Use% Mounted on</span></span>
+<span class="line"><span>/dev/sdb        916G  2.1M  870G   1% /data</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">파티션을 나누지 않았으므로 장치 이름이 <code>/dev/sdb1</code>이 아니라 <code>/dev/sdb</code> 그대로입니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">다만 <strong>읽는 속도가 곧 체감으로 이어지는 것은 <code>/data</code>로 보내지 않았습니다.</strong> 무엇이 여기에 해당하는지는 3편에서 다룹니다.</p>
+<h4 id="덮개를-닫아도-안-꺼지게-만들기" class="text-xl font-medium text-foreground mt-5 mb-2 w-full">덮개를 닫아도 안 꺼지게 만들기</h4>
+<p class="text-foreground leading-relaxed mb-4 w-full">노트북을 서버로 쓸 때 가장 먼저 만나는 문제입니다. 덮개를 닫으면 절전 모드로 들어가면서 SSH 연결이 끊깁니다. <code>/etc/systemd/logind.conf</code>를 수정합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="ini" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D"># /etc/systemd/logind.conf</span></span>
+<span class="line"><span style="color:#F97583">HandleLidSwitch</span><span style="color:#E1E4E8">=ignore</span></span>
+<span class="line"><span style="color:#F97583">HandleLidSwitchExternalPower</span><span style="color:#E1E4E8">=ignore</span></span>
+<span class="line"><span style="color:#F97583">HandleLidSwitchDocked</span><span style="color:#E1E4E8">=ignore</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>HandleLidSwitch</code> 하나만 바꾸면 전원이 연결된 상태에서 여전히 절전으로 들어가는 경우가 있어 세 항목을 함께 <code>ignore</code>로 두었습니다. 적용은 아래 명령으로 합니다.</p>
+<div class="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> restart</span><span style="color:#9ECBFF"> systemd-logind</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 명령은 현재 로그인 세션에 영향을 줄 수 있어, SSH로 접속 중이라면 재접속이 필요할 수 있습니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이제 노트북은 덮개를 닫아도 깨어 있습니다. 지금은 피아노 밑 거치대에 덮개를 닫은 채 세로로 세워져 있습니다. 노트북이라기보다 작은 본체에 가까운 모습입니다.</p>
+<hr/>
+<h2 id="결론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">결론</h2>
+<p class="text-foreground leading-relaxed mb-4 w-full">사용하지 않고 있던 10년 된 노트북을 Windows 운영체제에서 Ubuntu Server 운영체제로 변경해보았습니다. 사실 블로그나 여러 자료들도 많고, 설치 도구도 다 있어서 비교적 쉬운 작업이었다고 생각합니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">하나, 디스크를 어떻게 구성해야 할지 고민하면서 작업을 했어서 어렵게 느껴진 부분은 있었습니다. 마법사의 기본 제안이 용량 큰 HDD를 시스템 디스크로 잡아버려서, 확인 화면에서 한 번 멈춰 서야 했습니다. 그대로 넘겼다면 OS가 느린 디스크 위에서 돌 뻔했습니다. 막상 적용하고 여러 작업을 할 생각을 하니, 뿌듯하기도 하고 기대도 됩니다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">처음 해보는 작업이기도 했고, 해보고 싶었던 것들이어서 열심히 AI랑 인터넷 찾아가면서 해봤습니다. 계속 수정하면서 비서 교육 잘 시켜보려고 합니다.</p> <section class="pb-16 pt-8"> <script src="https://giscus.app/client.js" data-repo="gitsunmin/gitsunmin.github.io" data-repo-id="R_kgDOMZl2kA" data-category="Comments" data-category-id="DIC_kwDOMZl2kM4C3wBs" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="ko" data-loading="lazy" crossorigin="anonymous" async>
+          </script> </section> </article> <!-- Desktop TOC sidebar --> <aside class="hidden lg:block w-56 xl:w-64 shrink-0 sticky top-24 self-start"> <nav class="toc-desktop hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto" aria-label="목차"><p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+목차
+</p><ul class="space-y-1"><li style="padding-left: 0px"><a href="#서론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="서론">서론</a></li><li style="padding-left: 0px"><a href="#본론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="본론">본론</a></li><li style="padding-left: 12px"><a href="#ubuntu-server-설치" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="ubuntu-server-설치">Ubuntu Server 설치</a></li><li style="padding-left: 24px"><a href="#iso-내려받기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="iso-내려받기">ISO 내려받기</a></li><li style="padding-left: 24px"><a href="#설치-usb-만들기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="설치-usb-만들기">설치 USB 만들기</a></li><li style="padding-left: 24px"><a href="#usb로-부팅하기--이번-한-번만-순서를-바꾸기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="usb로-부팅하기--이번-한-번만-순서를-바꾸기">USB로 부팅하기 — 이번 한 번만 순서를 바꾸기</a></li><li style="padding-left: 24px"><a href="#설치-마법사--순서대로-무엇을-골랐나" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="설치-마법사--순서대로-무엇을-골랐나">설치 마법사 — 순서대로 무엇을 골랐나</a></li><li style="padding-left: 24px"><a href="#디스크--기본값이-엉뚱한-디스크를-골랐다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="디스크--기본값이-엉뚱한-디스크를-골랐다">디스크 — 기본값이 엉뚱한 디스크를 골랐다</a></li><li style="padding-left: 12px"><a href="#설치를-마치고--서버스럽게-만들기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="설치를-마치고--서버스럽게-만들기">설치를 마치고 — 서버스럽게 만들기</a></li><li style="padding-left: 24px"><a href="#hdd를-data로-붙이기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="hdd를-data로-붙이기">HDD를 /data로 붙이기</a></li><li style="padding-left: 24px"><a href="#덮개를-닫아도-안-꺼지게-만들기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="덮개를-닫아도-안-꺼지게-만들기">덮개를 닫아도 안 꺼지게 만들기</a></li><li style="padding-left: 0px"><a href="#결론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="결론">결론</a></li></ul></nav><div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"><button id="toc-mobile-toggle" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-expanded="false" aria-controls="toc-mobile-content"><span>목차</span><svg id="toc-chevron" class="w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg></button><div id="toc-mobile-content" class="hidden px-4 py-3 bg-white dark:bg-gray-900"><ul class="space-y-1"><li style="padding-left: 0px"><a href="#서론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">서론</a></li><li style="padding-left: 0px"><a href="#본론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">본론</a></li><li style="padding-left: 12px"><a href="#ubuntu-server-설치" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">Ubuntu Server 설치</a></li><li style="padding-left: 24px"><a href="#iso-내려받기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">ISO 내려받기</a></li><li style="padding-left: 24px"><a href="#설치-usb-만들기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">설치 USB 만들기</a></li><li style="padding-left: 24px"><a href="#usb로-부팅하기--이번-한-번만-순서를-바꾸기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">USB로 부팅하기 — 이번 한 번만 순서를 바꾸기</a></li><li style="padding-left: 24px"><a href="#설치-마법사--순서대로-무엇을-골랐나" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">설치 마법사 — 순서대로 무엇을 골랐나</a></li><li style="padding-left: 24px"><a href="#디스크--기본값이-엉뚱한-디스크를-골랐다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">디스크 — 기본값이 엉뚱한 디스크를 골랐다</a></li><li style="padding-left: 12px"><a href="#설치를-마치고--서버스럽게-만들기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">설치를 마치고 — 서버스럽게 만들기</a></li><li style="padding-left: 24px"><a href="#hdd를-data로-붙이기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">HDD를 /data로 붙이기</a></li><li style="padding-left: 24px"><a href="#덮개를-닫아도-안-꺼지게-만들기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">덮개를 닫아도 안 꺼지게 만들기</a></li><li style="padding-left: 0px"><a href="#결론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug">결론</a></li></ul></div></div> </aside> </div> </div>  <div id="image-lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-200" role="dialog" aria-modal="true" aria-label="이미지 확대 보기"> <button type="button" data-lightbox-close class="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 cursor-pointer" aria-label="닫기"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"> <title>닫기</title> <path d="M18 6L6 18M6 6l12 12"></path> </svg> </button> <figure class="flex max-h-full max-w-full flex-col items-center gap-3"> <img data-lightbox-image src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain"> <figcaption data-lightbox-caption class="max-w-2xl text-center text-sm text-gray-300"></figcaption> </figure> </div> <script>
+    function initImageLightbox() {
+      // document에 위임하므로 페이지 전환마다 리스너가 쌓이지 않도록 한 번만 등록한다
+      if (window.__lightboxBound) return;
+      window.__lightboxBound = true;
+
+      function el(selector) {
+        const lightbox = document.getElementById('image-lightbox');
+        return lightbox ? lightbox.querySelector(selector) : null;
+      }
+
+      function open(target) {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox) return;
+        const image = el('[data-lightbox-image]');
+        const caption = el('[data-lightbox-caption]');
+        image.src = target.currentSrc || target.src;
+        image.alt = target.alt || '';
+        caption.textContent = target.alt || '';
+        caption.classList.toggle('hidden', !target.alt);
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        // 다음 프레임에 opacity를 올려 페이드 인이 적용되게 한다
+        requestAnimationFrame(() => lightbox.classList.remove('opacity-0'));
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox || lightbox.classList.contains('hidden')) return;
+        lightbox.classList.add('opacity-0');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          lightbox.classList.add('hidden');
+          lightbox.classList.remove('flex');
+          const image = el('[data-lightbox-image]');
+          if (image) image.src = '';
+        }, 200);
+      }
+
+      // 본문 이미지는 MDX 렌더 결과라 개별 바인딩 대신 위임으로 처리한다
+      document.addEventListener('click', (e) => {
+        if (!(e.target instanceof Element)) return;
+        const zoomable = e.target.closest('[data-zoomable]');
+        if (zoomable) {
+          open(zoomable);
+          return;
+        }
+        // 라이트박스 안에서는 확대된 이미지 위가 아닌 곳을 누르면 닫는다
+        const lightbox = document.getElementById('image-lightbox');
+        if (lightbox && lightbox.contains(e.target) && !e.target.closest('[data-lightbox-image]')) {
+          close();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+
+      document.addEventListener('astro:before-swap', close);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initImageLightbox);
+    } else {
+      initImageLightbox();
+    }
+    document.addEventListener('astro:page-load', initImageLightbox);
+  </script> <script>
+    function initReadingProgress() {
+      const bar = document.getElementById('reading-progress');
+      if (!bar) return;
+
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = `${Math.min(pct, 100)}%`;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+      update();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initReadingProgress);
+    } else {
+      initReadingProgress();
+    }
+    document.addEventListener('astro:page-load', initReadingProgress);
+  </script> <script>
+    function initCopyButtons() {
+      const wrappers = document.querySelectorAll('.code-block-wrapper');
+      
+      wrappers.forEach((wrapper) => {
+        const button = wrapper.querySelector('.copy-button');
+        const pre = wrapper.querySelector('pre');
+        const copyIcon = button?.querySelector('.copy-icon');
+        const checkIcon = button?.querySelector('.check-icon');
+        
+        if (!button || !pre) return;
+        
+        // Remove existing listener if any (by cloning)
+        const newButton = button.cloneNode(true);
+        button.parentNode?.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', async () => {
+          const codeElement = pre.querySelector('code');
+          const code = codeElement?.innerText || pre.innerText || '';
+          
+          try {
+            await navigator.clipboard.writeText(code);
+            
+            const btnCopyIcon = newButton.querySelector('.copy-icon');
+            const btnCheckIcon = newButton.querySelector('.check-icon');
+            
+            // Show check icon
+            btnCopyIcon?.classList.add('hidden');
+            btnCheckIcon?.classList.remove('hidden');
+            newButton.classList.add('opacity-100');
+            newButton.classList.remove('opacity-0');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              btnCopyIcon?.classList.remove('hidden');
+              btnCheckIcon?.classList.add('hidden');
+              newButton.classList.remove('opacity-100');
+              newButton.classList.add('opacity-0', 'group-hover:opacity-100');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      });
+    }
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCopyButtons);
+    } else {
+      initCopyButtons();
+    }
+
+    // Re-initialize on view transitions
+    document.addEventListener('astro:page-load', initCopyButtons);
+  </script> <script>
+    function animatePromptBlock(block) {
+      if (block.getAttribute('data-animated')) return;
+      block.setAttribute('data-animated', 'true');
+      var text = block.getAttribute('data-text') || '';
+      var speed = parseInt(block.getAttribute('data-speed') || '15', 10);
+      var textEl = block.querySelector('[data-prompt-text]');
+      var cursorEl = block.querySelector('[data-prompt-cursor]');
+      if (!textEl || !text) return;
+      textEl.textContent = '';
+      var i = 0;
+      var timer = setInterval(function() {
+        i++;
+        textEl.textContent = text.slice(0, i);
+        if (i >= text.length) {
+          clearInterval(timer);
+          if (cursorEl) cursorEl.style.display = 'none';
+        }
+      }, speed);
+    }
+
+    function initFlipCompare() {
+      document.querySelectorAll('[data-component="flip-compare"]').forEach(function(container) {
+        var buttons = container.querySelectorAll('[data-flip-btn]');
+        var isAnimating = false;
+
+        // 초기 상태(then)의 prompt block 애니메이션 — 뷰포트 진입 시
+        var thenObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            thenObserver.unobserve(entry.target);
+            entry.target.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+          });
+        }, { threshold: 0.1 });
+        var thenPanel = container.querySelector('[data-flip-role="then"]');
+        if (thenPanel) thenObserver.observe(thenPanel);
+
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (isAnimating) return;
+            var target = btn.getAttribute('data-flip-btn');
+            var current = container.getAttribute('data-view');
+            if (current === target) return;
+
+            isAnimating = true;
+
+            // 모바일에서 토글이 sticky 상태일 때(컨테이너 상단이 헤더 아래로 올라간 경우)
+            // 클릭 후 컨테이너 상단이 헤더 바로 아래 오도록 스크롤
+            if (window.innerWidth < 1024) {
+              var headerEl = document.querySelector('header');
+              var headerH = headerEl ? headerEl.getBoundingClientRect().height : 48;
+              var containerRect = container.getBoundingClientRect();
+              if (containerRect.top < headerH) {
+                window.scrollTo({ top: window.scrollY + containerRect.top - headerH, behavior: 'smooth' });
+              }
+            }
+
+            var outPanel = container.querySelector('[data-flip-role="' + current + '"]');
+            var inPanel = container.querySelector('[data-flip-role="' + target + '"]');
+
+            // 버튼 상태 즉시 업데이트
+            buttons.forEach(function(b) {
+              b.setAttribute('data-active', b.getAttribute('data-flip-btn') === target ? 'true' : 'false');
+            });
+
+            var direction = target === 'now' ? 1 : -1;
+
+            // 나가는 패널: 슬라이드 아웃
+            if (outPanel) {
+              outPanel.style.transition = 'opacity 180ms ease, transform 180ms ease';
+              outPanel.style.opacity = '0';
+              outPanel.style.transform = 'translateX(' + (-direction * 20) + 'px)';
+            }
+
+            setTimeout(function() {
+              // CSS가 패널 display를 제어하도록 data-view 전환
+              container.setAttribute('data-view', target);
+
+              if (inPanel) {
+                // 들어오는 패널: 초기 위치 설정 후 슬라이드 인
+                inPanel.style.transition = 'none';
+                inPanel.style.opacity = '0';
+                inPanel.style.transform = 'translateX(' + (direction * 20) + 'px)';
+
+                // 다음 프레임에서 애니메이션 시작
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    inPanel.style.transition = 'opacity 250ms ease, transform 250ms ease';
+                    inPanel.style.opacity = '1';
+                    inPanel.style.transform = 'translateX(0)';
+
+                    setTimeout(function() {
+                      inPanel.style.transition = '';
+                      inPanel.style.opacity = '';
+                      inPanel.style.transform = '';
+                      isAnimating = false;
+
+                      // 새 패널의 prompt block 애니메이션 시작
+                      inPanel.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+                    }, 260);
+                  });
+                });
+              } else {
+                isAnimating = false;
+              }
+
+              // 나가는 패널 인라인 스타일 정리 (CSS display:none이 처리)
+              if (outPanel) {
+                outPanel.style.transition = '';
+                outPanel.style.opacity = '';
+                outPanel.style.transform = '';
+              }
+            }, 180);
+          });
+        });
+      });
+    }
+
+    function initPromptBlocks() {
+      // FlipCompare 밖에 있는 독립 prompt block 처리 (IntersectionObserver)
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          animatePromptBlock(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('[data-component="prompt-block"]').forEach(function(block) {
+        // FlipCompare 내부 block은 탭 전환 시 처리하므로 제외
+        if (!block.closest('[data-component="flip-compare"]')) {
+          observer.observe(block);
+        }
+      });
+    }
+
+    function initBlogInteractions() {
+      initFlipCompare();
+      initPromptBlocks();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBlogInteractions);
+    } else {
+      initBlogInteractions();
+    }
+    document.addEventListener('astro:page-load', initBlogInteractions);
+  </script>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island></body></html>
