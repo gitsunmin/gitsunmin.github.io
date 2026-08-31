@@ -112,7 +112,10 @@ export function KnowledgeNote({
           {label ?? style.label}
         </span>
 
-        <span className="min-w-0 flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100">
+        {/* 용어에 KbdInteractiveAuthentication 같은 긴 영문 토큰이 오면 줄바꿈 지점이 없어
+            요약 줄의 min-content가 화면 폭을 넘고, 그 폭이 조상으로 전파되어 가로 스크롤이 생긴다.
+            break-word는 min-content를 줄이지 못하므로 anywhere를 쓴다 */}
+        <span className="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">
           {term}
         </span>
 

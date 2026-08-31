@@ -888,6 +888,8 @@
     max-width: none !important;
     overflow: visible !important;
     border-radius: 0 !important;
+    /* 화면에서는 고유 폭 전파를 끊지만, 인쇄에서는 줄바꿈으로 처리하므로 격리를 푼다 */
+    contain: none !important;
   }
 
   [data-work-detail] .prose pre {

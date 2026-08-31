@@ -134,7 +134,11 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
       );
     },
     pre: ({ className, ...rest }) => (
-      <div className="relative my-6 group code-block-wrapper max-w-[calc(100vw-32px)] overflow-hidden rounded-lg shadow-md">
+      // contain:inline-size — 안쪽 pre는 min-w-max라 고유 폭이 화면보다 넓다.
+      // 이 선언이 없으면 그 폭이 조상들의 min-content로 전파되어, 중첩 깊이(KnowledgeNote 등)만큼
+      // 본문 컨테이너가 밀려나며 페이지 전체에 가로 스크롤이 생긴다.
+      // 뷰포트(100vw) 기준으로 빼는 방식은 중첩 여백을 알 수 없어 쓰지 않는다.
+      <div className="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md">
         <div className="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600">
           <pre
             {...rest}
@@ -211,7 +215,8 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
       </span>
     ),
     table: ({ className, ...rest }) => (
-      <div className="w-full max-w-[calc(100vw-40px)] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden">
+      // 코드 블록과 같은 이유로 고유 폭 전파를 끊는다 (위 pre 주석 참고)
+      <div className="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden">
         <div className="overflow-x-auto w-full">
           <table
             className={cn("w-full table-fixed text-sm text-left border-collapse", className)}
