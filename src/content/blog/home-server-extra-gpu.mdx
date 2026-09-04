@@ -1,0 +1,571 @@
+---
+title: "10년 된 노트북으로 비서를 고용하기 (번외) — nvidia-smi는 뜨는데 GPU는 놀고 있었다"
+description: "이 노트북을 서버로 고른 이유가 GPU였는데, 설치한 날부터 추론은 100% CPU에서 돌고 있었습니다. 드라이버를 깔고 toolkit을 붙이고 nvidia-smi까지 확인한 뒤에도 그대로였습니다. 확인해야 할 줄은 따로 있었습니다. 3편에서 갈라져 나온 글입니다."
+pubDate: "2026-09-01"
+updatedDate: "2026-09-01"
+tags: ["technology", "homelab", "docker", "ollama", "llm", "gpu"]
+heroImage: "/assets/blog/home-server/thumbnail.webp"
+draft: true
+---
+
+import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
+
+> **10년 된 노트북으로 비서를 고용하기**
+> 1. [서버 만들기](/blog/home-server-01-ubuntu-setup) — 오래된 노트북에 Ubuntu Server 올리기
+> 2. [SSH 보안 설정과 Docker](/blog/home-server-02-security-docker) — SSH·방화벽 기본과 Docker
+> 3. [Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n) — 로컬 모델과 자동화 도구
+> 4. 비서로 만들기 *(예정)* — 외부 접속 경로와 일정 판단 파이프라인
+>
+> **번외 — nvidia-smi는 뜨는데 GPU는 놀고 있었다** (3편에서 갈라져 나온 글) ← 지금 글
+
+## 서론
+
+[3편](/blog/home-server-03-ollama-n8n)에서 Ollama와 n8n을 올렸습니다. 모델이 돌기 시작했고, RSS를 읽어 Discord로 보내는 흐름까지 이어졌습니다.
+
+이 글은 그 사이에 끼어 있던 이야기입니다. 3편에 함께 두었더니 글이 너무 길어져서 따로 뺐습니다.
+
+**이 노트북을 서버로 고른 이유가 GPU였습니다.** [1편](/blog/home-server-01-ubuntu-setup)에서 사양을 적으며 GTX 960M을 자랑처럼 써두었는데, 정작 그때까지 그 이유를 한 번도 쓰지 않고 있었습니다. 확인해보니 **설치한 날부터 추론은 100% CPU에서 돌고 있었습니다.** 에러는 한 줄도 나지 않았습니다.
+
+이 글에서 하는 일은 두 가지입니다. 하나는 **GPU를 실제로 쓰게 만들려고 했던 과정**이고, 다른 하나는 그 과정에서 드러난 **이 노트북의 한계를 숫자로 재는 일**입니다.
+
+결론부터 적으면 **GPU는 결국 쓰지 못했습니다.** 그래도 그 실패가 마지막 편의 설계 조건을 정해주었습니다. 무엇이 안 되는지를 숫자로 알고 있는 것과 모르는 것은 다릅니다.
+
+그리고 끝에 하나 더 적었습니다. 애초에 **이 모델을 어떻게 골랐는지**에 대한 이야기인데, 결과는 괜찮았지만 이유가 틀렸던 쪽입니다.
+
+<KnowledgeNote term="이 글을 읽기 전에" kind="note" defaultOpen>
+
+`<서버 고정 IP>`처럼 꺾쇠로 감싼 부분은 **환경마다 다르고 직접 정해야 하는 값**입니다. 그대로 복사하면 동작하지 않습니다.
+
+이 글은 [3편](/blog/home-server-03-ollama-n8n)에서 만들어둔 상태 위에서 이어집니다. Docker와 `docker compose`가 설치되어 있고, compose 파일에 Ollama가 선언되어 컨테이너로 돌고 있는 상태입니다.
+
+`docker exec`, `docker logs`, compose 파일의 항목 같은 것은 3편에서 다뤘으므로 여기서는 다시 설명하지 않습니다.
+
+</KnowledgeNote>
+
+## 본론
+### 1. 컨테이너는 GPU의 존재조차 모르고 있었다
+
+모델이 올라갔으니 속도를 볼 차례였습니다. 그런데 그 전에, 컨테이너 안에서 GPU가 보이기는 하는지부터 확인해봤습니다.
+
+```bash
+docker exec ollama nvidia-smi
+```
+```
+OCI runtime exec failed: "nvidia-smi": executable file not found in $PATH
+```
+
+Ollama 로그를 보니 더 분명했습니다.
+
+```bash
+docker logs ollama 2>&1 | grep "inference compute"
+```
+```
+msg="inference compute" id=cpu library=cpu description=cpu total="7.1 GiB"
+```
+
+`library=cpu`. **설치한 날부터 계속 CPU로만 추론하고 있었습니다.**
+
+에러도 경고도 없었습니다. Ollama는 GPU를 못 찾으면 조용히 CPU로 떨어지고, 그냥 느려질 뿐입니다. **실패하는 것보다 느리게라도 돌아가는 쪽을 택하는 설계**인데, 그래서 확인하지 않으면 모르고 지나갑니다.
+
+원인은 두 겹이었습니다.
+
+#### 첫째, 호스트에 드라이버가 없었습니다
+
+```bash
+lsmod | grep -c nvidia
+```
+```
+0
+```
+
+`ubuntu-drivers`에게 물어보니 다행히 지원 목록에 남아 있었습니다.
+
+```bash
+ubuntu-drivers devices
+```
+```
+model    : GM107M [GeForce GTX 960M]
+driver   : nvidia-driver-580 - distro non-free recommended
+driver   : nvidia-driver-580-server - distro non-free
+```
+
+여기서 눈여겨볼 것이 있습니다. 시스템 저장소에는 595 브랜치 드라이버도 있는데, **이 GPU에는 580만 제시됩니다.** 960M은 Maxwell 세대(2015년)이고, 580이 Maxwell을 지원하는 마지막 브랜치입니다. 10년 된 하드웨어가 지원 목록의 끝자락에 겨우 걸려 있는 셈입니다. **몇 년 뒤에는 이 노트북으로 이 글을 다시 쓸 수 없을 겁니다.**
+
+추천은 `nvidia-driver-580`이지만 `-server` 변형을 골랐습니다. 이 노트북은 화면을 쓰지 않는 헤드리스 서버라 X 서버용 구성 요소가 필요 없습니다. **추천 로직은 일반 데스크탑을 가정합니다.** 용도가 다르면 추천을 따르지 않아도 됩니다.
+
+```bash
+sudo apt install -y nvidia-driver-580-server
+sudo reboot
+```
+
+재부팅 후:
+
+```
++-----------------------------------------------------------------------+
+| NVIDIA-SMI 580.173.02      Driver Version: 580.173.02  CUDA Version: 13.0 |
+|   0  NVIDIA GeForce GTX 960M      Off |    0MiB /   2048MiB |   0%      |
++-----------------------------------------------------------------------+
+```
+
+**VRAM 2048MiB.** 960M은 2GB 모델과 4GB 모델이 따로 있는데, 이 노트북은 2GB짜리였습니다. 이 숫자가 조금 뒤에 발목을 잡습니다.
+
+덧붙이면 이 재부팅에서 얻은 것이 하나 더 있습니다. compose에 적어둔 `restart: unless-stopped`가 실제로 동작하는지 확인해본 적이 없었는데, 여기서 확인됐습니다.
+
+```bash
+docker ps
+```
+```
+CONTAINER ID   IMAGE                     STATUS
+5f1ec9a07797   docker.n8n.io/n8nio/n8n   Up 39 minutes
+81ec121d2e25   ollama/ollama:latest      Up 39 minutes
+```
+
+전원이 나갔다 들어와도 컨테이너가 알아서 돌아온다는 것을, 의도치 않게 검증한 셈입니다.
+
+<KnowledgeList title="드라이버를 고르기 전에">
+<KnowledgeNote term="lspci · lsmod · nvidia-smi 는 서로 다른 질문에 답합니다" kind="definition" defaultOpen>
+
+셋 다 GPU를 확인하는 명령처럼 보이지만, 답하는 질문이 다릅니다. **순서대로 통과해야 합니다.**
+
+```bash
+lspci | grep -i nvidia     # ① 하드웨어가 꽂혀 있는가
+lsmod | grep -c nvidia     # ② 그걸 쓸 드라이버가 커널에 올라와 있는가
+nvidia-smi                 # ③ 드라이버가 GPU와 실제로 대화가 되는가
+```
+
+**①은 드라이버가 없어도 나옵니다.** 메인보드가 장치를 보고 있다는 것뿐이기 때문입니다. 여기만 보고 "GPU 잘 인식되네"라고 넘어가면 아무것도 확인한 게 아닙니다.
+
+`lspci`는 **PCI 버스에 연결된 장치 목록**(**l**i**s**t **PCI**)이고, `lsmod`는 **커널에 지금 올라와 있는 모듈 목록**(**l**i**s**t **mod**ules)입니다. 리눅스에서 드라이버는 커널 모듈 형태로 로드되므로, `lsmod`에 없으면 드라이버가 동작하고 있지 않다는 뜻입니다.
+
+`grep -c`는 [2편](/blog/home-server-02-security-docker)에서 본 대로 **개수만** 셉니다. 결과가 `0`이면 nvidia 관련 모듈이 하나도 없다는 뜻입니다.
+
+그리고 이 글의 결론을 미리 적자면, **③까지 통과해도 아직 끝이 아닙니다.** 확인해야 할 단계가 하나 더 있습니다.
+
+</KnowledgeNote>
+<KnowledgeNote term="ubuntu-drivers 와 -server 변형" kind="reason">
+
+```bash
+ubuntu-drivers devices
+```
+
+이 명령은 연결된 하드웨어를 훑어 **설치 가능한 드라이버 후보**를 알려줍니다. `recommended` 표시가 붙은 것이 추천입니다.
+
+그런데 이 추천은 **일반 데스크탑을 가정합니다.** 화면에 그래픽을 출력하는 용도까지 포함해 고르기 때문에, X 서버 관련 구성 요소가 함께 딸려옵니다.
+
+| 이름 | 용도 |
+|---|---|
+| `nvidia-driver-580` | 데스크탑용. 화면 출력용 구성 요소 포함 |
+| `nvidia-driver-580-server` | 서버용. **연산에 필요한 것만** |
+
+헤드리스 서버라면 `-server` 쪽이 맞습니다. 설치 용량이 작고, 화면을 쓰지 않으니 없어도 아쉬울 것이 없습니다. **추천은 참고일 뿐, 용도가 다르면 따르지 않아도 됩니다.**
+
+드라이버 설치 후에는 **재부팅이 필요합니다.** 커널 모듈을 새로 올려야 하기 때문입니다. 설치 직후에 `nvidia-smi`를 실행하면 아직 안 된다고 나오는 것이 정상입니다.
+
+</KnowledgeNote>
+<KnowledgeNote term="드라이버 브랜치와 GPU 세대" kind="reason">
+
+NVIDIA 드라이버는 `535`, `580`, `595`처럼 **브랜치 번호**로 나뉩니다. 큰 숫자가 항상 좋은 것은 아닙니다. **새 브랜치는 오래된 GPU 지원을 떨어뜨리기 때문**입니다.
+
+GPU는 세대마다 아키텍처 이름이 있습니다. 960M은 **Maxwell**(2015년)이고, 그 뒤로 Pascal → Turing → Ampere → Ada 순으로 이어졌습니다. 드라이버 브랜치는 어느 시점에 오래된 아키텍처를 **legacy로 분리**하고 새 브랜치에서는 지원을 뺍니다.
+
+`ubuntu-drivers`가 595를 제시하지 않고 580만 보여준 것이 그 표시입니다. 목록에 없는 것을 억지로 설치하면 부팅 후 화면도 안 나오고 `nvidia-smi`도 실패하는 상태가 될 수 있습니다. **제시된 것 중에서 고르는 게 맞습니다.**
+
+오래된 하드웨어를 서버로 되살릴 때 이 확인을 먼저 해두면 좋습니다. 지원이 이미 끊긴 GPU라면 애초에 CPU로 갈 계획을 세우는 편이, 며칠 헤매다 같은 결론에 도달하는 것보다 낫습니다.
+
+</KnowledgeNote>
+</KnowledgeList>
+
+#### 둘째, 컨테이너가 GPU를 볼 수 없었습니다
+
+호스트에 드라이버가 있어도 컨테이너는 여전히 GPU를 못 봅니다. Docker는 기본적으로 장치 노드를 격리하고, 이 격리를 뚫어 GPU를 넘겨주는 것이 `nvidia-container-toolkit`의 역할입니다.
+
+```bash
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+
+curl -fsSL https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt update
+sudo apt install -y nvidia-container-toolkit
+sudo nvidia-ctk runtime configure --runtime=docker
+sudo systemctl restart docker
+```
+
+저장소를 등록하고 키로 검증하는 구조는 [2편](/blog/home-server-02-security-docker)에서 Docker를 설치할 때와 같습니다. 낯선 것은 중간의 `sed`뿐입니다.
+
+그리고 compose에 한 줄을 더합니다.
+
+```yaml
+  ollama:
+    image: ollama/ollama:latest
+    gpus: all
+```
+
+<KnowledgeList title="컨테이너에 GPU 를 넘기는 구조">
+<KnowledgeNote term="nvidia-container-toolkit 이 하는 일" kind="definition" defaultOpen>
+
+컨테이너는 **호스트의 장치 파일을 볼 수 없도록 격리**되어 있습니다. GPU도 장치 파일(`/dev/nvidia*`)로 존재하므로, 기본 상태로는 컨테이너 안에서 GPU가 아예 없는 것과 같습니다.
+
+toolkit은 컨테이너가 뜨는 순간 끼어들어 **필요한 장치 파일과 드라이버 라이브러리를 컨테이너 안으로 넣어줍니다.** 그래서 컨테이너 이미지에 드라이버를 설치할 필요가 없습니다. **호스트의 드라이버를 빌려 쓰는 구조**입니다.
+
+이 구조 때문에 따라오는 성질이 하나 있습니다. **호스트 드라이버와 컨테이너 안의 CUDA 버전이 서로 맞아야 합니다.** 호스트 드라이버가 낡으면 컨테이너 안의 새 CUDA가 돌지 않습니다. 오래된 GPU를 쓸 때 이미지 태그를 아무거나 고르면 안 되는 이유입니다.
+
+`nvidia-ctk runtime configure --runtime=docker`는 `/etc/docker/daemon.json`에 NVIDIA 런타임을 등록합니다. 등록만으로는 적용되지 않으므로 **`systemctl restart docker`가 반드시 뒤따라야 합니다.** [2편](/blog/home-server-02-security-docker)의 `systemctl restart ssh`와 같은 이야기입니다. 설정을 넣는 것과 적용되는 것은 다릅니다.
+
+</KnowledgeNote>
+<KnowledgeNote term="sed 의 구분자를 # 으로 바꾼 이유" kind="definition">
+
+```bash
+... | sed 's#deb https://#deb [signed-by=...] https://#g'
+```
+
+`sed`는 **s**tream **ed**itor, 흘러들어온 텍스트를 규칙대로 고쳐서 내보내는 명령입니다. 여기 쓴 문법은 치환 하나뿐입니다.
+
+```
+s/찾을것/바꿀것/g
+```
+
+- `s` — substitute, 치환
+- `g` — global, 한 줄에 여러 번 나와도 **전부** 바꿉니다
+
+그런데 위 명령은 슬래시 대신 `#`을 쓰고 있습니다. **찾을 내용과 바꿀 내용 안에 슬래시(`https://`)가 들어 있기 때문**입니다. 그대로 슬래시를 구분자로 쓰면 어디까지가 찾을 내용인지 sed가 알 수 없습니다.
+
+`sed`는 **`s` 바로 뒤에 오는 문자를 구분자로 삼습니다.** 그래서 `#`이든 `,`이든 `|`이든, 내용에 없는 문자면 무엇이든 됩니다. 경로를 다루는 명령에서 `s#...#...#`를 자주 보게 되는 이유입니다.
+
+여기서 하는 일 자체는 단순합니다. NVIDIA가 배포하는 저장소 파일에 `signed-by=` 항목이 빠져 있어 **그 자리에 끼워 넣는** 작업입니다.
+
+</KnowledgeNote>
+<KnowledgeNote term="gpus: all 은 무엇을 여는가" kind="definition">
+
+`docker run --gpus all`에 해당하는 compose 표기입니다. **이 컨테이너에 호스트의 GPU 전부를 넘겨준다**는 뜻입니다.
+
+GPU가 여러 장이면 개수나 번호를 지정할 수 있고, 한 장뿐이면 `all`로 충분합니다.
+
+예전 예제에는 같은 일을 이렇게 적어둔 것이 많습니다.
+
+```yaml
+deploy:
+  resources:
+    reservations:
+      devices:
+        - driver: nvidia
+          count: all
+          capabilities: [gpu]
+```
+
+둘 다 동작하지만 `gpus: all` 쪽이 짧습니다. `deploy:` 아래 항목들은 원래 Swarm(여러 대를 묶어 쓰는 모드)을 위한 자리라, 한 대짜리 홈서버에서는 굳이 그쪽 문법을 쓸 이유가 없습니다.
+
+**중요한 건 이 줄이 하는 일의 범위입니다.** 이 한 줄은 컨테이너가 GPU를 *볼 수 있게* 만들 뿐이고, **모델이 GPU를 실제로 쓰는지와는 별개입니다.** 바로 그 이야기가 다음 절입니다.
+
+</KnowledgeNote>
+</KnowledgeList>
+
+이제 컨테이너 안에서 `nvidia-smi`가 뜹니다. 로그도 바뀌었습니다.
+
+```
+msg="gpu memory" id=0 library=CUDA available="1.5 GiB" free="1.9 GiB"
+```
+
+`library=cpu`에서 `library=CUDA`로. **성공한 것처럼 보였습니다.**
+
+### 2. `nvidia-smi`가 뜬다고 끝이 아니었다
+
+같은 로그를 조금 더 내려 읽었습니다.
+
+```
+common_params_fit_impl: - CUDA0 (NVIDIA GeForce GTX 960M):  0 layers, 129 MiB used, 1831 MiB free
+load_tensors: offloading 0 repeating layers to GPU
+load_tensors: offloaded 0/36 layers to GPU
+```
+
+**36개 레이어 중 0개.** GPU를 인식했지만 실제로는 아무것도 올리지 않았습니다. 이유는 그 바로 위에 있었습니다.
+
+```
+msg="disabling multimodal projector offload" reason=limited-vram
+```
+
+당시 쓰던 `gemma4:e2b`는 이미지도 처리하는 멀티모달 모델입니다. 이미지 인코더(projector)가 따로 붙어 있는데, Ollama는 가용 VRAM 1.5GiB로는 이 구조가 들어가지 않는다고 판단해서 projector 오프로드를 끄고, 이어서 레이어도 하나도 올리지 않기로 결정했습니다.
+
+드라이버를 깔고, 재부팅하고, toolkit을 붙이고, `nvidia-smi`까지 확인했는데 **추론은 여전히 100% CPU에서 돌고 있었습니다.**
+
+측정해봤습니다. 같은 프롬프트로 각각 5회씩입니다.
+
+| | eval rate 평균 | 범위 |
+|---|---|---|
+| GPU 연결 전 | 12.95 tok/s | 12.72 ~ 13.20 |
+| GPU 연결 후 | 13.24 tok/s | 13.07 ~ 13.33 |
+
+**차이 2.2%.** 측정 오차입니다. `offloaded 0/36`이 숫자로 확인된 셈입니다.
+
+그런데 프롬프트 처리 속도를 보고 한 번 더 놀랐습니다.
+
+| | prompt eval rate |
+|---|---|
+| GPU 연결 전 | 168 ~ 179 tok/s |
+| GPU 연결 후 | 119 ~ 131 tok/s |
+
+5회가 전부 깔끔하게 갈립니다. **GPU를 연결했더니 프롬프트 처리가 30% 느려졌습니다.**
+
+단서는 아까 그 로그 줄에 있었습니다.
+
+```
+CUDA0 (GTX 960M): 0 layers, 129 MiB used, 1831 MiB free
+```
+
+레이어는 하나도 안 올렸는데 **129MiB를 쓰고 있습니다.** 연산 버퍼는 GPU에 잡아둔 상태입니다. 실제 계산은 전부 CPU가 하는데, CUDA 백엔드와 동기화하는 비용만 얹힌 것입니다. **얻은 것 없이 부담만 추가된, 가장 나쁜 조합**이었습니다.
+
+여기서 배운 것은 하나입니다. **`nvidia-smi`가 출력되는 것과 모델이 GPU를 쓰는 것은 전혀 다른 문제입니다.** 대부분의 설치 안내는 `nvidia-smi`가 뜨면 끝난 것처럼 적고 넘어갑니다. 실제로 확인해야 할 줄은 이것입니다.
+
+```bash
+docker logs ollama 2>&1 | grep "offloaded"
+docker exec ollama ollama ps        # PROCESSOR 열이 100% CPU 인지
+```
+
+<KnowledgeList title="로그와 측정값 읽기">
+<KnowledgeNote term="offload 와 레이어" kind="definition" defaultOpen>
+
+언어 모델은 **레이어**라는 층이 수십 개 쌓인 구조입니다. 추론은 입력을 1번 레이어부터 마지막 레이어까지 차례로 통과시키는 일입니다.
+
+**오프로드**(offload)는 그 레이어들을 **CPU에서 GPU로 옮겨 싣는 것**을 말합니다. 전부 옮길 필요는 없고, VRAM에 들어가는 만큼만 옮긴 뒤 나머지는 CPU가 처리하는 **부분 오프로드**도 가능합니다.
+
+```
+offloaded 0/36 layers to GPU     ← 36개 중 0개. 전부 CPU
+offloaded 20/36 layers to GPU    ← 절반 조금 넘게 GPU
+offloaded 36/36 layers to GPU    ← 전부 GPU
+```
+
+**속도는 이 비율을 대체로 따라갑니다.** GPU가 인식되었는지가 아니라 **몇 개를 올렸는지**가 성능을 결정합니다. 그래서 확인해야 할 줄이 `nvidia-smi`가 아니라 이 줄입니다.
+
+Ollama는 VRAM이 부족하다고 판단하면 **경고 없이 올리는 개수를 줄입니다.** 실패하는 것보다 느리게라도 돌아가는 쪽을 택하는 설계인데, 그래서 조용히 CPU로 떨어져 있어도 사용자는 알 수 없습니다.
+
+</KnowledgeNote>
+<KnowledgeNote term="RAM 과 VRAM 은 서로 다른 벽입니다" kind="definition">
+
+이 절을 헤맨 이유가 두 메모리를 뭉뚱그려 생각했기 때문입니다.
+
+| | 누가 쓰나 | 이 노트북 |
+|---|---|---|
+| **RAM** | CPU가 씁니다. OS·Docker·n8n이 나눠 씁니다 | 8GB (Ollama가 인식한 가용량 7.1GiB) |
+| **VRAM** | GPU가 씁니다. 그래픽 카드에 붙어 있는 별도 메모리 | 2GB (Ollama가 쓸 수 있다고 판단한 양 1.5GiB) |
+
+**둘은 서로 빌려주지 않습니다.** RAM이 아무리 남아도 VRAM이 모자라면 레이어를 GPU에 올릴 수 없습니다. 반대로 VRAM이 넉넉해도 모델 전체가 RAM에 안 들어가면 애초에 로딩이 안 됩니다.
+
+그래서 "8GB면 4B 모델은 돌겠지"는 **RAM 쪽 이야기**일 뿐이고, GPU 가속이 되느냐는 완전히 다른 질문입니다. 이 서버에서 실제로 벽이 된 것은 큰 쪽인 8GB가 아니라 **작은 쪽인 2GB**였습니다.
+
+노트북에 붙은 GPU가 특히 이렇습니다. 연산 성능은 그럭저럭인데 VRAM이 2GB에서 멈춰 있어, **모델을 올릴 자리가 없어서 성능을 못 씁니다.**
+
+</KnowledgeNote>
+<KnowledgeNote term="eval rate 와 prompt eval rate 는 다른 것을 잽니다" kind="definition">
+
+Ollama가 내놓는 두 숫자는 서로 다른 구간을 측정합니다.
+
+| 지표 | 재는 것 |
+|---|---|
+| `prompt eval rate` | 내가 **입력한 문장을 읽어들이는** 속도 |
+| `eval rate` | 모델이 **답을 만들어내는** 속도 |
+
+성격이 다릅니다. 입력을 읽는 단계는 전체를 한꺼번에 처리할 수 있어서 **병렬 처리에 유리하고**, 그래서 GPU 효과가 크게 납니다. 답을 만드는 단계는 앞 글자가 나와야 다음 글자를 만들 수 있어 **순차적**입니다.
+
+체감 속도는 보통 `eval rate` 쪽입니다. 글자가 찍히는 속도가 그것입니다.
+
+이 절에서 **`eval rate`는 그대로인데 `prompt eval rate`만 30% 느려진 것**이 단서가 됐습니다. 레이어를 하나도 안 올렸으니 답을 만드는 속도는 그대로일 수밖에 없고, 그런데도 GPU에 129MiB를 잡아두고 동기화 비용만 치르고 있어서 읽는 쪽만 손해를 본 상태였습니다.
+
+**두 숫자가 다른 방향으로 움직이면 무언가 어긋나 있다는 신호입니다.** 하나만 보고 있었다면 못 찾았을 겁니다.
+
+</KnowledgeNote>
+<KnowledgeNote term="grep 이 로그를 못 찾을 때 — 표준 출력과 표준 에러" kind="definition">
+
+```bash
+docker logs ollama 2>&1 | grep "offloaded"
+```
+
+프로그램의 출력은 두 갈래로 나뉩니다.
+
+- **표준 출력**(1번) — 정상적인 결과
+- **표준 에러**(2번) — 에러와 진단 메시지
+
+`|` 파이프는 **표준 출력만** 넘깁니다. 그런데 많은 프로그램이 진단 메시지를 표준 에러로 내보내고, Ollama의 로딩 로그도 그쪽입니다. 그래서 그냥 `docker logs ollama | grep …`을 하면 **찾는 줄이 없다고 나옵니다.** 로그가 없어서가 아니라 파이프에 실리지 않아서입니다.
+
+`2>&1`은 **2번을 1번으로 합치라**는 뜻입니다(`&`는 "이건 파일 이름이 아니라 번호다"라는 표시). 합치고 나면 파이프가 둘 다 넘깁니다.
+
+`grep`이 아무것도 못 찾았을 때 이걸 먼저 의심해보면 시간을 아낍니다. **찾는 게 없는 것과 넘어오지 않은 것은 다릅니다.**
+
+</KnowledgeNote>
+</KnowledgeList>
+
+`offloaded 0/36 layers to GPU`를 보기 전까지, 저는 GPU를 쓰고 있다고 믿고 있었습니다.
+
+그렇다면 2GB VRAM에 들어가는 모델은 무엇인가. 이제 그 이야기인데, 그 전에 **애초에 이 모델을 어떻게 골랐는지**부터 적어야 할 것 같습니다.
+### 3. 모델을 고르면서 했던 착각
+
+Gemini를 자주 쓰고 있어서 같은 계열인 Gemma로 이어갔습니다. 이게 표면적인 이유입니다.
+
+그런데 솔직히 말하면, 후보를 좁히는 과정에서 **중국에서 만든 모델을 먼저 걸러냈습니다.** 개인정보가 새어 나간다는 이야기를 들은 적이 있었기 때문입니다. Qwen이나 DeepSeek은 성능 대비 크기가 작아서 이런 저사양 환경에 자주 추천되는데도, 목록에서 그냥 지웠습니다.
+
+이 판단은 **절반만 맞았습니다.**
+
+우려 자체는 근거가 있습니다. 2025년 4월, 개인정보보호위원회는 DeepSeek이 한국 이용자의 개인정보를 동의 없이 국외로 이전한 사실을 확인하고 시정을 권고했습니다. 기기·네트워크·앱 정보뿐 아니라 **이용자가 입력한 프롬프트 내용까지** ByteDance 계열사인 Volcano Engine으로 전송됐고, 영향 범위는 약 150만 명으로 추정됐습니다. 국내 앱마켓에서는 이미 2월에 신규 다운로드가 중단된 상태였습니다.
+
+- [개인정보위, 딥시크에 "해외이전 개인정보 파기" 시정·권고명령 — 바이라인네트워크](https://byline.network/2025/04/25-427/)
+- [South Korea says DeepSeek transferred user data to China and the U.S. without consent — CNBC](https://www.cnbc.com/2025/04/24/south-korea-says-deepseek-transferred-user-data-to-china-us-without-consent.html)
+
+그런데 이 사건은 **DeepSeek이라는 서비스**의 이야기입니다. 앱에 입력한 데이터가 그 회사 서버로 갔다는 것입니다.
+
+제가 지금 하려는 일은 다릅니다. Ollama로 받는 것은 **가중치 파일**입니다. 한 번 내려받고 나면 추론은 이 노트북 안에서만 일어납니다. 컨테이너에서 나가는 트래픽이 없고, 프롬프트가 도달할 서버도 없습니다. 어느 나라 회사가 공개한 가중치든, 로컬에서 도는 이상 **데이터를 보낼 방법 자체가 없습니다.**
+
+<KnowledgeNote term="서비스로서의 모델과 파일로서의 모델" kind="definition" defaultOpen>
+
+같은 이름이 전혀 다른 두 가지를 가리킵니다. 이걸 구분하지 못한 것이 제 착각의 정체였습니다.
+
+| | 서비스 | 가중치 파일 |
+|---|---|---|
+| 어디서 도나 | **그 회사 서버** | **내 컴퓨터** |
+| 내 프롬프트는 | 네트워크를 타고 그쪽으로 갑니다 | 이 기기 밖으로 나가지 않습니다 |
+| 무엇을 신뢰해야 하나 | 그 회사의 정책과 관할 법 | 파일 자체와 받아온 경로 |
+| 예 | 앱·웹사이트·클라우드 API | Ollama로 받아 로컬에서 도는 모델 |
+
+**가중치 파일에는 "어디로 보낸다"는 동작이 들어 있지 않습니다.** 모델은 숫자 덩어리이고, 그걸 실행하는 것은 제 컴퓨터의 Ollama입니다. 네트워크를 쓸지 말지는 실행하는 쪽이 정합니다.
+
+그래서 로컬 모델에서 실제로 점검해야 할 것은 국적이 아니라 이런 것들입니다.
+
+- **어디서 받았는가** — 공식 배포처인지, 해시가 맞는지
+- **라이선스가 무엇인가** — 상업적 사용이나 재배포에 제약이 있는지
+- **그 프로그램이 밖으로 나가는가** — 모델이 아니라 **실행 도구**가 통신하는지
+
+마지막 항목이 실제 위험이 있는 자리입니다. 모델 파일이 아니라 그것을 감싸는 도구·플러그인·확장이 텔레메트리를 보내는 경우입니다. **의심할 대상을 정확히 고르는 것이 의심하지 않는 것보다 낫습니다.**
+
+</KnowledgeNote>
+
+이 서버를 만든 이유가 바로 그것이었는데도, 정작 모델을 고를 때는 그 원리를 잊고 브랜드로 판단하고 있었습니다. 클라우드에 보내기 싫어서 집에 서버를 세워놓고, 그 서버 안에서 돌릴 파일을 국적으로 걸러낸 셈입니다.
+
+결과적으로 Gemma를 쓰고 있고 그 선택 자체를 후회하지는 않습니다. 익숙한 계열이라 응답 형태를 예상하기 쉽고, 한국어도 무난합니다. 다만 **이유가 틀렸다는 건 기록해둡니다.** 다음에 모델을 바꿀 때는 국적이 아니라 크기와 품질로 고를 겁니다.
+
+### 4. 8GB와 2GB 사이에서
+
+받아둔 모델은 두 개입니다.
+
+```bash
+docker exec ollama ollama list
+```
+```
+gemma4:e2b
+gemma4:e4b
+```
+
+이 노트북에는 두 개의 벽이 있습니다.
+
+```
+  RAM   8GB   ─ OS + Docker + n8n이 먼저 쓰고 남은 자리
+                Ollama가 인식한 가용 메모리: 7.1 GiB
+  VRAM  2GB   ─ Ollama가 실제로 쓸 수 있다고 판단한 양: 1.5 GiB
+```
+
+RAM 쪽은 생각보다 여유가 있습니다. 7.1GiB면 4B급 모델도 CPU에서는 돌아갑니다. 문제는 **VRAM 1.5GiB**입니다. 2절에서 `offloaded 0/36`의 원인으로 확인한 그 숫자입니다.
+
+그래서 지금 쓰는 모델은 GPU에 올라가지 못합니다. 2GB 안에 들어가는 1B급 텍스트 전용 모델로 바꾸면 상황이 달라지겠지만, 그러면 이번에는 품질을 포기해야 합니다.
+
+**속도를 얻으려면 더 작은 모델로 내려가야 하고, 품질을 지키려면 CPU로 돌려야 합니다.** 이 교환을 어느 쪽으로 끊을지는 비서가 실제로 어떤 판단을 해야 하는지 정해진 다음에야 결정할 수 있습니다. 마지막 편의 숙제로 남겨두었습니다.
+
+참고로 반대 방향도 시험해봤습니다. 한 단계 큰 `gemma4:e4b`입니다.
+
+| | e2b | e4b |
+|---|---|---|
+| eval rate | 13.0 tok/s | 6.95 tok/s |
+| 모델 로딩 | 25.7초 | 1분 41초 |
+| prompt eval rate | 120~180 tok/s | 4.17 tok/s |
+
+생성 속도가 절반인 것은 파라미터가 두 배이니 예상 범위입니다. 문제는 나머지입니다. 프롬프트 처리 속도가 **30배 이상 떨어졌습니다.** 이건 계산이 느린 게 아니라 **메모리가 부족해 디스크와 오가고 있다는 신호**입니다. 로딩에 1분 41초가 걸린 것도 같은 이야기입니다.
+
+<KnowledgeNote term="메모 — 모델 파일은 SSD 에 두었습니다" kind="note">
+
+[1편](/blog/home-server-01-ubuntu-setup)에서 931GB HDD를 `/data`에 붙여두고 *읽는 속도가 곧 체감으로 이어지는 것은 `/data`로 보내지 않았다*고 적어두었습니다. **모델 파일이 그것입니다.**
+
+처음에는 용량이 넉넉한 HDD가 맞다고 생각했습니다. 모델 하나가 수 GB인데 275GB SSD를 그걸로 채우는 게 아까웠습니다. 그런데 모델은 **호출할 때마다 통째로 메모리에 올라가는** 구조라, 디스크에서 읽어 올리는 시간이 그대로 첫 응답 시간이 됩니다.
+
+```
+1회차  total duration: 1m2.6s   load duration: 25.7s
+2회차  total duration: 35.3s    load duration: 8.0ms
+```
+
+**두 회차의 차이가 전부 모델 로딩입니다.** SSD에서 25.7초였으니 HDD였다면 더 걸렸을 겁니다. 그래서 compose의 볼륨은 홈 디렉터리, 즉 **SSD 쪽**을 가리키고 있습니다.
+
+```yaml
+volumes:
+  - ./ollama:/root/.ollama    # ~/carrier/ollama → SSD
+```
+
+용량이 아까운 것과 매번 기다리는 것 중에 후자가 더 비쌌습니다. **`/data`에 보낼 것은 자주 읽히지 않으면서 계속 쌓이기만 하는 것**이고, 모델은 정반대였습니다.
+
+한 번 올라간 모델은 잠시 메모리에 머뭅니다(기본값 5분). 그 안에 다시 부르면 로딩이 없고, 지나면 내려가서 그 시간을 다시 기다립니다. `OLLAMA_KEEP_ALIVE`로 늘릴 수 있지만 **그동안 메모리를 계속 붙잡고 있어서**, RAM 8GB인 이 서버에서는 공짜가 아닙니다.
+
+</KnowledgeNote>
+
+<KnowledgeNote term="속도가 배수가 아니라 자릿수로 떨어질 때" kind="note">
+
+모델을 키우면 느려지는 건 당연합니다. 그런데 **몇 배가 아니라 몇십 배로 떨어지면 원인이 다릅니다.**
+
+- **2배 정도 느려짐** — 계산량이 늘어난 것입니다. 정상입니다
+- **30배 느려짐** — 계산이 아니라 **메모리 때문에 기다리고 있는 것**입니다
+
+메모리에 다 들어가지 않으면 시스템은 일부를 디스크로 밀어냅니다(스왑). 그러면 계산할 때마다 디스크를 읽어야 하는데, 메모리와 디스크는 속도 차이가 자릿수 단위입니다. 그래서 결과가 배수가 아니라 자릿수로 나빠집니다.
+
+확인은 간단합니다.
+
+```bash
+free -h              # 메모리와 스왑 사용량
+docker stats         # 컨테이너별 메모리 사용량
+```
+
+`free -h`의 `Swap` 줄이 0이 아니고 계속 늘고 있다면 그게 답입니다. `-h`는 사람이 읽기 좋은 단위로 보여달라는 뜻입니다(**h**uman-readable).
+
+**"조금 느리다"와 "메모리가 모자라다"는 다른 문제이고, 해결 방법도 다릅니다.** 앞은 참으면 되고 뒤는 참는다고 되지 않습니다.
+
+</KnowledgeNote>
+
+한가할 때는 e4b도 그럭저럭 돌아갑니다. 하지만 비서가 실제로 일할 때는 n8n 워크플로가 함께 움직이고, 그때 이 여유는 사라집니다. **8GB의 벽은 평소가 아니라 바쁠 때 드러납니다.**
+
+### 5. 13 tok/s는 쓸 만한 속도인가
+
+지금 `gemma4:e2b`의 생성 속도는 **초당 13토큰**입니다.
+
+이 숫자를 감각으로 옮기면 사람이 소리 내어 읽는 속도와 비슷합니다. 화면 앞에 앉아 대화하기에는 답답합니다. 질문 하나에 30초에서 1분이 걸립니다.
+
+그런데 만들려는 것은 대화 상대가 아닙니다. **정해진 시간에 혼자 돌아가는 비서**입니다. 아침에 오늘 일정을 정리하고, 저녁에 남은 항목을 훑는 작업입니다. 그 시간에 저는 화면을 보고 있지 않습니다. 1분이 걸리든 3분이 걸리든 결과만 제때 도착하면 됩니다.
+
+**로컬 LLM의 쓸모를 가르는 기준이 여기 있었습니다.** 즉시 응답이 필요한 용도에는 맞지 않고, 사람이 기다리지 않는 자동화에는 충분합니다. 그리고 제가 만들려는 것은 정확히 후자입니다.
+
+품질은 아직 검증하지 못했습니다. 속도는 숫자로 나왔지만, **2B급 모델이 실제로 일정을 판단하고 정리할 수 있는지**는 마지막 편에서 확인해야 할 문제입니다.
+
+---
+
+## 결론
+
+GPU는 결국 쓰지 못했습니다.
+
+드라이버를 깔고, 재부팅하고, toolkit을 붙이고, 컨테이너 안에서 `nvidia-smi`가 뜨는 것까지 확인했습니다. 로그의 `library=cpu`도 `library=CUDA`로 바뀌었습니다. **그런데 추론은 여전히 100% CPU에서 돌고 있었습니다.**
+
+확인해야 할 줄은 따로 있었습니다.
+
+```bash
+docker logs ollama 2>&1 | grep "offloaded"
+docker exec ollama ollama ps          # PROCESSOR 열
+```
+
+`offloaded 0/36 layers to GPU`. VRAM 1.5GiB에 36개 레이어 중 하나도 올라가지 않았고, 그러면서 연산 버퍼로 129MiB는 잡아두고 있었습니다. 그 결과 **GPU를 연결했더니 프롬프트 처리가 30% 느려졌습니다.** 얻은 것 없이 동기화 비용만 치른 셈입니다.
+
+**`nvidia-smi`가 출력되는 것과 모델이 GPU를 쓰는 것은 전혀 다른 문제입니다.** 대부분의 설치 안내가 `nvidia-smi`에서 끝나는데, 거기까지는 "장치가 보인다"까지만 확인한 것입니다.
+
+숫자로 남은 것들입니다.
+
+```
+  VRAM  2GB   →  지금 쓰는 모델은 들어가지 않는다
+  RAM   8GB   →  e4b 는 버겁다 (프롬프트 처리 30배 하락, 스왑)
+  속도  13 tok/s  →  CPU 만으로 낸 값
+```
+
+그리고 하나 더. 모델을 고를 때 저는 **중국에서 만든 모델을 먼저 걸러냈습니다.** 클라우드에 보내기 싫어서 집에 서버를 세워놓고, 정작 그 서버 안에서 돌릴 **가중치 파일**을 국적으로 판단했습니다. 서비스로서의 모델과 파일로서의 모델은 다른 물건인데, 이름이 같다는 이유로 같은 기준을 적용했습니다. 결과는 나쁘지 않았지만 이유는 틀렸습니다.
+
+13 tok/s는 화면 앞에 앉아 대화하기에는 답답한 속도입니다. 하지만 만들려는 것은 **정해진 시간에 혼자 돌아가는 비서**이고, 그 시간에 저는 화면을 보고 있지 않습니다. **로컬 LLM의 쓸모를 가르는 기준이 여기 있었습니다.**
+
+그래서 이 실패는 마지막 편으로 넘어갑니다. 비서가 어떤 판단을 해야 하는지 정해지면, **더 작은 모델로 내려가 GPU를 쓸지 / 품질을 지키고 CPU로 갈지**를 그때 결정하면 됩니다. 지금은 어느 쪽을 골라도 되는 상태가 아니라, **어느 쪽이 무엇을 잃는지 숫자로 아는 상태**입니다.
+
+이어지는 이야기는 [3편](/blog/home-server-03-ollama-n8n)에 있습니다.
