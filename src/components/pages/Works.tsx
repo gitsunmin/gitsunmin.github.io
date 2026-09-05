@@ -1,4 +1,4 @@
-import { AppWindow, Globe, Layers, Package } from 'lucide-react';
+import { AppWindow, Globe, Layers, Package, Sparkles } from 'lucide-react';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { TechFilterBar } from '@/components/TechFilterBar';
 import { WorkSection, type CategoryMeta } from '@/components/WorkSection';
@@ -12,6 +12,7 @@ type SectionDef = {
 const SECTIONS: SectionDef[] = [
   { categories: ['service'], meta: { id: 'service', label: '서비스 · 앱', icon: AppWindow } },
   { categories: ['framework'], meta: { id: 'framework', label: '프레임워크', icon: Layers } },
+  { categories: ['side-project'], meta: { id: 'side-project', label: '사이드 프로젝트', icon: Sparkles } },
   { categories: ['library', 'vscode-extension'], meta: { id: 'tool', label: '라이브러리 · 확장 도구', icon: Package } },
   { categories: ['website'], meta: { id: 'website', label: '웹사이트', icon: Globe } },
 ];

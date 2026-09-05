@@ -1,6 +1,6 @@
 import type { CareerId } from '@/data/careers';
 
-export type WorkCategory = 'service' | 'library' | 'vscode-extension' | 'framework' | 'website';
+export type WorkCategory = 'side-project' | 'service' | 'library' | 'vscode-extension' | 'framework' | 'website';
 
 export const WORK_IDS = [
   'doldeuls-forest',
@@ -45,7 +45,7 @@ export const Works: Work[] = [
     id: 'doldeuls-forest',
     title: '돌들의 숲',
     icon: '/assets/logos/forest-of-stones.webp',
-    category: 'service',
+    category: 'side-project',
     description: `디지털 환경에서의 정서적 고립을 해소하고 싶어 만든 익명 P2P 힐링 커뮤니티입니다.
 누군가와 연결되고 싶지만 신분을 드러내기 어려운 순간을 위해, 완전한 익명성을 보장하면서도 진심 어린 대화가 가능한 공간을 만들었습니다.`,
     techs: ['React', 'TypeScript', 'TanStack Router', 'Relay', 'Tailwind CSS', 'Three.js', 'Expo', 'React Native', 'Cloudflare Workers', 'Hono', 'GraphQL', 'Prisma', 'Astro', 'Turborepo', 'Bun'],
@@ -60,7 +60,7 @@ export const Works: Work[] = [
     id: 'namat-deonga',
     title: '남았던가',
     icon: '/assets/logos/namat-deonga.webp',
-    category: 'service',
+    category: 'side-project',
     description: `냉장고 식재료를 사진으로 기록해 음식물 낭비를 줄이는 모바일 앱입니다.
 서버 없이 기기 로컬 스토리지만 사용하는 완전 프라이빗 아키텍처로, 찍고 닫는 2초가 전부입니다.`,
     techs: ['React Native', 'Expo', 'TypeScript', 'SQLite', 'Zustand', 'Tailwind CSS', 'Astro', 'Turborepo', 'Bun'],
