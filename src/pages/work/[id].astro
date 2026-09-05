@@ -77,13 +77,6 @@ const title = work?.title ?? entry.data.title;
 const description = work?.description.split('\n')[0] ?? entry.data.summary ?? '';
 const ogImage = `/og/works/${id}.png`;
 
-const COMPANY_LABELS: Record<string, string> = {
-  seonhamlabs: '선함연구소',
-  marketboro: '마켓보로',
-  korens: '코렌스',
-};
-const company = work?.careerId ? COMPANY_LABELS[work.careerId] ?? work.careerId : null;
-
 /**
  * 본문이 스스로 기술 스택 절을 갖고 있으면 자동 칩 슬라이드를 만들지 않는다.
  * 두 장이 나란히 서면 읽는 사람은 둘이 어떻게 다른지부터 따지게 되는데,
@@ -137,10 +130,9 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
           );
         })()}
 
-        <div class="mt-10 text-sm text-muted-foreground">
-          <p class="font-medium text-foreground">김선민</p>
-          {company && <p class="mt-1">{company}</p>}
-        </div>
+        {/* 이름과 회사명은 표지에 두지 않는다. 이미 떠난 회사가 이름 아래에 적혀
+            있으면 아직 소속인 것처럼 읽힌다. 소속 이력은 /careers가 기간과 함께
+            보여 주는 것으로 충분하다. */}
       </div>
     </section>
 
