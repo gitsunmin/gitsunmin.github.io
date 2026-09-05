@@ -320,6 +320,57 @@ html:has([data-deck]) {
   font-size: clamp(0.75rem, 1.6vw, 0.9375rem);
 }
 
+/* ─── 케이스 안내 ────────────────────────────────────────────
+   덱에는 케이스를 감싸는 카드가 없다. 번호와 읽는 순서를 글 안에 심어 두지 않으면
+   문제와 해결이 맥락 없이 튀어나오는 것처럼 읽힌다. */
+
+[data-deck] .deck-prose span[data-work-case-label] {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: clamp(0.6875rem, 1.5vw, 0.8125rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: hsl(var(--primary) / 0.75);
+}
+
+[data-deck] .deck-prose ol[data-case-steps] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(0.6875rem, 1.4vw, 0.8125rem);
+}
+
+[data-deck] .deck-prose ol[data-case-steps] > li {
+  margin: 0;
+  padding: 0.15rem 0;
+  color: hsl(var(--muted-foreground) / 0.55);
+}
+
+/* 단계 사이의 화살표. 마지막 칸 뒤에는 붙이지 않는다. */
+[data-deck] .deck-prose ol[data-case-steps] > li:not(:last-child)::after {
+  content: '→';
+  margin-left: 0.55rem;
+  color: hsl(var(--muted-foreground) / 0.35);
+}
+
+[data-deck] .deck-prose ol[data-case-steps] > li[data-current] {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 600;
+  color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.12);
+}
+
+/* 케이스 간지에서는 제목이 주인공이라 띠를 제목 아래로 내려 붙인다. */
+[data-deck] .deck-prose h2[data-work-section='case'] + ol[data-case-steps] {
+  margin-top: 1.25rem;
+}
+
 /* 케이스 카드 껍데기는 덱에서 아무 상자도 만들지 않는다. */
 [data-deck] .deck-prose :is(section[data-work-case], section[data-work-aux]) {
   display: contents;
@@ -516,6 +567,8 @@ html:has([data-deck]) {
   [data-deck] .deck-prose h2 { font-size: 15pt !important; margin-bottom: 0.5rem !important; }
   [data-deck] .deck-prose h3 { font-size: 12pt !important; }
   [data-deck] .deck-prose :is(p, li) { font-size: 10pt !important; }
+  [data-deck] .deck-prose span[data-work-case-label] { font-size: 8pt !important; }
+  [data-deck] .deck-prose ol[data-case-steps] > li { font-size: 8pt !important; }
   .deck-note { font-size: 8pt !important; }
   .deck-caveat { font-size: 10pt !important; }
   .deck-release-headline { font-size: 11pt !important; }

@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
+import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 import { rehypeWorkSections } from './src/lib/rehype-work-sections.mjs';
 
 // https://astro.build/config
@@ -42,6 +43,9 @@ export default defineConfig({
       wrap: true,
     },
     // works 문서의 케이스/보조 섹션과 근거 마커에 data-* 표시를 붙인다 (스타일은 CSS 담당)
-    rehypePlugins: [rehypeWorkSections],
+    // 헤딩 id를 먼저 박는다. rehypeWorkSections가 케이스 제목 안에 '문제 N' 머리표를
+    // 넣기 때문에, 순서가 뒤집히면 슬러그가 '문제-1재현되지-않는-…'이 되어
+    // 이력서가 가리키는 딥링크가 전부 끊긴다.
+    rehypePlugins: [rehypeHeadingIds, rehypeWorkSections],
   },
 });

@@ -46,9 +46,19 @@ type Chapter = {
   name: string;
   summary?: string;
   contributions?: string[];
+  hasCases: boolean;
   Content: Awaited<ReturnType<typeof render>>['Content'];
 };
 const chapters: Chapter[] = [];
+
+/**
+ * 케이스 글을 읽는 법. 문서 뷰 시절 WorkBrief가 케이스 카드 위에 달아 주던 안내다.
+ * 카드가 슬라이드로 바뀌면서 안내가 사라졌고, 그래서 문제와 해결이 아무 예고 없이
+ * 튀어나오게 됐다. 케이스가 실제로 있는 곳에만 다시 붙인다.
+ */
+const CASE_GUIDE =
+  '여기서부터는 실제로 부딪힌 문제를 케이스로 정리했습니다. 각 케이스는 어떤 상황이었고 무엇이 제약이었는지에서 시작해, 그래서 어떻게 판단했고 무엇이 남았는지까지 이어집니다.';
+const hasCases = (body: string | undefined) => /^##\s*문제\s*\d+\./m.test(body ?? '');
 
 for (const repo of work?.subRepos ?? []) {
   const subEntry = allEntries.find((e: CollectionEntry<'works'>) => e.id.replace(/\.mdx$/, '') === `${id}/${repo.slug}`);
@@ -58,6 +68,7 @@ for (const repo of work?.subRepos ?? []) {
     name: repo.name,
     summary: subEntry.data.summary,
     contributions: subEntry.data.contributions,
+    hasCases: hasCases(subEntry.body),
     Content: SubContent,
   });
 }
@@ -162,6 +173,10 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
         ) : null}
 
         {/* 고지는 한 장을 통째로 쓸 만한 내용이 아니라 소개의 각주로 붙인다. */}
+        {chapters.length === 0 && hasCases(entry.body) && (
+          <p class="deck-note mt-8">{CASE_GUIDE}</p>
+        )}
+
         {entry.data.disclaimer && (
           <p class="deck-note mt-10">
             <strong>고지</strong> — {entry.data.disclaimer}
@@ -206,6 +221,7 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
                 ))}
               </ul>
             ) : null}
+            {chapter.hasCases && <p class="deck-note mt-8 text-left">{CASE_GUIDE}</p>}
           </div>
         </section>
         <div class={PROSE}>

@@ -74,6 +74,71 @@ function ellipsisNode() {
 }
 
 /**
+ * `문제 1` 머리표를 제목 안에 넣는다.
+ *
+ * 형제 노드로 두면 안 된다 — 슬라이드 경계가 h2이므로, h2 앞의 문단은 앞 슬라이드로
+ * 밀려나 "문제 1"만 적힌 빈 장이 하나씩 생긴다. h2의 첫 자식으로 넣고 CSS에서
+ * 블록으로 띄우면 한 장 안에서 제목 위에 놓인다.
+ */
+function prependCaseLabel(heading, number) {
+  heading.children.unshift({
+    type: 'element',
+    tagName: 'span',
+    properties: { 'data-work-case-label': '' },
+    children: [{ type: 'text', value: `문제 ${number}` }],
+  });
+}
+
+/**
+ * 케이스를 읽는 순서 — `상황 → 제약 → 접근과 결정 → 결과 → 한계`.
+ *
+ * 케이스 글은 늘 같은 차례로 쓰여 있는데, 덱에서는 그 차례가 한 장에 한 토막씩
+ * 흩어져 나온다. 지금 어디를 읽고 있는지 보이지 않으면 문제와 해결이 맥락 없이
+ * 튀어나오는 것처럼 읽힌다. 그래서 매 장에 같은 띠를 놓고 현재 단계만 밝힌다.
+ *
+ * `current`가 없으면(간지) 아무 단계도 밝히지 않아 "이 순서로 이어집니다"가 된다.
+ */
+function caseStepsNode(steps, current) {
+  return {
+    type: 'element',
+    tagName: 'ol',
+    properties: {
+      'data-case-steps': '',
+      'aria-label': current ? `이 문제를 읽는 순서 — 지금은 ${current}` : '이 문제를 읽는 순서',
+    },
+    children: steps.map((step) => ({
+      type: 'element',
+      tagName: 'li',
+      properties: step === current ? { 'data-current': '', 'aria-current': 'step' } : {},
+      children: [{ type: 'text', value: step }],
+    })),
+  };
+}
+
+/**
+ * 케이스 본문에 머리표와 단계 띠를 심는다.
+ *
+ * 단계 이름은 문서마다 다를 수 있으므로(제약 절이 없는 케이스도 있다) 정해 두지 않고
+ * 그 케이스에 실제로 있는 h3를 차례대로 읽어 쓴다.
+ */
+function annotateCase(collected, number) {
+  const steps = collected.filter((node) => isElement(node, 'h3')).map((node) => textOf(node).trim());
+
+  const output = [];
+  for (const node of collected) {
+    if (isElement(node, 'h2')) {
+      prependCaseLabel(node, number);
+      output.push(node);
+      if (steps.length > 0) output.push(caseStepsNode(steps, null));
+      continue;
+    }
+    output.push(node);
+    if (isElement(node, 'h3')) output.push(caseStepsNode(steps, textOf(node).trim()));
+  }
+  return output;
+}
+
+/**
  * h2와 그 아래 내용을 <section>으로 묶어 영역 한 장이 되게 한다.
  * 케이스는 카드, `그 밖의 …`는 말줄임까지 붙은 보조 영역이 된다.
  */
@@ -84,7 +149,12 @@ function groupSections(root) {
   const boundaryOf = (node) => {
     if (!isElement(node, 'h2')) return null;
     const section = node.properties?.['data-work-section'];
-    if (section === 'case') return { attribute: 'data-work-case', ellipsis: false };
+    if (section === 'case')
+      return {
+        attribute: 'data-work-case',
+        ellipsis: false,
+        caseNumber: node.properties?.['data-work-case-number'],
+      };
     if (node.properties?.['data-work-aux-group'] !== undefined)
       return { attribute: 'data-work-aux', ellipsis: true };
     return null;
@@ -107,6 +177,10 @@ function groupSections(root) {
       if (isElement(next, 'h2') || isElement(next, 'hr')) break;
       collected.push(next);
       cursor += 1;
+    }
+
+    if (boundary.caseNumber !== undefined) {
+      collected.splice(0, collected.length, ...annotateCase(collected, boundary.caseNumber));
     }
 
     if (boundary.ellipsis) {
@@ -171,6 +245,21 @@ function makeSlide(title) {
 
 const isBlank = (node) => node.type === 'text' && node.value.trim() === '';
 
+const isCaseLabel = (node) =>
+  node?.type === 'element' && node.properties?.['data-work-case-label'] !== undefined;
+
+/**
+ * 헤딩의 제목만 읽는다. 안에 심어 둔 `문제 1` 머리표는 빼야 목차에 붙는 이름이
+ * "문제 1재현되지 않는 …"처럼 붙어 나오지 않는다.
+ */
+function headingText(node) {
+  return (node.children ?? [])
+    .filter((child) => !isCaseLabel(child))
+    .map(textOf)
+    .join('')
+    .trim();
+}
+
 /**
  * 슬라이드를 손으로 끊는 표시 — MDX에 `{/* slide *\/}`라고 적는다.
  *
@@ -220,10 +309,12 @@ function sliceIntoSlides(children) {
     }
 
     if (isElement(node, 'h2')) {
-      chapter = textOf(node).trim();
+      const number = node.properties?.['data-work-case-number'];
+      const title = headingText(node);
+      chapter = number === undefined ? title : `문제 ${number} · ${title}`;
       open(chapter);
     } else if (isElement(node, 'h3')) {
-      const title = textOf(node).trim();
+      const title = headingText(node);
       open(chapter ? `${chapter} · ${title}` : title);
     } else if (current === null) {
       open('');
@@ -294,11 +385,27 @@ function groupSlides(root) {
   root.children = [...esm, ...output];
 }
 
+/** `문제-1-재현되지-…` → `재현되지-…` */
+const CASE_ID_PREFIX = /^문제-\d+-/;
+
 export function rehypeWorkSections() {
   return (tree, file) => {
     // blog·til은 이 표기 체계를 쓰지 않으므로 works 문서에만 적용한다.
     const path = file?.history?.[0] ?? file?.path ?? '';
     if (!path.replaceAll('\\', '/').includes('/src/content/works/')) return;
+
+    /** 접두사를 떼다 서로 겹치는 id가 생기면 slugger처럼 번호를 붙인다. */
+    const usedIds = new Set();
+    const uniqueId = (id) => {
+      if (!usedIds.has(id)) {
+        usedIds.add(id);
+        return id;
+      }
+      let n = 1;
+      while (usedIds.has(`${id}-${n}`)) n += 1;
+      usedIds.add(`${id}-${n}`);
+      return `${id}-${n}`;
+    };
 
     for (const node of tree.children ?? []) {
       if (!isElement(node, 'h2')) continue;
@@ -309,8 +416,17 @@ export function rehypeWorkSections() {
 
       if (matched) {
         node.properties['data-work-section'] = 'case';
-        // 번호는 노출하지 않기로 했으므로 "문제 N. " 접두사를 지운다.
+        // 접두사는 제목에서 빼되 번호는 버리지 않는다. 덱에는 케이스를 감싸는 카드가
+        // 없어서, 번호가 사라지면 읽는 사람이 몇 번째 문제인지 알 길이 없다.
+        node.properties['data-work-case-number'] = matched[1];
         trimLeadingText(node, matched[0].length);
+
+        // 제목에서 뗀 접두사는 id에도 남아 있다. 이력서가 가리키는 딥링크는
+        // 접두사 없는 슬러그(#재현되지-않는-장바구니가-느리다)이므로 함께 떼어 준다.
+        const id = node.properties.id;
+        if (typeof id === 'string' && CASE_ID_PREFIX.test(id)) {
+          node.properties.id = uniqueId(id.replace(CASE_ID_PREFIX, ''));
+        }
         continue;
       }
 
