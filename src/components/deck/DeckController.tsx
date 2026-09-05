@@ -1,6 +1,5 @@
-import { ChevronDown, Play, Printer, ScrollText } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { useStoryAutoplay } from '@/hooks/useStoryAutoplay';
+import { ChevronDown, Printer } from 'lucide-react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -10,21 +9,12 @@ import { cn } from '@/lib/utils';
  * `[data-slide]`를 훑어서 이동·표시만 담당한다. 그래야 콘텐츠가 서버 렌더 HTML에
  * 그대로 남아 SEO·인쇄·딥링크가 유지된다.
  *
- * 검증하려는 것 세 가지:
- *   1. scroll-snap이 모바일/PC에서 견딜 만한가
- *   2. 스크롤 구동 Story를 덱 안에 넣었을 때 자동 진행이 가능한가
- *   3. 자동 스크롤과 사용자 스크롤이 싸우지 않게 만들 수 있는가
+ * 진행은 전적으로 사용자 몫이다. 자동 스크롤은 두었다가 걷어냈다 — 발표자가
+ * 말하는 속도와 맞을 리 없고, 읽는 사람의 스크롤과도 계속 다퉜다.
  */
 
-type Mode = 'scroll' | 'auto';
-
-type Props = {
-  /** 자동 진행 1회에 걸리는 시간(ms) */
-  autoplayMs?: number;
-};
-
 /**
- * 자동 진행 대상 슬라이드인지. rehype가 인터랙티브 컴포넌트를 품은 슬라이드에
+ * 스스로 높이를 정하는 슬라이드인지. rehype가 인터랙티브 컴포넌트를 품은 슬라이드에
  * data-slide-full을 남겨 두므로, 특정 work의 슬라이드 id를 알 필요가 없다.
  */
 const isStorySlide = (slide: HTMLElement | undefined) => slide?.dataset.slideFull !== undefined;
@@ -93,20 +83,9 @@ function fitSlide(slide: HTMLElement) {
   slide.dataset.slideOverflow = '';
 }
 
-export function DeckController({ autoplayMs = 9000 }: Props) {
+export function DeckController() {
   const slides = useSyncExternalStore(slideStore.subscribe, slideStore.getSnapshot, slideStore.getServerSnapshot);
   const [active, setActive] = useState(0);
-  const [mode, setMode] = useState<Mode>('scroll');
-
-  /** 이번 방문에서 이미 자동 재생한 슬라이드. 떠나면 지워 다시 볼 수 있게 한다. */
-  const playedRef = useRef<Set<HTMLElement>>(new Set());
-  /** 지금 재생 중인 슬라이드. 끝났을 때 그다음 장으로 넘기는 데 쓴다. */
-  const playingSlideRef = useRef<HTMLElement | null>(null);
-  /* onComplete가 참조할 최신 슬라이드 목록. 훅에 매번 새 콜백을 넘기지 않으려고 ref로 둔다. */
-  const slidesRef = useRef(slides);
-  useEffect(() => {
-    slidesRef.current = slides;
-  }, [slides]);
 
   /* ── 현재 슬라이드 추적 ─────────────────────────────────────
      IntersectionObserver로 "보인다/안 보인다"만 받고, 실제 인덱스는
@@ -141,19 +120,6 @@ export function DeckController({ autoplayMs = 9000 }: Props) {
       window.removeEventListener('resize', update);
     };
   }, [slides]);
-
-  /* ── Story 자동 진행 ────────────────────────────────────────
-     구간을 끝까지 훑고 나면 마지막 장면을 잠깐 보여 준 뒤 다음 슬라이드로 넘긴다.
-     사용자가 중간에 개입하면 onComplete는 호출되지 않으므로 자동 이동도 없다. */
-  const { play: playStory, stop: stopAutoplay, playing } = useStoryAutoplay({
-    durationMs: autoplayMs,
-    onComplete: useCallback(() => {
-      const played = playingSlideRef.current;
-      if (!played) return;
-      const next = slidesRef.current.indexOf(played) + 1;
-      window.setTimeout(() => slidesRef.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 900);
-    }, []),
-  });
 
   /* ── 한 화면에 맞추기 ───────────────────────────────────────
      발표 슬라이드는 스크롤해서 읽는 문서가 아니다. 넘치는 슬라이드는 줄여서
@@ -271,38 +237,10 @@ export function DeckController({ autoplayMs = 9000 }: Props) {
     (index: number) => {
       const target = slides[Math.max(0, Math.min(slides.length - 1, index))];
       if (!target) return;
-      stopAutoplay();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
-    [slides, stopAutoplay],
+    [slides],
   );
-
-  /* auto 모드에서 Story 슬라이드에 닿으면 재생한다. 슬라이드를 벗어나면 표시를
-     지워, 되돌아왔을 때 다시 볼 수 있게 한다. */
-  useEffect(() => {
-    const slide = slides[active];
-
-    if (!isStorySlide(slide)) {
-      playedRef.current.clear();
-      return;
-    }
-
-    if (mode !== 'auto') return;
-    if (playedRef.current.has(slide)) return;
-    if (slide.getBoundingClientRect().top > 4) return; // 스냅이 끝난 뒤에만
-
-    playedRef.current.add(slide);
-
-    // 다음 프레임으로 미룬다 — 스냅이 막 끝난 직후의 스크롤 위치를 기준으로 잡아야 한다.
-    // 정리 함수에서 취소하지 않는다. 이 effect는 스크롤·리렌더로 곧바로 다시 도는데,
-    // 취소해 버리면 예약과 취소가 번갈아 일어나 재생이 영영 시작되지 않는다.
-    // rAF이므로 탭이 백그라운드면 재생이 시작되지 않는다 — 의도한 동작이다.
-    requestAnimationFrame(() => {
-      if (slide.getBoundingClientRect().top > 4) return;
-      playingSlideRef.current = slide;
-      playStory(slide);
-    });
-  }, [active, mode, playStory, slides]);
 
   /* ── 키보드 ─────────────────────────────────────────────── */
   useEffect(() => {
@@ -332,7 +270,6 @@ export function DeckController({ autoplayMs = 9000 }: Props) {
   /* 인쇄 중에는 스냅이 페이지 분할을 방해한다. */
   useEffect(() => {
     const before = () => {
-      stopAutoplay();
       document.documentElement.style.scrollSnapType = 'none';
     };
     const after = () => document.documentElement.style.removeProperty('scroll-snap-type');
@@ -343,9 +280,7 @@ export function DeckController({ autoplayMs = 9000 }: Props) {
       window.removeEventListener('beforeprint', before);
       window.removeEventListener('afterprint', after);
     };
-  }, [stopAutoplay]);
-
-  useEffect(() => stopAutoplay, [stopAutoplay]);
+  }, []);
 
   if (slides.length === 0) return null;
 
@@ -374,21 +309,6 @@ export function DeckController({ autoplayMs = 9000 }: Props) {
         <span className="tabular-nums">
           {active + 1} <span className="opacity-40">/ {slides.length}</span>
         </span>
-
-        <button
-          type="button"
-          onClick={() => {
-            playedRef.current.clear();
-            stopAutoplay();
-            setMode((prev) => (prev === 'scroll' ? 'auto' : 'scroll'));
-          }}
-          className="deck-mode"
-          aria-pressed={mode === 'auto'}
-          title="Story 슬라이드의 진행 방식을 바꿉니다"
-        >
-          {mode === 'auto' ? <Play className="size-3" /> : <ScrollText className="size-3" />}
-          {mode === 'scroll' ? '스크롤 진행' : playing ? '재생 중' : '자동 진행'}
-        </button>
 
         <button type="button" onClick={() => window.print()} className="deck-mode" title="덱 전체를 인쇄합니다">
           <Printer className="size-3" />

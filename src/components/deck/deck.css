@@ -448,11 +448,6 @@ html:has([data-deck]) {
   transition: color 150ms ease, border-color 150ms ease;
 }
 
-.deck-mode[aria-pressed='true'] {
-  color: hsl(var(--primary));
-  border-color: hsl(var(--primary) / 0.6);
-}
-
 .deck-mode:hover {
   color: hsl(var(--foreground));
 }
