@@ -1,0 +1,529 @@
+/* ─── 덱(발표 슬라이드) 공통 스타일 ────────────────────────────────
+   슬라이드 경계는 rehype-work-sections가 빌드 타임에 만든 <section data-slide>다.
+   여기서는 그 경계를 화면 한 장씩으로 배치하는 일만 한다. */
+
+/* 전용 스크롤 div가 아니라 문서 스크롤에 스냅을 건다. 별도 컨테이너를 쓰면
+   iOS에서 주소창이 접히지 않아 100dvh가 계속 흔들린다. */
+html:has([data-deck]) {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* 슬라이드는 정확히 한 화면이다.
+   min-height로 두면 내용이 많을 때 슬라이드가 화면보다 길어지고, mandatory 스냅은
+   그 안에서 쉴 자리를 주지 않아 스크롤을 다음 스냅 지점으로 확 끌어당긴다.
+   높이를 확정해 두면 스냅이 사용자와 다투지 않고, 안쪽 max-height도 비로소 먹는다. */
+[data-deck] [data-slide] {
+  position: relative;
+  scroll-snap-align: start;
+  /* 플링 한 번에 여러 장을 건너뛰지 않게 한다. */
+  scroll-snap-stop: always;
+
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 5vw, 3rem);
+}
+
+/* 인터랙티브 컴포넌트를 품은 슬라이드는 스스로 높이를 정한다(Story는 300svh에
+   sticky 패널). 여백을 주면 sticky 정렬이 어긋나고, 스냅도 그 슬라이드 안에서
+   씬마다 멈춰야 하므로 바깥 스냅을 끈다. */
+[data-deck] [data-slide][data-slide-full] {
+  height: auto;
+  overflow: visible;
+  display: block;
+  padding: 0;
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+}
+
+/* 씬 경계마다 하나씩 심어 두는 스냅 지점. 보이지 않는다. */
+.deck-snap-anchor {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: start;
+  pointer-events: none;
+}
+
+/* 슬라이드 내용은 상자 하나로 묶여 가운데 놓인다. 상자 안은 평범한 흐름이라
+   문단이 세로로 쌓이고 prose의 마진 상쇄도 그대로다.
+   넘칠 때만 이 상자가 스크롤된다. overscroll-behavior는 일부러 걸지 않는다 —
+   contain을 걸면 상자 끝에 닿아도 스크롤이 페이지로 이어지지 않아 덱이 갇힌다.
+   기본값(auto)이라야 끝에서 다음 슬라이드로 넘어간다. */
+[data-deck] [data-slide] > * {
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* 가장 작게 줄여도 한 화면에 안 들어가는 슬라이드. 아래가 잘린 게 아니라
+   더 있다는 것을 알리려고 바닥을 흐린다. */
+[data-deck] [data-slide][data-slide-overflow]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4rem;
+  background: linear-gradient(to top, hsl(var(--background)), transparent);
+  pointer-events: none;
+}
+
+[data-deck] [data-slide][data-slide-full] > * {
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+}
+
+/* 헤딩이 곧 슬라이드 맨 위다. 문서 뷰에서 쓰던 sticky 헤더 보정이 필요 없다. */
+[data-deck] [data-slide] :is(h2, h3)[id] {
+  scroll-margin-top: 0;
+}
+
+/* ─── 등장 연출 ──────────────────────────────────────────────
+   슬라이드가 자리를 잡으면 내용이 살짝 떠오른다. DeckController가 런타임에
+   [data-deck-animate]를 붙인 뒤에만 적용되므로, JS가 없거나 죽어도 본문은
+   그대로 보인다 — 검색엔진과 인쇄가 보는 것도 그 상태다. */
+[data-deck][data-deck-animate] [data-slide]:not([data-slide-full]) > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 420ms ease, transform 420ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+[data-deck][data-deck-animate] [data-slide][data-slide-shown] > * {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-deck][data-deck-animate] [data-slide] > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─── 표지 · 마무리 슬라이드 타이포 ──────────────────────────── */
+.deck-eyebrow {
+  font-size: clamp(0.6875rem, 1.6vw, 0.8125rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  opacity: 0.6;
+}
+
+.deck-title {
+  font-size: clamp(2rem, 7vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: hsl(var(--foreground));
+}
+
+.deck-lead {
+  font-size: clamp(1rem, 2.4vw, 1.375rem);
+  line-height: 1.75;
+  color: hsl(var(--muted-foreground));
+}
+
+.deck-chapter {
+  font-size: clamp(1.5rem, 4.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: hsl(var(--foreground));
+}
+
+/* 출시 배지 — 표지의 기간 줄 아래. 고지가 아니라 성취라서 흐리지 않고,
+   왼쪽 굵은 선으로 표지의 가운데 정렬 속에서 한 덩이로 읽히게 한다. */
+.deck-release {
+  display: inline-block;
+  text-align: left;
+  padding-left: 0.875rem;
+  border-left: 3px solid hsl(var(--primary) / 0.6);
+}
+
+.deck-release-headline {
+  font-size: clamp(0.8125rem, 1.8vw, 0.9375rem);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.deck-release-note {
+  margin-top: 0.25rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.8125rem);
+  line-height: 1.6;
+  color: hsl(var(--muted-foreground));
+}
+
+/* 단서 — 소개 본문 위. 읽는 방식을 바꾸는 내용이라 각주와 반대로 눈에 띄어야 한다. */
+.deck-caveat {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--muted) / 0.4);
+  font-size: clamp(0.8125rem, 1.6vw, 0.9375rem);
+  line-height: 1.7;
+  color: hsl(var(--muted-foreground));
+}
+
+.deck-caveat strong {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+/* 각주 — 소개 슬라이드 아래에 붙는 고지 같은 것. 본문보다 한 단계 작고 흐리며,
+   위쪽에 실선을 둬서 소개 문장과 섞이지 않게 한다. */
+.deck-note {
+  padding-top: 0.75rem;
+  border-top: 1px solid hsl(var(--border) / 0.5);
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: hsl(var(--muted-foreground) / 0.75);
+}
+
+.deck-note strong {
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+}
+
+.deck-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.deck-link:hover {
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+/* ─── 본문 슬라이드 ──────────────────────────────────────────
+   문서 뷰와 같은 prose를 쓰되, 한 화면에 들어가도록 크기를 올리고
+   첫 헤딩 위 여백을 지운다. */
+[data-deck] .deck-prose :is(h2, h3):first-child {
+  margin-top: 0;
+}
+
+[data-deck] .deck-prose h2 {
+  font-size: clamp(1.375rem, 3.4vw, 2rem);
+  line-height: 1.3;
+  margin-bottom: clamp(1rem, 3vh, 2rem);
+}
+
+[data-deck] .deck-prose h3 {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+}
+
+[data-deck] .deck-prose :is(p, li) {
+  font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
+}
+
+/* 넘치는 표·코드는 슬라이드 안에서만 스크롤시키고 부모 스냅과 격리한다. */
+[data-deck] .deck-prose :is(pre, .deck-table-wrap) {
+  overflow-x: auto;
+  overscroll-behavior: contain;
+}
+
+/* ─── 본문 요소 ──────────────────────────────────────────────
+   문서 뷰(/work/[id].astro)가 갖고 있던 규칙을 덱으로 옮긴 것.
+   케이스 카드의 '상자'는 가져오지 않는다 — 덱에서는 케이스 하나가 여러 슬라이드에
+   걸치므로, 상자를 두르면 화면 여섯 장을 감싸는 거대한 테두리가 된다.
+   케이스는 슬라이드 그 자체로 표현한다. */
+
+[data-deck] .deck-prose h2 {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* 케이스 제목은 본문 색으로 둔다(문서 뷰와 같은 처리). */
+[data-deck] .deck-prose h2[data-work-section='case'] {
+  color: hsl(var(--foreground));
+}
+
+/* 보조 섹션은 대비를 낮춰 케이스에서 시선을 뺏지 않는다. */
+[data-deck] .deck-prose h2[data-work-section='aux'] {
+  color: hsl(var(--muted-foreground));
+}
+
+/* 말줄임 — "대표적인 것만 골라 뒀다"를 문장 대신 기호로 */
+[data-deck] .deck-prose p[data-work-aux-more] {
+  margin: 1.75rem 0 0;
+  text-align: center;
+  color: hsl(var(--muted-foreground) / 0.7);
+  letter-spacing: 0.4em;
+  line-height: 1;
+  user-select: none;
+}
+
+/* 보조 자료 접기 */
+[data-deck] .deck-prose details.work-aux-details {
+  border-top: 1px solid hsl(var(--border) / 0.5);
+}
+
+[data-deck] .deck-prose details.work-aux-details > summary {
+  padding-top: 0.75rem;
+  cursor: pointer;
+  list-style: none;
+  color: hsl(var(--muted-foreground));
+  user-select: none;
+}
+
+[data-deck] .deck-prose details.work-aux-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-deck] .deck-prose details.work-aux-details > summary::before {
+  content: '▸';
+  display: inline-block;
+  margin-right: 0.4rem;
+  transition: transform 150ms ease;
+}
+
+[data-deck] .deck-prose details.work-aux-details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/* 인라인 코드 */
+[data-deck] .deck-prose :not(pre) > code {
+  background: hsl(var(--muted) / 0.6);
+  padding: 0.1em 0.375em;
+  border-radius: 0.3em;
+  font-size: 0.875em;
+  font-weight: 500;
+  color: hsl(var(--foreground) / 0.9);
+  border: 1px solid hsl(var(--border) / 0.4);
+}
+
+/* 코드 블록 */
+[data-deck] .deck-prose pre {
+  font-size: clamp(0.6875rem, 1.5vw, 0.8125rem);
+  line-height: 1.7;
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* 표 */
+[data-deck] .deck-prose table {
+  font-size: clamp(0.75rem, 1.6vw, 0.9375rem);
+}
+
+/* 케이스 카드 껍데기는 덱에서 아무 상자도 만들지 않는다. */
+[data-deck] .deck-prose :is(section[data-work-case], section[data-work-aux]) {
+  display: contents;
+}
+
+/* ─── 컨트롤 UI ──────────────────────────────────────────────── */
+.deck-dots {
+  position: fixed;
+  z-index: 60;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.deck-dot {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: hsl(var(--muted-foreground) / 0.3);
+  transition: background 200ms ease, height 200ms ease;
+}
+
+.deck-dot.is-active {
+  height: 1.5rem;
+  background: hsl(var(--primary) / 0.7);
+}
+
+.deck-dot-label {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 0.6875rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  background: hsl(var(--popover));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--popover-foreground));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.deck-dot:hover .deck-dot-label,
+.deck-dot:focus-visible .deck-dot-label {
+  opacity: 1;
+}
+
+.deck-status {
+  position: fixed;
+  z-index: 60;
+  left: 1rem;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.deck-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  background: hsl(var(--background) / 0.75);
+  backdrop-filter: blur(8px);
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.deck-mode[aria-pressed='true'] {
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary) / 0.6);
+}
+
+.deck-mode:hover {
+  color: hsl(var(--foreground));
+}
+
+.deck-next {
+  position: fixed;
+  z-index: 60;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: hsl(var(--muted-foreground));
+  opacity: 0.5;
+  animation: deck-bounce 2.4s ease-in-out infinite;
+}
+
+.deck-next:hover {
+  opacity: 1;
+}
+
+@keyframes deck-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(5px); }
+}
+
+/* 모바일 — 도트는 상단 가로 바로, 힌트는 뺀다. */
+@media (max-width: 640px) {
+  .deck-dots {
+    top: 0.75rem;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+  .deck-dot.is-active {
+    height: 0.5rem;
+    width: 1.5rem;
+  }
+  .deck-dot-label {
+    display: none;
+  }
+  .deck-next {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has([data-deck]) { scroll-behavior: auto; }
+  .deck-next { animation: none; }
+}
+
+/* ─── 인쇄 — 슬라이드 한 장이 페이지 한 장 ──────────────────────
+   덱은 발표 자료이므로 가로로 눕힌다. 이 파일은 덱 라우트에만 실리므로
+   @page가 다른 페이지의 인쇄를 건드리지 않는다. */
+@media print {
+  @page {
+    size: landscape;
+    margin: 12mm;
+  }
+
+  html:has([data-deck]) {
+    scroll-snap-type: none;
+  }
+
+  .deck-chrome {
+    display: none !important;
+  }
+
+  [data-deck] [data-slide] {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+    padding: 0 0 1.5rem !important;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  [data-deck] [data-slide]:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  /* 화면에서는 넘치는 내용을 슬라이드 안에서 스크롤시키지만, 종이에는
+     스크롤이 없다. 높이 제한을 풀지 않으면 그대로 잘려 나간다. */
+  [data-deck] [data-slide] > * {
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    /* 화면에서 넣은 자동 축소(인라인 zoom)를 되돌린다. 종이는 높이가 남으므로
+       줄일 이유가 없고, 줄인 채로 인쇄하면 글자만 작아진다. */
+    zoom: 1 !important;
+  }
+
+  [data-deck] [data-slide][data-slide-overflow]::after {
+    display: none !important;
+  }
+
+  /* 인터랙티브 Story 말고는 아무것도 없는 슬라이드. 전역 인쇄 규칙이 컴포넌트를
+     숨기므로 그대로 두면 빈 종이 한 장이 나온다. */
+  [data-deck] [data-slide][data-slide-visual] {
+    display: none !important;
+  }
+
+  /* 전역 인쇄 규칙이 이미지를 전부 숨기지만, 표지 로고는 덱의 얼굴이라 남긴다. */
+  [data-deck] img {
+    display: block !important;
+  }
+
+  .deck-title   { font-size: 24pt !important; }
+  .deck-chapter { font-size: 18pt !important; }
+  .deck-lead    { font-size: 12pt !important; }
+
+  [data-deck] .deck-prose h2 { font-size: 15pt !important; margin-bottom: 0.5rem !important; }
+  [data-deck] .deck-prose h3 { font-size: 12pt !important; }
+  [data-deck] .deck-prose :is(p, li) { font-size: 10pt !important; }
+  .deck-note { font-size: 8pt !important; }
+  .deck-caveat { font-size: 10pt !important; }
+  .deck-release-headline { font-size: 11pt !important; }
+  .deck-release-note { font-size: 9pt !important; }
+
+  /* 표와 코드가 페이지 경계에서 두 동강 나지 않게 한다. */
+  [data-deck] :is(table, pre, blockquote) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

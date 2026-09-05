@@ -21,6 +21,13 @@
  *   4. `## 그 밖의 …`는 같은 방식으로 <section data-work-aux>로 묶고, 끝에 생략 표시를
  *      덧붙인다. 케이스처럼 깊이 쓴 글이 아니라 "대표적인 것만 골라 둔 목록"이라는 것을
  *      영역 경계와 말줄임으로 드러내기 위해서다.
+ *   5. 마지막으로 문서 전체를 <section data-slide>로 쪼갠다. h2와 `---`가 경계이며,
+ *      발표 덱이 슬라이드 한 장씩 배치할 단위가 된다.
+ *
+ * 슬라이드 분해를 런타임 DOM 조작이 아니라 여기서 하는 이유:
+ * 슬라이드가 서버 렌더 HTML에 그대로 남아야 검색엔진·인쇄·헤딩 딥링크가 유지된다.
+ * 문서 뷰(/work/[id])는 이 래퍼를 `display: contents`로 지워 레이아웃에 영향받지 않고,
+ * 덱 뷰만 이 경계를 실제 슬라이드로 쓴다.
  */
 
 /** `## 문제 3. 저장 직전에 사라진 상품` */
@@ -123,6 +130,170 @@ function groupSections(root) {
   root.children = grouped;
 }
 
+/**
+ * 이 노드 아래에 React 컴포넌트가 있는지.
+ *
+ * MDX는 `<details>` 같은 평범한 HTML도 mdxJsxFlowElement로 만든다. 그래서 노드 종류만
+ * 봐서는 `<DoldeulsForestStory/>`와 구분되지 않는다. 대문자로 시작하는 이름만 컴포넌트다.
+ *
+ * Story는 `<div data-print-hide>`로 한 겹 감싸여 있어 자식까지 훑어야 한다.
+ */
+function containsComponent(node) {
+  if (node.type === 'mdxJsxFlowElement' && /^[A-Z]/.test(node.name ?? '')) return true;
+  return Array.isArray(node.children) && node.children.some(containsComponent);
+}
+
+/**
+ * 빈 슬라이드 껍데기.
+ *
+ * 내용은 곧바로 넣지 않고 <div data-slide-body>로 한 겹 감싼다. 슬라이드는 내용을
+ * 화면 가운데에 놓아야 하는데, 자식이 여럿인 채로 flex 정렬을 걸면 문단들이 가로로
+ * 늘어선다. 감싸는 상자가 하나 있어야 슬라이드는 '그 상자 하나'만 가운데 놓으면 되고,
+ * 상자 안은 평범한 흐름이라 prose의 마진 상쇄도 그대로 유지된다.
+ */
+function makeSlide(title) {
+  const body = {
+    type: 'element',
+    tagName: 'div',
+    properties: { 'data-slide-body': '' },
+    children: [],
+  };
+
+  const slide = {
+    type: 'element',
+    tagName: 'section',
+    properties: title ? { 'data-slide': '', 'data-slide-title': title } : { 'data-slide': '' },
+    children: [body],
+  };
+
+  return { slide, body };
+}
+
+const isBlank = (node) => node.type === 'text' && node.value.trim() === '';
+
+/**
+ * 슬라이드를 손으로 끊는 표시 — MDX에 `{/* slide *\/}`라고 적는다.
+ *
+ * `---`를 쓰지 않는 이유: 이 문서들에서 `---`는 이미 "케이스 카드가 여기서 끝난다"는
+ * 뜻으로 쓰이고 있다(groupSections). 카드 안에서 슬라이드만 나누고 싶을 때 `---`를
+ * 넣으면 카드가 두 동강 나 문서 뷰가 깨진다. 그래서 별도의 표시를 둔다.
+ *
+ * 주석이라 화면에도 인쇄에도 아무것도 남기지 않는다.
+ */
+const isSlideBreak = (node) =>
+  node.type === 'mdxFlowExpression' && /^\s*\/\*\s*slide\s*\*\/\s*$/.test(node.value ?? '');
+
+/**
+ * 노드 목록을 슬라이드로 쪼갠다.
+ *
+ * 경계는 네 가지다.
+ *   · h2 — 새 장(章)
+ *   · h3 — 같은 장 안의 다음 화면. 케이스 글이 `상황 / 원인 / 결과`로 쓰여 있어,
+ *          이 단위가 곧 발표 한 장이 된다. 제목에는 소속 h2를 붙여 목차에서 구분되게 한다.
+ *   · `---` — 케이스 카드의 끝. 카드가 끝나면 슬라이드도 끝난다.
+ *   · `{/* slide *\/}` — 글쓴이가 손으로 끊는 지점. 카드 안에서도 쓸 수 있다.
+ *
+ * 앞머리 내용(도입 인용문, 인터랙티브 Story 등)도 슬라이드 한 장이 된다.
+ */
+function sliceIntoSlides(children) {
+  const slides = [];
+  let current = null;
+  let chapter = '';
+
+  /** current는 내용을 담는 상자, current.slide는 바깥 <section>이다. */
+  const open = (title) => {
+    const made = makeSlide(title);
+    current = made.body;
+    current.slide = made.slide;
+    slides.push(made.slide);
+  };
+
+  for (const node of children) {
+    if (isBlank(node)) {
+      if (current) current.children.push(node);
+      continue;
+    }
+
+    if (isElement(node, 'hr') || isSlideBreak(node)) {
+      current = null;
+      continue;
+    }
+
+    if (isElement(node, 'h2')) {
+      chapter = textOf(node).trim();
+      open(chapter);
+    } else if (isElement(node, 'h3')) {
+      const title = textOf(node).trim();
+      open(chapter ? `${chapter} · ${title}` : title);
+    } else if (current === null) {
+      open('');
+    }
+
+    current.children.push(node);
+    if (containsComponent(node)) current.slide.properties['data-slide-full'] = '';
+  }
+
+  const bodyOf = (slide) => slide.children[0];
+
+  // `---`로 끝나 내용이 없는 슬라이드를 걸러 낸다.
+  const filled = slides.filter((slide) => bodyOf(slide).children.some((child) => !isBlank(child)));
+
+  // 인터랙티브 컴포넌트 말고는 아무것도 없는 슬라이드를 표시한다.
+  // 인쇄에서는 컴포넌트가 통째로 숨겨지므로, 그대로 두면 빈 종이 한 장이 나온다.
+  for (const slide of filled) {
+    if (bodyOf(slide).children.every((child) => isBlank(child) || containsComponent(child))) {
+      slide.properties['data-slide-visual'] = '';
+    }
+  }
+
+  return filled;
+}
+
+/**
+ * 문서 전체를 슬라이드로 쪼갠다.
+ *
+ * 케이스·보조 영역(<section data-work-case> 등)은 문서 뷰에서 카드 한 장이므로
+ * 그 껍데기는 그대로 두고 **안쪽**을 슬라이드로 나눈다. 문서 뷰는 슬라이드 래퍼를
+ * display: contents로 지우므로 카드가 쪼개져 보이지 않고, 덱만 경계를 쓴다.
+ */
+function groupSlides(root) {
+  /** MDX의 import/export. 모듈 최상위에 남아 있어야 한다. */
+  const esm = [];
+  const rest = [];
+
+  for (const node of root.children ?? []) {
+    // `import DoldeulsForestStory from …`. <section>으로 감싸면 바인딩이 끊겨
+    // "No matching import has been found"로 빌드가 깨진다.
+    if (node.type === 'mdxjsEsm') esm.push(node);
+    else rest.push(node);
+  }
+
+  const isGrouped = (node) =>
+    isElement(node, 'section') &&
+    (node.properties?.['data-work-case'] !== undefined || node.properties?.['data-work-aux'] !== undefined);
+
+  const output = [];
+  let loose = [];
+
+  const flushLoose = () => {
+    if (loose.length > 0) output.push(...sliceIntoSlides(loose));
+    loose = [];
+  };
+
+  for (const node of rest) {
+    if (isGrouped(node)) {
+      flushLoose();
+      node.children = sliceIntoSlides(node.children ?? []);
+      output.push(node);
+      continue;
+    }
+    loose.push(node);
+  }
+  flushLoose();
+
+  root.children = [...esm, ...output];
+}
+
 export function rehypeWorkSections() {
   return (tree, file) => {
     // blog·til은 이 표기 체계를 쓰지 않으므로 works 문서에만 적용한다.
@@ -151,5 +322,6 @@ export function rehypeWorkSections() {
     }
 
     groupSections(tree);
+    groupSlides(tree);
   };
 }

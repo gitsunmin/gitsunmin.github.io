@@ -124,7 +124,9 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
     description: `전화·팩스로 이뤄지던 식자재 발주를 온라인으로 옮긴 B2B 커머스 식봄의 프론트엔드를 담당했습니다.
 레거시 PHP 웹과 Next.js 신규 웹이 같은 도메인에서 병행 운영되는 구조라, 양쪽을 함께 다루며 검색·상세·주문·쿠폰 등 핵심 사용자 흐름을 개발하고 대형 장바구니 성능을 측정 기반으로 최적화했습니다. 관리자 웹과 인쇄 템플릿 라이브러리까지 여러 레이어를 함께 맡았습니다.`,
     techs: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'GraphQL', 'Relay', 'PHP', 'Storybook', 'Datadog'],
-    links: [],
+    links: [
+      { label: '식봄 웹사이트', url: 'https://www.foodspring.co.kr' },
+    ],
     range: '2024.01 ~ 2025.12',
     careerId: 'marketboro',
     subRepos: [
@@ -162,7 +164,9 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
     description: `식자재 유통사를 위한 B2B SaaS 플랫폼 마켓봄(구 마켓봄 프로)의 프론트엔드를 담당했습니다.
 네이티브 WebView 안에서 동작하는 인앱 하이브리드 앱을 개발하며 배포 버전 불일치 진단·금액 계산 정합성 등 운영 이슈를 해결했고, 웹 서비스·정산 관리자·디자인 시스템까지 전 레이어에 걸쳐 개발했습니다.`,
     techs: ['React', 'Vue.js', 'Nuxt.js', 'TypeScript', 'GraphQL', 'Apollo Client', 'Emotion', 'Storybook', 'Datadog', 'ag-Grid', 'Vite'],
-    links: [],
+    links: [
+      { label: '마켓봄 웹사이트', url: 'https://marketbom.com/service_marketbom' },
+    ],
     range: '2020.10 ~ 2023.08',
     careerId: 'marketboro',
     subRepos: [

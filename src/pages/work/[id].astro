@@ -1,11 +1,22 @@
 ---
+/**
+ * work 상세 — 발표 덱 (/work/<id>)
+ *
+ * 문서형 뷰를 덱으로 완전히 대체했다. 슬라이드 본문은 rehype-work-sections가
+ * MDX에서 만들어 낸 <section data-slide>를 그대로 쓰고, 이 파일은 표지·간지·마무리처럼
+ * 문서에는 없고 발표에만 필요한 슬라이드와 그 순서를 더한다.
+ *
+ * 서브 레포는 탭이 아니라 간지 뒤에 이어지는 장(章)이다. 탭이 사라져서
+ * 이력서의 헤딩 딥링크(#슬러그)는 오히려 단순해졌다 — 모든 내용이 한 문서에
+ * 펼쳐져 있으므로 탭을 켜 줄 필요 없이 앵커가 바로 그 슬라이드에 닿는다.
+ */
 import { type GetStaticPaths } from 'astro';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
-import MainLayout from '@/layouts/MainLayout.astro';
-import { Works } from '@/data/works';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { DeckController } from '@/components/deck/DeckController';
 import { MDXReplacer } from '@/components/MDXReplacer';
-import { WorkTabBar } from '@/components/WorkTabBar';
-import WorkBrief from '@/components/WorkBrief.astro';
+import { Works } from '@/data/works';
+import '@/components/deck/deck.css';
 
 export const getStaticPaths = (async () => {
   const entries: CollectionEntry<'works'>[] = await getCollection('works', ({ data, id }: CollectionEntry<'works'>) => {
@@ -16,11 +27,7 @@ export const getStaticPaths = (async () => {
 
   return entries.map((entry) => {
     const workId = entry.id.replace(/\.mdx$/, '');
-    const work = Works.find((w) => w.id === workId);
-    return {
-      params: { id: workId },
-      props: { entry, work },
-    };
+    return { params: { id: workId }, props: { entry, work: Works.find((w) => w.id === workId) } };
   });
 }) satisfies GetStaticPaths;
 
@@ -33,39 +40,30 @@ const { entry, work } = Astro.props;
 const { id } = Astro.params;
 const { Content } = await render(entry);
 
-// Load sub-repo MDX files
+// 서브 레포는 간지 슬라이드를 앞에 두고 본문을 이어 붙인다.
 const allEntries = await getCollection('works');
-type SubRepoContent = {
-  slug: string;
+type Chapter = {
   name: string;
-  entry: CollectionEntry<'works'>;
+  summary?: string;
+  contributions?: string[];
   Content: Awaited<ReturnType<typeof render>>['Content'];
 };
-const subRepoContents: SubRepoContent[] = [];
+const chapters: Chapter[] = [];
 
-if (work?.subRepos) {
-  for (const repo of work.subRepos) {
-    const subEntry = allEntries.find((e: CollectionEntry<'works'>) => {
-      const cleanId = e.id.replace(/\.mdx$/, '');
-      return cleanId === `${id}/${repo.slug}`;
-    });
-    if (subEntry) {
-      const { Content: SubContent } = await render(subEntry);
-      subRepoContents.push({ slug: repo.slug, name: repo.name, entry: subEntry, Content: SubContent });
-    }
-  }
+for (const repo of work?.subRepos ?? []) {
+  const subEntry = allEntries.find((e: CollectionEntry<'works'>) => e.id.replace(/\.mdx$/, '') === `${id}/${repo.slug}`);
+  if (!subEntry) continue;
+  const { Content: SubContent } = await render(subEntry);
+  chapters.push({
+    name: repo.name,
+    summary: subEntry.data.summary,
+    contributions: subEntry.data.contributions,
+    Content: SubContent,
+  });
 }
 
-/** 본문에 케이스가 있는지. WorkBrief가 케이스 안내 문구를 그릴지 판단하는 데 쓴다. */
-const hasCases = (e: CollectionEntry<'works'>) => /^## 문제 \d+\./m.test(e.body ?? '');
-
-const hasTabs = subRepoContents.length > 0;
-const tabs = hasTabs
-  ? [{ id: 'overview', label: '개요' }, ...subRepoContents.map((r) => ({ id: r.slug, label: r.name }))]
-  : [];
-
 const title = work?.title ?? entry.data.title;
-const description = work?.description.split('\n')[0] ?? '';
+const description = work?.description.split('\n')[0] ?? entry.data.summary ?? '';
 const ogImage = `/og/works/${id}.png`;
 
 const COMPANY_LABELS: Record<string, string> = {
@@ -73,296 +71,161 @@ const COMPANY_LABELS: Record<string, string> = {
   marketboro: '마켓보로',
   korens: '코렌스',
 };
+const company = work?.careerId ? COMPANY_LABELS[work.careerId] ?? work.careerId : null;
+
+/**
+ * 본문이 스스로 기술 스택 절을 갖고 있으면 자동 칩 슬라이드를 만들지 않는다.
+ * 두 장이 나란히 서면 읽는 사람은 둘이 어떻게 다른지부터 따지게 되는데,
+ * 레이어별로 갈라 적은 본문 표가 언제나 칩 나열보다 많은 것을 말해 준다.
+ */
+const hasOwnTechSection = /^##\s.*기술/m.test(entry.body ?? '');
+
+/**
+ * 프론트매터 한 줄짜리 글에서 `**굵게**`만 살린다.
+ * 본문은 MDX가 처리하지만 caveat 같은 프론트매터 값은 그냥 문자열이라, 강조가
+ * 별표 그대로 찍힌다. 먼저 이스케이프해서 태그 주입을 막고 나서 강조만 되살린다.
+ */
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const withStrong = (text: string) =>
+  escapeHtml(text).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+/** `머리말 — 덧말`을 두 덩이로 가른다. 덧말이 없으면 머리말만 돌려준다. */
+const splitLead = (text: string): [string, string | null] => {
+  const at = text.indexOf(' — ');
+  return at === -1 ? [text, null] : [text.slice(0, at), text.slice(at + 3)];
+};
+
+/** 본문 슬라이드에 입히는 prose. 크기 조정은 deck.css가 덮어쓴다. */
+const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium';
 ---
 
-<MainLayout
-  title={`${title} - Gitsunmin`}
-  headerTitle={title}
-  description={description}
-  ogImage={ogImage}
->
-  <div data-work-detail class="w-full max-w-3xl mx-auto pt-20 md:pt-24 px-4 md:px-0 pb-20">
-    <!-- 뒤로 가기 -->
-    <a
-      href="/works"
-      aria-label="Works 목록으로 돌아가기"
-      class="work-print-back inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-8 hover:text-primary transition-colors duration-200"
-    >
-      ← Works
-    </a>
+<BaseLayout title={`${title} - Gitsunmin`} description={description} ogImage={ogImage} ogType="article">
+  <div data-deck class="deck">
+    {/* ── 표지 ─────────────────────────────────────────────── */}
+    <section data-slide="cover" data-slide-title="표지">
+      <div class="text-center">
+        {work?.icon && (
+          <img
+            src={work.icon}
+            alt={`${title} 아이콘`}
+            class="mx-auto size-20 rounded-2xl bg-white p-2 border border-border/40"
+          />
+        )}
+        <h1 class="deck-title mt-8">{title}</h1>
+        {work?.range && <p class="deck-lead mt-6">{work.range}</p>}
 
-    <!-- 헤더 카드 (view-transition morphing 대상) -->
-    {work && (
-      <div
-        class="work-header-card rounded-xl border border-border/70 bg-card p-6 mb-6"
-        style={`view-transition-name: work-card-${id}`}
-      >
-        <div class="flex items-start gap-4 mb-4">
-          {work.icon ? (
-            <img
-              src={work.icon}
-              alt={`${work.title} 아이콘`}
-              class="size-12 rounded-xl object-contain bg-white border border-border/40 p-1 shrink-0"
-            />
-          ) : (
-            <div class="size-12 rounded-xl bg-muted border border-border/40 shrink-0 flex items-center justify-center font-semibold text-muted-foreground text-sm select-none">
-              {work.title.replace(/^\(주\)\s*/, '').slice(0, 2)}
+        {/* 출시 이력은 고지가 아니라 성취라서 표지의 기간 줄 아래에 둔다. */}
+        {entry.data.release && (() => {
+          const [headline, note] = splitLead(entry.data.release);
+          return (
+            <div class="deck-release mt-6">
+              <p class="deck-release-headline">{headline}</p>
+              {note && <p class="deck-release-note">{note}</p>}
             </div>
-          )}
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-2 flex-wrap mb-1">
-              <h1 class="text-xl font-bold text-primary">{work.title}</h1>
-              {work.careerId && (
-                <span class="work-print-company text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border/50">
-                  {COMPANY_LABELS[work.careerId] ?? work.careerId}
-                </span>
-              )}
-            </div>
-            <p class="text-sm text-muted-foreground">{work.range}</p>
-          </div>
+          );
+        })()}
+
+        <div class="mt-10 text-sm text-muted-foreground">
+          <p class="font-medium text-foreground">김선민</p>
+          {company && <p class="mt-1">{company}</p>}
         </div>
+      </div>
+    </section>
 
-        <p class="text-sm leading-[1.8] text-muted-foreground mb-4 whitespace-pre-line">{work.description}</p>
+    {/* ── 소개 ─────────────────────────────────────────────── */}
+    <section data-slide="intro" data-slide-title="소개">
+      <div>
+        <p class="deck-eyebrow">소개</p>
 
-        <!-- 기술 태그 -->
-        <div class="work-print-techs flex flex-wrap gap-1.5">
-          {work.techs.map((tech) => (
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground">
-              {tech}
-            </span>
-          ))}
-        </div>
+        {/* 본문 전체를 읽는 방식을 바꾸는 단서. 소개보다 먼저 눈에 들어와야 한다. */}
+        {entry.data.caveat && (
+          <p class="deck-caveat mt-4" set:html={withStrong(entry.data.caveat)} />
+        )}
 
-        <!-- 외부 링크 -->
-        {work.links.length > 0 && (
-          <div class="work-print-links flex flex-wrap gap-2 mt-4">
+        <p class="deck-lead mt-4 whitespace-pre-line">{work?.description ?? description}</p>
+
+        {entry.data.contributions?.length ? (
+          <ul class="mt-8 flex flex-col gap-2 list-none pl-0 text-sm text-muted-foreground">
+            {entry.data.contributions.map((item: string) => (
+              <li class="pl-4 border-l-2 border-border">{item}</li>
+            ))}
+          </ul>
+        ) : null}
+
+        {work?.links.length ? (
+          <div class="mt-8 flex flex-wrap gap-2">
             {work.links.map(({ label, url }) => (
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-border/60 bg-background text-muted-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-150"
-              >
-                {label} ↗
-              </a>
+              <a href={url} target="_blank" rel="noopener noreferrer" class="deck-link">{label} ↗</a>
             ))}
           </div>
+        ) : null}
+
+        {/* 고지는 한 장을 통째로 쓸 만한 내용이 아니라 소개의 각주로 붙인다. */}
+        {entry.data.disclaimer && (
+          <p class="deck-note mt-10">
+            <strong>고지</strong> — {entry.data.disclaimer}
+          </p>
         )}
       </div>
-    )}
+    </section>
 
-    <!-- 탭바 (서브 레포가 있을 때만) -->
-    {hasTabs && (
-      <div data-work-tab-bar>
-        <WorkTabBar tabs={tabs} client:load />
-      </div>
-    )}
+    {/* ── 기술 스택 ────────────────────────────────────────── */}
+    {work?.techs.length && !hasOwnTechSection ? (
+      <section data-slide="techs" data-slide-title="사용 기술">
+        <div>
+          <p class="deck-eyebrow">사용 기술</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            {work.techs.map((tech) => (
+              <span class="px-3 py-1 rounded-full text-sm font-medium bg-muted/60 text-muted-foreground border border-border/40">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+    ) : null}
 
-    <!-- 개요 탭 (또는 단일 본문) -->
-    <article
-      data-tab-content="overview"
-      class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
-    >
-      {hasTabs && <h2 class="print-only work-print-tab-title">개요</h2>}
-      <WorkBrief
-        summary={entry.data.summary}
-        contributions={entry.data.contributions}
-        hasCases={hasCases(entry)}
-      />
+    {/* ── 본문 (rehype가 만든 슬라이드들) ──────────────────── */}
+    <div class={PROSE}>
       <Content components={MDXReplacer({})} />
-      <div data-tab-sentinel="overview" style="height: 1px" aria-hidden="true" />
-    </article>
+    </div>
 
-    <!-- 서브 레포 탭들 -->
-    {subRepoContents.map((repo) => (
-      <article
-        data-tab-content={repo.slug}
-        style="display: none"
-        class="work-detail-section prose prose-sm dark:prose-invert max-w-none prose-headings:text-primary prose-headings:font-semibold prose-headings:tracking-tight prose-h2:text-base prose-h2:mt-8 prose-h2:mb-4 prose-h3:text-[0.9375rem] prose-h3:mt-6 prose-h3:mb-2 prose-p:text-muted-foreground prose-p:leading-[1.85] prose-li:text-muted-foreground prose-li:leading-relaxed prose-table:text-sm prose-code:text-[0.8125em] prose-code:font-medium"
-      >
-        <h2 class="print-only work-print-tab-title">{repo.name}</h2>
-        <WorkBrief
-          summary={repo.entry.data.summary}
-          contributions={repo.entry.data.contributions}
-          hasCases={hasCases(repo.entry)}
-        />
-        <repo.Content components={MDXReplacer({})} />
-        <div data-tab-sentinel={repo.slug} style="height: 1px" aria-hidden="true" />
-      </article>
+    {/* ── 서브 레포 = 장(章) ───────────────────────────────── */}
+    {chapters.map((chapter) => (
+      <>
+        <section data-slide={`chapter-${chapter.name}`} data-slide-title={chapter.name}>
+          <div class="text-center">
+            <p class="deck-eyebrow">Chapter</p>
+            <p class="deck-chapter mt-4">{chapter.name}</p>
+            {chapter.summary && <p class="deck-lead mt-6 text-left">{chapter.summary}</p>}
+            {chapter.contributions?.length ? (
+              <ul class="mt-6 flex flex-col gap-2 list-none pl-0 text-sm text-muted-foreground text-left">
+                {chapter.contributions.map((item: string) => (
+                  <li class="pl-4 border-l-2 border-border">{item}</li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </section>
+        <div class={PROSE}>
+          <chapter.Content components={MDXReplacer({})} />
+        </div>
+      </>
     ))}
+
+    {/* ── 마무리 ───────────────────────────────────────────── */}
+    <section data-slide="thanks" data-slide-title="Q&amp;A">
+      <div class="text-center">
+        <h2 class="deck-title">감사합니다</h2>
+        <p class="deck-lead mt-6">궁금한 점은 언제든 편하게 물어봐 주세요.</p>
+        <a href="mailto:tjsals116@gmail.com" class="deck-link mt-10 inline-flex text-base">tjsals116@gmail.com</a>
+        <p class="mt-10 text-sm text-muted-foreground">
+          <a href="/works" class="underline underline-offset-4">← Works 목록으로</a>
+        </p>
+      </div>
+    </section>
   </div>
-</MainLayout>
 
-<style>
-  @keyframes work-detail-in {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes tab-underline-in {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-  }
-
-  .work-detail-section {
-    animation: work-detail-in 420ms cubic-bezier(0, 0, 0.2, 1) 260ms both;
-  }
-
-  [data-tab-content][data-entering] {
-    animation: work-detail-in 320ms cubic-bezier(0, 0, 0.2, 1) both;
-  }
-
-  .tab-underline {
-    animation: tab-underline-in 150ms ease-out both;
-    transform-origin: left center;
-  }
-
-  /* 테이블 overflow는 MDXReplacer wrapper div가 처리 */
-
-  /* ─── 헤딩 딥링크 ─────────────────────────────────────────────
-     이력서 등 외부에서 #헤딩-id로 진입하면 WorkTabBar가 소속 탭을
-     활성화한 뒤 스크롤하고, 케이스 카드를 잠시 강조한다. */
-
-  /* sticky 헤더(48px) + 탭바 높이만큼 스크롤 지점을 내린다 */
-  :global(.work-detail-section [id]) {
-    scroll-margin-top: 7rem;
-  }
-
-  @keyframes work-target-flash {
-    0%   { background-color: hsl(var(--primary) / 0.1); box-shadow: 0 0 0 2px hsl(var(--primary) / 0.35); }
-    100% { background-color: transparent; box-shadow: 0 0 0 2px transparent; }
-  }
-
-  :global(.work-target-flash) {
-    /* 스크롤이 어느 정도 진행된 뒤 강조가 빠지도록 지연을 두고, 지연 중에도 0% 상태를 유지(both) */
-    animation: work-target-flash 1.8s ease-out 500ms both;
-    border-radius: 0.75rem;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :global(.work-target-flash) { animation-duration: 0.6s; }
-  }
-
-  /* h2 구분선 */
-  :global(.prose h2) {
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  /* ─── 섹션 구분 ───────────────────────────────────────────────
-     rehype-work-sections.mjs가 붙인 data-* 표시를 스타일로 옮긴다.
-     케이스 경계만 표시하고, 그 안쪽은 기본 헤딩 스타일에 맡긴다. */
-
-  /* 케이스 — 문제 하나가 카드 한 장.
-     rehype가 h2와 본문을 <section data-work-case>로 묶어 준다. */
-  :global(.prose section[data-work-case]) {
-    margin-top: 1.5rem;
-    padding: 1.5rem 1.75rem;
-    border: 1px solid hsl(var(--border) / 0.7);
-    border-radius: 0.75rem;
-    background: hsl(var(--card));
-  }
-
-  :global(.prose section[data-work-case] > h2[data-work-section='case']) {
-    margin-top: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-    color: hsl(var(--foreground));
-  }
-
-  /* 카드 안쪽 위아래 여백은 카드 패딩이 담당한다 */
-  :global(.prose section[data-work-case] > *:last-child) {
-    margin-bottom: 0;
-  }
-
-  /* 보조 섹션 — 대비를 낮춰 케이스에서 시선을 뺏지 않는다 */
-  :global(.prose h2[data-work-section='aux']) {
-    margin-top: 3.5rem;
-    color: hsl(var(--muted-foreground));
-  }
-
-  /* `그 밖의 …` — 케이스와 같은 영역이되 같은 무게는 아니게.
-     채운 카드가 아니라 점선으로 둘러싼 목록으로 두어, 깊이 쓴 케이스와 구분한다. */
-  :global(.prose section[data-work-aux]) {
-    margin-top: 3.5rem;
-    padding: 0.5rem 1.75rem 1.5rem;
-    border: 1px dashed hsl(var(--border));
-    border-radius: 0.75rem;
-    background: hsl(var(--muted) / 0.25);
-  }
-
-  :global(.prose section[data-work-aux] > h2[data-work-section='aux']) {
-    margin-top: 1rem;
-    padding-bottom: 0;
-    border-bottom: none;
-  }
-
-  /* 말줄임 — "대표적인 것만 골라 뒀다"를 문장 대신 기호로 */
-  :global(.prose p[data-work-aux-more]) {
-    margin: 1.75rem 0 0;
-    text-align: center;
-    color: hsl(var(--muted-foreground) / 0.7);
-    letter-spacing: 0.4em;
-    line-height: 1;
-    user-select: none;
-  }
-
-  /* 보조 자료 접기 — 아키텍처·기술 선택은 기본으로 접어 케이스가 먼저 읽히게.
-     상자를 만들지 않고 구분선 하나로 처리한다. */
-  :global(.prose details.work-aux-details) {
-    margin-top: 3.5rem;
-    border-top: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  :global(.prose details.work-aux-details > summary) {
-    padding-top: 0.75rem;
-    cursor: pointer;
-    list-style: none;
-    color: hsl(var(--muted-foreground));
-    user-select: none;
-  }
-  :global(.prose details.work-aux-details > summary)::-webkit-details-marker {
-    display: none;
-  }
-  :global(.prose details.work-aux-details > summary)::before {
-    content: '▸';
-    display: inline-block;
-    margin-right: 0.4rem;
-    transition: transform 150ms ease;
-  }
-  :global(.prose details.work-aux-details[open] > summary)::before {
-    transform: rotate(90deg);
-  }
-
-  /* 인라인 코드 */
-  :global(.prose :not(pre) > code) {
-    background: hsl(var(--muted) / 0.6);
-    padding: 0.1em 0.375em;
-    border-radius: 0.3em;
-    font-size: 0.875em;
-    font-weight: 500;
-    color: hsl(var(--foreground) / 0.9);
-    border: 1px solid hsl(var(--border) / 0.4);
-  }
-
-  /* 코드 블록 */
-  :global(.prose pre) {
-    font-size: 0.8125rem;
-    line-height: 1.7;
-    overflow-x: auto;
-    border: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  /* 모바일 헤더 카드 패딩 */
-  @media (max-width: 480px) {
-    :global(.work-header-card) {
-      padding: 1rem;
-    }
-  }
-</style>
+  <DeckController client:load autoplayMs={9000} />
+</BaseLayout>

@@ -33,7 +33,12 @@ const CONFIDENTIAL_DOCS = [
 
 /** 사내 문서 최상위에 영업비밀 고지문이 있어야 하는 파일. */
 const DISCLOSURE_REQUIRED = ['sikbom.mdx', 'marketbom-pro.mdx', 'hybrid-app-framework.mdx'];
-const DISCLOSURE_MARKER = /^>\s*\*\*(고지|참고)\*\*/m;
+/**
+ * 고지는 두 자리 중 하나에 있으면 된다 — 본문 맨 위 블록인용이거나,
+ * 프론트매터의 disclaimer다. 덱에서는 한 문장이 슬라이드 한 장·인쇄 한 쪽을
+ * 통째로 쓰므로 프론트매터로 옮겨 소개 슬라이드의 각주로 붙인다.
+ */
+const DISCLOSURE_MARKER = /^>\s*\*\*(고지|참고)\*\*|^disclaimer:\s*\S/m;
 
 /** 본문에 등장해도 되는 외부 링크 호스트. */
 const ALLOWED_HOSTS = [
@@ -211,7 +216,7 @@ function checkFile(fullPath: string): Finding[] {
       line: 1,
       rule: 'disclosure-notice',
       match: relPath,
-      message: '전 직장 관련 문서에는 영업비밀 고지문(> **고지**: ...)이 있어야 합니다.',
+      message: '전 직장 관련 문서에는 영업비밀 고지문(프론트매터 disclaimer 또는 > **고지**: ...)이 있어야 합니다.',
     });
   }
 

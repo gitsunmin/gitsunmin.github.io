@@ -1,4 +1,5 @@
 import { type CSSProperties, useEffect, useRef, useState } from 'react';
+import { useStoryScroll } from '@/hooks/useStoryScroll';
 
 const MAX_SCENE = 3;
 
@@ -116,34 +117,17 @@ export default function SikbomStory() {
   const progressRef = useRef(0);
   const sceneRef = useRef(1);
 
-  useEffect(() => {
-    function handleScroll() {
-      const outer = outerRef.current;
-      if (!outer) return;
-      const rect = outer.getBoundingClientRect();
-      const scrolledInto = -rect.top;
-      if (scrolledInto < 0) return;
+  useStoryScroll(outerRef, ({ progress }) => {
+    if (Math.abs(progress - progressRef.current) <= 0.0005) return;
+    progressRef.current = progress;
+    setProgress(progress);
 
-      const totalHeight = outer.offsetHeight - window.innerHeight;
-      if (totalHeight <= 0) return;
-
-      const newProgress = Math.max(0, Math.min(1, scrolledInto / totalHeight));
-
-      if (Math.abs(newProgress - progressRef.current) > 0.0005) {
-        progressRef.current = newProgress;
-        setProgress(newProgress);
-        const s = newProgress < 0.33 ? 1 : newProgress < 0.67 ? 2 : 3;
-        if (s !== sceneRef.current) {
-          sceneRef.current = s;
-          setScene(s);
-        }
-      }
+    const nextScene = progress < 0.33 ? 1 : progress < 0.67 ? 2 : 3;
+    if (nextScene !== sceneRef.current) {
+      sceneRef.current = nextScene;
+      setScene(nextScene);
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  });
 
   useEffect(() => {
     const style = document.createElement('style');

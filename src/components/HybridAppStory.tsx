@@ -1,4 +1,5 @@
 import { type CSSProperties, useEffect, useRef, useState } from 'react';
+import { useStoryScroll } from '@/hooks/useStoryScroll';
 
 interface BatteryManager {
   level: number;
@@ -172,24 +173,10 @@ export default function HybridAppStory() {
   }, []);
 
   // Scroll-driven scene detection
-  useEffect(() => {
-    function handleScroll() {
-      const outer = outerRef.current;
-      if (!outer) return;
-      const rect = outer.getBoundingClientRect();
-      const scrolledInto = -rect.top;
-      if (scrolledInto < 0) return;
-      const segmentHeight = window.innerHeight;
-      const newScene = Math.max(1, Math.min(MAX_SCENE, Math.floor(scrolledInto / segmentHeight) + 1));
-      if (newScene !== sceneRef.current) {
-        setScene(newScene);
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useStoryScroll(outerRef, ({ scrolledInto, viewport }) => {
+    const nextScene = Math.max(1, Math.min(MAX_SCENE, Math.floor(scrolledInto / viewport) + 1));
+    if (nextScene !== sceneRef.current) setScene(nextScene);
+  });
 
   // Inject @keyframes & responsive rules once
   useEffect(() => {

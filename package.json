@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "build": "bun run check:works && bun .scripts/optimize-blog-images.ts && astro check && astro build",
     "check:works": "bun .scripts/check-works-content.ts",
+    "check:slides": "bun .scripts/check-slide-length.ts",
     "preview": "astro preview",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "biome format --write .",

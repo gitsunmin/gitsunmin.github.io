@@ -1,4 +1,5 @@
 import { type CSSProperties, useEffect, useRef, useState } from 'react';
+import { useStoryScroll } from '@/hooks/useStoryScroll';
 
 const MAX_SCENE = 3;
 
@@ -62,32 +63,14 @@ export default function DoldeulsForestStory() {
   const outerRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
 
-  useEffect(() => {
-    function handleScroll() {
-      const outer = outerRef.current;
-      if (!outer) return;
-      const rect = outer.getBoundingClientRect();
-      const scrolledInto = -rect.top;
-      if (scrolledInto < 0) return;
-
-      const totalHeight = outer.offsetHeight - window.innerHeight;
-      if (totalHeight <= 0) return;
-
-      const newProgress = Math.max(0, Math.min(1, scrolledInto / totalHeight));
-
-      if (Math.abs(newProgress - progressRef.current) > 0.001) {
-        progressRef.current = newProgress;
-        const state = computeState(newProgress);
-        setScene(state.scene);
-        setPebbleCount(state.pebbles);
-        setOverlayIndex(state.overlay);
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  useStoryScroll(outerRef, ({ progress }) => {
+    if (Math.abs(progress - progressRef.current) <= 0.001) return;
+    progressRef.current = progress;
+    const state = computeState(progress);
+    setScene(state.scene);
+    setPebbleCount(state.pebbles);
+    setOverlayIndex(state.overlay);
+  });
 
   useEffect(() => {
     const style = document.createElement('style');
