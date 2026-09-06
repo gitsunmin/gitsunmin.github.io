@@ -195,7 +195,7 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
 
     {/* ── 본문 (rehype가 만든 슬라이드들) ──────────────────── */}
     <div class={PROSE}>
-      <Content components={MDXReplacer({})} />
+      <Content components={MDXReplacer({ eagerImages: true })} />
     </div>
 
     {/* ── 서브 레포 = 장(章) ───────────────────────────────── */}
@@ -217,7 +217,7 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
           </div>
         </section>
         <div class={PROSE}>
-          <chapter.Content components={MDXReplacer({})} />
+          <chapter.Content components={MDXReplacer({ eagerImages: true })} />
         </div>
       </>
     ))}

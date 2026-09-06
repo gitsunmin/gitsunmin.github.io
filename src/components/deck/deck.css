@@ -338,7 +338,8 @@ html:has([data-deck]) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  /* 세로 간격은 줄바꿈용, 가로 간격은 화살표가 놓일 자리다. */
+  gap: 0.35rem 2rem;
   margin: 0 0 1.5rem;
   padding: 0;
   list-style: none;
@@ -346,20 +347,34 @@ html:has([data-deck]) {
 }
 
 [data-deck] .deck-prose ol[data-case-steps] > li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0;
-  padding: 0.15rem 0;
+  padding: 0.2rem 0;
+  /* 한글은 기본 line-height에서 글자가 상자 위쪽으로 쏠린다. 1로 눕히고
+     flex 정렬에 맡겨야 알약 안에서 정확히 가운데에 온다. */
+  line-height: 1;
   color: hsl(var(--muted-foreground) / 0.55);
 }
 
-/* 단계 사이의 화살표. 마지막 칸 뒤에는 붙이지 않는다. */
+/* 단계 사이의 화살표. 마지막 칸 뒤에는 붙이지 않는다.
+   현재 단계는 알약 배경을 두르므로, 화살표를 흐름에 두면 그 배경 안으로
+   빨려 들어간다. 상자 밖 여백(gap)에 절대 배치해 떼어 놓는다. */
 [data-deck] .deck-prose ol[data-case-steps] > li:not(:last-child)::after {
   content: '→';
-  margin-left: 0.55rem;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  /* 2rem 여백의 한가운데. 0.85rem은 1rem에서 살짝 당긴 값인데, 화살표 글리프의
+     먹이 자기 폭 안에서 오른쪽으로 치우쳐 있어 정중앙에 두면 뒷글자에 붙어 보인다. */
+  transform: translate(calc(0.85rem - 50%), -50%);
   color: hsl(var(--muted-foreground) / 0.35);
 }
 
 [data-deck] .deck-prose ol[data-case-steps] > li[data-current] {
-  padding: 0.15rem 0.55rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 999px;
   font-weight: 600;
   color: hsl(var(--primary));

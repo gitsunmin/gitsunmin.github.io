@@ -144,6 +144,13 @@ export function DeckController() {
     };
 
     refit();
+    // 이미지도 마찬가지다. 도착 전에는 높이가 0이라, 그 상태로 잰 축소 배율은
+    // 사진이 붙는 순간 다 어긋난다.
+    for (const slide of targets) {
+      for (const image of slide.querySelectorAll('img')) {
+        if (!image.complete) image.addEventListener('load', refit, { once: true });
+      }
+    }
     // 웹폰트가 늦게 도착하면 줄 수가 달라진다. 그때 한 번 더 잰다.
     document.fonts?.ready.then(refit);
 

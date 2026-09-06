@@ -64,9 +64,14 @@ function parseCalloutType(children: ReactNode): { type: CalloutType | null; rest
 
 type Props = {
   components?: MDXComponents;
+  /**
+   * 본문 이미지를 지연 로드 없이 바로 받는다. 발표 덱처럼 문서 하나가 수만 px이고
+   * 인쇄까지 하는 화면에서는 지연 로드가 제때 걸리지 않아 빈 액자만 남는다.
+   */
+  eagerImages?: boolean;
 };
 
-export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
+export const MDXReplacer = ({ components = {}, eagerImages = false }: Props): MDXComponents => {
   return {
     h1: (props) => (
       <h1
@@ -204,6 +209,7 @@ export const MDXReplacer = ({ components = {} }: Props): MDXComponents => {
         <SafeImage
           {...props}
           alt={alt}
+          loading={eagerImages ? 'eager' : 'lazy'}
           data-zoomable
           className="my-0 block max-h-[70vh] w-full cursor-zoom-in rounded-lg object-contain shadow-none transition-opacity hover:opacity-90"
         />
