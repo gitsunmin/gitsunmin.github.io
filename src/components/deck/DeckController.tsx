@@ -47,13 +47,39 @@ const slideStore = {
   },
 };
 
-/** 현재 스크롤 위치에서 가장 위쪽에 걸린 슬라이드를 고른다. */
-function findActive(slides: HTMLElement[]) {
-  const line = window.innerHeight * 0.35;
+/**
+ * 슬라이드의 문서 좌표(문서 맨 위에서의 거리)를 전부 잰다.
+ *
+ * 레이아웃을 강제로 계산하는 무거운 일이라, 스크롤 중에는 절대 부르지 않는다.
+ * 높이가 실제로 달라지는 순간 — 리사이즈, 폰트 도착, 자동 축소 — 에만 다시 잰다.
+ */
+function measureTops(slides: HTMLElement[]) {
+  const base = window.scrollY;
+  return slides.map((slide) => slide.getBoundingClientRect().top + base);
+}
+
+/**
+ * 현재 스크롤 위치에서 가장 위쪽에 걸린 슬라이드를 고른다.
+ *
+ * 재어 둔 좌표만 보므로 레이아웃을 읽지 않는다. 좌표는 오름차순이라
+ * "기준선 위에 있는 마지막 슬라이드"를 이분 탐색으로 찾을 수 있다.
+ */
+function activeFromTops(tops: number[]) {
+  const line = window.scrollY + window.innerHeight * 0.35;
+  let low = 0;
+  let high = tops.length - 1;
   let index = 0;
-  for (let i = 0; i < slides.length; i += 1) {
-    if (slides[i].getBoundingClientRect().top <= line) index = i;
+
+  while (low <= high) {
+    const mid = (low + high) >> 1;
+    if (tops[mid] <= line) {
+      index = mid;
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
   }
+
   return index;
 }
 
@@ -66,21 +92,45 @@ function findActive(slides: HTMLElement[]) {
  */
 const FIT_STEPS = [1, 0.92, 0.84, 0.76, 0.68];
 
-function fitSlide(slide: HTMLElement) {
-  const body = slide.firstElementChild;
-  if (!(body instanceof HTMLElement)) return;
+/** 슬라이드가 지금 배율에서 한 화면에 들어가는지. 1px은 소수점 반올림 여유다. */
+function fits(body: HTMLElement) {
+  return body.scrollHeight <= body.clientHeight + 1;
+}
 
-  for (const step of FIT_STEPS) {
-    body.style.zoom = step === 1 ? '' : String(step);
-    // 1px은 소수점 반올림 여유. 이 값이 없으면 딱 맞는 슬라이드도 계속 줄어든다.
-    if (body.scrollHeight <= body.clientHeight + 1) {
-      delete slide.dataset.slideOverflow;
-      return;
+/**
+ * 여러 슬라이드를 한꺼번에 맞춘다.
+ *
+ * 슬라이드마다 zoom을 쓰고 곧바로 높이를 읽으면 그때마다 레이아웃이 다시 돈다.
+ * 배율 단계별로 "전부 쓰고 → 전부 읽기"로 묶으면 레이아웃이 단계 수만큼만 돈다.
+ * 93장짜리 marketbom-pro에서 113ms → 35ms.
+ */
+function fitSlides(targets: HTMLElement[]) {
+  // 화면 밖 슬라이드는 content-visibility로 렌더를 건너뛰는데, 그 상태에서는
+  // scrollHeight가 실제 내용이 아니라 예약 크기를 돌려준다. 재는 동안만 켠다.
+  for (const slide of targets) slide.style.contentVisibility = 'visible';
+
+  try {
+    let pending = targets.filter((slide) => slide.firstElementChild instanceof HTMLElement);
+
+    for (const step of FIT_STEPS) {
+      for (const slide of pending) {
+        (slide.firstElementChild as HTMLElement).style.zoom = step === 1 ? '' : String(step);
+      }
+
+      pending = pending.filter((slide) => {
+        if (!fits(slide.firstElementChild as HTMLElement)) return true;
+        delete slide.dataset.slideOverflow;
+        return false;
+      });
+
+      if (pending.length === 0) return;
     }
-  }
 
-  // 최소 단계에서도 넘치면 슬라이드 안 스크롤에 맡기고, 더 있다는 표시를 남긴다.
-  slide.dataset.slideOverflow = '';
+    // 최소 단계에서도 넘치면 슬라이드 안 스크롤에 맡기고, 더 있다는 표시를 남긴다.
+    for (const slide of pending) slide.dataset.slideOverflow = '';
+  } finally {
+    for (const slide of targets) slide.style.removeProperty('content-visibility');
+  }
 }
 
 export function DeckController() {
@@ -88,86 +138,142 @@ export function DeckController() {
   const [active, setActive] = useState(0);
 
   /* ── 현재 슬라이드 추적 ─────────────────────────────────────
-     IntersectionObserver로 "보인다/안 보인다"만 받고, 실제 인덱스는
-     그때그때 기하로 다시 계산한다. 300svh짜리 Story 슬라이드처럼 뷰포트보다
-     큰 슬라이드가 섞여 있으면 교차 비율만으로는 순서가 뒤집히기 때문이다. */
+     교차 비율만으로는 순서를 못 정한다. 300svh짜리 Story 슬라이드처럼 뷰포트보다
+     큰 슬라이드가 섞여 있으면 비율이 뒤집히기 때문이다. 그래서 기하로 계산하되,
+     좌표를 미리 재 두고 스크롤 중에는 그 값만 본다 — 80장짜리 덱에서 매 프레임
+     80번씩 레이아웃을 강제로 계산하던 것이 스크롤이 끊기던 이유였다. */
   useEffect(() => {
     if (slides.length === 0) return;
 
-    // findActive는 슬라이드 전부의 위치를 잰다. 90장짜리 덱에서 스크롤 이벤트마다
-    // 그대로 돌리면 매 프레임 레이아웃을 강제로 계산하게 되어 스크롤이 끊긴다.
-    // 프레임당 한 번으로 묶는다.
+    let tops = measureTops(slides);
     let frame: number | null = null;
+    let disposed = false;
+
     const update = () => {
-      if (frame !== null) return;
+      if (disposed || frame !== null) return;
       frame = requestAnimationFrame(() => {
         frame = null;
-        setActive(findActive(slides));
+        setActive(activeFromTops(tops));
       });
     };
 
-    const observer = new IntersectionObserver(update, { threshold: [0, 0.5, 1] });
-    for (const slide of slides) observer.observe(slide);
+    const remeasure = () => {
+      if (disposed) return;
+      tops = measureTops(slides);
+      update();
+    };
+
+    // 문서 높이가 실제로 달라질 때만 다시 잰다. 자동 축소, 이미지 도착,
+    // details 펼침이 모두 여기로 모인다.
+    const resize = new ResizeObserver(remeasure);
+    resize.observe(document.documentElement);
 
     window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener('resize', remeasure);
+    document.fonts?.ready.then(remeasure);
     update();
 
     return () => {
+      disposed = true;
       if (frame !== null) cancelAnimationFrame(frame);
-      observer.disconnect();
+      resize.disconnect();
       window.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('resize', remeasure);
     };
   }, [slides]);
 
-  /* ── 한 화면에 맞추기 ───────────────────────────────────────
+  /* ── 첫 배치와 그 뒤의 보정 ─────────────────────────────────
      발표 슬라이드는 스크롤해서 읽는 문서가 아니다. 넘치는 슬라이드는 줄여서
      한눈에 들어오게 하고, 접혀 있던 보조 자료는 미리 펼쳐 둔다 —
-     발표 도중에 클릭해서 펼쳐야 하는 내용은 없는 편이 낫다. */
+     발표 도중에 클릭해서 펼쳐야 하는 내용은 없는 편이 낫다.
+
+     그 계산은 덱 전체를 한 번 훑는 일이라 93장에서 수십 ms가 걸린다. 예전에는
+     이걸 리사이즈·폰트 도착·details 펼침마다 통째로 다시 돌렸는데, 모바일에서
+     스크롤할 때 주소창이 접히며 resize가 뜨면 스크롤 한복판에서 그 작업이
+     끼어들었다. 지금은 첫 배치를 로딩 화면 뒤에서 한 번에 끝내고, 그 뒤로는
+     정말 필요한 슬라이드만 다시 잰다. */
   useEffect(() => {
+    const root = document.documentElement;
+    const reveal = () => delete root.dataset.deckBooting;
+
     const targets = slides.filter((slide) => !isStorySlide(slide));
-    if (targets.length === 0) return;
+    if (targets.length === 0) {
+      reveal();
+      return;
+    }
 
     for (const slide of targets) {
       for (const details of slide.querySelectorAll('details')) details.open = true;
     }
 
     let disposed = false;
-    let frame: number | null = null;
-    const refit = () => {
-      if (disposed || frame !== null) return;
-      frame = requestAnimationFrame(() => {
-        frame = null;
-        for (const slide of targets) fitSlide(slide);
-      });
+
+    // ── 첫 배치. 폰트가 도착하면 줄 수가 달라지므로 한 번 더 재고 나서 드러낸다.
+    fitSlides(targets);
+    const settle = () => {
+      if (disposed) return;
+      fitSlides(targets);
+      reveal();
+    };
+    if (document.fonts) document.fonts.ready.then(settle);
+    else settle();
+    // 폰트가 끝내 도착하지 않아도 덱이 가려진 채로 남지는 않게 한다.
+    const failsafe = window.setTimeout(reveal, 3000);
+
+    // ── 한 장만 다시 재기. details를 펼치거나 이미지가 도착한 슬라이드만 해당한다.
+    const listeners: Array<[EventTarget, string, EventListener]> = [];
+    const refitOne = (slide: HTMLElement) => () => {
+      if (!disposed) fitSlides([slide]);
     };
 
-    refit();
-    // 이미지도 마찬가지다. 도착 전에는 높이가 0이라, 그 상태로 잰 축소 배율은
-    // 사진이 붙는 순간 다 어긋난다.
     for (const slide of targets) {
+      // toggle은 버블링하지 않으므로 캡처 단계에서 받는다.
+      const onToggle = refitOne(slide);
+      slide.addEventListener('toggle', onToggle, true);
+      listeners.push([slide, 'toggle', onToggle]);
+
       for (const image of slide.querySelectorAll('img')) {
-        if (!image.complete) image.addEventListener('load', refit, { once: true });
+        if (image.complete) continue;
+        const onLoad = refitOne(slide);
+        image.addEventListener('load', onLoad, { once: true });
+        listeners.push([image, 'load', onLoad]);
       }
     }
-    // 웹폰트가 늦게 도착하면 줄 수가 달라진다. 그때 한 번 더 잰다.
-    document.fonts?.ready.then(refit);
 
-    window.addEventListener('resize', refit);
-    // toggle은 버블링하지 않으므로 캡처 단계에서 받는다.
-    for (const slide of targets) slide.addEventListener('toggle', refit, true);
+    // ── 창 크기가 정말 달라졌을 때만 전부 다시 잰다.
+    // 모바일 주소창이 접히면 innerHeight가 100px 남짓 흔들리는데, 그건 배치를
+    // 다시 할 이유가 되지 않는다. 폭이 바뀌거나 높이가 크게 달라졌을 때만 센다.
+    const viewportKey = () => `${window.innerWidth}x${Math.round(window.innerHeight / 120)}`;
+    let viewport = viewportKey();
+    let timer: number | null = null;
+
+    const onResize = () => {
+      const next = viewportKey();
+      if (next === viewport) return;
+      viewport = next;
+      if (timer !== null) window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        timer = null;
+        if (!disposed) fitSlides(targets);
+      }, 150);
+    };
+
+    window.addEventListener('resize', onResize);
 
     return () => {
       disposed = true;
-      if (frame !== null) cancelAnimationFrame(frame);
-      window.removeEventListener('resize', refit);
+      window.clearTimeout(failsafe);
+      if (timer !== null) window.clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+      for (const [target, type, handler] of listeners) {
+        target.removeEventListener(type, handler, type === 'toggle');
+      }
       for (const slide of targets) {
-        slide.removeEventListener('toggle', refit, true);
         delete slide.dataset.slideOverflow;
         const body = slide.firstElementChild;
         if (body instanceof HTMLElement) body.style.zoom = '';
       }
+      reveal();
     };
   }, [slides]);
 
@@ -195,7 +301,10 @@ export function DeckController() {
           revealed += 1;
         }
       },
-      { threshold: 0.35 },
+      // 슬라이드가 화면에 들어오기 한참 전(뷰포트 40% 앞)부터 연출을 시작한다.
+      // 0.35를 기준으로 삼았을 때는 스냅이 끝나갈 무렵에야 페이드가 시작돼,
+      // 착지한 다음에 글이 뒤늦게 떠오르는 것처럼 보였다.
+      { rootMargin: '40% 0px', threshold: 0.01 },
     );
     for (const slide of slides) observer.observe(slide);
 

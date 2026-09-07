@@ -105,6 +105,33 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
 ---
 
 <BaseLayout title={`${title} - Gitsunmin`} description={description} ogImage={ogImage} ogType="article">
+  {/*
+    덱은 첫 배치(슬라이드마다 한 화면에 맞추는 자동 축소)를 끝낸 뒤에 드러난다.
+    93장짜리 덱에서 그 계산은 수십 ms가 걸리는데, 그걸 스크롤 도중에 하면 그때마다
+    걸린다. 로딩 화면 뒤에서 한 번에 끝내고 나면 그 뒤로는 스크롤만 남는다.
+
+    이 표시는 인라인 스크립트가 첫 페인트 전에 붙인다. JS가 없으면 붙지 않으므로
+    로딩 화면도 뜨지 않고 본문이 그대로 보인다 — 크롤러와 인쇄가 보는 것도 그 상태다.
+  */}
+  <script is:inline>
+    document.documentElement.dataset.deckBooting = '';
+    // DeckController가 죽어도 덱이 영영 가려지지 않게 하는 안전장치.
+    setTimeout(function () {
+      delete document.documentElement.dataset.deckBooting;
+    }, 4000);
+  </script>
+
+  <div class="deck-loading print:hidden" aria-hidden="true">
+    <div class="deck-book">
+      <div class="deck-book-body">
+        <span class="deck-book-page"></span>
+        <span class="deck-book-page"></span>
+        <span class="deck-book-page"></span>
+      </div>
+    </div>
+    <p class="deck-loading-label">슬라이드를 배치하는 중…</p>
+  </div>
+
   <div data-deck class="deck">
     {/* ── 표지 ─────────────────────────────────────────────── */}
     <section data-slide="cover" data-slide-title="표지">

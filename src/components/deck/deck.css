@@ -3,7 +3,12 @@
    여기서는 그 경계를 화면 한 장씩으로 배치하는 일만 한다. */
 
 /* 전용 스크롤 div가 아니라 문서 스크롤에 스냅을 건다. 별도 컨테이너를 쓰면
-   iOS에서 주소창이 접히지 않아 100dvh가 계속 흔들린다. */
+   iOS에서 주소창이 접히지 않아 100dvh가 계속 흔들린다.
+
+   스냅은 mandatory다. proximity로 낮춰 두었다가 되돌렸다 — 걸리는 느낌의
+   원인은 스냅이 아니라 스크롤 중에 끼어들던 자동 축소 계산이었고, 그쪽을
+   고치고 나니 mandatory로도 충분히 매끄럽다. 한 장이 정확히 한 화면이라는
+   덱의 성격은 이 값이 지킨다. */
 html:has([data-deck]) {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
@@ -12,7 +17,8 @@ html:has([data-deck]) {
 /* 슬라이드는 정확히 한 화면이다.
    min-height로 두면 내용이 많을 때 슬라이드가 화면보다 길어지고, mandatory 스냅은
    그 안에서 쉴 자리를 주지 않아 스크롤을 다음 스냅 지점으로 확 끌어당긴다.
-   높이를 확정해 두면 스냅이 사용자와 다투지 않고, 안쪽 max-height도 비로소 먹는다. */
+   높이를 확정해 두어야 스냅이 사용자와 다투지 않고, 안쪽 max-height도 비로소
+   먹으며, 화면 밖 슬라이드의 렌더를 건너뛰어도 문서 높이가 흔들리지 않는다. */
 [data-deck] [data-slide] {
   position: relative;
   scroll-snap-align: start;
@@ -37,6 +43,148 @@ html:has([data-deck]) {
   padding: 0;
   scroll-snap-align: none;
   scroll-snap-stop: normal;
+}
+
+/* 화면 밖 슬라이드는 렌더를 건너뛴다. 80장짜리 덱에서 문서 전체가 10만 px에
+   가깝고, 그 전부가 매번 레이아웃·페인트 대상으로 남아 있었다.
+   슬라이드 높이는 100dvh로 이미 확정돼 있으므로 렌더를 건너뛰어도 문서 높이가
+   흔들리지 않는다 — 이 규칙을 안전하게 쓸 수 있는 이유다.
+   스스로 높이를 정하는 Story 슬라이드는 제외한다.
+   자동 축소가 높이를 잴 때는 DeckController가 잠깐 강제로 켠다. */
+[data-deck] [data-slide]:not([data-slide-full]) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100dvh;
+}
+
+/* ─── 첫 배치 로딩 ───────────────────────────────────────────
+   자동 축소가 끝나기 전의 덱은 글자 크기가 확정되지 않은 상태다. 그게 스치듯
+   보이면 글이 크게 떴다가 줄어드는 것처럼 보이므로, 배치가 끝날 때까지 가려 둔다.
+   표시는 인라인 스크립트가 붙이고 DeckController가 뗀다. */
+.deck-loading {
+  display: none;
+}
+
+html[data-deck-booting] [data-deck] {
+  visibility: hidden;
+}
+
+html[data-deck-booting] .deck-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: hsl(var(--background));
+}
+
+/* 펼친 책. 가운데 접힘선을 두고, 오른쪽 반쪽이 왼쪽으로 넘어간다.
+   덱은 결국 여러 장을 넘겨 가며 읽는 것이라, 기다리는 동안의 그림도 그쪽이 맞다.
+
+   .deck-book은 원근만 잡는 무대이고, 실제로 기울어 서는 것은 .deck-book-body다.
+   무대와 몸체를 나눠야 책을 기울인 채로 그 안에서 장을 넘길 수 있다. */
+.deck-book {
+  width: 6rem;
+  height: 4.25rem;
+  perspective: 360px;
+  perspective-origin: 50% 30%;
+}
+
+/* 위에서 조금 내려다보고, 오른쪽으로 살짝 돌아앉은 각도. */
+.deck-book-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(38deg) rotateY(-14deg);
+}
+
+/* 펼친 바닥면. 그림자는 여기에 준다 — filter를 쓰면 3D가 납작해진다. */
+.deck-book-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid hsl(var(--muted-foreground) / 0.4);
+  border-radius: 3px;
+  background: hsl(var(--muted) / 0.4);
+  box-shadow: 0 10px 14px hsl(0 0% 0% / 0.3);
+}
+
+/* 접힘선. 바닥면보다 아주 조금 위에 띄워 두어야 파묻히지 않는다. */
+.deck-book-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: hsl(var(--muted-foreground) / 0.45);
+  transform: translateZ(0.5px);
+}
+
+.deck-book-page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 50%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  border: 1px solid hsl(var(--muted-foreground) / 0.55);
+  border-left: none;
+  border-radius: 0 3px 3px 0;
+  background: hsl(var(--background));
+  opacity: 0;
+  animation: deck-page-turn 1.8s ease-in-out infinite;
+  /* 장마다 높이를 달리 두어 종이가 겹쳐 쌓인 두께를 만든다. */
+  --lift: 1px;
+}
+
+/* 0.6초에 한 장씩. 한 장이 넘어가는 동안 다음 장이 뒤따른다. */
+.deck-book-page:nth-child(2) {
+  --lift: 2.5px;
+  animation-delay: 0.6s;
+}
+
+.deck-book-page:nth-child(3) {
+  --lift: 4px;
+  animation-delay: 1.2s;
+}
+
+/* 되돌아오는 구간은 투명한 채로 지나가므로, 넘어간 장이 제자리로 튀지 않는다. */
+@keyframes deck-page-turn {
+  0% {
+    transform: translateZ(var(--lift)) rotateY(0deg);
+    opacity: 0;
+  }
+  8% {
+    transform: translateZ(var(--lift)) rotateY(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateZ(var(--lift)) rotateY(-180deg);
+    opacity: 1;
+  }
+  58%,
+  100% {
+    transform: translateZ(var(--lift)) rotateY(-180deg);
+    opacity: 0;
+  }
+}
+
+.deck-loading-label {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* 연출을 끈 사람에게는 펼친 책만 남긴다. */
+@media (prefers-reduced-motion: reduce) {
+  .deck-book-page {
+    animation: none;
+  }
 }
 
 /* 씬 경계마다 하나씩 심어 두는 스냅 지점. 보이지 않는다. */
@@ -93,7 +241,7 @@ html:has([data-deck]) {
 [data-deck][data-deck-animate] [data-slide]:not([data-slide-full]) > * {
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 420ms ease, transform 420ms cubic-bezier(0, 0, 0.2, 1);
+  transition: opacity 240ms ease, transform 240ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 [data-deck][data-deck-animate] [data-slide][data-slide-shown] > * {
@@ -526,8 +674,14 @@ html:has([data-deck]) {
     scroll-snap-type: none;
   }
 
-  .deck-chrome {
+  .deck-chrome,
+  .deck-loading {
     display: none !important;
+  }
+
+  /* 인쇄가 배치보다 먼저 시작돼도 본문이 사라지지는 않게 한다. */
+  html[data-deck-booting] [data-deck] {
+    visibility: visible !important;
   }
 
   [data-deck] [data-slide] {
@@ -542,6 +696,13 @@ html:has([data-deck]) {
   [data-deck] [data-slide]:last-child {
     break-after: auto;
     page-break-after: auto;
+  }
+
+  /* 종이에는 "화면 밖"이 없다. 렌더 건너뛰기를 켠 채로 두면 안 될 이유는
+     없지만, 인쇄 경로에서까지 예약 크기에 기대고 싶지는 않다. */
+  [data-deck] [data-slide] {
+    content-visibility: visible !important;
+    contain-intrinsic-size: none !important;
   }
 
   /* 화면에서는 넘치는 내용을 슬라이드 안에서 스크롤시키지만, 종이에는
