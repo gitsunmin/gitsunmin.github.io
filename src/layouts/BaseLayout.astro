@@ -43,15 +43,42 @@ const pageTitle = title === 'Gitsunmin' ? title : `${title} | Gitsunmin`;
             document.documentElement.classList.add('dark');
           }
         } catch (e) {}
+
+        // 글자 크기도 첫 페인트 전에 확정한다. useFontSize가 하이드레이션 뒤에
+        // 붙이도록 두면, 글이 기본 크기로 한 번 그려졌다가 저장된 배율로
+        // 줄었다 커진다 — 읽는 사람에게는 글자 크기가 저 혼자 바뀌는 것으로 보인다.
+        try {
+          var size = localStorage.getItem('fontSize');
+          if (size !== 'small' && size !== 'medium' && size !== 'large') size = 'medium';
+          document.documentElement.classList.add('text-' + size);
+          document.documentElement.style.setProperty(
+            '--font-size-scale',
+            size === 'small' ? '0.875' : size === 'large' ? '1.125' : '1',
+          );
+        } catch (e) {}
       })();
     </script>
     <script is:inline>
       document.addEventListener('astro:before-swap', function (e) {
-        if (document.documentElement.classList.contains('dark')) {
-          e.newDocument.documentElement.classList.add('dark');
+        var from = document.documentElement;
+        var to = e.newDocument.documentElement;
+
+        if (from.classList.contains('dark')) {
+          to.classList.add('dark');
         } else {
-          e.newDocument.documentElement.classList.remove('dark');
+          to.classList.remove('dark');
         }
+
+        // 글자 크기도 새 문서로 넘긴다. 넘기지 않으면 페이지를 옮길 때마다
+        // 기본 크기로 한 번 돌아갔다가 다시 줄어든다.
+        to.classList.remove('text-small', 'text-medium', 'text-large');
+        ['text-small', 'text-medium', 'text-large'].forEach(function (name) {
+          if (from.classList.contains(name)) to.classList.add(name);
+        });
+        to.style.setProperty(
+          '--font-size-scale',
+          from.style.getPropertyValue('--font-size-scale') || '1',
+        );
       });
     </script>
     <meta charset="UTF-8" />
