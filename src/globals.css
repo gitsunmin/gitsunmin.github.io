@@ -736,4 +736,28 @@
   .pointer-events-none.size-5 {
     display: none !important;
   }
+
+  /* 표 줄무늬.
+     행마다 배경이 달라야 눈이 줄을 놓치지 않으므로 줄무늬 자체는 남긴다.
+     다만 화면용 값(dark:odd:bg-gray-900 등)이 그대로 나가면 검정에 가까운
+     배경 위에 검정 글자가 얹혀 읽을 수 없다. 흰 종이에서 겨우 구분되는
+     정도로만 눕힌다 — 줄을 따라가는 데는 이 정도면 충분하다. */
+  thead tr,
+  thead th {
+    background: #eeeeee !important;
+    color: black !important;
+  }
+
+  tbody tr {
+    background: transparent !important;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f6f6f6 !important;
+  }
+
+  :is(th, td) {
+    color: black !important;
+    border-color: #cccccc !important;
+  }
 }
