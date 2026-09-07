@@ -7,14 +7,41 @@
             document.documentElement.classList.add('dark');
           }
         } catch (e) {}
+
+        // 글자 크기도 첫 페인트 전에 확정한다. useFontSize가 하이드레이션 뒤에
+        // 붙이도록 두면, 글이 기본 크기로 한 번 그려졌다가 저장된 배율로
+        // 줄었다 커진다 — 읽는 사람에게는 글자 크기가 저 혼자 바뀌는 것으로 보인다.
+        try {
+          var size = localStorage.getItem('fontSize');
+          if (size !== 'small' && size !== 'medium' && size !== 'large') size = 'medium';
+          document.documentElement.classList.add('text-' + size);
+          document.documentElement.style.setProperty(
+            '--font-size-scale',
+            size === 'small' ? '0.875' : size === 'large' ? '1.125' : '1',
+          );
+        } catch (e) {}
       })();
     </script><script>
       document.addEventListener('astro:before-swap', function (e) {
-        if (document.documentElement.classList.contains('dark')) {
-          e.newDocument.documentElement.classList.add('dark');
+        var from = document.documentElement;
+        var to = e.newDocument.documentElement;
+
+        if (from.classList.contains('dark')) {
+          to.classList.add('dark');
         } else {
-          e.newDocument.documentElement.classList.remove('dark');
+          to.classList.remove('dark');
         }
+
+        // 글자 크기도 새 문서로 넘긴다. 넘기지 않으면 페이지를 옮길 때마다
+        // 기본 크기로 한 번 돌아갔다가 다시 줄어든다.
+        to.classList.remove('text-small', 'text-medium', 'text-large');
+        ['text-small', 'text-medium', 'text-large'].forEach(function (name) {
+          if (from.classList.contains(name)) to.classList.add(name);
+        });
+        to.style.setProperty(
+          '--font-size-scale',
+          from.style.getPropertyValue('--font-size-scale') || '1',
+        );
       });
     </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Gitsunmin's website | 김선민의 웹사이트"><title>document animate - TIL - Gitsunmin | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/til/javascript/document-animate/"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="document animate - TIL - Gitsunmin | Gitsunmin"><meta property="og:description" content="Gitsunmin's website | 김선민의 웹사이트"><meta property="og:type" content="website"><meta property="og:url" content="https://gitsunmin.github.io/til/javascript/document-animate/"><meta property="og:image" content="https://gitsunmin.github.io/og/til/javascript/document-animate.png"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="document animate - TIL - Gitsunmin | Gitsunmin"><meta name="twitter:description" content="Gitsunmin's website | 김선민의 웹사이트"><meta name="twitter:image" content="https://gitsunmin.github.io/og/til/javascript/document-animate.png"><!-- JSON-LD Structured Data --><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
       window.dataLayer = window.dataLayer || [];
@@ -22,7 +49,7 @@
       gtag('js', new Date());
 
       gtag('config', 'G-CHCGLXSCJN');
-    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Co4N1b0E.js"></script><link rel="stylesheet" href="/_astro/BaseLayout.By4uil4S.css">
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Co4N1b0E.js"></script><link rel="stylesheet" href="/_astro/BaseLayout.rO-7BrlQ.css">
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 </style><script type="module" src="/_astro/page.BB_G4N2h.js"></script><style>[data-astro-transition-scope="astro-5kv4pklq-1"] { view-transition-name: site-header; }@layer astro { ::view-transition-old(site-header) { 
 	animation-duration: 180ms;
