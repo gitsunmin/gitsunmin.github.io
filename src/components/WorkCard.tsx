@@ -75,9 +75,16 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
         viewTransitionName: `work-card-${work.id}`,
       }}
     >
-      {/* 오버레이 네비게이션 링크 */}
+      {/* 오버레이 네비게이션 링크.
+
+          data-astro-reload로 ClientRouter를 건너뛴다. 뷰 트랜지션은 새 문서를
+          받아 파싱한 뒤에야 화면을 바꾸는데, work 상세는 HTML만 170KB에 덱까지
+          띄워야 해서 그동안 이 페이지가 그대로 멈춰 있는 것처럼 보인다.
+          평범한 이동으로 두면 브라우저가 바로 반응하고, 로딩 표시는 도착한
+          페이지가 스스로 띄운다. */}
       <a
         href={`/work/${work.id}`}
+        data-astro-reload
         className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 print:hidden"
       >
         <span className="sr-only">{work.title} 상세 보기</span>

@@ -462,6 +462,8 @@ const CareerCard = ({
                         <a
                           key={work.id}
                           href={`/work/${work.id}`}
+                          // WorkCard와 같은 이유로 뷰 트랜지션을 건너뛴다.
+                          data-astro-reload
                           className={cn(
                             'group/work flex items-center gap-3 px-3 py-2.5 rounded-lg',
                             'border border-border/50 bg-muted/20',
