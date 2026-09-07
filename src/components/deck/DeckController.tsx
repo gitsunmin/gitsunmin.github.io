@@ -48,6 +48,25 @@ const slideStore = {
 };
 
 /**
+ * 첫 진입이면 스크롤을 표지에 붙인다.
+ *
+ * [id].astro의 인라인 스크립트가 첫 페인트 전에 한 번 하지만, 그것만으로는 모자란다.
+ * ClientRouter가 scrollRestoration을 'manual'로 돌려 두어 브라우저의 스크롤 초기화가
+ * 꺼져 있고, iOS Safari는 로드가 끝난 뒤에도 앞 문서의 오프셋을 되돌려 놓는 일이 있다.
+ * 덱을 드러내기 직전 — 자동 축소로 높이가 확정된 뒤 — 에 한 번 더 굳힌다.
+ *
+ * 되돌아온 것(뒤로/앞으로)과 딥링크는 그 위치가 맞으므로 건드리지 않는다.
+ */
+function pinToTopIfFresh() {
+  if (location.hash) return;
+  const nav = performance.getEntriesByType('navigation')[0] as
+    | PerformanceNavigationTiming
+    | undefined;
+  if (nav?.type === 'back_forward') return;
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+}
+
+/**
  * 슬라이드의 문서 좌표(문서 맨 위에서의 거리)를 전부 잰다.
  *
  * 레이아웃을 강제로 계산하는 무거운 일이라, 스크롤 중에는 절대 부르지 않는다.
@@ -194,7 +213,16 @@ export function DeckController() {
      정말 필요한 슬라이드만 다시 잰다. */
   useEffect(() => {
     const root = document.documentElement;
-    const reveal = () => delete root.dataset.deckBooting;
+    // 표지 고정은 딱 한 번. 배치가 늦어져 실패 안전장치가 대신 드러낼 때,
+    // 그 사이 이미 읽기 시작한 사람을 맨 위로 끌어올리지 않기 위해서다.
+    let pinned = false;
+    const reveal = () => {
+      if (!pinned) {
+        pinned = true;
+        pinToTopIfFresh();
+      }
+      delete root.dataset.deckBooting;
+    };
 
     const targets = slides.filter((slide) => !isStorySlide(slide));
     if (targets.length === 0) {
