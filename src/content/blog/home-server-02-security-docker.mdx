@@ -13,11 +13,11 @@ import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 > **10년 된 노트북으로 비서를 고용하기**
 > 1. [서버 만들기](/blog/home-server-01-ubuntu-setup) — 오래된 노트북에 Ubuntu Server 올리기
 > 2. **SSH 보안 설정과 Docker** — SSH·방화벽 기본과 Docker ← 지금 글
-> 3. Ollama와 n8n 올리기 *(예정)* — 로컬 모델과 자동화 도구, 그리고 GPU
+> 3. Ollama와 n8n 올리기 *(예정)* — 로컬 모델과 자동화 도구
 > 4. 비서로 만들기 *(예정)* — 외부 접속 경로와 일정 판단 파이프라인
 
 {/* 3편 공개 시 위 목록의 해당 줄을 아래 링크 버전으로 되돌린다
-> 3. [Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n) — 로컬 모델과 자동화 도구, 그리고 GPU
+> 3. [Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n) — 로컬 모델과 자동화 도구
 */}
 
 ## 서론
@@ -52,7 +52,7 @@ import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 2. **SSH 포트 옮기기** — 기본 포트를 노리는 자동 스캔을 줄입니다
 3. **fail2ban** — 인증 실패가 반복되는 IP를 자동으로 막습니다
 
-방화벽(ufw)은 이번 편에서 다루지 않습니다. 기본 정책이 거부로 켜져 있는 상태 그대로 두었습니다. **무엇을 열어둘지는 무엇을 올릴지가 정해진 다음의 문제**라, 서비스를 올리는 다음 편에서 함께 손보는 편이 낫다고 판단했습니다.
+방화벽(ufw)은 이번 편에서 다루지 않습니다. 기본 정책이 거부로 켜져 있는 상태 그대로 두었습니다. **무엇을 열어둘지는 무엇을 올릴지가 정해진 다음의 문제**라, 외부 접속 경로까지 정해지는 마지막 편에서 함께 손보는 편이 낫다고 판단했습니다.
 
 <KnowledgeNote term="이 글의 &lt;꺾쇠&gt; 표기에 대하여" kind="note" defaultOpen>
 
