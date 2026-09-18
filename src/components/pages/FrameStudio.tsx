@@ -44,7 +44,7 @@ const PRESETS: Preset[] = [
   { label: 'Custom', width: 800, height: 600 },
 ];
 
-type FontFamily = 'Pretendard' | 'sans-serif' | 'serif' | 'monospace' | 'cursive';
+type FontFamily = 'Pretendard Variable' | 'sans-serif' | 'serif' | 'monospace' | 'cursive';
 
 type TextLayer = {
   id: string;
@@ -151,7 +151,7 @@ const makeTextLayer = (): TextLayer => ({
   fontSize: 5,
   color: '#ffffff',
   align: 'center',
-  fontFamily: 'Pretendard',
+  fontFamily: 'Pretendard Variable',
   bold: true,
   italic: false,
   bgColor: '',
@@ -299,7 +299,7 @@ const renderFrameToCanvas = async (
   for (const layer of textLayers) {
     if (!layer.text) continue;
     const scaledFontSize = (layer.fontSize / 100) * W;
-    ctx.font = `${layer.italic ? 'italic ' : ''}${layer.bold ? 'bold ' : ''}${scaledFontSize}px ${layer.fontFamily}`;
+    ctx.font = `${layer.italic ? 'italic ' : ''}${layer.bold ? 'bold ' : ''}${scaledFontSize}px "${layer.fontFamily}", sans-serif`;
     ctx.textAlign = layer.align;
     ctx.textBaseline = 'middle';
 
@@ -1539,7 +1539,7 @@ const Content = () => {
                       }
                       className={inp}
                     >
-                      {(['Pretendard', 'sans-serif', 'serif', 'monospace', 'cursive'] as FontFamily[]).map(
+                      {(['Pretendard Variable', 'sans-serif', 'serif', 'monospace', 'cursive'] as FontFamily[]).map(
                         (f) => (
                           <option key={f} value={f}>
                             {f}

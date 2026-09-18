@@ -13,12 +13,8 @@ import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 > **10년 된 노트북으로 비서를 고용하기**
 > 1. **서버 만들기** — 오래된 노트북에 Ubuntu Server 올리기 ← 지금 글
 > 2. [SSH 보안 설정과 Docker](/blog/home-server-02-security-docker) — SSH·방화벽 기본과 Docker
-> 3. Ollama와 n8n 올리기 *(예정)* — 로컬 모델과 자동화 도구
-> 4. 비서로 만들기 *(예정)* — 외부 접속 경로와 일정 판단 파이프라인
-
-{/* 3편 공개 시 위 목록의 해당 줄을 아래 링크 버전으로 되돌린다
 > 3. [Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n) — 로컬 모델과 자동화 도구
-*/}
+> 4. [비서 고용](/blog/home-server-04-assistant) — 외부 접속 경로와 도구를 쓰는 봇
 
 ## 서론
 
@@ -162,7 +158,7 @@ Ubuntu Server 설치 마법사는 아래 순서로 진행됩니다. 제가 고�
 | 6 | Mirror address | 기본값(국내 미러 자동 선택) |
 | 7 | Guided storage configuration | **SSD를 시스템 디스크로 직접 지정** + LVM |
 | 8 | Storage configuration 확인 | `Confirm destructive action` |
-| 9 | Profile setup | 이름 / 호스트명 `carrier` / 계정 / 비밀번호 |
+| 9 | Profile setup | 이름 / 호스트명 `home-server` / 계정 / 비밀번호 |
 | 10 | Upgrade to Ubuntu Pro | `Skip for now` |
 | 11 | SSH configuration | **`Install OpenSSH server` 체크** |
 | 12 | Featured server snaps | 아무것도 선택 안 함 |
@@ -177,7 +173,7 @@ Ubuntu Server 설치 마법사는 아래 순서로 진행됩니다. 제가 고�
 
 **7. 디스크 구성** — 유일하게 손이 멈춘 곳입니다. 기본 제안을 그대로 두면 안 되는 이유가 있어 다음 절에서 따로 다룹니다.
 
-**9. 프로필 설정** — 이름, 호스트명, 사용자 계정, 비밀번호를 정합니다. Ubuntu Server는 root 직접 로그인이 처음부터 막혀 있고, 여기서 만든 계정이 `sudo` 권한을 갖습니다. 호스트명은 `carrier`로 지었습니다. 비서 하나만 태울 서버가 아니라 앞으로 이것저것 올려볼 판이라고 생각했기 때문입니다.
+**9. 프로필 설정** — 이름, 호스트명, 사용자 계정, 비밀번호를 정합니다. Ubuntu Server는 root 직접 로그인이 처음부터 막혀 있고, 여기서 만든 계정이 `sudo` 권한을 갖습니다. 호스트명은 `home-server`로 지었습니다. 비서 하나만 올릴 서버가 아니라 앞으로 이것저것 올려볼 자리라고 생각해서, 용도를 좁히는 이름 대신 있는 위치를 그대로 적었습니다. 이 이름은 뒤 편에서 SSH 별명과 키 파일 이름으로 계속 따라옵니다.
 
 <KnowledgeNote term="계정 이름과 비밀번호는 공개하지 마세요" kind="caution" defaultOpen>
 
@@ -330,7 +326,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 파티션을 나누지 않았으므로 장치 이름이 `/dev/sdb1`이 아니라 `/dev/sdb` 그대로입니다.
 
-다만 **읽는 속도가 곧 체감으로 이어지는 것은 `/data`로 보내지 않았습니다.** 무엇이 여기에 해당하는지는 번외편에서 다룹니다.
+다만 **모든 것을 `/data`로 보내지는 않았습니다.** HDD는 SSD보다 읽기가 느려서, 읽는 속도가 곧 체감으로 이어지는 것은 SSD에 두는 편이 낫습니다. 뒤 편에서 올릴 언어 모델의 가중치 파일이 그렇습니다. 한 번 읽고 마는 것이 아니라 응답할 때마다 읽는 파일이라, 이쪽은 `/data`가 아니라 SSD에 두었습니다.
 
 
 #### 덮개를 닫아도 안 꺼지게 만들기

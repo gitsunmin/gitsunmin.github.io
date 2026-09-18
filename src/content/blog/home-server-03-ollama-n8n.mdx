@@ -14,11 +14,7 @@ import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 > 1. [서버 만들기](/blog/home-server-01-ubuntu-setup) — 오래된 노트북에 Ubuntu Server 올리기
 > 2. [SSH 보안 설정과 Docker](/blog/home-server-02-security-docker) — SSH·방화벽 기본과 Docker
 > 3. **Ollama와 n8n 올리기** — 로컬 모델과 자동화 도구 ← 지금 글
-> 4. 비서로 만들기 *(예정)* — 외부 접속 경로와 일정 판단 파이프라인
-
-{/* 4편 공개 시 위 목록의 해당 줄을 아래 링크 버전으로 되돌린다
-> 4. [비서로 만들기](/blog/home-server-04-assistant) — 외부 접속 경로와 일정 판단 파이프라인
-*/}
+> 4. [비서 고용](/blog/home-server-04-assistant) — 외부 접속 경로와 도구를 쓰는 봇
 
 ## 서론
 
@@ -40,7 +36,7 @@ docker로 컨테이너를 띄워 사용하는 방법은 두 가지 입니다.
 ollama와 n8n을 설치 및 셋팅하기 위해서 아래와 같이 yaml 파일을 구성하였으며, 각 옵션들에 대한 설명을 해두었습니다.
 
 ```yaml
-# ~/carrier/compose.yaml
+# ~/home-server/compose.yaml
 # version: 3.8
 
 services:
@@ -110,7 +106,7 @@ volumes:
 이 서버는 **바인드 마운트**를 사용해보려고 합니다. 모델 파일이나 워크플로처럼 남아야 하는 것이 **어느 경로에 떨어지는지를 제가 직접 정해야 하기 때문**입니다. Docker가 알아서 두는 자리에 맡기면 그걸 통제할 수 없습니다.
 
 
-`./ollama`의 `.`은 **compose 파일이 있는 디렉터리**를 뜻합니다. `~/carrier/compose.yaml`에 적었으니 `~/carrier/ollama/`가 됩니다.
+`./ollama`의 `.`은 **compose 파일이 있는 디렉터리**를 뜻합니다. `~/home-server/compose.yaml`에 적었으니 `~/home-server/ollama/`가 됩니다.
 
 </KnowledgeNote>
 <KnowledgeNote term="restart 정책 네 가지" kind="definition">
@@ -502,6 +498,8 @@ body에 표현식을 쓴 이유가 둘입니다. **메시지 하나가 2000자�
 
 ## 결론
 
-서론에서 말한 대로 도구 두 가지를 올리고 마지막에 둘을 이어봤습니다. Ollama와 n8n이 같은 Docker 네트워크에서 연결됐고, RSS를 읽어 로컬 모델이 정리한 것이 Discord까지 도달했습니다. **아직 비서는 아닙니다. 비서가 갖춰야 할 세 자리가 채워진 상태입니다.**
+서론에서 말한 대로 도구 두 가지를 올리고 마지막에 둘을 이어봤습니다. Ollama와 n8n이 같은 Docker 네트워크에서 연결됐고, RSS를 읽어 로컬 모델이 정리한 것이 Discord까지 도달했습니다.
 
-다음 편에서는 외부 접속 경로를 만들고, 이 파이프라인의 각 자리를 일정 판단으로 바꿔 끼웁니다. 이번에 임시로 낮춰둔 `N8N_SECURE_COOKIE=false`와 `N8N_PROTOCOL=http`도 그때 되돌립니다.
+**아직 비서는 아닙니다.** 이 파이프라인은 **정해진 시각에 정해진 일만** 합니다. 아침 10시에 요약이 오고, 제가 무언가를 요청할 방법은 없습니다. 요청을 받는 자리도, 무엇을 할지 고르는 자리도 비어 있습니다.
+
+다음 편에서 그 두 자리를 채웁니다. 밖에서 서버로 들어가는 경로를 Cloudflare Tunnel로 만들고, 모델이 스스로 도구를 고르게 하는 Discord 봇을 코드로 붙입니다. 이번에 임시로 낮춰둔 `N8N_SECURE_COOKIE=false`와 `N8N_PROTOCOL=http`도 그때 되돌립니다.

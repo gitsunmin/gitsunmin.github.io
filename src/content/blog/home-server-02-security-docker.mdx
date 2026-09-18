@@ -13,12 +13,8 @@ import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 > **10년 된 노트북으로 비서를 고용하기**
 > 1. [서버 만들기](/blog/home-server-01-ubuntu-setup) — 오래된 노트북에 Ubuntu Server 올리기
 > 2. **SSH 보안 설정과 Docker** — SSH·방화벽 기본과 Docker ← 지금 글
-> 3. Ollama와 n8n 올리기 *(예정)* — 로컬 모델과 자동화 도구
-> 4. 비서로 만들기 *(예정)* — 외부 접속 경로와 일정 판단 파이프라인
-
-{/* 3편 공개 시 위 목록의 해당 줄을 아래 링크 버전으로 되돌린다
 > 3. [Ollama와 n8n 올리기](/blog/home-server-03-ollama-n8n) — 로컬 모델과 자동화 도구
-*/}
+> 4. [비서 고용](/blog/home-server-04-assistant) — 외부 접속 경로와 도구를 쓰는 봇
 
 ## 서론
 
@@ -52,15 +48,34 @@ import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 2. **SSH 포트 옮기기** — 기본 포트를 노리는 자동 스캔을 줄입니다
 3. **fail2ban** — 인증 실패가 반복되는 IP를 자동으로 막습니다
 
-방화벽(ufw)은 이번 편에서 다루지 않습니다. 기본 정책이 거부로 켜져 있는 상태 그대로 두었습니다. **무엇을 열어둘지는 무엇을 올릴지가 정해진 다음의 문제**라, 외부 접속 경로까지 정해지는 마지막 편에서 함께 손보는 편이 낫다고 판단했습니다.
+방화벽(ufw)은 이번 편에서 다루지 않습니다. 설치는 되어 있지만 **켜지 않은 상태 그대로 두었습니다.** **무엇을 열어둘지는 무엇을 올릴지가 정해진 다음의 문제**라, 외부 접속 경로까지 정해지는 [마지막 편](/blog/home-server-04-assistant)에서 함께 손보는 편이 낫다고 판단했습니다.
+
+<KnowledgeNote term="지금 방화벽을 켜지 않아도 되는 이유" kind="reason">
+
+현재 상태부터 확인합니다.
+
+```bash
+sudo ufw status
+```
+```
+Status: inactive
+```
+
+Ubuntu Server에 ufw는 설치되어 있지만 **기본값은 비활성**입니다. 그런데도 지금 인터넷에서 이 서버로 들어올 수 있는 경로는 없습니다. [1편](/blog/home-server-01-ubuntu-setup)부터 공유기에 포트 포워딩을 하나도 걸지 않았기 때문입니다. **지금의 방어선은 ufw가 아니라 공유기입니다.**
+
+그래서 ufw를 지금 켜면 막을 대상이 집 안의 기기뿐입니다. 얻는 것에 비해 스스로를 잠글 위험이 큽니다 — 규칙을 빠뜨린 채 `ufw enable`을 치면 그 순간 SSH 연결이 끊기고, 화면 없는 서버에서는 복구가 번거롭습니다.
+
+마지막 편에서 Cloudflare Tunnel로 외부 접속 경로를 만들고 나면 상황이 달라집니다. 그때는 **외부 SSH가 터널로 들어오므로 ufw에 SSH 포트를 인터넷에 여는 규칙 자체가 필요 없어지고**, 집 안 대역만 허용하는 형태로 켜게 됩니다.
+
+</KnowledgeNote>
 
 <KnowledgeNote term="이 글의 &lt;꺾쇠&gt; 표기에 대하여" kind="note" defaultOpen>
 
-아래 명령어와 설정 파일에서 `<서버 고정 IP>`, `<포트>`처럼 꺾쇠로 감싼 부분은 **환경마다 다르고, 직접 정해야 하는 값**입니다. 그대로 복사하면 동작하지 않습니다.
+아래 명령어와 설정 파일에서 `<서버 고정 IP>`, `<SSH 포트>`처럼 꺾쇠로 감싼 부분은 **환경마다 다르고, 직접 정해야 하는 값**입니다. 그대로 복사하면 동작하지 않습니다.
 
 | 표기 | 정하는 방법 |
 |---|---|
-| `<포트>` | SSH를 옮길 포트. `1024`~`65535` 사이에서 임의로 고릅니다. 다른 서비스가 쓰는 번호는 피합니다 |
+| `<SSH 포트>` | SSH를 옮길 포트. `1024`~`65535` 사이에서 임의로 고릅니다. 다른 서비스가 쓰는 번호는 피합니다 |
 | `<서버 고정 IP>` | 서버에 직접 부여할 주소. 공유기의 DHCP 할당 범위 **밖**에서 고릅니다 |
 | `<DHCP로 받은 IP>` | 지금 공유기가 서버에 빌려준 주소. `ip -4 addr`로 확인합니다 |
 | `<접속하는 기기의 IP>` | 서버에 접속하는 노트북이나 데스크탑의 주소 |
@@ -138,7 +153,7 @@ sudo sshd -t && sudo sshd -T | grep -i passwordauth
 
 
 ```bash
-ssh-keygen -t ed25519 -f ~/.ssh/carrier_ed25519 -C "carrier"
+ssh-keygen -t ed25519 -f ~/.ssh/home_ed25519 -C "home-server"
 ```
 
 <KnowledgeNote term="ssh-keygen 의 옵션 읽기" kind="definition">
@@ -146,26 +161,26 @@ ssh-keygen -t ed25519 -f ~/.ssh/carrier_ed25519 -C "carrier"
 | 옵션 | 뜻 | 안 쓰면 |
 |---|---|---|
 | `-t ed25519` | 키의 **종류**(type) | `rsa`로 만들어집니다 |
-| `-f ~/.ssh/carrier_ed25519` | 저장할 **파일 이름**(file) | `~/.ssh/id_ed25519`로 저장됩니다 |
-| `-C "carrier"` | 키 끝에 붙는 **메모**(comment) | `사용자@컴퓨터이름`이 들어갑니다 |
+| `-f ~/.ssh/home_ed25519` | 저장할 **파일 이름**(file) | `~/.ssh/id_ed25519`로 저장됩니다 |
+| `-C "home-server"` | 키 끝에 붙는 **메모**(comment) | `사용자@컴퓨터이름`이 들어갑니다 |
 
 `-C`는 인증에 아무 영향을 주지 않습니다. 서버의 `authorized_keys`를 열어봤을 때 **이 줄이 어느 기기의 키인지 알아보기 위한 꼬리표**입니다. 키를 여러 대에서 등록해두면 나중에 특정 기기만 골라 지울 때 이것만 보고 찾게 됩니다.
 
 이 명령이 만드는 파일은 두 개입니다.
 
-- `carrier_ed25519` — **개인키.** 절대 밖으로 나가면 안 됩니다. 권한이 `600`이 아니면 SSH가 사용을 거부합니다
-- `carrier_ed25519.pub` — **공개키.** 서버에 올리는 쪽입니다
+- `home_ed25519` — **개인키.** 절대 밖으로 나가면 안 됩니다. 권한이 `600`이 아니면 SSH가 사용을 거부합니다
+- `home_ed25519.pub` — **공개키.** 서버에 올리는 쪽입니다
 
 이름이 헷갈리기 쉬운데, **서버에 등록하는 것은 `.pub`가 붙은 쪽**입니다.
 
 </KnowledgeNote>
 
-파일 이름을 `carrier_ed25519`로 지은 것도 나중을 위한 것입니다. 기본값인 `~/.ssh/id_ed25519`로 만들면 키가 여러 개가 됐을 때 어느 것이 어느 서버 것인지 알 수 없게 됩니다. 서버 이름을 파일명에 넣어두면 지우거나 교체할 때 헷갈리지 않습니다.
+파일 이름을 `home_ed25519`로 지은 것도 나중을 위한 것입니다. 기본값인 `~/.ssh/id_ed25519`로 만들면 키가 여러 개가 됐을 때 어느 것이 어느 서버 것인지 알 수 없게 됩니다. 서버 이름을 파일명에 넣어두면 지우거나 교체할 때 헷갈리지 않습니다. 1편에서 정한 호스트명이 `home-server`라 `home_ed25519`로 지었습니다.
 
 만든 공개키를 서버에 등록합니다.
 
 ```bash
-ssh-copy-id -i ~/.ssh/carrier_ed25519.pub carrier
+ssh-copy-id -i ~/.ssh/home_ed25519.pub home-server
 ```
 
 이 명령이 하는 일은 단순합니다. 서버에 접속해서 `~/.ssh/authorized_keys` 끝에 공개키 한 줄을 덧붙이는 것입니다. **이 시점에는 아직 비밀번호로 접속합니다.** 
@@ -179,7 +194,7 @@ ssh-copy-id -i ~/.ssh/carrier_ed25519.pub carrier
 이 명령이 없어도 손으로 할 수 있습니다. 하는 일이 이게 전부이기 때문입니다.
 
 ```bash
-cat ~/.ssh/carrier_ed25519.pub | ssh <사용자 이름>@<서버 고정 IP> \
+cat ~/.ssh/home_ed25519.pub | ssh <사용자 이름>@<서버 고정 IP> \
   "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
 ```
 
@@ -196,20 +211,20 @@ Host <접속할 서버의 별명(임의 설정 가능)>
   HostName <접속 url 혹은 ip>
   Port <설정한 포트>
   User <사용자 이름>
-  IdentityFile ~/.ssh/carrier_ed25519
+  IdentityFile ~/.ssh/home_ed25519
   IdentitiesOnly yes
   AddKeysToAgent yes
   UseKeychain yes
 ```
 
-`Host` 뒤의 별명은 마음대로 정하면 됩니다. 저는 서버 이름을 따서 `carrier`로 지었고, 이 글에서 앞으로 나오는 `ssh carrier`는 전부 이 별명을 부르는 것입니다. 이 블록을 적어두면 `ssh -p <포트> <사용자 이름>@<서버 고정 IP>` 대신 `ssh carrier`로 끝납니다.
+`Host` 뒤의 별명은 마음대로 정하면 됩니다. 저는 1편에서 정한 호스트명을 그대로 따서 `home-server`로 지었고, 이 글에서 앞으로 나오는 `ssh home-server`는 전부 이 별명을 부르는 것입니다. 4편에서 외부 접속 경로를 붙일 때도 이 블록을 고쳐 씁니다. 이 블록을 적어두면 `ssh -p <SSH 포트> <사용자 이름>@<서버 고정 IP>` 대신 `ssh home-server`로 끝납니다.
 
 `IdentitiesOnly yes`가 중요합니다. 이게 없으면 SSH는 가지고 있는 키를 순서대로 전부 시도하는데, 서버의 `MaxAuthTries`에 먼저 걸려서 **정작 맞는 키를 내밀기 전에 끊길 수 있습니다.** 지정한 키 하나만 쓰게 못박아두는 옵션입니다.
 
 이제 검증합니다.
 
 ```bash
-ssh -o PreferredAuthentications=publickey carrier 'echo KEY_OK'
+ssh -o PreferredAuthentications=publickey home-server 'echo KEY_OK'
 ```
 ```
 KEY_OK
@@ -229,7 +244,7 @@ KEY_OK
 | `PreferredAuthentications=password` | 반대로 비밀번호만 시도합니다 |
 | `PubkeyAuthentication=no` | 키 인증을 **끕니다.** 위와 함께 쓰면 "비밀번호로만 들어가보기"가 됩니다 |
 
-이렇게 **수단을 하나로 봉인해야** 그 수단이 되는지 안 되는지를 알 수 있습니다. 아무 옵션 없이 `ssh carrier`를 하면 SSH가 알아서 여러 방법을 시도하기 때문에, 성공해도 **어느 방법으로 성공했는지 알 수 없습니다.**
+이렇게 **수단을 하나로 봉인해야** 그 수단이 되는지 안 되는지를 알 수 있습니다. 아무 옵션 없이 `ssh home-server`를 하면 SSH가 알아서 여러 방법을 시도하기 때문에, 성공해도 **어느 방법으로 성공했는지 알 수 없습니다.**
 
 **뒤에 붙는 `'echo KEY_OK'`** — 접속한 다음 서버에서 실행할 명령입니다. 이걸 적으면 SSH는 명령만 실행하고 **바로 빠져나옵니다.** 대화형 셸이 열리지 않으니 `exit`을 칠 필요가 없고, 화면에 `KEY_OK`가 찍혔다는 것 자체가 "접속에 성공했다"는 증거가 됩니다.
 
@@ -295,7 +310,7 @@ OpenSSH 6.5(2014년) 이상이면 어디서나 지원되므로, 새로 만드는
 IgnoreUnknown UseKeychain
 ```
 
-**이 줄을 파일 맨 위, 어떤 `Host` 블록에도 속하지 않는 위치에 두어야 합니다.** `Host carrier` 안에 넣으면 다른 호스트에 접속할 때 다시 같은 에러가 납니다. SSH는 설정 파일을 **파싱하는 시점에** 모르는 옵션을 거부하기 때문에, 지금 접속하려는 호스트와 무관한 블록의 오류로도 전체가 죽습니다.
+**이 줄을 파일 맨 위, 어떤 `Host` 블록에도 속하지 않는 위치에 두어야 합니다.** `Host home-server` 안에 넣으면 다른 호스트에 접속할 때 다시 같은 에러가 납니다. SSH는 설정 파일을 **파싱하는 시점에** 모르는 옵션을 거부하기 때문에, 지금 접속하려는 호스트와 무관한 블록의 오류로도 전체가 죽습니다.
 
 </KnowledgeNote>
 </KnowledgeList>
@@ -386,9 +401,9 @@ sudo systemctl restart ssh
 그리고 검증인데, **두 가지를 따로 물어봐야 합니다.**
 
 ```bash
-ssh carrier 'echo STILL_OK'                                  # 키가 되는가
+ssh home-server 'echo STILL_OK'                                  # 키가 되는가
 ssh -o PreferredAuthentications=password \
-    -o PubkeyAuthentication=no carrier true                  # 비밀번호가 막히는가
+    -o PubkeyAuthentication=no home-server true                  # 비밀번호가 막히는가
 ```
 ```
 STILL_OK
@@ -469,7 +484,7 @@ sudo systemctl edit ssh.socket
 ```
 [Socket]
 ListenStream=
-ListenStream=<포트>
+ListenStream=<SSH 포트>
 ```
 
 **중간의 빈 `ListenStream=`이 핵심입니다.** 이 줄이 기본값 22를 지웁니다. 이게 없으면 22와 새 포트를 **둘 다** 듣게 됩니다.
@@ -482,10 +497,10 @@ sudo systemctl restart ssh.socket
 확인은 설정이 아니라 **실제로 듣고 있는 쪽**을 봐야 합니다.
 
 ```bash
-sudo ss -tulpn | grep <포트>
+sudo ss -tulpn | grep <SSH 포트>
 ```
 ```
-LISTEN 0.0.0.0:<포트>  users:(("sshd",pid=18364,fd=3),("systemd",pid=1,fd=256))
+LISTEN 0.0.0.0:<SSH 포트>  users:(("sshd",pid=18364,fd=3),("systemd",pid=1,fd=256))
 ```
 
 `systemd`가 함께 잡혀 있는 것이 소켓 활성화의 흔적입니다.
@@ -520,7 +535,7 @@ SSH 포트를 옮기는 방법으로 대부분의 안내문은 `sshd_config`의 
 sudo sshd -T | grep '^port'
 ```
 ```
-port <포트>
+port <SSH 포트>
 ```
 
 바뀐 것처럼 보입니다. 하지만 이건 **sshd가 자기 설정 파일을 어떻게 읽었는지**일 뿐, 실제로 누가 그 포트를 열고 있는지와는 다른 이야기입니다. 재시작도 성공하고 에러도 나지 않습니다. 그저 포트만 그대로입니다.
@@ -611,7 +626,7 @@ sudo fail2ban-client status sshd
 ```bash
 for i in 1 2 3; do
   ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no \
-      -p <포트> nosuchuser@<서버 고정 IP> true
+      -p <SSH 포트> nosuchuser@<서버 고정 IP> true
 done
 
 sudo fail2ban-client status sshd
@@ -627,7 +642,7 @@ sudo fail2ban-client status sshd
 터미널에 여러 줄 붙여넣기가 잘 안 되면 한 줄로 이어 써도 됩니다.
 
 ```bash
-for i in 1 2 3; do ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -p <포트> nosuchuser@<서버 고정 IP> true; done
+for i in 1 2 3; do ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -p <SSH 포트> nosuchuser@<서버 고정 IP> true; done
 ```
 
 여기서 `nosuchuser`는 **존재하지 않는 계정 이름**입니다. 실제 계정으로 시험하면 그 계정이 차단 대상이 되어 자기 발등을 찍게 됩니다.
@@ -712,10 +727,10 @@ fail2ban은 두 단계로 동작합니다.
 
 | 항목 | 설정 | 확인 명령 |
 |---|---|---|
-| SSH 키 인증 | `ed25519` 키 등록 | `ssh -o PreferredAuthentications=publickey carrier true` |
-| 비밀번호 로그인 | 차단 | `ssh -o PubkeyAuthentication=no carrier true` → `Permission denied (publickey)` |
+| SSH 키 인증 | `ed25519` 키 등록 | `ssh -o PreferredAuthentications=publickey home-server true` |
+| 비밀번호 로그인 | 차단 | `ssh -o PubkeyAuthentication=no home-server true` → `Permission denied (publickey)` |
 | root 로그인 | 차단 | `sudo sshd -T \| grep permitrootlogin` |
-| SSH 포트 | 기본 22에서 이동 | `sudo ss -tulpn \| grep <포트>` |
+| SSH 포트 | 기본 22에서 이동 | `sudo ss -tulpn \| grep <SSH 포트>` |
 | fail2ban | 10분 3회 → 1시간 차단 | `sudo fail2ban-client get sshd maxretry` |
 
 ### 2. Docker 설치
@@ -880,5 +895,5 @@ docker run -it -v /:/host alpine chroot /host sh
 
 Ubuntu Server에 보안 설정과 Docker 설치를 했습니다. 이제는 비밀번호로 접속하지 않고, 가지고 있는 키로 간편히 접속할 수 있고, SSH 연결 포트를 변경하여 기본 포트만 노리는 자동 스캔은 헛걸음하게 되었습니다. 그리고 fail2ban이 반복되는 인증 실패를 세고 있습니다.
 
-다음 편에서는 지금까지 만들었던 Ubuntu Server에 Ollama와 n8n을 올려보려고 합니다. 그리고 번외로 Ollama의 성능을 올려보기 위해서 했던 노력들도 함께 녹여 보았습니다.
+다음 편에서는 지금까지 만들었던 Ubuntu Server에 Ollama와 n8n을 올려보려고 합니다. 로컬에서 도는 언어 모델과, 그 모델을 정해진 시각에 불러줄 자동화 도구입니다.
 
