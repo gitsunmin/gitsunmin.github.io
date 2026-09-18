@@ -47,6 +47,8 @@ const parseCareerDate = (str: string): Date => {
 };
 
 const computeStats = (careers: (typeof Career)[number][]) => {
+  const toMonthIndex = (date: Date) => date.getFullYear() * 12 + date.getMonth();
+
   const toRange = (range: string) => {
     const [startStr, endStr] = range.split('~').map((s) => s.trim());
     return {
@@ -55,19 +57,28 @@ const computeStats = (careers: (typeof Career)[number][]) => {
     };
   };
 
-  const ranges = careers.map((c) => toRange(c.range));
-  const earliest = ranges.reduce(
-    (min, { start }) => (start < min ? start : min),
-    new Date(),
-  );
+  // 재직 기간만 합산한다. 공백기는 제외하고, 겹치는 기간은 한 번만 센다.
+  const ranges = careers
+    .map((c) => toRange(c.range))
+    .map(({ start, end }) => ({ start: toMonthIndex(start), end: toMonthIndex(end) }))
+    .sort((a, b) => a.start - b.start);
 
-  const now = new Date();
-  const totalMonths =
-    (now.getFullYear() - earliest.getFullYear()) * 12 + (now.getMonth() - earliest.getMonth());
+  const merged = ranges.reduce<{ start: number; end: number }[]>((acc, range) => {
+    const last = acc.at(-1);
+    if (last && range.start <= last.end) {
+      last.end = Math.max(last.end, range.end);
+      return acc;
+    }
+    return [...acc, { ...range }];
+  }, []);
+
+  // 입사월과 퇴사월을 모두 포함해 개월 수를 센다.
+  const totalMonths = merged.reduce((sum, { start, end }) => sum + (end - start) + 1, 0);
+  const earliest = ranges.reduce((min, { start }) => Math.min(min, start), Number.POSITIVE_INFINITY);
 
   return {
     totalYears: Math.floor(totalMonths / 12),
-    startYear: earliest.getFullYear(),
+    startYear: Math.floor(earliest / 12),
     techCount: new Set(careers.flatMap((c) => c.techs)).size,
     companyCount: careers.length,
   };
