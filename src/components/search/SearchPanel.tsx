@@ -139,7 +139,9 @@ export function SearchPanel({ state, onSelect, onClose, autoFocus = true }: Sear
           autoCorrect="off"
           spellCheck={false}
           enterKeyHint="go"
-          className="min-w-0 flex-1 bg-transparent text-[15px] text-foreground outline-none placeholder:text-muted-foreground/60"
+          // 모바일에서는 16px 이상이어야 한다. iOS Safari는 그보다 작은 입력창에 포커스가
+          // 가면 페이지를 통째로 확대해 버린다.
+          className="min-w-0 flex-1 bg-transparent text-base text-foreground outline-none placeholder:text-muted-foreground/60 sm:text-[15px]"
         />
 
         {hasQuery ? (
