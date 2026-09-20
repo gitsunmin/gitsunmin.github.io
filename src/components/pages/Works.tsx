@@ -1,5 +1,6 @@
 import { AppWindow, Globe, Layers, Package, Sparkles } from 'lucide-react';
 import { Suspense, useCallback, useMemo, useState } from 'react';
+import { WorkSearch } from '@/components/search/WorkSearch';
 import { TechFilterBar } from '@/components/TechFilterBar';
 import { WorkSection, type CategoryMeta } from '@/components/WorkSection';
 import { Works, type WorkCategory } from '@/data/works';
@@ -50,6 +51,11 @@ export const WorksPage = () => {
   return (
     <Suspense>
       <div className="w-full md:max-w-(--breakpoint-md) mx-auto pt-16 md:pt-20 px-4 md:px-0 pb-16 print:pt-0 print:px-0 print:pb-0 print:max-w-none">
+        {/* 검색 — 기술 칩은 목록을 거르고, 검색은 덱 안 슬라이드까지 찾는다. */}
+        <div className="mb-5 print:hidden">
+          <WorkSearch variant="bar" />
+        </div>
+
         <TechFilterBar
           techs={ALL_TECHS}
           activeFilter={activeFilter}

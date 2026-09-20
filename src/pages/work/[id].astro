@@ -43,6 +43,8 @@ const { Content } = await render(entry);
 // 서브 레포는 간지 슬라이드를 앞에 두고 본문을 이어 붙인다.
 const allEntries = await getCollection('works');
 type Chapter = {
+  /** 간지 슬라이드의 id. 검색 결과가 #slug로 장에 바로 닿는다. */
+  slug: string;
   name: string;
   summary?: string;
   contributions?: string[];
@@ -65,6 +67,7 @@ for (const repo of work?.subRepos ?? []) {
   if (!subEntry) continue;
   const { Content: SubContent } = await render(subEntry);
   chapters.push({
+    slug: repo.slug,
     name: repo.name,
     summary: subEntry.data.summary,
     contributions: subEntry.data.contributions,
@@ -161,7 +164,7 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
     <p class="deck-loading-label">슬라이드를 배치하는 중…</p>
   </div>
 
-  <div data-deck class="deck">
+  <div data-deck data-deck-id={id} data-deck-title={title} class="deck">
     {/* ── 표지 ─────────────────────────────────────────────── */}
     <section data-slide="cover" data-slide-title="표지">
       <div class="text-center">
@@ -193,7 +196,8 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
     </section>
 
     {/* ── 소개 ─────────────────────────────────────────────── */}
-    <section data-slide="intro" data-slide-title="소개">
+    {/* id는 검색 결과의 착지점. 프로젝트 레코드(설명·담당 범위·기술)의 내용이 여기 있다. */}
+    <section id="intro" data-slide="intro" data-slide-title="소개">
       <div>
         <p class="deck-eyebrow">소개</p>
 
@@ -257,7 +261,7 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
     {/* ── 서브 레포 = 장(章) ───────────────────────────────── */}
     {chapters.map((chapter) => (
       <>
-        <section data-slide={`chapter-${chapter.name}`} data-slide-title={chapter.name}>
+        <section id={chapter.slug} data-slide={`chapter-${chapter.name}`} data-slide-title={chapter.name}>
           <div class="text-center">
             <p class="deck-eyebrow">Chapter</p>
             <p class="deck-chapter mt-4">{chapter.name}</p>

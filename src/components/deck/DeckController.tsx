@@ -1,5 +1,11 @@
-import { ChevronDown, Printer } from 'lucide-react';
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { DeckOutline } from '@/components/deck/DeckOutline';
+import { DeckPosition } from '@/components/deck/DeckPosition';
+import { markMatches } from '@/components/deck/markMatches';
+import { buildOutline, locate } from '@/components/deck/outline';
+import { WorkSearch } from '@/components/search/WorkSearch';
+import type { SearchHit } from '@/lib/workSearch';
 import { cn } from '@/lib/utils';
 
 /**
@@ -64,6 +70,31 @@ function pinToTopIfFresh() {
     | undefined;
   if (nav?.type === 'back_forward') return;
   window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+}
+
+/**
+ * 딥링크(#슬러그)가 가리키는 슬라이드로 바로 간다.
+ *
+ * 브라우저의 프래그먼트 이동에 맡기지 않는다. html에 scroll-behavior: smooth가 걸려 있어
+ * 3만 px를 애니메이션으로 흘러가고, 그 사이 자동 축소가 높이를 바꿔 엉뚱한 곳에 멈춘다.
+ * 배치가 끝난 뒤에 한 번, 즉시 이동으로 굳힌다.
+ */
+function jumpToHash() {
+  if (!location.hash) return;
+  let id = location.hash.slice(1);
+  try {
+    id = decodeURIComponent(id);
+  } catch {
+    /* 깨진 인코딩은 그대로 둔다. */
+  }
+  const target = document.getElementById(id);
+  if (!target) return;
+  (target.closest<HTMLElement>('[data-slide]') ?? target).scrollIntoView({ behavior: 'instant', block: 'start' });
+}
+
+/** 검색에서 넘어올 때 실어 보낸 검색어(?q=). */
+function arrivalQuery() {
+  return new URLSearchParams(location.search).get('q')?.trim() ?? '';
 }
 
 /**
@@ -155,6 +186,47 @@ function fitSlides(targets: HTMLElement[]) {
 export function DeckController() {
   const slides = useSyncExternalStore(slideStore.subscribe, slideStore.getSnapshot, slideStore.getServerSnapshot);
   const [active, setActive] = useState(0);
+  const [outlineOpen, setOutlineOpen] = useState(false);
+  /** 검색에서 넘어왔을 때의 검색어. 위치 표시줄에 칩으로 남고, 도착한 장을 하이라이트한다. */
+  const [arrived, setArrived] = useState('');
+  const clearMarks = useRef<() => void>(() => {});
+
+  /** 슬라이드 하나를 잠깐 밝히고 검색어를 <mark>로 감싼다. 앞선 하이라이트는 지운다. */
+  const spotlight = useCallback((slide: HTMLElement | undefined, query: string) => {
+    clearMarks.current();
+    clearMarks.current = () => {};
+    if (!slide) return;
+    slide.dataset.slideSpot = '';
+    const timer = window.setTimeout(() => delete slide.dataset.slideSpot, 1800);
+    const unmark = query ? markMatches(slide, query) : () => {};
+    clearMarks.current = () => {
+      window.clearTimeout(timer);
+      delete slide.dataset.slideSpot;
+      unmark();
+    };
+  }, []);
+
+  /* ── 목차 계층 ──────────────────────────────────────────────
+     슬라이드 제목(data-slide-title)만 읽어 장 › 묶음 › 슬라이드로 접는다.
+     최상위 장의 이름은 페이지가 [data-deck]에 적어 둔 덱 제목이다. */
+  const outline = useMemo(() => {
+    const deck = slides[0]?.closest<HTMLElement>('[data-deck]');
+    const rootTitle = deck?.dataset.deckTitle ?? '개요';
+    return buildOutline(
+      slides.map((slide) => ({ id: slide.dataset.slide ?? '', title: slide.dataset.slideTitle ?? '' })),
+      rootTitle,
+    );
+  }, [slides]);
+  const position = useMemo(() => locate(outline, active), [outline, active]);
+
+  /* ── 검색 스코프 ────────────────────────────────────────────
+     이 덱이 어느 프로젝트인지는 [data-deck]이 적어 둔 id·제목으로 안다. */
+  const searchScope = useMemo(() => {
+    const deck = slides[0]?.closest<HTMLElement>('[data-deck]');
+    const id = deck?.dataset.deckId;
+    const title = deck?.dataset.deckTitle;
+    return id && title ? { id, title } : null;
+  }, [slides]);
 
   /* ── 현재 슬라이드 추적 ─────────────────────────────────────
      교차 비율만으로는 순서를 못 정한다. 300svh짜리 Story 슬라이드처럼 뷰포트보다
@@ -220,6 +292,15 @@ export function DeckController() {
       if (!pinned) {
         pinned = true;
         pinToTopIfFresh();
+        jumpToHash();
+        // 검색에서 왔으면 도착한 장을 밝히고 검색어를 표시한다.
+        const query = arrivalQuery();
+        if (query && location.hash) {
+          setArrived(query);
+          const id = decodeURIComponent(location.hash.slice(1));
+          const slide = document.getElementById(id)?.closest<HTMLElement>('[data-slide]') ?? undefined;
+          spotlight(slide, query);
+        }
       }
       delete root.dataset.deckBooting;
     };
@@ -303,7 +384,7 @@ export function DeckController() {
       }
       reveal();
     };
-  }, [slides]);
+  }, [slides, spotlight]);
 
   /* ── 등장 연출 ──────────────────────────────────────────────
      슬라이드가 화면에 자리 잡으면 내용이 한 번 떠오른다.
@@ -379,17 +460,57 @@ export function DeckController() {
 
   const goTo = useCallback(
     (index: number) => {
-      const target = slides[Math.max(0, Math.min(slides.length - 1, index))];
+      const clamped = Math.max(0, Math.min(slides.length - 1, index));
+      const target = slides[clamped];
       if (!target) return;
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // 옆 장으로는 미끄러지고, 목차·검색으로 멀리 뛸 때는 바로 간다. 3만 px를
+      // 애니메이션으로 흘러가는 걸 지켜보는 건 이동이 아니라 기다림이고, mandatory 스냅이
+      // 그 사이 어느 장에 붙잡을지도 알 수 없다.
+      const behavior = Math.abs(clamped - active) <= 1 ? 'smooth' : 'instant';
+      target.scrollIntoView({ behavior, block: 'start' });
     },
-    [slides],
+    [slides, active],
+  );
+
+  /* 같은 프로젝트의 결과는 페이지를 옮기지 않고 그 슬라이드로 간다. */
+  const navigateWithin = useCallback(
+    (hit: SearchHit, query: string) => {
+      if (!searchScope || hit.record.workId !== searchScope.id) return false;
+      const { slug } = hit.record;
+      if (!slug) return false;
+      const target = document.getElementById(slug)?.closest<HTMLElement>('[data-slide]');
+      const index = target ? slides.indexOf(target) : -1;
+      if (index === -1) return false;
+      goTo(index);
+      history.replaceState(null, '', `?q=${encodeURIComponent(query)}#${slug}`);
+      setArrived(query);
+      spotlight(target ?? undefined, query);
+      return true;
+    },
+    [searchScope, slides, goTo, spotlight],
   );
 
   /* ── 키보드 ─────────────────────────────────────────────── */
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+      // 목차 필터처럼 글자를 받는 곳에 포커스가 있으면 덱 단축키를 양보한다.
+      const target = event.target;
+      if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"], [data-search-root]')) {
+        if (event.key === 'Escape') setOutlineOpen(false);
+        return;
+      }
+
+      if (event.key === 't' || event.key === 'T') {
+        event.preventDefault();
+        setOutlineOpen((prev) => !prev);
+        return;
+      }
+      if (event.key === 'Escape') {
+        setOutlineOpen(false);
+        return;
+      }
 
       const step = { ArrowDown: 1, PageDown: 1, ' ': 1, ArrowRight: 1, ArrowUp: -1, PageUp: -1, ArrowLeft: -1 }[event.key];
       if (step !== undefined) {
@@ -432,33 +553,57 @@ export function DeckController() {
 
   return (
     <div className="deck-chrome print:hidden">
-      {/* 진행 도트 — PC는 오른쪽 세로, 모바일은 상단 가로 바 */}
-      <nav className="deck-dots" aria-label="슬라이드 이동">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.dataset.slide ?? index}
-            type="button"
-            onClick={() => goTo(index)}
-            aria-label={`${index + 1}번 슬라이드: ${slide.dataset.slideTitle ?? ''}`}
-            aria-current={index === active ? 'true' : undefined}
-            className={cn('deck-dot', index === active && 'is-active')}
-          >
-            <span className="deck-dot-label">{slide.dataset.slideTitle}</span>
-          </button>
-        ))}
+      {/* 위치 표시줄 — PC는 좌상단 알약, 모바일은 상단 한 줄 헤더 */}
+      <DeckPosition
+        outline={outline}
+        position={position}
+        active={active}
+        total={slides.length}
+        outlineOpen={outlineOpen}
+        onToggleOutline={() => setOutlineOpen((prev) => !prev)}
+        search={<WorkSearch variant="icon" scope={searchScope} onNavigateWithin={navigateWithin} className="deck-position-search" />}
+        arrivedQuery={arrived}
+        onDismissArrival={() => {
+          setArrived('');
+          clearMarks.current();
+          history.replaceState(null, '', location.pathname + location.hash);
+        }}
+      />
+
+      {/* 전체 목차 — PC는 왼쪽 사이드 패널, 모바일은 하단 시트 */}
+      <DeckOutline
+        outline={outline}
+        active={active}
+        open={outlineOpen}
+        onOpenChange={setOutlineOpen}
+        onGoTo={goTo}
+      />
+
+      {/* 진행 레일(PC) — 장마다 한 칸. 도트 93개를 세로로 늘어놓던 자리다.
+          칸의 길이는 장의 슬라이드 수에 비례하고, 지금 읽는 장만 채워진다. */}
+      <nav className="deck-rail" aria-label="장 이동">
+        {outline.map((chapter, i) => {
+          const next = outline[i + 1];
+          const startIndex = chapter.index;
+          const endIndex = next ? next.index : slides.length;
+          const count = Math.max(1, endIndex - startIndex);
+          const isCurrent = active >= startIndex && active < endIndex;
+          const fill = isCurrent ? (active - startIndex + 1) / count : active >= endIndex ? 1 : 0;
+          return (
+            <button
+              key={chapter.index}
+              type="button"
+              onClick={() => goTo(chapter.index)}
+              aria-label={`${chapter.title} (${count}장)`}
+              aria-current={isCurrent ? 'true' : undefined}
+              className={cn('deck-rail-segment', isCurrent && 'is-active')}
+              style={{ flexGrow: count, '--deck-rail-fill': fill } as React.CSSProperties}
+            >
+              <span className="deck-rail-label">{chapter.title}</span>
+            </button>
+          );
+        })}
       </nav>
-
-      {/* 좌하단 상태 · 모드 전환 */}
-      <div className="deck-status">
-        <span className="tabular-nums">
-          {active + 1} <span className="opacity-40">/ {slides.length}</span>
-        </span>
-
-        <button type="button" onClick={() => window.print()} className="deck-mode" title="덱 전체를 인쇄합니다">
-          <Printer className="size-3" />
-          인쇄
-        </button>
-      </div>
 
       {/* 다음 슬라이드 힌트 */}
       {!isLast && (
@@ -469,3 +614,4 @@ export function DeckController() {
     </div>
   );
 }
+

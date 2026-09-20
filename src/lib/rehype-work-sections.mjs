@@ -245,6 +245,15 @@ function makeSlide(title) {
 
 const isBlank = (node) => node.type === 'text' && node.value.trim() === '';
 
+/** `<details><summary>참고 — …</summary>…</details>`의 요약 문구. 없으면 빈 문자열. */
+function summaryText(node) {
+  if (node.type !== 'mdxJsxFlowElement' || node.name !== 'details') return '';
+  const summary = (node.children ?? []).find(
+    (child) => child.type === 'mdxJsxFlowElement' && child.name === 'summary',
+  );
+  return summary ? textOf(summary).trim() : '';
+}
+
 const isCaseLabel = (node) =>
   node?.type === 'element' && node.properties?.['data-work-case-label'] !== undefined;
 
@@ -317,7 +326,9 @@ function sliceIntoSlides(children) {
       const title = headingText(node);
       open(chapter ? `${chapter} · ${title}` : title);
     } else if (current === null) {
-      open('');
+      // 접힌 보조 자료(<details>)가 한 장을 이루면 <summary>가 그 장의 이름이다.
+      // 이름이 없으면 목차에서 앞 장의 '계속'으로만 보인다.
+      open(summaryText(node));
     }
 
     current.children.push(node);
@@ -386,7 +397,24 @@ function groupSlides(root) {
 }
 
 /** `문제-1-재현되지-…` → `재현되지-…` */
-const CASE_ID_PREFIX = /^문제-\d+-/;
+export const CASE_ID_PREFIX = /^문제-\d+-/;
+
+/**
+ * 케이스 헤딩 id에서 `문제-N-` 접두사를 떼되, 떼고 나서 겹치면 slugger처럼 번호를 붙인다.
+ * 덱과 검색 인덱스가 같은 딥링크를 만들어야 하므로 여기 한곳에서 정한다.
+ * `used`는 문서 하나 안에서 공유하는 집합이다.
+ */
+export function caseSlug(id, used) {
+  const base = id.replace(CASE_ID_PREFIX, '');
+  if (!used.has(base)) {
+    used.add(base);
+    return base;
+  }
+  let n = 1;
+  while (used.has(`${base}-${n}`)) n += 1;
+  used.add(`${base}-${n}`);
+  return `${base}-${n}`;
+}
 
 export function rehypeWorkSections() {
   return (tree, file) => {
@@ -396,16 +424,6 @@ export function rehypeWorkSections() {
 
     /** 접두사를 떼다 서로 겹치는 id가 생기면 slugger처럼 번호를 붙인다. */
     const usedIds = new Set();
-    const uniqueId = (id) => {
-      if (!usedIds.has(id)) {
-        usedIds.add(id);
-        return id;
-      }
-      let n = 1;
-      while (usedIds.has(`${id}-${n}`)) n += 1;
-      usedIds.add(`${id}-${n}`);
-      return `${id}-${n}`;
-    };
 
     for (const node of tree.children ?? []) {
       if (!isElement(node, 'h2')) continue;
@@ -425,7 +443,7 @@ export function rehypeWorkSections() {
         // 접두사 없는 슬러그(#재현되지-않는-장바구니가-느리다)이므로 함께 떼어 준다.
         const id = node.properties.id;
         if (typeof id === 'string' && CASE_ID_PREFIX.test(id)) {
-          node.properties.id = uniqueId(id.replace(CASE_ID_PREFIX, ''));
+          node.properties.id = caseSlug(id, usedIds);
         }
         continue;
       }

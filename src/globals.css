@@ -699,3 +699,16 @@
     border-color: #cccccc !important;
   }
 }
+
+/* ─── works 검색 다이얼로그 ────────────────────────────────────
+   네이티브 <dialog>는 열릴 때 연출이 없다. 살짝 떠오르게 한다. */
+.work-search-dialog[open] {
+  animation: work-search-in 160ms ease-out;
+}
+@keyframes work-search-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.99); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-search-dialog[open] { animation: none; }
+}
