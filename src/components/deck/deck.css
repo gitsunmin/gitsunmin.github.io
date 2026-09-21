@@ -1088,8 +1088,18 @@ html[data-deck-booting] .deck-loading {
   }
 
   .deck-chrome,
-  .deck-loading {
+  .deck-loading,
+  [data-vaul-overlay],
+  [data-vaul-drawer] {
     display: none !important;
+  }
+
+  /* 시트가 미처 닫히기 전에 인쇄가 시작돼도 body의 스크롤 잠금이 종이를 한 장으로
+     자르지 않게 한다. */
+  html:has([data-deck]),
+  html:has([data-deck]) body {
+    overflow: visible !important;
+    height: auto !important;
   }
 
   /* 인쇄가 배치보다 먼저 시작돼도 본문이 사라지지는 않게 한다. */

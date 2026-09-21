@@ -31,10 +31,22 @@ export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Pro
     if (isMobile) onOpenChange(false);
   };
 
+  // 모바일은 시트를 닫고 나서 인쇄한다. 시트가 열려 있는 동안은 다이얼로그가 body에
+  // overflow: hidden을 걸어 두는데, 그 상태로 인쇄하면 첫 장 뒤가 잘린다.
+  // 닫힘 연출(500ms)이 끝나 시트가 내려간 뒤에 부른다.
+  const print = () => {
+    if (!isMobile) {
+      window.print();
+      return;
+    }
+    onOpenChange(false);
+    window.setTimeout(() => window.print(), 650);
+  };
+
   if (isMobile) {
     return (
       <BottomSheet open={open} onOpenChange={onOpenChange} title="목차" height={0.85}>
-        <OutlineList outline={outline} active={active} open={open} onSelect={select} />
+        <OutlineList outline={outline} active={active} open={open} onSelect={select} onPrint={print} />
       </BottomSheet>
     );
   }
@@ -52,7 +64,7 @@ export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Pro
           <X className="size-4" />
         </button>
       </div>
-      <OutlineList outline={outline} active={active} open={open} onSelect={select} />
+      <OutlineList outline={outline} active={active} open={open} onSelect={select} onPrint={print} />
     </aside>
   );
 }
@@ -62,12 +74,13 @@ type ListProps = {
   active: number;
   open: boolean;
   onSelect: (index: number) => void;
+  onPrint: () => void;
 };
 
 const containsActive = (group: OutlineGroup, active: number) =>
   group.items.some((item) => item.index === active);
 
-function OutlineList({ outline, active, open, onSelect }: ListProps) {
+function OutlineList({ outline, active, open, onSelect, onPrint }: ListProps) {
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set());
   const listRef = useRef<HTMLDivElement>(null);
@@ -214,7 +227,7 @@ function OutlineList({ outline, active, open, onSelect }: ListProps) {
         <span className="tabular-nums" aria-live="polite">
           {normalized ? `${total}개 슬라이드` : `${active + 1} / ${total}`}
         </span>
-        <button type="button" onClick={() => window.print()} className="deck-mode" title="덱 전체를 인쇄합니다">
+        <button type="button" onClick={onPrint} className="deck-mode" title="덱 전체를 인쇄합니다">
           <Printer className="size-3" />
           인쇄
         </button>
