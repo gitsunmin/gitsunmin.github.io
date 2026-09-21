@@ -26,9 +26,23 @@ type Props = {
 export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Props) {
   const isMobile = useMediaQuery(MOBILE_QUERY);
 
+  // 모바일에서 고른 항목. 시트가 열려 있는 동안은 문서 스크롤이 잠겨 있어(iOS Safari는
+  // scrollIntoView까지 막는다) 바로 가는 게 안 먹을 수 있다. 일단 시도하고, 시트가
+  // 다 내려간 뒤에 한 번 더 간다 — 이미 갔다면 두 번째는 제자리라 아무 일도 없다.
+  const pending = useRef<number | null>(null);
+
   const select = (index: number) => {
     onGoTo(index);
-    if (isMobile) onOpenChange(false);
+    if (isMobile) {
+      pending.current = index;
+      onOpenChange(false);
+    }
+  };
+
+  const onClosed = () => {
+    const index = pending.current;
+    pending.current = null;
+    if (index != null) onGoTo(index);
   };
 
   // 모바일은 시트를 닫고 나서 인쇄한다. 시트가 열려 있는 동안은 다이얼로그가 body에
@@ -45,7 +59,7 @@ export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Pro
 
   if (isMobile) {
     return (
-      <BottomSheet open={open} onOpenChange={onOpenChange} title="목차" height={0.85}>
+      <BottomSheet open={open} onOpenChange={onOpenChange} onClosed={onClosed} title="목차" height={0.85}>
         <OutlineList outline={outline} active={active} open={open} onSelect={select} onPrint={print} />
       </BottomSheet>
     );

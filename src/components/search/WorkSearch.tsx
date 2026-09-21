@@ -71,16 +71,29 @@ export function WorkSearch({ scope = null, onNavigateWithin, variant = 'bar', cl
 
   const close = useCallback(() => setOpen(false), []);
 
+  // 모바일에서 같은 프로젝트 안으로 이동할 때의 목표. 시트가 떠 있는 동안은 문서
+  // 스크롤이 잠겨 있어(iOS Safari) 바로 가는 게 안 먹을 수 있으니, 시트가 다 내려간
+  // 뒤에 한 번 더 간다.
+  const pending = useRef<{ hit: SearchHit; query: string } | null>(null);
+  const onClosed = useCallback(() => {
+    const target = pending.current;
+    pending.current = null;
+    if (target) onNavigateWithin?.(target.hit, target.query);
+  }, [onNavigateWithin]);
+
   const handleSelect = useCallback(
     (hit: SearchHit, query: string) => {
       state.remember(query);
       setOpen(false);
-      if (onNavigateWithin?.(hit, query)) return;
+      if (onNavigateWithin?.(hit, query)) {
+        if (isMobile) pending.current = { hit, query };
+        return;
+      }
       // 카드와 같은 이유로 ClientRouter를 거치지 않는다 — 덱은 무거워서 뷰 트랜지션이
       // 새 문서를 다 받을 때까지 이 페이지를 멈춘 것처럼 보이게 한다.
       window.location.assign(hrefOf(hit, query));
     },
-    [onNavigateWithin, state],
+    [onNavigateWithin, state, isMobile],
   );
 
   const shortcut = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘K' : 'Ctrl K';
@@ -116,7 +129,7 @@ export function WorkSearch({ scope = null, onNavigateWithin, variant = 'bar', cl
       )}
 
       {isMobile ? (
-        <BottomSheet open={open} onOpenChange={setOpen} title="works 검색" height={0.94}>
+        <BottomSheet open={open} onOpenChange={setOpen} onClosed={onClosed} title="works 검색" height={0.94}>
           <SearchPanel state={state} onSelect={handleSelect} onClose={close} />
         </BottomSheet>
       ) : (

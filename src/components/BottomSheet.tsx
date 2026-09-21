@@ -18,6 +18,12 @@ import { cn } from '@/lib/utils';
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /**
+   * 닫힘 연출이 끝나 시트가 완전히 내려간 뒤. 시트가 떠 있는 동안은 다이얼로그가
+   * 문서 스크롤을 잠가 두므로(iOS Safari는 그 상태에서 프로그램 스크롤도 막는다),
+   * 문서를 스크롤하는 일은 이때로 미룬다.
+   */
+  onClosed?: () => void;
   /** 접근성 제목. 화면에는 보이지 않는다. */
   title: string;
   /** 시각 뷰포트 높이 대비 시트 높이(0~1). */
@@ -26,7 +32,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const BottomSheet = ({ open, onOpenChange, title, height = 0.92, className, children }: Props) => {
+export const BottomSheet = ({ open, onOpenChange, onClosed, title, height = 0.92, className, children }: Props) => {
   const viewport = useVisualViewport(open);
   const style: CSSProperties | undefined = viewport
     ? {
@@ -37,7 +43,16 @@ export const BottomSheet = ({ open, onOpenChange, title, height = 0.92, classNam
     : undefined;
 
   return (
-    <Drawer.Root open={open} onOpenChange={onOpenChange} noBodyStyles repositionInputs={false}>
+    <Drawer.Root
+      open={open}
+      onOpenChange={onOpenChange}
+      onAnimationEnd={(isOpen) => {
+        // 오버레이(스크롤 잠금의 주인)가 내려가는 것과 거의 같은 순간이라, 한 박자 늦춘다.
+        if (!isOpen) window.setTimeout(() => onClosed?.(), 60);
+      }}
+      noBodyStyles
+      repositionInputs={false}
+    >
       <Drawer.Portal>
         {/* touch-none: 덱의 문서 스크롤이 시트 뒤에서 따라 움직이지 않게 한다. */}
         <Drawer.Overlay className="fixed inset-0 z-[70] touch-none bg-black/40" />
