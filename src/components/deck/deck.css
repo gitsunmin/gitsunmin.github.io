@@ -936,59 +936,128 @@ html[data-deck-booting] .deck-loading {
   50%      { transform: translateX(-50%) translateY(5px); }
 }
 
-/* ── 모바일 — 위치 표시줄이 상단 헤더가 되고, 레일과 힌트는 뺀다 ── */
+/* ── 플로팅 버튼(모바일) — 목차·검색 ──────────────────────────
+   상단은 읽는 자리, 누르는 것은 엄지가 닿는 오른쪽 아래로 모은다.
+   DeckController가 모바일에서만 그리지만, 기준 폭이 어긋나도 PC에는 안 보이게 한다. */
+.deck-fab { display: none; }
+
+/* ── 아치(모바일) — 글자가 화면 가장자리를 따라 돈다 ─────────────
+   상자가 없다. 글자와 진행 선이 위 모서리를 돌아 양옆으로 내려오는 띠 하나가 전부라,
+   슬라이드 한가운데는 그대로 보인다. 기하는 DeckArch가 잰다. */
+.deck-arch {
+  position: fixed;
+  z-index: 60;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* 유리 띠 — 글자가 놓인 구간만 뒤를 흐리고 살짝 밝힌다. 모양은 mask-image가 오린다.
+   position: absolute라 svg 뒤에 깔린다. 배경은 옅게 — 유리는 가리는 게 아니라
+   흐리는 것이라, 뒤가 비쳐야 유리다. */
+.deck-arch-glass {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background:
+    linear-gradient(to bottom, hsl(0 0% 100% / 0.12), hsl(0 0% 100% / 0.04)),
+    hsl(var(--background) / 0.35);
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.08);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.08);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.deck-arch-svg {
+  position: relative;
+  display: block;
+  overflow: visible;
+  animation: deck-crumb-in 320ms ease-out;
+}
+
+.deck-arch-probe { visibility: hidden; }
+
+.deck-arch-text {
+  fill: hsl(var(--foreground));
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* 누르는 자리는 위 띠만. 옆으로 내려온 글자까지 덮으면 본문을 가로막는다. */
+.deck-arch-button {
+  position: absolute;
+  top: env(safe-area-inset-top, 0px);
+  left: 0;
+  right: 0;
+  height: 2.25rem;
+  pointer-events: auto;
+}
+
+.deck-arch-below {
+  pointer-events: auto;
+  margin-top: 0.25rem;
+}
+
+/* ── 모바일 — 아치·하단 바로 바꾸고, 레일과 힌트는 뺀다 ──────────── */
 @media (max-width: 640px) {
-  .deck-position {
-    top: 0;
-    left: 0;
-    right: 0;
-    max-width: none;
-    padding-top: env(safe-area-inset-top, 0px);
-    background: hsl(var(--background) / 0.85);
+  /* 슬라이드는 아치의 위 띠와 하단 바를 비켜난다. 양옆으로 내려온 글자는
+     본문 여백 위를 지나며, 배경색 테두리가 겹침을 감당한다. */
+  [data-deck] [data-slide]:not([data-slide-full]) {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.25rem);
+    padding-inline: 1.75rem;
+  }
+
+  .deck-fab {
+    position: fixed;
+    z-index: 60;
+    left: 1rem;
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .deck-fab > * { pointer-events: auto; }
+
+  .deck-fab-counter {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--background) / 0.88);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: 0 6px 20px hsl(0 0% 0% / 0.1);
+    font-size: 0.75rem;
+    color: hsl(var(--foreground));
   }
 
-  .deck-position-row { gap: 0; }
-
-  .deck-position-search {
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
+  .deck-fab-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--background) / 0.88);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 20px hsl(0 0% 0% / 0.14);
+    color: hsl(var(--foreground));
+    transition: transform 120ms ease, border-color 150ms ease;
   }
-
-  .deck-position-button {
-    flex: 1;
-    padding: 0.55rem 0.5rem 0.55rem 0.875rem;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
-    box-shadow: none !important;
-  }
-
-  .deck-position-crumbs { flex: 1; }
-  .deck-crumb-chapter { display: none; }
-  .deck-crumb-chapter + .deck-crumb-sep { display: none; }
-  .deck-crumb-group { max-width: none; flex-shrink: 1; }
-  .deck-crumb-item { max-width: 7rem; flex-shrink: 0; }
-
-  .deck-progress {
-    display: block;
-    height: 2px;
-    background: hsl(var(--muted-foreground) / 0.15);
-  }
-  .deck-progress::after {
-    content: '';
-    display: block;
-    height: 100%;
-    background: hsl(var(--primary) / 0.8);
-    transform-origin: left;
-    transform: scaleX(var(--deck-progress, 0));
-    transition: transform 240ms ease;
+  .deck-fab-button > svg { width: 1.25rem; height: 1.25rem; }
+  .deck-fab-button:active { transform: scale(0.94); }
+  .deck-fab-button[aria-expanded='true'] {
+    border-color: hsl(var(--primary) / 0.5);
+    color: hsl(var(--primary));
   }
 
   .deck-rail,
@@ -1000,7 +1069,8 @@ html[data-deck-booting] .deck-loading {
 @media (prefers-reduced-motion: reduce) {
   html:has([data-deck]) { scroll-behavior: auto; }
   .deck-next { animation: none; }
-  .deck-position-crumbs { animation: none; }
+  .deck-position-crumbs,
+  .deck-arch-svg { animation: none; }
   .deck-outline { transition: none; }
 }
 
@@ -1143,11 +1213,6 @@ html[data-deck-booting] .deck-loading {
 }
 .deck-arrival-close:hover { opacity: 1; background: hsl(var(--primary) / 0.15); }
 
-@media (max-width: 640px) {
-  .deck-arrival {
-    margin: 0 0.875rem 0.4rem;
-  }
-}
 @media print {
   [data-deck] mark[data-search-mark] { background: none; }
 }

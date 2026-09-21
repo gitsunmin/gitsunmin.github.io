@@ -116,7 +116,7 @@ export function WorkSearch({ scope = null, onNavigateWithin, variant = 'bar', cl
       )}
 
       {isMobile ? (
-        <BottomSheet open={open} onOpenChange={setOpen} title="works 검색" snapPoints={[0.94]}>
+        <BottomSheet open={open} onOpenChange={setOpen} title="works 검색" height={0.94}>
           <SearchPanel state={state} onSelect={handleSelect} onClose={close} />
         </BottomSheet>
       ) : (

@@ -33,7 +33,7 @@ export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Pro
 
   if (isMobile) {
     return (
-      <BottomSheet open={open} onOpenChange={onOpenChange} title="목차" snapPoints={[0.6, 0.94]}>
+      <BottomSheet open={open} onOpenChange={onOpenChange} title="목차" height={0.85}>
         <OutlineList outline={outline} active={active} open={open} onSelect={select} />
       </BottomSheet>
     );

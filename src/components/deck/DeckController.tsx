@@ -1,10 +1,13 @@
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, List } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { DeckArch } from '@/components/deck/DeckArch';
+import { DeckArrival } from '@/components/deck/DeckArrival';
 import { DeckOutline } from '@/components/deck/DeckOutline';
 import { DeckPosition } from '@/components/deck/DeckPosition';
 import { markMatches } from '@/components/deck/markMatches';
-import { buildOutline, locate } from '@/components/deck/outline';
+import { buildOutline, locate, positionCrumbs } from '@/components/deck/outline';
 import { WorkSearch } from '@/components/search/WorkSearch';
+import { MOBILE_QUERY, useMediaQuery } from '@/hooks/useMediaQuery';
 import type { SearchHit } from '@/lib/workSearch';
 import { cn } from '@/lib/utils';
 
@@ -187,6 +190,7 @@ export function DeckController() {
   const slides = useSyncExternalStore(slideStore.subscribe, slideStore.getSnapshot, slideStore.getServerSnapshot);
   const [active, setActive] = useState(0);
   const [outlineOpen, setOutlineOpen] = useState(false);
+  const isMobile = useMediaQuery(MOBILE_QUERY);
   /** 검색에서 넘어왔을 때의 검색어. 위치 표시줄에 칩으로 남고, 도착한 장을 하이라이트한다. */
   const [arrived, setArrived] = useState('');
   const clearMarks = useRef<() => void>(() => {});
@@ -550,25 +554,49 @@ export function DeckController() {
   if (slides.length === 0) return null;
 
   const isLast = active === slides.length - 1;
+  const toggleOutline = () => setOutlineOpen((prev) => !prev);
+  const crumbs = positionCrumbs(outline, position);
+  const archCrumbs = crumbs ? [crumbs.chapter, crumbs.group, crumbs.item].filter((c): c is string => !!c) : [];
+  const dismissArrival = () => {
+    setArrived('');
+    clearMarks.current();
+    history.replaceState(null, '', location.pathname + location.hash);
+  };
+
+  // 검색은 단축키와 시트를 하나만 가져야 하므로 한 곳에만 그린다.
+  // PC는 위치 표시줄 옆, 모바일은 아래 플로팅 버튼 묶음이다.
+  const search = (
+    <WorkSearch
+      variant="icon"
+      scope={searchScope}
+      onNavigateWithin={navigateWithin}
+      className={isMobile ? 'deck-fab-button' : 'deck-position-search'}
+    />
+  );
 
   return (
     <div className="deck-chrome print:hidden">
-      {/* 위치 표시줄 — PC는 좌상단 알약, 모바일은 상단 한 줄 헤더 */}
-      <DeckPosition
-        outline={outline}
-        position={position}
-        active={active}
-        total={slides.length}
-        outlineOpen={outlineOpen}
-        onToggleOutline={() => setOutlineOpen((prev) => !prev)}
-        search={<WorkSearch variant="icon" scope={searchScope} onNavigateWithin={navigateWithin} className="deck-position-search" />}
-        arrivedQuery={arrived}
-        onDismissArrival={() => {
-          setArrived('');
-          clearMarks.current();
-          history.replaceState(null, '', location.pathname + location.hash);
-        }}
-      />
+      {/* 위치 — PC는 좌상단 알약, 모바일은 화면 가장자리를 도는 아치 */}
+      {isMobile ? (
+        <DeckArch
+          crumbs={archCrumbs}
+          onOpen={toggleOutline}
+        >
+          {arrived && <DeckArrival query={arrived} onDismiss={dismissArrival} />}
+        </DeckArch>
+      ) : (
+        <DeckPosition
+          outline={outline}
+          position={position}
+          active={active}
+          total={slides.length}
+          outlineOpen={outlineOpen}
+          onToggleOutline={toggleOutline}
+          search={search}
+          arrivedQuery={arrived}
+          onDismissArrival={dismissArrival}
+        />
+      )}
 
       {/* 전체 목차 — PC는 왼쪽 사이드 패널, 모바일은 하단 시트 */}
       <DeckOutline
@@ -604,6 +632,27 @@ export function DeckController() {
           );
         })}
       </nav>
+
+      {/* 모바일 하단 바 — 왼쪽 목차, 가운데 쪽수, 오른쪽 검색. 상단 아치는 읽는
+          자리라 누르는 것은 여기로 모은다. */}
+      {isMobile && (
+        <div className="deck-fab">
+          <button
+            type="button"
+            onClick={toggleOutline}
+            aria-expanded={outlineOpen}
+            aria-label="목차 열기"
+            className="deck-fab-button"
+          >
+            <List className="size-5" strokeWidth={1.75} />
+          </button>
+          <span className="deck-fab-counter tabular-nums" aria-label={`${active + 1} / ${slides.length} 쪽`}>
+            {active + 1}
+            <span className="opacity-40"> / {slides.length}</span>
+          </span>
+          {search}
+        </div>
+      )}
 
       {/* 다음 슬라이드 힌트 */}
       {!isLast && (

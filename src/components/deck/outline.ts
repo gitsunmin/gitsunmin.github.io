@@ -143,3 +143,22 @@ export function locate(outline: Outline, index: number): OutlinePosition | null 
   }
   return null;
 }
+
+/** 위치를 글자로. 위치 표시줄(PC)과 아치(모바일)가 같은 규칙으로 읽는다. */
+export type PositionCrumbs = {
+  /** 장이 여럿일 때만. */
+  chapter?: string;
+  group: string;
+  /** 묶음 이름과 다를 때만. */
+  item?: string;
+};
+
+export function positionCrumbs(outline: Outline, position: OutlinePosition | null): PositionCrumbs | null {
+  if (!position) return null;
+  const { chapter, group, item } = position;
+  return {
+    chapter: outline.length > 1 ? chapter.title : undefined,
+    group: group.label ? `${group.label}${SEPARATOR}${group.title}` : group.title,
+    item: item.label !== group.title && item.label !== '개요' ? item.label : undefined,
+  };
+}
