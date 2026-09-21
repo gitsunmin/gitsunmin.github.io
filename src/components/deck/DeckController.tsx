@@ -536,6 +536,203 @@ export function DeckController() {
     return () => window.removeEventListener('keydown', onKey);
   }, [active, goTo, slides.length]);
 
+  /* ── 넘치는 슬라이드의 끝에서 한 번 더 밀면 다음 장 ──────────────
+     한 화면에 안 들어가는 슬라이드는 안쪽 상자가 스크롤된다. 그 상자의 끝에 닿은 뒤
+     계속 미는 힘은 문서로 이어지지 않게 막고(overscroll-behavior: contain, deck.css),
+     여기서 받아 옆 장으로 보낸다. 브라우저의 스크롤 연쇄에 맡기면 데스크톱은
+     바로 튀고 iOS는 안쪽 상자만 튕기고 말아, 어느 쪽도 뜻대로 되지 않는다.
+
+     끝에 닿자마자 넘어가면 실수로 지나친다. 끝에서 더 민 거리가 문턱을 넘어야
+     넘어가고, 방향이 바뀌거나 잠깐 쉬면 다시 센다. */
+  useEffect(() => {
+    const WHEEL_THRESHOLD = 90;
+    const TOUCH_THRESHOLD = 72;
+    const REST_MS = 400;
+    const COOLDOWN_MS = 700;
+
+    let accumulated = 0;
+    let lastAt = 0;
+    let cooldownUntil = 0;
+    let touchY: number | null = null;
+    // 터치는 손을 뗀 뒤에 넘어간다. iOS는 손가락이 화면에 있는 동안 프로그램 스크롤을
+    // 무시하므로, 문턱을 넘었다는 것만 기억해 두었다가 touchend에서 간다.
+    let touchJump = 0;
+
+    // 지금 읽는 슬라이드의 스크롤 상자. 넘치지 않는 슬라이드면 null — 그건 문서 스냅이 맡는다.
+    const scrollBox = (target: EventTarget | null) => {
+      const slide = slides[active];
+      const box = slide?.firstElementChild;
+      if (!(box instanceof HTMLElement) || isStorySlide(slide)) return null;
+      if (box.scrollHeight <= box.clientHeight + 1) return null;
+      if (!(target instanceof Node) || !box.contains(target)) return null;
+      return box;
+    };
+
+    // 끝에서 민 만큼을 더하고, 문턱을 넘으면 방향(±1)을 돌려준다. 양수가 아래.
+    const push = (box: HTMLElement, delta: number, threshold: number): 0 | 1 | -1 => {
+      const now = performance.now();
+      if (now < cooldownUntil) return 0;
+      const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 1;
+      const atTop = box.scrollTop <= 0;
+      const pastEnd = (delta > 0 && atBottom) || (delta < 0 && atTop);
+      if (!pastEnd) {
+        accumulated = 0;
+        return 0;
+      }
+      if (now - lastAt > REST_MS || Math.sign(accumulated) !== Math.sign(delta)) accumulated = 0;
+      lastAt = now;
+      accumulated += delta;
+      if (Math.abs(accumulated) < threshold) return 0;
+      accumulated = 0;
+      cooldownUntil = now + COOLDOWN_MS;
+      return delta > 0 ? 1 : -1;
+    };
+
+    const onWheel = (event: WheelEvent) => {
+      const box = scrollBox(event.target);
+      if (!box) return;
+      const direction = push(box, event.deltaY, WHEEL_THRESHOLD);
+      if (direction) goTo(active + direction);
+    };
+    const onTouchStart = (event: TouchEvent) => {
+      touchJump = 0;
+      touchY = scrollBox(event.target) ? event.touches[0].clientY : null;
+    };
+    const onTouchMove = (event: TouchEvent) => {
+      if (touchY === null || touchJump) return;
+      const box = scrollBox(event.target);
+      if (!box) return;
+      const y = event.touches[0].clientY;
+      // 손가락이 위로 가면 내용은 아래로 — 스크롤 방향과 같게 부호를 뒤집는다.
+      touchJump = push(box, touchY - y, TOUCH_THRESHOLD);
+      touchY = y;
+    };
+    const onTouchEnd = () => {
+      const direction = touchJump;
+      touchJump = 0;
+      touchY = null;
+      accumulated = 0;
+      if (direction) goTo(active + direction);
+    };
+
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchEnd);
+    };
+  }, [active, goTo, slides]);
+
+  /* ── 코드·표의 가로 스크롤(터치) ─────────────────────────────
+     iOS Safari는 세로 mandatory 스냅 컨테이너 안에 든 가로 스크롤러를 손가락으로
+     밀어도 움직이지 않는다 — 제스처를 스냅 컨테이너가 먼저 가져간다. 가로로 시작한
+     드래그를 여기서 받아 직접 scrollLeft를 움직이고, 손을 떼면 남은 속도만큼 미끄러진다.
+     세로로 시작한 드래그는 건드리지 않아 문서 스크롤이 그대로 동작한다. */
+  useEffect(() => {
+    const AXIS_LOCK = 6;
+    const FRICTION = 0.94;
+
+    // 손가락 아래에서 가장 가까운, 실제로 가로로 넘치는 스크롤러.
+    const horizontalScroller = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return null;
+      for (let node: Element | null = target; node && !node.hasAttribute('data-slide'); node = node.parentElement) {
+        if (!(node instanceof HTMLElement)) continue;
+        if (node.scrollWidth <= node.clientWidth + 1) continue;
+        const overflowX = getComputedStyle(node).overflowX;
+        if (overflowX === 'auto' || overflowX === 'scroll') return node;
+      }
+      return null;
+    };
+
+    let scroller: HTMLElement | null = null;
+    let startX = 0;
+    let startY = 0;
+    let startLeft = 0;
+    // 상자에 자동 축소(zoom)가 걸려 있으면 손가락 1px이 상자 안에서는 1/zoom px다.
+    let scale = 1;
+    let lastX = 0;
+    let lastAt = 0;
+    let velocity = 0;
+    let axis: 'x' | 'y' | null = null;
+    let glide: number | null = null;
+
+    const stopGlide = () => {
+      if (glide !== null) cancelAnimationFrame(glide);
+      glide = null;
+    };
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (event.touches.length !== 1) return;
+      stopGlide();
+      scroller = horizontalScroller(event.target);
+      if (!scroller) return;
+      const touch = event.touches[0];
+      startX = lastX = touch.clientX;
+      startY = touch.clientY;
+      startLeft = scroller.scrollLeft;
+      const box = scroller.closest('[data-slide]')?.firstElementChild;
+      scale = box instanceof HTMLElement ? Number(box.style.zoom) || 1 : 1;
+      lastAt = performance.now();
+      velocity = 0;
+      axis = null;
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!scroller || event.touches.length !== 1) return;
+      const touch = event.touches[0];
+      const dx = touch.clientX - startX;
+      const dy = touch.clientY - startY;
+      if (axis === null) {
+        if (Math.abs(dx) < AXIS_LOCK && Math.abs(dy) < AXIS_LOCK) return;
+        axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (axis === 'y') {
+          scroller = null;
+          return;
+        }
+      }
+      // 가로 제스처는 우리가 맡는다. 기본 동작을 막아야 스냅 컨테이너가 끼어들지 않는다.
+      if (event.cancelable) event.preventDefault();
+      scroller.scrollLeft = startLeft - dx / scale;
+      const now = performance.now();
+      const dt = now - lastAt;
+      if (dt > 0) velocity = (lastX - touch.clientX) / scale / dt;
+      lastX = touch.clientX;
+      lastAt = now;
+    };
+
+    const onTouchEnd = () => {
+      const el = scroller;
+      scroller = null;
+      if (!el || axis !== 'x' || Math.abs(velocity) < 0.05) return;
+      // 관성. 브라우저가 해 주던 것을 잃었으니 흉내만 낸다 — 프레임마다 조금씩 줄어든다.
+      let v = velocity * 16;
+      const step = () => {
+        el.scrollLeft += v;
+        v *= FRICTION;
+        glide = Math.abs(v) > 0.5 ? requestAnimationFrame(step) : null;
+      };
+      glide = requestAnimationFrame(step);
+    };
+
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    return () => {
+      stopGlide();
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('touchcancel', onTouchEnd);
+    };
+  }, []);
+
   /* 인쇄 중에는 스냅이 페이지 분할을 방해한다. */
   useEffect(() => {
     const before = () => {
