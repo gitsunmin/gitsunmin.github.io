@@ -1,0 +1,805 @@
+<!DOCTYPE html><html lang="ko"> <head><script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('darkMode');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'true' || (saved === null && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+
+        // 글자 크기도 첫 페인트 전에 확정한다. useFontSize가 하이드레이션 뒤에
+        // 붙이도록 두면, 글이 기본 크기로 한 번 그려졌다가 저장된 배율로
+        // 줄었다 커진다 — 읽는 사람에게는 글자 크기가 저 혼자 바뀌는 것으로 보인다.
+        try {
+          var size = localStorage.getItem('fontSize');
+          if (size !== 'small' && size !== 'medium' && size !== 'large') size = 'medium';
+          document.documentElement.classList.add('text-' + size);
+          document.documentElement.style.setProperty(
+            '--font-size-scale',
+            size === 'small' ? '0.875' : size === 'large' ? '1.125' : '1',
+          );
+        } catch (e) {}
+      })();
+    </script><script>
+      document.addEventListener('astro:before-swap', function (e) {
+        var from = document.documentElement;
+        var to = e.newDocument.documentElement;
+
+        if (from.classList.contains('dark')) {
+          to.classList.add('dark');
+        } else {
+          to.classList.remove('dark');
+        }
+
+        // 글자 크기도 새 문서로 넘긴다. 넘기지 않으면 페이지를 옮길 때마다
+        // 기본 크기로 한 번 돌아갔다가 다시 줄어든다.
+        to.classList.remove('text-small', 'text-medium', 'text-large');
+        ['text-small', 'text-medium', 'text-large'].forEach(function (name) {
+          if (from.classList.contains(name)) to.classList.add(name);
+        });
+        to.style.setProperty(
+          '--font-size-scale',
+          from.style.getPropertyValue('--font-size-scale') || '1',
+        );
+      });
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="브라우저 내부를 다룬 한국어 자료는 2012년 D2 글과 그 파생물에 묶여 있다. 이 시리즈는 재해석된 2차 자료 대신 Chromium 저장소의 코드와 저장소 내 문서만을 근거로 삼는다. 1편은 분석 환경을 구성하고, 저장소의 계층 구조와 프로세스 모델, 그리고 프로세스 간 통신 방식을 확인한다."><title>Chromium 구조 분석 (1) — 저장소를 직접 읽는다 | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/blog/chromium-architecture-01-reading-the-source"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="Chromium 구조 분석 (1) — 저장소를 직접 읽는다 | Gitsunmin"><meta property="og:description" content="브라우저 내부를 다룬 한국어 자료는 2012년 D2 글과 그 파생물에 묶여 있다. 이 시리즈는 재해석된 2차 자료 대신 Chromium 저장소의 코드와 저장소 내 문서만을 근거로 삼는다. 1편은 분석 환경을 구성하고, 저장소의 계층 구조와 프로세스 모델, 그리고 프로세스 간 통신 방식을 확인한다."><meta property="og:type" content="article"><meta property="og:url" content="https://gitsunmin.github.io/blog/chromium-architecture-01-reading-the-source"><meta property="og:image" content="https://gitsunmin.github.io/assets/blog/chromium-architecture/thumbnail.webp"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Chromium 구조 분석 (1) — 저장소를 직접 읽는다 | Gitsunmin"><meta name="twitter:description" content="브라우저 내부를 다룬 한국어 자료는 2012년 D2 글과 그 파생물에 묶여 있다. 이 시리즈는 재해석된 2차 자료 대신 Chromium 저장소의 코드와 저장소 내 문서만을 근거로 삼는다. 1편은 분석 환경을 구성하고, 저장소의 계층 구조와 프로세스 모델, 그리고 프로세스 간 통신 방식을 확인한다."><meta name="twitter:image" content="https://gitsunmin.github.io/assets/blog/chromium-architecture/thumbnail.webp"><!-- JSON-LD Structured Data --><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Chromium 구조 분석 (1) — 저장소를 직접 읽는다","description":"브라우저 내부를 다룬 한국어 자료는 2012년 D2 글과 그 파생물에 묶여 있다. 이 시리즈는 재해석된 2차 자료 대신 Chromium 저장소의 코드와 저장소 내 문서만을 근거로 삼는다. 1편은 분석 환경을 구성하고, 저장소의 계층 구조와 프로세스 모델, 그리고 프로세스 간 통신 방식을 확인한다.","image":"https://gitsunmin.github.io/assets/blog/chromium-architecture/thumbnail.webp","datePublished":"2026-10-01T00:00:00.000Z","dateModified":"2026-10-01T00:00:00.000Z","author":{"@type":"Person","name":"Sunmin Kim","url":"https://gitsunmin.github.io"},"publisher":{"@type":"Person","name":"Sunmin Kim","url":"https://gitsunmin.github.io"},"url":"https://gitsunmin.github.io/blog/chromium-architecture-01-reading-the-source","keywords":"technology, chromium, browser, architecture, mojo, security","inLanguage":"ko-KR"}</script><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><link rel="preload" as="image" href="/assets/blog/chromium-architecture/thumbnail.webp" fetchpriority="high"><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CHCGLXSCJN');
+    </script><meta name="astro-view-transitions-enabled" content="true"> <meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Bwsu7jgA.js"></script><style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media (prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*),[data-astro-transition-scope]{animation:none!important}}
+.giscus,.giscus-frame{width:100%!important}.code-block-wrapper:hover .copy-button{opacity:1!important}
+</style><link rel="stylesheet" href="/_astro/BaseLayout.DSOaC4Td.css"><script type="module" src="/_astro/page.9pYLC08D.js"></script><style>[data-astro-transition-scope="astro-vsev7mas-1"] { view-transition-name: blog-image-chromium-architecture-01-reading-the-source; }@layer astro { ::view-transition-old(blog-image-chromium-architecture-01-reading-the-source) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(blog-image-chromium-architecture-01-reading-the-source) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(blog-image-chromium-architecture-01-reading-the-source) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(blog-image-chromium-architecture-01-reading-the-source) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-ellcb6ao-2"] { view-transition-name: site-header; }@layer astro { ::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-phexilqp-3"] { view-transition-name: site-footer; }@layer astro { ::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(a,s,c)=>s in a?g(a,s,{enumerable:!0,configurable:!0,writable:!0,value:c}):a[s]=c;var l=(a,s,c)=>w(a,typeof s!="symbol"?s+"":s,c);var E=new Set(["__proto__","constructor","prototype"]);{let a={0:t=>y(t),1:t=>c(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(c(t)),5:t=>new Set(c(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in a?a[p](e):void 0},c=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),n={},d=this.querySelectorAll("template[data-astro-template]");for(let o of d){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of r){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let i=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(i+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${i}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let r=new URL(e,document.baseURI);return r.searchParams.set("astro-retry",Date.now().toString()),r.toString()}async importWithRetry(e){try{return await import(e)}catch(r){return await new Promise(n=>setTimeout(n,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let r=this.getAttribute("component-url"),n=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:r}});this.dispatchEvent(n)&&console.error(`[astro-island] Error hydrating ${r}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}try{await Astro[r](async()=>{let n=this.getAttribute("renderer-url");try{let[d,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),n?this.importWithRetry(n):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=d;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=d[h]}return this.hydrator=u,this.hydrate}catch(d){return this.handleHydrationError(d),()=>{}}},e,this)}catch(n){this.handleHydrationError(n)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="2bsdcc" prefix="r5" component-url="/_astro/LivingBackground.DDJ15FEX.js" component-export="LivingBackground" renderer-url="/_astro/client.Dda4loRL.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;LivingBackground&quot;,&quot;value&quot;:true}" await-children><div aria-hidden="true" class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index:-1"><div class="living-bg-blob living-bg-blob-1"></div><div class="living-bg-blob living-bg-blob-2"></div><div class="living-bg-blob living-bg-blob-3"></div><div class="living-bg-grid absolute inset-0"></div><canvas class="absolute inset-0"></canvas><canvas class="absolute inset-0"></canvas></div><!--astro:end--></astro-island> <script type="module">function e(){let e=document.getElementById(`toc-mobile-toggle`),t=document.getElementById(`toc-mobile-content`),n=document.getElementById(`toc-chevron`);if(e&&t&&n){let n=e.cloneNode(!0);e.parentNode?.replaceChild(n,e),n.addEventListener(`click`,()=>{let e=n.getAttribute(`aria-expanded`)===`true`;n.setAttribute(`aria-expanded`,String(!e)),t.classList.toggle(`hidden`,e),n.querySelector(`#toc-chevron`)?.classList.toggle(`rotate-180`,!e)}),t.querySelectorAll(`.toc-mobile-link`).forEach(e=>{e.addEventListener(`click`,()=>{t.classList.add(`hidden`),n.setAttribute(`aria-expanded`,`false`),n.querySelector(`#toc-chevron`)?.classList.remove(`rotate-180`)})})}let r=document.querySelectorAll(`.toc-link`);if(r.length===0)return;let i=e=>{r.forEach(t=>{let n=t.dataset.slug===e;t.classList.toggle(`text-blue-600`,n),t.classList.toggle(`dark:text-blue-400`,n),t.classList.toggle(`font-medium`,n),t.classList.toggle(`text-gray-500`,!n),t.classList.toggle(`dark:text-gray-400`,!n)})},a=Array.from(r).map(e=>document.getElementById(e.dataset.slug)).filter(Boolean);if(a.length===0)return;let o=new IntersectionObserver(e=>{let t=e.filter(e=>e.isIntersecting).sort((e,t)=>e.boundingClientRect.top-t.boundingClientRect.top);t.length>0&&i(t[0].target.id)},{rootMargin:`-10% 0px -80% 0px`});a.forEach(e=>o.observe(e))}document.readyState===`loading`?document.addEventListener(`DOMContentLoaded`,e):e(),document.addEventListener(`astro:page-load`,e);</script><astro-island uid="2dqtVa" prefix="r999" component-url="/_astro/Providers.NFxsitL0.js" component-export="Providers" renderer-url="/_astro/client.Dda4loRL.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="ZHbHnH" prefix="r3" component-url="/_astro/Header.BpGaIKbu.js" component-export="Header" renderer-url="/_astro/client.Dda4loRL.js" props="{&quot;title&quot;:[0],&quot;data-astro-transition-scope&quot;:[0,&quot;astro-ellcb6ao-2&quot;],&quot;data-astro-transition-persist&quot;:[0,&quot;site-header&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" data-astro-transition-scope="astro-ellcb6ao-2" data-astro-transition-persist="site-header" await-children><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">Gitsunmin</h1></span></a><a href="/settings" aria-label="설정" class="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></a></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">   <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-blue-500 dark:bg-blue-400 z-50 transition-none" style="width: 0%" aria-hidden="true"></div> <div class="max-w-6xl mx-auto px-4 py-12 md:px-8 md:py-24"> <!-- Mobile TOC --><div class="lg:hidden mb-6">  <!-- Desktop TOC: hidden on mobile, shown on lg+ --><nav class="toc-desktop hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto" aria-label="목차"> <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+목차
+</p> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="서론"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="문제-제기"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#접근" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="접근"> 접근 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="분석-대상"> 분석 대상 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="범위"> 범위 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="본론"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-분석-환경-구성" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1-분석-환경-구성"> 1. 분석 환경 구성 </a> </li><li style="padding-left: 12px"> <a href="#2-저장소는-네-계층으로-나뉜다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2-저장소는-네-계층으로-나뉜다"> 2. 저장소는 네 계층으로 나뉜다 </a> </li><li style="padding-left: 12px"> <a href="#3-경계의-규칙--content와-chrome" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="3-경계의-규칙--content와-chrome"> 3. 경계의 규칙 — //content와 //chrome </a> </li><li style="padding-left: 12px"> <a href="#4-저장소에-없는-것" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="4-저장소에-없는-것"> 4. 저장소에 없는 것 </a> </li><li style="padding-left: 12px"> <a href="#5-프로세스-모델--무엇을-하나의-단위로-볼-것인가" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="5-프로세스-모델--무엇을-하나의-단위로-볼-것인가"> 5. 프로세스 모델 — 무엇을 하나의 단위로 볼 것인가 </a> </li><li style="padding-left: 12px"> <a href="#6-격리는-어떻게-집행되는가" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="6-격리는-어떻게-집행되는가"> 6. 격리는 어떻게 집행되는가 </a> </li><li style="padding-left: 12px"> <a href="#7-프로세스-간-통신--mojo" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="7-프로세스-간-통신--mojo"> 7. 프로세스 간 통신 — Mojo </a> </li><li style="padding-left: 12px"> <a href="#8-저장소를-읽는-방법" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="8-저장소를-읽는-방법"> 8. 저장소를 읽는 방법 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="결론"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="확인된-사실"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="이-분석의-한계"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="다음-편"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="참조"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="저장소"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1차-자료--본론-절별"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2차-자료"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="관련-공식-문서"> 관련 공식 문서 </a> </li> </ul> </nav> <!-- Mobile TOC: collapsible, shown below lg --> <div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"> <button id="toc-mobile-toggle" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-expanded="false" aria-controls="toc-mobile-content"> <span>목차</span> <svg id="toc-chevron" class="w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <polyline points="6 9 12 15 18 9"></polyline> </svg> </button> <div id="toc-mobile-content" class="hidden px-4 py-3 bg-white dark:bg-gray-900"> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#접근" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 접근 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 분석 대상 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 범위 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-분석-환경-구성" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1. 분석 환경 구성 </a> </li><li style="padding-left: 12px"> <a href="#2-저장소는-네-계층으로-나뉜다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2. 저장소는 네 계층으로 나뉜다 </a> </li><li style="padding-left: 12px"> <a href="#3-경계의-규칙--content와-chrome" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 3. 경계의 규칙 — //content와 //chrome </a> </li><li style="padding-left: 12px"> <a href="#4-저장소에-없는-것" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 4. 저장소에 없는 것 </a> </li><li style="padding-left: 12px"> <a href="#5-프로세스-모델--무엇을-하나의-단위로-볼-것인가" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 5. 프로세스 모델 — 무엇을 하나의 단위로 볼 것인가 </a> </li><li style="padding-left: 12px"> <a href="#6-격리는-어떻게-집행되는가" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 6. 격리는 어떻게 집행되는가 </a> </li><li style="padding-left: 12px"> <a href="#7-프로세스-간-통신--mojo" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 7. 프로세스 간 통신 — Mojo </a> </li><li style="padding-left: 12px"> <a href="#8-저장소를-읽는-방법" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 8. 저장소를 읽는 방법 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 관련 공식 문서 </a> </li> </ul> </div> </div>  </div> <div class="flex gap-10 items-start"> <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-clip" data-pagefind-body data-pagefind-meta="title:Chromium 구조 분석 (1) — 저장소를 직접 읽는다, tags:technology,chromium,browser,architecture,mojo,security"> <img data-astro-transition-scope="astro-vsev7mas-1" src="/assets/blog/chromium-architecture/thumbnail.webp" onerror="this.src='/og/blog.png';" alt="Chromium 구조 분석 (1) — 저장소를 직접 읽는다" class="w-full h-auto rounded-lg mb-8 shadow-lg" fetchpriority="high" loading="eager"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">Chromium 구조 분석 (1) — 저장소를 직접 읽는다</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 10. 1.</span> <span class="ml-2">(수정일: 2026. 10. 1.)</span> <span class="ml-2">· 약 35분 읽기</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># technology</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># chromium</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># browser</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># architecture</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># mojo</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># security</span> </div> </div> <blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Chromium 구조 분석</strong> — 전체 4편 중 1편 공개. 2~4편은 준비 중이다.</p>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>저장소를 직접 읽는다</strong> — 분석 환경, 계층 구조, 프로세스 모델, IPC ← 지금 글</li>
+<li class="mb-2 ml-0">주소에서 픽셀까지 — 네비게이션, 문서 수명주기, 합성 <em>(준비 중)</em></li>
+<li class="mb-2 ml-0">자바스크립트가 실행되는 자리 — 바인딩, 이벤트 루프, 태스크 큐 <em>(준비 중)</em></li>
+<li class="mb-2 ml-0">엔진 심층 — V8의 네 단계 티어, Wasm, 디옵티마이제이션 <em>(준비 중)</em></li>
+</ol>
+</blockquote>
+<h2 id="서론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">서론</h2>
+<h3 id="문제-제기" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">문제 제기</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">개발자로서 브라우저 위에 실행되는 웹 프로그램을 만들고 있지만, 내부 원리, 로직에 대해서는 2차 가공 글로만 학습을 해왔습니다. 사실 코드도 공개되어있는 오픈 소스 프로젝트인데, 관심이 너무 없었던 것 같습니다. 이를 문제라고 인지하고, LLM을 이용해서 직접 소스 코드를 분석해보려고 시도했고, 학습하면서 정리도 할 겸, 블로그 글을 작성해보려고 합니다.</p>
+<h3 id="접근" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">접근</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 시리즈는 2차 자료를 경유하지 않는다. 근거는 두 종류만 사용한다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>1차 자료</strong>: Chromium 및 V8 저장소의 소스 코드, 그리고 저장소 안에 함께 배포되는 설계 문서(<code>docs/</code>, 각 모듈의 <code>README.md</code>)</li>
+<li class="mb-2 ml-0"><strong>2차 자료</strong>: V8 공식 블로그. 날짜와 버전 확인, 그리고 설계 의도의 공식적 진술이 필요한 경우에만 인용한다</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full">모든 주장에는 <code>파일:행</code> 형태의 근거를 붙인다. 각 편 마지막의 <strong>참조</strong> 절에 고정 커밋 기준 퍼머링크를 본론 절 번호별로 정리해 두었다.</p>
+<h3 id="분석-대상" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">분석 대상</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">코드는 계속 변경되므로 분석 시점의 커밋을 고정한다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">저장소</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">고정 커밋</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">날짜</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">코드 검색</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium">chromium/chromium</a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3"><code>fca8b75c</code></a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2026-09-30</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://source.chromium.org/chromium/chromium/src">source.chromium.org</a></td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/v8/v8">v8/v8</a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/v8/v8/commit/d44b084e33a4501c46b7fd01052228ce8e45d435"><code>d44b084e</code></a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2026-09-30</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://source.chromium.org/chromium/chromium/src/+/main:v8/">source.chromium.org</a></td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 글의 모든 인용은 위 커밋에서 재현된다.</p>
+<details data-component="knowledge-note" data-kind="note" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">인용 링크의 형식과 재현 방법</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">참조 절의 링크는 <strong>GitHub 퍼머링크</strong>를 사용한다. 형식은 다음과 같다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>https://github.com/chromium/chromium/blob/&lt;커밋&gt;/&lt;경로&gt;#L&lt;행&gt;</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">커밋 해시가 URL에 포함되어 있으므로 <code>main</code>이 갱신되어도 링크가 가리키는 내용은 변하지 않는다. 행 번호 앵커(<code>#L2543</code>)도 함께 고정된다.</p><p class="text-foreground leading-relaxed mb-4 w-full">공식 코드 검색인 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://source.chromium.org/chromium/chromium/src">source.chromium.org</a>도 같은 커밋을 지원한다. 형식이 다르다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>https://source.chromium.org/chromium/chromium/src/+/&lt;커밋&gt;:&lt;경로&gt;;l=&lt;행&gt;</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">이쪽은 심볼 교차 참조(정의로 이동, 호출부 찾기)를 제공하므로 코드를 따라 읽을 때 유리하다. 반면 GitHub 쪽은 로그인 없이 가볍게 열린다. 이 시리즈는 후자를 기본으로 쓴다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>git</code> 저장소에서 직접 확인하려면 본론 1절의 명령에 커밋을 지정한다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> fca8b75c7d7962742759debada81051bc99e3eb3</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div></div></details>
+<h3 id="범위" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">범위</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">1편이 다루는 것은 분석 환경 구성, 저장소의 계층 구조, 계층 간 경계 규칙, 프로세스 모델, 격리의 집행 방식, 프로세스 간 통신이다. 렌더링 파이프라인은 2편, 자바스크립트 실행은 3편, V8 내부는 4편에서 다룬다.</p>
+<details data-component="knowledge-note" data-kind="note" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">LLM을 사용한 분석에 대하여</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">이 시리즈가 성립한 전제는 대규모 오픈소스를 탐색하는 비용이 낮아졌다는 점이다. Chromium은 저장소 전체가 수십 GB이고 파일 수가 수십만 개에 달한다. 어디서 시작해야 하는지를 판단하는 것 자체가 과거에는 상당한 진입 장벽이었다.</p><p class="text-foreground leading-relaxed mb-4 w-full">다만 LLM의 역할은 <strong>탐색 범위를 좁히는 것</strong>에 한정했다. 이 글의 모든 사실 주장은 해당 파일을 직접 열어 확인한 것이며, 주석과 코드가 어긋나는 경우에는 코드를 기준으로 삼았다. 구체적인 방법과 그 한계는 본론 8절에서 다룬다.</p></div></details>
+<h2 id="본론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">본론</h2>
+<h3 id="1-분석-환경-구성" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1. 분석 환경 구성</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">Chromium 공식 체크아웃은 <code>depot_tools</code>와 <code>gclient</code>를 사용하며, 빌드까지 고려하면 수십 GB의 디스크를 요구한다. 코드를 읽는 것만이 목적이라면 이 비용은 불필요하다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">Git의 두 기능을 조합하면 필요한 디렉터리만 받을 수 있다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#79B8FF"> --filter=blob:none</span><span style="color:#79B8FF"> --no-checkout</span><span style="color:#79B8FF"> --depth</span><span style="color:#79B8FF"> 1</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">    https://github.com/chromium/chromium.git</span><span style="color:#9ECBFF"> .</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> sparse-checkout</span><span style="color:#9ECBFF"> init</span><span style="color:#79B8FF"> --cone</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> sparse-checkout</span><span style="color:#9ECBFF"> set</span><span style="color:#9ECBFF"> content</span><span style="color:#9ECBFF"> third_party/blink/renderer</span><span style="color:#9ECBFF"> cc</span><span style="color:#9ECBFF"> mojo</span><span style="color:#9ECBFF"> base</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#9ECBFF">    docs</span><span style="color:#9ECBFF"> services</span><span style="color:#9ECBFF"> gpu</span><span style="color:#9ECBFF"> net</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> main</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<section data-component="knowledge-list" class="not-prose my-6 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/30 px-3 pb-3 pt-2.5"><p class="mb-1.5 flex items-center gap-1.5 px-1 text-[11px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500"><span aria-hidden="true">✦</span>짚고 넘어가기</p><div class="flex flex-col"><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">--filter=blob:none</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">부분 클론(partial clone)이다. 커밋과 트리 객체는 모두 받되, 파일 내용(blob)은 받지 않는다. 체크아웃하는 시점에 필요한 blob만 서버에서 가져온다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>--depth 1</code>(shallow clone)과 조합하면 히스토리와 blob을 모두 줄인다. 다만 이 경우 과거 커밋을 조회할 수 없으므로, 특정 코드가 언제 도입되었는지를 추적하려면 <code>git fetch --unshallow</code>가 필요하다.</p></div></details><details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">sparse-checkout --cone</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">작업 디렉터리에 체크아웃할 경로를 제한한다. <code>--cone</code> 모드는 디렉터리 단위 패턴만 허용하는 대신 매칭 비용이 낮다.</p><p class="text-foreground leading-relaxed mb-4 w-full"><code>git sparse-checkout add &lt;경로&gt;</code>로 나중에 범위를 넓힐 수 있다. 분석 과정에서 필요한 디렉터리가 추가로 발견되는 것이 일반적이므로, 처음부터 넓게 잡을 이유는 없다.</p></div></details></div></section>
+<p class="text-foreground leading-relaxed mb-4 w-full">위 구성의 실측 결과는 다음과 같다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>전체                 869M  (.git 250M 포함)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>third_party/blink/renderer   186M   19,025 파일</span></span>
+<span class="line"><span>content                      165M   16,965 파일</span></span>
+<span class="line"><span>net                           93M    5,699 파일</span></span>
+<span class="line"><span>docs                          40M    1,075 파일</span></span>
+<span class="line"><span>base                          38M    4,131 파일</span></span>
+<span class="line"><span>services                      37M    3,867 파일</span></span>
+<span class="line"><span>gpu                           18M    1,230 파일</span></span>
+<span class="line"><span>cc                            17M    1,165 파일</span></span>
+<span class="line"><span>mojo                          12M    1,693 파일</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">V8은 별도 저장소이며, 동일한 방식으로 받을 경우 <strong>75MB</strong>(<code>.git</code> 14MB 포함)에 불과하다. 이유는 4편에서 다룬다.</p>
+<h3 id="2-저장소는-네-계층으로-나뉜다" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2. 저장소는 네 계층으로 나뉜다</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">최상위 디렉터리의 역할 구분은 추측할 필요가 없다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/source_tree_overview.md"><code>docs/source_tree_overview.md</code></a>가 직접 분류한다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">계층</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">디렉터리</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">역할</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Core Application Logic</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>//chrome</code>, <code>//components</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Chrome이라는 제품. UI, 제품 고유 기능</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Core Abstraction Layers</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>//content</code>, <code>//third_party/blink</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">멀티프로세스 렌더링 엔진. 웹 플랫폼 구현</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Foundational Libraries</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>//base</code>, <code>//net</code>, <code>//mojo</code>, <code>//services</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">자료구조·스레딩, 네트워크, IPC, 프로세스 서비스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">UI Toolkits</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><code>//ui</code>, <code>//ui/views</code></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">크로스 플랫폼 위젯 프레임워크</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">문서는 <code>//content</code>를 “the core multi-process rendering engine abstraction”으로 규정하고, “It encapsulates the sandbox and the browser/renderer process model”이라고 명시한다. <code>//third_party/blink</code>는 “where the open web platform is implemented”이며 “runs inside the sandboxed renderer process”다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">의존 방향은 위에서 아래로만 흐른다. <code>content/README.md</code>는 이를 다음과 같이 서술한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">A module can include code directly from lower modules. However, a module can not include code from a module that is higher than it. This is enforced through DEPS rules.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">즉 <code>//content</code>는 <code>//chrome</code>을 참조할 수 없다. 이것은 관례가 아니라 빌드 단계에서 검사되는 제약이다.</p>
+<details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">DEPS 파일에 의한 의존성 검사</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">Chromium의 각 디렉터리에는 <code>DEPS</code> 파일이 놓일 수 있고, 여기에 해당 디렉터리가 포함할 수 있는 경로가 열거된다. 커밋 전 검사(presubmit)와 빌드 과정에서 이 규칙을 위반하는 <code>#include</code>가 검출된다.</p><p class="text-foreground leading-relaxed mb-4 w-full">최상위 <code>DEPS</code>는 성격이 다르다. 그쪽은 외부 저장소를 가져오는 정의 파일이다. 같은 이름이 두 용도로 쓰인다.</p></div></details>
+<h3 id="3-경계의-규칙--content와-chrome" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">3. 경계의 규칙 — <code>//content</code>와 <code>//chrome</code></h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">계층 구분이 의미를 갖는 것은 경계가 명시적으로 정의되어 있기 때문이다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/README.md"><code>content/README.md</code></a>는 어떤 기능이 <code>//content</code>에 들어갈 수 있는지를 세 조건으로 규정한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Generally, a feature belongs in this category if and only if all of the following are true:</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Its launch is tracked on the <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromestatus.com/">https://chromestatus.com/</a> dashboard.</li>
+<li class="mb-2 ml-0">It has an associated spec.</li>
+<li class="mb-2 ml-0">It is going through the feature development lifecycle.</li>
+</ul>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">세 조건을 모두 만족해야 한다. 문서는 이어서 만족하지 않는 기능의 목록을 제시한다 — Extensions, SpellCheck, Autofill, Sync, Safe Browsing, Translate.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 기능들은 모든 현대 브라우저가 제공하지만 웹 플랫폼의 일부가 아니므로 <code>//chrome</code>에 구현된다. <code>//content</code>는 이들이 필요한 사건을 구독할 수 있도록 <strong>확장 지점만 제공한다</strong>.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">문서는 이 분리의 동기를 다음과 같이 밝힌다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">As the Chromium code has grown, features inevitably hooked into the wrong places, causing layering violations and dependencies that shouldn’t exist.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">파일 수를 보면 이 분리의 실질적 효과가 드러난다. <code>//chrome</code>은 51,795개 이상, <code>//components</code>는 41,789개다. 두 디렉터리를 합치면 9만 개를 넘는다. 반면 웹 플랫폼의 핵심인 <code>//content</code>와 <code>blink/renderer</code>는 합계 36,000개 수준이다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>브라우저의 동작 원리를 파악하려는 목적이라면 <code>//chrome</code>과 <code>//components</code>는 읽을 필요가 없다.</strong> 전체 코드의 과반이 제품 기능이며, 구조와 무관하다. 이것이 분석에서 가장 먼저 확보해야 할 판단이다.</p>
+<details data-component="knowledge-note" data-kind="note" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">content_shell</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>//content</code>만으로 구성된 최소 브라우저가 저장소에 포함되어 있다. <code>content/shell/</code>이며, <code>content/README.md</code>는 이를 “a basic browser built on top of content”로 설명한다.</p><p class="text-foreground leading-relaxed mb-4 w-full">웹 플랫폼 기능을 작업하는 개발자가 Chrome 전체를 빌드하지 않고 테스트할 수 있도록 하는 것이 목적이다. 계층 분리가 선언에 그치지 않고 실제로 동작함을 증명하는 장치이기도 하다.</p></div></details>
+<h3 id="4-저장소에-없는-것" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4. 저장소에 없는 것</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">“Chromium을 읽는다”는 표현은 부정확하다. 분석에 필요한 구성 요소 상당수가 이 저장소에 존재하지 않는다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">최상위 디렉터리 목록에 <code>v8</code>이 있지만, 체크아웃 결과는 빈 디렉터리다. 최상위 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3362"><code>DEPS</code>의 3362행</a>이 그 이유를 보여준다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>&#39;src/v8&#39;:</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">V8은 독립 저장소이며 <code>gclient</code>가 해당 위치로 가져온다. Skia(<code>DEPS:3095</code>), ANGLE(<code>DEPS:2038</code>), Dawn(<code>DEPS:2125</code>), PDFium(<code>DEPS:2840</code>), WebRTC(<code>DEPS:3289</code>)도 동일하다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">자바스크립트 엔진, 2D 그래픽 엔진, OpenGL ES 변환 계층, WebGPU 구현, PDF 렌더러, 실시간 통신 스택이 모두 외부 저장소다. 이 시리즈가 4편에서 V8을 별도로 다루는 것은 임의의 구성이 아니라 저장소 구조를 따른 것이다.</p>
+<details data-component="knowledge-note" data-kind="caution" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-amber-400 dark:before:bg-amber-500 open:bg-amber-50/40 dark:open:bg-amber-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:ring-amber-800"><span aria-hidden="true">⚠️</span>주의</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">GitHub 미러와 공식 체크아웃의 차이</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>github.com/chromium/chromium</code>은 미러이며, 일부 외부 의존성이 <code>third_party/</code> 아래에 펼쳐진 상태로 포함되어 있다. 따라서 미러에서는 Skia나 ANGLE의 코드를 볼 수 있지만, <code>src/v8</code>은 gitlink 플레이스홀더로 남아 빈 디렉터리가 된다.</p><p class="text-foreground leading-relaxed mb-4 w-full">미러에서 보이는 <code>third_party/skia</code>를 수정해도 상류 Skia 저장소와는 무관하다. 코드를 읽는 목적에는 문제가 없으나, 기여를 고려한다면 각 프로젝트의 원본 저장소를 확인해야 한다.</p></div></details>
+<h3 id="5-프로세스-모델--무엇을-하나의-단위로-볼-것인가" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">5. 프로세스 모델 — 무엇을 하나의 단위로 볼 것인가</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md"><code>docs/process_model_and_site_isolation.md</code></a>는 580행의 문서이며, 프로세스 분할의 설계 근거를 다룬다. 서두의 문제 정의는 다음과 같다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">First, the process model must identify which parts of a “program” on the web need to coexist in a single process. Somewhat surprisingly, a program on the web is not a single document plus its subresources, but rather a group of same (or similar) origin documents that can fully access each other’s contents.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">즉 분할의 단위는 문서가 아니다. <strong>서로의 내용에 완전히 접근할 수 있는 문서들의 집합</strong>이다. 이들을 분리된 프로세스에 두면 데이터 경쟁이나 교착이 발생한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">문서는 세 단계의 추상을 정의한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Security Principal</strong> (<code>content/browser/site_info.h</code>). 보안 용어에서 principal은 특정 권한을 가진 주체다. Chromium은 실행 컨텍스트에 principal을 연결하여, 그 프로세스가 접근할 수 있는 데이터를 추적한다. 통상 <strong>site</strong>(스킴 + eTLD+1)가 principal이 된다. origin이 아니라 site인 이유는 <code>document.domain</code> 조작을 통해 same-site 문서 간 접근이 가능하기 때문이다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Principal Instance</strong> (<code>content/public/browser/site_instance.h</code>). 프로세스 모델의 핵심 단위다. 같은 browsing context group 안에서 같은 principal을 갖는 두 문서는 반드시 같은 프로세스에 있어야 한다. 문서는 그 이유를 명확히 한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">This access includes cross-document scripting and synchronous communication through shared memory (e.g., SharedArrayBuffer). If such documents were in different processes, data races or deadlocks would occur if they concurrently accessed objects in their shared DOM or JavaScript heaps.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Browsing Context Group</strong> (<code>content/browser/browsing_instance.h</code>). 서로에 대한 참조를 가진 탭과 프레임의 묶음이다. 같은 페이지 안의 프레임, <code>window.opener</code> 참조를 가진 팝업 등이 해당한다. 이 그룹 안에서는 이름으로 서로를 찾을 수 있으므로, 같은 principal을 가진 문서가 같은 프로세스에 있어야 한다는 제약이 발생한다.</p>
+<details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">agent cluster와의 관계</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">Principal Instance는 HTML 표준의 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism">agent cluster</a>에 대응한다. 문서는 “roughly corresponds”라고 표현하며, 정확히 일치하지 않는 경우를 명시한다.</p><ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">여러 agent cluster가 하나의 principal instance를 공유할 수 있다. 예: 생성자와 같은 principal instance에 놓이는 <code>data:</code> URL</li>
+<li class="mb-2 ml-0">principal은 agent cluster key보다 많은 요소를 추적할 수 있다. 예: StoragePartition의 차이</li>
+</ul><p class="text-foreground leading-relaxed mb-4 w-full">구현이 스펙을 그대로 따르지 않는 지점이며, 이 시리즈에서 반복적으로 관찰되는 양상이다. 3편에서는 더 명시적인 사례를 다룬다.</p></div></details>
+<p class="text-foreground leading-relaxed mb-4 w-full">Site Isolation은 항상 완전하게 적용되지 않는다. 문서는 세 가지 모드를 구분한다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>Full Site Isolation</strong> (site-per-process): 모든 site가 전용 프로세스를 가진다</li>
+<li class="mb-2 ml-0"><strong>Partial Site Isolation</strong>: 일부 site만 격리한다. 메모리 제약이 있는 Android가 해당한다</li>
+<li class="mb-2 ml-0"><strong>No Site Isolation</strong></li>
+</ul>
+<h3 id="6-격리는-어떻게-집행되는가" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">6. 격리는 어떻게 집행되는가</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">프로세스를 분리하는 것만으로는 보호가 완성되지 않는다. 렌더러 프로세스가 침해된 상황을 가정해야 한다. 문서는 집행 수단을 두 축으로 정리한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>Locked Renderer Processes</strong>: A renderer process can be limited to documents and workers from a single web site or origin, even if such documents are in iframes.</li>
+<li class="mb-2 ml-0"><strong>Browser-Enforced Restrictions</strong>: The privileged browser process can monitor IPC messages from renderer processes to limit their actions or access to site data.</li>
+</ul>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">두 번째 축이 다시 두 종류로 나뉜다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><em>“Jail” checks</em>: Ensure that a process locked to a particular site can only access data belonging to that site. If all processes are locked, this is sufficient protection.</li>
+<li class="mb-2 ml-0"><em>“Citadel” checks</em>: Ensure that unlocked processes cannot access data for sites that require a dedicated process. This adds protection in cases where full Site Isolation is not available, such as Android.</li>
+</ul>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 두 검사는 구현에 그대로 반영되어 있다. <code>content/browser/security/cpsp/child_process_security_policy_impl.cc</code>의 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2543">2543행에 <code>PerformJailAndCitadelChecks</code></a>가 정의되어 있고, 2689행과 2756행의 주석이 각각의 역할을 설명한다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>2689:  // Jail-style enforcement - a process with a lock can only access data</span></span>
+<span class="line"><span>2756:  // Citadel-style enforcement - an unlocked process should not be able to</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">구현 파일은 4,380행이다. 프로세스 분리라는 설계가 실제로는 “렌더러가 요청할 수 있는 것의 목록을 브라우저 프로세스가 일일이 검사한다”는 형태로 구현되어 있음을 분량이 보여준다.</p>
+<details data-component="knowledge-note" data-kind="note" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">같은 디렉터리에 Rust 구현이 있다</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">해당 디렉터리에는 <code>child_process_security_policy_impl.rs</code>와 <code>process_state.rs</code>가 함께 존재한다. 저작권 표기는 2026년이며, <code>cxx::bridge</code>를 통해 C++과 연결된다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="rust" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">/// This block defines the Foreign Function Interface for C++ code to call the</span></span>
+<span class="line"><span style="color:#6A737D">/// specified Rust functions. The functions operate on a</span></span>
+<span class="line"><span style="color:#6A737D">/// ChildProcessSecurityPolicyImpl singleton defined further below.</span></span>
+<span class="line"><span style="color:#E1E4E8">#[cxx</span><span style="color:#F97583">::</span><span style="color:#E1E4E8">bridge(namespace </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> &quot;content::rust::child_process_security_policy&quot;</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">mod</span><span style="color:#B392F0"> ffi</span><span style="color:#E1E4E8"> {</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">보안 경계를 집행하는 코드가 메모리 안전성이 보장되는 언어로 이식되고 있다는 의미다. <code>child_process_security_policy_shim.h</code>(44행)와 <code>shim.cc</code>(33행)가 양쪽을 중개한다.</p><p class="text-foreground leading-relaxed mb-4 w-full">이 시리즈의 분석 시점(2026년 9월)에 진행 중인 작업이므로, 최종 형태는 달라질 수 있다.</p></div></details>
+<h3 id="7-프로세스-간-통신--mojo" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7. 프로세스 간 통신 — Mojo</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">프로세스를 분리하면 통신 수단이 필요하다. Chromium은 Mojo를 사용한다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/mojo_and_services.md"><code>docs/mojo_and_services.md</code></a>(576행)가 기본 개념을 정의한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">A <strong>message pipe</strong> is a pair of <strong>endpoints</strong>. Each endpoint has a queue of incoming messages, and writing a message at one endpoint effectively enqueues that message on the other (<strong>peer</strong>) endpoint. Message pipes are thus bidirectional.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">인터페이스는 <code>.mojom</code> 파일로 선언한다. 문서는 이를 protobuf에 대응시킨다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">A <strong>mojom</strong> file describes <strong>interfaces</strong>, which are strongly-typed collections of <strong>messages</strong>. Each interface message is roughly analogous to a single proto message, for developers who are familiar with Google protobufs.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">파이프의 두 끝에는 역할이 부여된다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Given a mojom interface and a message pipe, one of the endpoints can be designated as a <strong><code>Remote</code></strong> and is used to <em>send</em> messages described by the interface. The other endpoint can be designated as a <strong><code>Receiver</code></strong> and is used to <em>receive</em> interface messages.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">문서는 이를 한 문장으로 요약한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>a <code>Remote</code> makes calls on a remote implementation of its interface associated with a corresponding remote <code>Receiver</code>.</strong></p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">실제 <code>.mojom</code> 파일의 형태는 다음과 같다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/mojom/browser_interface_broker.mojom#L11"><code>third_party/blink/public/mojom/browser_interface_broker.mojom</code></a>이다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>interface BrowserInterfaceBroker {</span></span>
+<span class="line"><span>    // Asks the browser to bind |receiver| to its remote implementation</span></span>
+<span class="line"><span>    // in the browser process.</span></span>
+<span class="line"><span>    GetInterface(mojo_base.mojom.GenericPendingReceiver receiver);</span></span>
+<span class="line"><span>};</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">메서드 하나뿐이지만 역할이 중요하다. 렌더러가 브라우저 프로세스의 임의 인터페이스를 직접 얻는 것이 아니라, <strong>브로커를 통해 요청하고 브라우저가 바인딩 여부를 결정한다.</strong> 5절과 6절에서 확인한 불신의 구조가 통신 계층에도 동일하게 적용되어 있다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 시리즈의 체크아웃 범위 안에 <code>.mojom</code> 파일은 833개가 존재한다.</p>
+<details data-component="knowledge-note" data-kind="caution" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-amber-400 dark:before:bg-amber-500 open:bg-amber-50/40 dark:open:bg-amber-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:ring-amber-800"><span aria-hidden="true">⚠️</span>주의</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">양방향성과 응답</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>Remote</code>가 송신, <code>Receiver</code>가 수신이라는 설명은 단순화된 것이다. 문서 자체가 이를 밝힌다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">NOTE: The above generalization is a bit oversimplified. Remember that the message pipe is still bidirectional, and it’s possible for a mojom message to expect a reply. Replies are sent from the <code>Receiver</code> endpoint and received by the <code>Remote</code> endpoint.</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">응답을 기대하는 메시지를 정의할 수 있으며, 이 경우 데이터는 반대 방향으로도 흐른다.</p></div></details>
+<h3 id="8-저장소를-읽는-방법" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">8. 저장소를 읽는 방법</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">앞 일곱 절의 근거는 대부분 저장소 안의 문서에서 나왔다. 이 사실 자체가 분석 방법의 핵심이다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>첫째, 설계 문서가 코드와 함께 배포된다.</strong> <code>docs/</code> 디렉터리에는 1,075개의 파일이 있고, 각 모듈에도 <code>README.md</code>가 놓여 있다. <code>blink/renderer</code> 아래에만 40개 이상의 <code>README.md</code>가 존재한다. 외부 블로그를 찾기 전에 해당 디렉터리의 문서를 확인하는 것이 순서다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>둘째, 학습 순서가 문서에 명시되어 있는 경우가 있다.</strong> <code>content/README.md</code>에는 <code>//content</code>의 최상위 OWNER가 되기 위해 숙지해야 할 항목이 열거되어 있다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>- Render(Frame|FrameProxy|Process|Widget|View)Host</span></span>
+<span class="line"><span>- Render(Frame|Widget|Thread)</span></span>
+<span class="line"><span>- WebContents and WebContentsObserver</span></span>
+<span class="line"><span>- FrameTree and FrameTreeNode</span></span>
+<span class="line"><span>- RenderFrameHostManager</span></span>
+<span class="line"><span>- NavigationHandle and NavigationRequest, their ownership and lifetime</span></span>
+<span class="line"><span>- Page vs RenderFrameHost vs blink&#39;s Document</span></span>
+<span class="line"><span>- SiteInstance and BrowsingInstance, SiteInfo</span></span>
+<span class="line"><span>- NavigationController, NavigationEntry vs FrameNavigationEntry</span></span>
+<span class="line"><span>- ChildProcessSecurityPolicy</span></span>
+<span class="line"><span>- BrowserContext, StoragePartition</span></span>
+<span class="line"><span>- ContentBrowserClient</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 목록은 리뷰어 자격 요건으로 작성된 것이지만, 결과적으로 <code>//content</code>를 이해하는 데 필요한 클래스의 목록으로 기능한다. 어떤 클래스가 중요한지를 외부에서 추정할 필요가 없다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>셋째, 열거형과 정적 단정문이 설계를 직접 서술한다.</strong> 이 시리즈에서 반복적으로 활용하는 방법이다. 상태 기계는 <code>enum</code>으로, 불변 조건은 <code>static_assert</code>로 코드에 박혀 있는 경우가 많다. 산문으로 된 설명보다 정확하고, 코드와 어긋날 수 없다. 2편의 문서 수명주기, 3편의 태스크 유형, 4편의 컴파일러 티어가 모두 이 형태로 확인된다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>넷째, 주석을 그대로 신뢰하지 않는다.</strong> 주석은 코드보다 느리게 갱신된다. 2편에서 다룰 사례가 이에 해당한다 — <code>docs/life_of_a_frame.md</code>는 커밋 중 메인 스레드가 블록된다고 서술하지만, 현재 구현은 그렇게 동작하지 않는다. 주석에서 얻은 주장은 호출부를 <code>grep</code>으로 확인하는 절차가 필요하다.</p>
+<details data-component="knowledge-note" data-kind="reason" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-sky-400 dark:before:bg-sky-500 open:bg-sky-50/40 dark:open:bg-sky-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-sky-50 text-sky-600 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:ring-sky-800"><span aria-hidden="true">🤔</span>왜</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">LLM에게 맡긴 범위와 맡기지 않은 범위</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">맡긴 것은 <strong>탐색</strong>이다. “컴포지터의 스레드 경계를 담당하는 코드가 어디인가”와 같은 질문에서 후보 디렉터리와 파일을 좁히는 작업이다. 수십만 개의 파일에서 이것을 수동으로 하는 비용이 과거의 진입 장벽이었다.</p><p class="text-foreground leading-relaxed mb-4 w-full">맡기지 않은 것은 <strong>사실 확정</strong>이다. 지목된 파일은 직접 열어 확인했고, 인용은 해당 행을 그대로 옮겼다. 이 절차를 생략하면 결과물이 “재해석된 2차 자료”가 되며, 이 시리즈가 피하려는 대상과 같아진다.</p><p class="text-foreground leading-relaxed mb-4 w-full">실제로 이 과정에서 몇 가지 통념이 코드와 어긋남을 확인했다. 2편의 컴포지터 동기화, 3편의 이벤트 루프 구현, 4편의 Turboshaft 분류가 그 예다. 탐색 결과를 검증 없이 수용했다면 모두 놓쳤을 지점이다.</p></div></details>
+<h2 id="결론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">결론</h2>
+<h3 id="확인된-사실" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">확인된 사실</h3>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>저장소는 네 계층으로 분류되어 있고, 의존 방향이 빌드 단계에서 강제된다.</strong> 분류는 <code>docs/source_tree_overview.md</code>에 명시되어 있으며, <code>DEPS</code> 규칙으로 집행된다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>웹 플랫폼과 제품 기능의 경계가 세 조건으로 정의되어 있다.</strong> chromestatus 추적, 스펙 존재, 기능 출시 절차. 자동완성·확장·번역 등은 이를 만족하지 않으므로 <code>//chrome</code>에 있다. 전체 코드의 과반이 여기에 속하며, 구조 분석 대상이 아니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>분석 대상의 상당 부분이 이 저장소에 없다.</strong> V8, Skia, ANGLE, Dawn, PDFium, WebRTC는 모두 외부 저장소이며 <code>DEPS</code>로 연결된다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>프로세스 분할의 단위는 문서가 아니라 principal instance다.</strong> 동기적으로 서로의 내용에 접근할 수 있는 문서들은 같은 프로세스에 있어야 한다. 이는 성능 선택이 아니라 데이터 경쟁을 피하기 위한 제약이다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>격리는 jail 검사와 citadel 검사로 집행된다.</strong> 전자는 잠긴 프로세스가 자기 site의 데이터만 접근하게 하고, 후자는 잠기지 않은 프로세스가 전용 프로세스를 요구하는 site의 데이터에 접근하지 못하게 한다. 구현은 4,380행이며, 현재 Rust로 이식되는 중이다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>프로세스 간 통신은 타입이 지정된 양방향 파이프 위에서 이루어진다.</strong> 렌더러는 브라우저의 인터페이스를 직접 얻지 않고 브로커에 요청하며, 바인딩 여부는 브라우저가 결정한다.</p>
+</li>
+</ol>
+<h3 id="이-분석의-한계" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">이 분석의 한계</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">샌드박스 자체의 구현(<code>//sandbox</code>)은 다루지 않았다. 운영체제별 기법이 크게 다르며, 이 시리즈의 범위를 넘는다. 네트워크 스택(<code>//net</code>, 5,699 파일)도 다루지 않았다. 또한 코드를 읽었을 뿐이며, 빌드하여 동작을 측정하지는 않았다.</p>
+<h3 id="다음-편" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">다음 편</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">2편은 이 구조 위에서 하나의 요청이 흐르는 경로를 추적한다. 주소창 입력부터 화면에 픽셀이 나타나기까지이며, 중심 자료는 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md"><code>docs/navigation.md</code></a>, <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h"><code>core/dom/document_lifecycle.h</code></a>, <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md"><code>docs/how_cc_works.md</code></a>다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">2~4편은 작성을 마쳤으나 아직 공개하지 않았다. 본문의 “2편에서 다룬다” 형태의 참조는 공개 시점에 링크로 연결된다.</p>
+<h2 id="참조" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">참조</h2>
+<h3 id="저장소" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">저장소</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">저장소</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">고정 커밋</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">비고</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium">chromium/chromium</a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3"><code>fca8b75c</code></a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">아래 모든 링크의 기준</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/v8/v8">v8/v8</a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/v8/v8/commit/d44b084e33a4501c46b7fd01052228ce8e45d435"><code>d44b084e</code></a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">4편에서 사용</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">공식 코드 검색: <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://source.chromium.org/chromium/chromium/src">source.chromium.org</a> · 공식 Git 호스팅: <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src">chromium.googlesource.com</a></p>
+<h3 id="1차-자료--본론-절별" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1차 자료 — 본론 절별</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>2절 · 저장소의 계층 구조</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/source_tree_overview.md"><code>docs/source_tree_overview.md</code></a> — 최상위 디렉터리 4계층 분류</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/README.md"><code>third_party/blink/README.md</code></a> — Blink 디렉터리 구조, <code>common</code>/<code>public</code>/<code>renderer</code> 구분</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>3절 · <code>//content</code>와 <code>//chrome</code>의 경계</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/README.md"><code>content/README.md</code></a> — 입주 조건 3항, 제외 기능 목록, 분리의 동기</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/content/shell"><code>content/shell/</code></a> — <code>content_shell</code>, <code>//content</code>만으로 구성된 최소 브라우저</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>4절 · 저장소에 없는 것</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS"><code>DEPS</code></a> — 외부 저장소 정의. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L2038">ANGLE 2038행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L2125">Dawn 2125행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L2840">PDFium 2840행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3095">Skia 3095행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3289">WebRTC 3289행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3362">V8 3362행</a></li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>5절 · 프로세스 모델</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md"><code>docs/process_model_and_site_isolation.md</code></a> — 전문(580행). <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md#L75">Abstractions and Implementations 75행</a>에 principal 3단 정의</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/site_info.h"><code>content/browser/site_info.h</code></a> — Security Principal 구현</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/public/browser/site_instance.h"><code>content/public/browser/site_instance.h</code></a> — Principal Instance 구현</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/browsing_instance.h"><code>content/browser/browsing_instance.h</code></a> — Browsing Context Group 구현</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>6절 · 격리의 집행</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md#L60"><code>docs/process_model_and_site_isolation.md#L60</code></a> — jail 검사와 citadel 검사의 정의</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2543"><code>child_process_security_policy_impl.cc#L2543</code></a> — <code>PerformJailAndCitadelChecks</code>. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2689">jail 주석 2689행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2756">citadel 주석 2756행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.rs"><code>child_process_security_policy_impl.rs</code></a> — Rust 이식, <code>cxx::bridge</code> FFI</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp"><code>content/browser/security/cpsp/</code></a> — 디렉터리 전체. C++ 구현 4,380행, Rust 2개 파일, shim 2개 파일</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>7절 · Mojo</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/mojo_and_services.md"><code>docs/mojo_and_services.md</code></a> — 전문(576행). <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/mojo_and_services.md#L15">Mojo Terminology 15행</a>에 message pipe·Remote·Receiver 정의</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/mojom/browser_interface_broker.mojom#L11"><code>browser_interface_broker.mojom#L11</code></a> — <code>BrowserInterfaceBroker</code> 인터페이스</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/mojo/README.md"><code>mojo/README.md</code></a> — Mojo 디렉터리 구조</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>8절 · 저장소를 읽는 방법</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/docs"><code>docs/</code></a> — 설계 문서 디렉터리(1,075 파일)</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/README.md#L151"><code>content/README.md</code> OWNER 요건 목록</a> — 핵심 클래스 열거</li>
+</ul>
+<h3 id="2차-자료" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2차 자료</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="http://blog.chromium.org/2008/10/content-not-chrome.html">Content not Chrome</a> — Chromium Blog, 2008-10. <code>//content</code> 분리의 명칭 유래. <code>content/README.md</code>가 인용하는 원문</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://d2.naver.com/helloworld/59361">브라우저는 어떻게 동작하는가?</a> — NAVER D2. 서론에서 다룬 선행 자료</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism">HTML Standard — Agent clusters</a> — 5절의 principal instance가 대응하는 스펙 개념</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://html.spec.whatwg.org/multipage/origin.html#site">HTML Standard — Site</a> — 5절의 security principal 단위</li>
+</ul>
+<h3 id="관련-공식-문서" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">관련 공식 문서</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src/+/main/docs/README.md">Chromium Docs 목차</a> — 저장소 내 문서 전체 색인</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src/+/main/docs/get_the_code.md">Get the Code</a> — <code>depot_tools</code>를 사용한 공식 체크아웃 절차. 본론 1절의 sparse checkout은 읽기 전용 대안</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.chromium.org/Home/chromium-security/site-isolation">Site Isolation</a> — 6절 주제의 개요</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src/+/main/docs/security/compromised-renderers.md">compromised-renderers.md</a> — 침해된 렌더러를 가정한 방어 설계</li>
+</ul> <section class="pb-16 pt-8"> <script src="https://giscus.app/client.js" data-repo="gitsunmin/gitsunmin.github.io" data-repo-id="R_kgDOMZl2kA" data-category="Comments" data-category-id="DIC_kwDOMZl2kM4C3wBs" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="ko" data-loading="lazy" crossorigin="anonymous" async>
+          </script></section> </article> <!-- Desktop TOC sidebar --> <aside class="hidden lg:block w-56 xl:w-64 shrink-0 sticky top-24 self-start">  <!-- Desktop TOC: hidden on mobile, shown on lg+ --><nav class="toc-desktop hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto" aria-label="목차"> <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+목차
+</p> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="서론"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="문제-제기"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#접근" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="접근"> 접근 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="분석-대상"> 분석 대상 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="범위"> 범위 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="본론"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-분석-환경-구성" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1-분석-환경-구성"> 1. 분석 환경 구성 </a> </li><li style="padding-left: 12px"> <a href="#2-저장소는-네-계층으로-나뉜다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2-저장소는-네-계층으로-나뉜다"> 2. 저장소는 네 계층으로 나뉜다 </a> </li><li style="padding-left: 12px"> <a href="#3-경계의-규칙--content와-chrome" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="3-경계의-규칙--content와-chrome"> 3. 경계의 규칙 — //content와 //chrome </a> </li><li style="padding-left: 12px"> <a href="#4-저장소에-없는-것" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="4-저장소에-없는-것"> 4. 저장소에 없는 것 </a> </li><li style="padding-left: 12px"> <a href="#5-프로세스-모델--무엇을-하나의-단위로-볼-것인가" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="5-프로세스-모델--무엇을-하나의-단위로-볼-것인가"> 5. 프로세스 모델 — 무엇을 하나의 단위로 볼 것인가 </a> </li><li style="padding-left: 12px"> <a href="#6-격리는-어떻게-집행되는가" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="6-격리는-어떻게-집행되는가"> 6. 격리는 어떻게 집행되는가 </a> </li><li style="padding-left: 12px"> <a href="#7-프로세스-간-통신--mojo" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="7-프로세스-간-통신--mojo"> 7. 프로세스 간 통신 — Mojo </a> </li><li style="padding-left: 12px"> <a href="#8-저장소를-읽는-방법" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="8-저장소를-읽는-방법"> 8. 저장소를 읽는 방법 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="결론"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="확인된-사실"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="이-분석의-한계"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="다음-편"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="참조"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="저장소"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1차-자료--본론-절별"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2차-자료"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="관련-공식-문서"> 관련 공식 문서 </a> </li> </ul> </nav> <!-- Mobile TOC: collapsible, shown below lg --> <div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"> <button id="toc-mobile-toggle" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-expanded="false" aria-controls="toc-mobile-content"> <span>목차</span> <svg id="toc-chevron" class="w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <polyline points="6 9 12 15 18 9"></polyline> </svg> </button> <div id="toc-mobile-content" class="hidden px-4 py-3 bg-white dark:bg-gray-900"> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#접근" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 접근 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 분석 대상 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 범위 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-분석-환경-구성" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1. 분석 환경 구성 </a> </li><li style="padding-left: 12px"> <a href="#2-저장소는-네-계층으로-나뉜다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2. 저장소는 네 계층으로 나뉜다 </a> </li><li style="padding-left: 12px"> <a href="#3-경계의-규칙--content와-chrome" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 3. 경계의 규칙 — //content와 //chrome </a> </li><li style="padding-left: 12px"> <a href="#4-저장소에-없는-것" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 4. 저장소에 없는 것 </a> </li><li style="padding-left: 12px"> <a href="#5-프로세스-모델--무엇을-하나의-단위로-볼-것인가" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 5. 프로세스 모델 — 무엇을 하나의 단위로 볼 것인가 </a> </li><li style="padding-left: 12px"> <a href="#6-격리는-어떻게-집행되는가" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 6. 격리는 어떻게 집행되는가 </a> </li><li style="padding-left: 12px"> <a href="#7-프로세스-간-통신--mojo" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 7. 프로세스 간 통신 — Mojo </a> </li><li style="padding-left: 12px"> <a href="#8-저장소를-읽는-방법" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 8. 저장소를 읽는 방법 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 관련 공식 문서 </a> </li> </ul> </div> </div>  </aside> </div> </div>  <div id="image-lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-200" role="dialog" aria-modal="true" aria-label="이미지 확대 보기"> <button type="button" data-lightbox-close class="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 cursor-pointer" aria-label="닫기"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"> <title>닫기</title> <path d="M18 6L6 18M6 6l12 12"></path> </svg> </button> <figure class="flex max-h-full max-w-full flex-col items-center gap-3"> <img data-lightbox-image src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain"> <figcaption data-lightbox-caption class="max-w-2xl text-center text-sm text-gray-300"></figcaption> </figure> </div> <script>
+    function initImageLightbox() {
+      // document에 위임하므로 페이지 전환마다 리스너가 쌓이지 않도록 한 번만 등록한다
+      if (window.__lightboxBound) return;
+      window.__lightboxBound = true;
+
+      function el(selector) {
+        const lightbox = document.getElementById('image-lightbox');
+        return lightbox ? lightbox.querySelector(selector) : null;
+      }
+
+      function open(target) {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox) return;
+        const image = el('[data-lightbox-image]');
+        const caption = el('[data-lightbox-caption]');
+        image.src = target.currentSrc || target.src;
+        image.alt = target.alt || '';
+        caption.textContent = target.alt || '';
+        caption.classList.toggle('hidden', !target.alt);
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        // 다음 프레임에 opacity를 올려 페이드 인이 적용되게 한다
+        requestAnimationFrame(() => lightbox.classList.remove('opacity-0'));
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox || lightbox.classList.contains('hidden')) return;
+        lightbox.classList.add('opacity-0');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          lightbox.classList.add('hidden');
+          lightbox.classList.remove('flex');
+          const image = el('[data-lightbox-image]');
+          if (image) image.src = '';
+        }, 200);
+      }
+
+      // 본문 이미지는 MDX 렌더 결과라 개별 바인딩 대신 위임으로 처리한다
+      document.addEventListener('click', (e) => {
+        if (!(e.target instanceof Element)) return;
+        const zoomable = e.target.closest('[data-zoomable]');
+        if (zoomable) {
+          open(zoomable);
+          return;
+        }
+        // 라이트박스 안에서는 확대된 이미지 위가 아닌 곳을 누르면 닫는다
+        const lightbox = document.getElementById('image-lightbox');
+        if (lightbox && lightbox.contains(e.target) && !e.target.closest('[data-lightbox-image]')) {
+          close();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+
+      document.addEventListener('astro:before-swap', close);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initImageLightbox);
+    } else {
+      initImageLightbox();
+    }
+    document.addEventListener('astro:page-load', initImageLightbox);
+  </script><script>
+    function initReadingProgress() {
+      const bar = document.getElementById('reading-progress');
+      if (!bar) return;
+
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = `${Math.min(pct, 100)}%`;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+      update();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initReadingProgress);
+    } else {
+      initReadingProgress();
+    }
+    document.addEventListener('astro:page-load', initReadingProgress);
+  </script><script>
+    function initCopyButtons() {
+      const wrappers = document.querySelectorAll('.code-block-wrapper');
+      
+      wrappers.forEach((wrapper) => {
+        const button = wrapper.querySelector('.copy-button');
+        const pre = wrapper.querySelector('pre');
+        const copyIcon = button?.querySelector('.copy-icon');
+        const checkIcon = button?.querySelector('.check-icon');
+        
+        if (!button || !pre) return;
+        
+        // Remove existing listener if any (by cloning)
+        const newButton = button.cloneNode(true);
+        button.parentNode?.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', async () => {
+          const codeElement = pre.querySelector('code');
+          const code = codeElement?.innerText || pre.innerText || '';
+          
+          try {
+            await navigator.clipboard.writeText(code);
+            
+            const btnCopyIcon = newButton.querySelector('.copy-icon');
+            const btnCheckIcon = newButton.querySelector('.check-icon');
+            
+            // Show check icon
+            btnCopyIcon?.classList.add('hidden');
+            btnCheckIcon?.classList.remove('hidden');
+            newButton.classList.add('opacity-100');
+            newButton.classList.remove('opacity-0');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              btnCopyIcon?.classList.remove('hidden');
+              btnCheckIcon?.classList.add('hidden');
+              newButton.classList.remove('opacity-100');
+              newButton.classList.add('opacity-0', 'group-hover:opacity-100');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      });
+    }
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCopyButtons);
+    } else {
+      initCopyButtons();
+    }
+
+    // Re-initialize on view transitions
+    document.addEventListener('astro:page-load', initCopyButtons);
+  </script><script>
+    function animatePromptBlock(block) {
+      if (block.getAttribute('data-animated')) return;
+      block.setAttribute('data-animated', 'true');
+      var text = block.getAttribute('data-text') || '';
+      var speed = parseInt(block.getAttribute('data-speed') || '15', 10);
+      var textEl = block.querySelector('[data-prompt-text]');
+      var cursorEl = block.querySelector('[data-prompt-cursor]');
+      if (!textEl || !text) return;
+      textEl.textContent = '';
+      var i = 0;
+      var timer = setInterval(function() {
+        i++;
+        textEl.textContent = text.slice(0, i);
+        if (i >= text.length) {
+          clearInterval(timer);
+          if (cursorEl) cursorEl.style.display = 'none';
+        }
+      }, speed);
+    }
+
+    function initFlipCompare() {
+      document.querySelectorAll('[data-component="flip-compare"]').forEach(function(container) {
+        var buttons = container.querySelectorAll('[data-flip-btn]');
+        var isAnimating = false;
+
+        // 초기 상태(then)의 prompt block 애니메이션 — 뷰포트 진입 시
+        var thenObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            thenObserver.unobserve(entry.target);
+            entry.target.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+          });
+        }, { threshold: 0.1 });
+        var thenPanel = container.querySelector('[data-flip-role="then"]');
+        if (thenPanel) thenObserver.observe(thenPanel);
+
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (isAnimating) return;
+            var target = btn.getAttribute('data-flip-btn');
+            var current = container.getAttribute('data-view');
+            if (current === target) return;
+
+            isAnimating = true;
+
+            // 모바일에서 토글이 sticky 상태일 때(컨테이너 상단이 헤더 아래로 올라간 경우)
+            // 클릭 후 컨테이너 상단이 헤더 바로 아래 오도록 스크롤
+            if (window.innerWidth < 1024) {
+              var headerEl = document.querySelector('header');
+              var headerH = headerEl ? headerEl.getBoundingClientRect().height : 48;
+              var containerRect = container.getBoundingClientRect();
+              if (containerRect.top < headerH) {
+                window.scrollTo({ top: window.scrollY + containerRect.top - headerH, behavior: 'smooth' });
+              }
+            }
+
+            var outPanel = container.querySelector('[data-flip-role="' + current + '"]');
+            var inPanel = container.querySelector('[data-flip-role="' + target + '"]');
+
+            // 버튼 상태 즉시 업데이트
+            buttons.forEach(function(b) {
+              b.setAttribute('data-active', b.getAttribute('data-flip-btn') === target ? 'true' : 'false');
+            });
+
+            var direction = target === 'now' ? 1 : -1;
+
+            // 나가는 패널: 슬라이드 아웃
+            if (outPanel) {
+              outPanel.style.transition = 'opacity 180ms ease, transform 180ms ease';
+              outPanel.style.opacity = '0';
+              outPanel.style.transform = 'translateX(' + (-direction * 20) + 'px)';
+            }
+
+            setTimeout(function() {
+              // CSS가 패널 display를 제어하도록 data-view 전환
+              container.setAttribute('data-view', target);
+
+              if (inPanel) {
+                // 들어오는 패널: 초기 위치 설정 후 슬라이드 인
+                inPanel.style.transition = 'none';
+                inPanel.style.opacity = '0';
+                inPanel.style.transform = 'translateX(' + (direction * 20) + 'px)';
+
+                // 다음 프레임에서 애니메이션 시작
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    inPanel.style.transition = 'opacity 250ms ease, transform 250ms ease';
+                    inPanel.style.opacity = '1';
+                    inPanel.style.transform = 'translateX(0)';
+
+                    setTimeout(function() {
+                      inPanel.style.transition = '';
+                      inPanel.style.opacity = '';
+                      inPanel.style.transform = '';
+                      isAnimating = false;
+
+                      // 새 패널의 prompt block 애니메이션 시작
+                      inPanel.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+                    }, 260);
+                  });
+                });
+              } else {
+                isAnimating = false;
+              }
+
+              // 나가는 패널 인라인 스타일 정리 (CSS display:none이 처리)
+              if (outPanel) {
+                outPanel.style.transition = '';
+                outPanel.style.opacity = '';
+                outPanel.style.transform = '';
+              }
+            }, 180);
+          });
+        });
+      });
+    }
+
+    function initPromptBlocks() {
+      // FlipCompare 밖에 있는 독립 prompt block 처리 (IntersectionObserver)
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          animatePromptBlock(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('[data-component="prompt-block"]').forEach(function(block) {
+        // FlipCompare 내부 block은 탭 전환 시 처리하므로 제외
+        if (!block.closest('[data-component="flip-compare"]')) {
+          observer.observe(block);
+        }
+      });
+    }
+
+    function initBlogInteractions() {
+      initFlipCompare();
+      initPromptBlocks();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBlogInteractions);
+    } else {
+      initBlogInteractions();
+    }
+    document.addEventListener('astro:page-load', initBlogInteractions);
+  </script>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island> </body> </html>
