@@ -1,0 +1,644 @@
+---
+title: "Chromium 구조 분석 (2) — 주소에서 픽셀까지"
+description: "주소창에 입력된 URL이 화면의 픽셀이 되는 경로를 추적한다. Chromium은 이 과정을 navigation과 loading 두 단계로 분리하며, 문서의 렌더링 상태는 열거형 상태 기계로 선언되어 있다. 컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 달리 기본적으로 메인 스레드를 블록하지 않는다."
+pubDate: "2026-10-01"
+updatedDate: "2026-10-01"
+tags: ["technology", "chromium", "browser", "rendering", "architecture", "compositor"]
+heroImage: "/assets/blog/chromium-architecture/thumbnail.webp"
+draft: true
+---
+
+import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
+
+> **Chromium 구조 분석** — 전체 4편 중 1편 공개. 2~4편은 준비 중이다.
+> 1. [저장소를 직접 읽는다](/blog/chromium-architecture-01-reading-the-source) — 분석 환경, 계층 구조, 프로세스 모델, IPC
+> 2. **주소에서 픽셀까지** — 네비게이션, 문서 수명주기, 합성 ← 지금 글 *(준비 중)*
+> 3. 자바스크립트가 실행되는 자리 — 바인딩, 이벤트 루프, 태스크 큐 *(준비 중)*
+> 4. 엔진 심층 — V8의 네 단계 티어, Wasm, 디옵티마이제이션 *(준비 중)*
+
+## 서론
+
+### 문제 제기
+
+"주소창에 URL을 입력하면 어떤 일이 일어나는가"는 널리 알려진 질문이다. 통상적인 답변은 DNS 조회, TCP 연결, HTTP 요청, 응답 수신, 그리고 "브라우저가 렌더링한다"로 끝난다.
+
+마지막 항목이 문제다. 네트워크 계층까지는 RFC와 교과서로 검증 가능한 영역이지만, 그 이후는 브라우저 구현의 영역이며 설명이 급격히 추상화된다. "파싱하여 DOM 트리를 만들고, CSS를 적용하여 렌더 트리를 만들고, 레이아웃과 페인트를 수행한다"는 서술은 2012년 기준으로는 정확했으나 현재 Chromium의 구조와는 상당히 다르다.
+
+이 편에서 확인할 차이는 다음과 같다.
+
+- Chromium은 네비게이션과 로딩을 **별개 단계로 분리**하며, 그 경계에 명확한 기술적 이유가 있다
+- 렌더링 단계는 "렌더 트리"가 아니라 **문서 수명주기 상태 기계**로 구현되어 있고, 상태 목록이 열거형으로 선언되어 있다
+- 레이아웃 결과는 페인트로 직행하지 않는다. 그 사이에 **속성 트리를 구축하는 단계**가 있으며, 이것이 현대 Chromium 합성의 핵심이다
+- 컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 **다르게 동작한다**
+
+### 범위
+
+이 편이 답하려는 질문은 하나다. **URL 하나가 화면이 되기까지 어떤 단계를 거치며, 각 단계의 경계는 왜 거기에 있는가.**
+
+자바스크립트의 실행 자체는 3편에서 다룬다. 이 편에서는 그것이 렌더링 파이프라인의 어느 지점에 끼어드는지만 확인한다. 네트워크 스택 내부(`//net`)는 다루지 않는다.
+
+### 분석 대상
+
+1편과 동일한 커밋을 사용한다.
+
+| 저장소 | 고정 커밋 | 날짜 |
+|---|---|---|
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 2026-09-30 |
+
+인용 링크의 형식과 재현 방법은 [1편 서론](/blog/chromium-architecture-01-reading-the-source)에 정리해 두었다. 이 편의 모든 근거는 마지막 **참조** 절에서 본론 절 번호별 퍼머링크로 확인할 수 있다.
+
+## 본론
+
+### 1. 네비게이션과 로딩은 별개 단계다
+
+[`docs/navigation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md)는 제목이 "Life of a Navigation"이며, 주소 입력부터 문서 로드 완료까지를 추적한다. 이 문서가 서두에 밝히는 구분이 중요하다.
+
+> Most people use the word "navigation" to describe the act of moving from one page to another, but in Chromium we separate that process into two phases.
+
+**네비게이션 단계**는 응답을 받아 새 문서를 생성하고 커밋하는 것까지다. **로딩 단계**는 그 이후다.
+
+> Loading consists of reading the remaining response data from the server, parsing it, rendering the document so it is visible to the user, executing any script accompanying it, and loading any subresources specified by the document.
+
+즉 HTML 파싱, 렌더링, 스크립트 실행, 서브리소스 로드가 모두 로딩 단계에 속한다. 네비게이션은 그보다 앞에서 끝난다.
+
+분리의 이유는 문서가 직접 밝힌다.
+
+> The main reason for splitting into these two phases is that errors are treated differently before and after a navigation commits.
+
+커밋 전에 HTTP 오류가 발생하면 브라우저는 여전히 새 문서를 커밋하지만, 그 문서는 오류 페이지다. 커밋 후에 네트워크 연결이 끊기면 오류 페이지를 보여주지 않고, 받은 만큼의 문서를 표시한다.
+
+> In that case the browser displays as much of the new document as it can, without showing an error page.
+
+**오류 처리 규칙이 달라지는 지점이 곧 단계의 경계다.** 이것은 임의의 구획이 아니다.
+
+<KnowledgeNote term="네비게이션이 문서 생성 없이 끝나는 경우" kind="note">
+
+`docs/navigation.md`는 네트워크 요청이 성공했는데도 새 문서가 렌더링되지 않는 두 경우를 명시한다.
+
+- **HTTP 204 또는 205**: 응답은 성공이지만 본문이 없다. 현재 문서가 그대로 유지되어야 한다
+- **`Content-Disposition` 헤더**: 응답을 네비게이션이 아니라 다운로드로 처리해야 한다
+
+링크를 클릭했는데 페이지가 바뀌지 않고 파일 다운로드만 시작되는 동작의 근거다.
+
+</KnowledgeNote>
+
+### 2. 커밋 시점의 정의
+
+네비게이션 단계의 종결점인 커밋은 정확한 정의를 갖는다. [`docs/navigation.md`의 Commit 절](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L74)이다.
+
+> The browser process then sends the response to the chosen process via a "commit" IPC, waiting for it to create the document and send an acknowledgement via a Mojo callback. The browser process's receipt of this acknowledgement from the renderer process marks the authoritative _commit_ time for the navigation, which is when the browser process changes its security state to reflect the new document and creates a session history entry for the previous document.
+
+주목할 점은 **권위 있는 커밋 시점이 브라우저 프로세스가 확인 응답을 수신한 순간**이라는 것이다. 렌더러가 문서를 만든 시점이 아니다. 1편에서 확인한 불신의 구조가 여기에도 적용된다. 브라우저는 렌더러의 보고를 받은 뒤에 비로소 자신의 보안 상태를 갱신한다.
+
+렌더러 프로세스 선택도 이 단계에서 일어난다.
+
+> The browser process selects an appropriate renderer process for the new document based on the origin and headers of the response as well as the current process model and isolation policy.
+
+응답 헤더가 origin에 영향을 줄 수 있다. 문서는 `Content-Security-Policy: sandbox;` 헤더가 문서에 opaque origin을 부여하는 경우를 예로 든다. 즉 1편에서 다룬 principal 결정이 응답 헤더를 읽은 뒤에 확정된다.
+
+<KnowledgeNote term="이전 문서의 unload 처리" kind="definition">
+
+같은 렌더러 프로세스에 머무는 네비게이션과 프로세스를 넘는 네비게이션의 동작이 다르다.
+
+> In navigations that stay in the same renderer process, the old document is unloaded by Blink before the new document is created, including running any registered unload handlers. In the case of a navigation that goes cross-process, any unload handlers are executed in the previous document's process concurrently with the creation of the new document in the new process.
+
+프로세스를 넘는 경우 `unload` 핸들러 실행과 새 문서 생성이 **병행된다**. 두 프로세스가 동시에 동작하므로 순서를 보장할 수 없다.
+
+</KnowledgeNote>
+
+### 3. 문서 수명주기는 열거형 상태 기계다
+
+로딩 단계에서 일어나는 렌더링은 "렌더 트리 구축 → 레이아웃 → 페인트"라는 선형 절차로 설명되는 경우가 많다. Chromium의 구현은 **상태 기계**다.
+
+[`third_party/blink/renderer/core/dom/document_lifecycle.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h#L49)에 전체 상태가 선언되어 있다.
+
+```cpp
+enum LifecycleState {
+  kUninitialized,
+  kInactive,
+
+  // When the document is active, it traverses these states.
+
+  kVisualUpdatePending,
+
+  kInStyleRecalc,
+  kStyleClean,
+
+  kInPerformLayout,
+  kAfterPerformLayout,
+  kLayoutClean,
+
+  kInCompositingInputsUpdate,
+  kCompositingInputsClean,
+
+  // In InPrePaint step, any data needed by painting are prepared.
+  // Paint property trees are built and paint invalidations are issued.
+  kInPrePaint,
+  kPrePaintClean,
+
+  // In InPaint step, paint artifacts are generated and raster invalidations
+  // are issued.
+  // In CAP, composited layers are generated/updated.
+  kInPaint,
+  kPaintClean,
+
+  // Once the document starts shutting down, we cannot return
+  // to the style/layout/compositing states.
+  kStopping,
+  kStopped,
+};
+```
+
+이 열거형에서 읽을 수 있는 사실이 여럿 있다.
+
+**첫째, 각 단계가 `In-` 상태와 `-Clean` 상태의 쌍으로 구성된다.** `kInStyleRecalc`/`kStyleClean`, `kInPerformLayout`/`kLayoutClean`과 같은 형태다. "진행 중"과 "완료되어 유효함"을 구분하는 것이며, 어떤 데이터를 읽어도 되는 시점을 타입 수준에서 추적하기 위한 구조다.
+
+**둘째, 널리 알려진 3단계보다 많다.** 활성 문서가 통과하는 단계는 스타일 재계산, 레이아웃, 합성 입력 갱신, 프리페인트, 페인트의 다섯이다. 특히 `kInPrePaint`는 통상적인 설명에 등장하지 않는다.
+
+**셋째, 종료 상태로 넘어가면 되돌아올 수 없다.** 주석이 이를 명시한다 — "Once the document starts shutting down, we cannot return to the style/layout/compositing states."
+
+<KnowledgeNote term="레이아웃 담당 디렉터리가 선언하는 상태" kind="note">
+
+`blink/renderer/core/layout/README.md`는 자신이 담당하는 수명주기 상태를 직접 열거한다.
+
+> It covers the following document lifecycle states:
+> - LayoutSubtreeChange (`InLayoutSubtreeChange` and `LayoutSubtreeChangeClean`)
+> - PreLayout (`InPreLayout`)
+> - PerformLayout (`InPerformLayout`)
+> - AfterPerformLayout (`AfterPerformLayout` and `LayoutClean`)
+
+디렉터리와 수명주기 상태가 대응되도록 코드가 조직되어 있다는 뜻이다. 특정 단계의 구현을 찾으려면 해당 상태를 담당하는 디렉터리의 `README.md`를 먼저 보면 된다.
+
+이 README가 열거하는 상태 중 일부(`InLayoutSubtreeChange`, `InPreLayout`)는 위의 `LifecycleState` 열거형에 현재 존재하지 않는다. 문서와 코드가 어긋난 지점이며, 1편 8절에서 언급한 "주석을 그대로 신뢰하지 않는다"의 실례다.
+
+</KnowledgeNote>
+
+### 4. 레이아웃에서 합성으로 — 속성 트리의 구축
+
+[`blink/renderer/core/paint/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md)는 644행이며, 자신의 역할을 다음과 같이 규정한다.
+
+> The primary responsibility of this directory is to convert the outputs from layout (the `LayoutObject` tree) to the inputs of the compositor (the `cc::Layer` list, which contains display items, and the associated `cc::PropertyNode`s).
+
+입력은 `LayoutObject` 트리이고, 출력은 **`cc::Layer`의 리스트와 `cc::PropertyNode`들**이다. 트리가 아니라 리스트라는 점이 중요하다.
+
+이 변환은 두 수명주기 단계에 걸쳐 수행된다.
+
+> - **PrePaint** (`kInPrePaint`)
+>   - Paint invalidation which invalidates display items which need to be painted.
+>   - Builds paint property trees.
+> - **Paint** (`kInPaint`)
+>   - Walks the LayoutObject tree and creates a display item list.
+>   - Groups the display list into paint chunks which share the same property tree state.
+>   - Commits the results to the compositor.
+
+문서는 실제 함수 호출 경로까지 제시한다.
+
+```text
+from layout
+  |
+  v
++------------------------------+
+| LayoutObject/PaintLayer tree |
++------------------------------+
+  |     |
+  |     | PrePaintTreeWalk::Walk()
+  |     |   PaintPropertyTreeBuider::UpdatePropertiesForSelf()
+  |     v
+  |   +--------------------------------+
+  |<--|         Property trees         |
+  |   +--------------------------------+
+  |                                  |
+  | LocalFrameView::PaintTree()      |
+  |   FramePainter::Paint()          |
+  |     PaintLayerPainter::Paint()   |
+  |       ObjectPainter::Paint()     |
+  v                                  |
++---------------------------------+  |
+| DisplayItemList/PaintChunk list |  |
++---------------------------------+  |
+  |                                  |
+  |<---------------------------------+
+  | LocalFrameView::PushPaintArtifactToCompositor()
+  |   PaintArtifactCompositor::Update()
+  |
+  +---+---------------------------------+
+  |   v                                 |
+  | +----------------------+            |
+  | | Chunk list for layer |            |
+  | +----------------------+            |
+  |   |                                 |
+  |   | PaintChunksToCcLayer::Convert() |
+  v   v                                 v
++----------------+ +-----------------------+
+| cc::Layer list | |   cc property trees   |
++----------------+ +-----------------------+
+```
+
+합성 알고리즘의 요지는 다음과 같다.
+
+> The process starts with pre-paint to generate property trees. During paint, each generated display item will be associated with a property tree state. Adjacent display items having the same property tree state will be grouped as `PaintChunk`. The list of paint chunks then will be processed by `PaintArtifactCompositor` for layerization.
+
+**레이어는 페인트 결과로부터 역산된다.** 먼저 속성 트리를 만들고, 페인트한 결과를 같은 속성 상태를 공유하는 덩어리(`PaintChunk`)로 묶고, 그 덩어리들을 보고 어떤 `cc::Layer`를 만들 것인지 결정한다. "요소가 레이어를 만든다"는 방향이 아니다.
+
+<KnowledgeNote term="속성 트리가 왜 도입되었는가" kind="reason" defaultOpen>
+
+`docs/how_cc_works.md`가 이전 방식의 문제를 서술한다.
+
+> The historical way (and the way that ui/ manages this) is to provide a tree of Layers. If a parent layer has a transform (e.g. a translation, scale, or perspective), a clip, or an effect (e.g. a blur filter, or a mask, or an opacity) then this applies recursively to its children. This abstraction has a lot of corner cases (fixed position layers, scroll parents, scroll children) as well as not being performant (requires traversing a very large tree and calculating all properties at all steps).
+
+속성이 레이어 트리를 따라 상속되는 구조에서는 `position: fixed`처럼 상속을 벗어나는 경우가 예외 처리의 집합이 되고, 매 단계 전체 트리를 순회해야 한다.
+
+해결 방식은 속성을 레이어에서 분리하는 것이다.
+
+> Instead, cc is provided with separate trees of properties: a transform tree, a clip tree, an effect tree. Each layer then has a node id for which transform, clip, and effect node that the layer is using. In this way, the update is O(interesting nodes) instead of O(layers).
+
+변환·클립·효과가 각각 독립된 트리가 되고, 레이어는 자신이 참조하는 노드의 id만 갖는다. 갱신 비용이 레이어 수가 아니라 실제로 변경된 노드 수에 비례한다.
+
+그리고 문서가 덧붙이는 결론이 중요하다.
+
+> When there are property trees, there is also no longer a need for a tree of layers, and instead an ordered list of layers can be used.
+
+속성 트리가 있으면 레이어는 트리일 필요가 없다. 이것이 앞서 "출력이 `cc::Layer`의 리스트"였던 이유다.
+
+</KnowledgeNote>
+
+### 5. `cc`는 컴포지터가 아니다
+
+렌더링의 뒷단은 `//cc` 디렉터리가 담당한다. 파일 수는 1,165개로 작지만 역할이 결정적이다.
+
+[`docs/how_cc_works.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md)의 첫 문단이 이름 문제를 먼저 정리한다.
+
+> `cc/` is historically but inaccurately called the Chrome Compositor. It's neither "the" chrome compositor (of course we have many), nor a compositor at all any more. danakj suggests "content collator" as an alternative name.
+
+실제 역할은 다음과 같다.
+
+> cc is responsible for taking painted inputs from its embedder, figuring out where and if they appear on screen, rasterizing and decoding and animating images from the painted input into gpu textures, and finally forwarding those textures on to the display compositor in the form of a compositor frame.
+
+최종 합성은 `//components/viz`의 display compositor가 GPU 프로세스에서 수행한다. `cc/README.md`가 이를 명시한다.
+
+> CompositorFrames from individual compositors are sent to the SurfaceManager (which is in the GPU process). The SurfaceAggregator combines all CompositorFrames together when asked to by the Display.
+
+`cc`는 브라우저 프로세스와 렌더러 프로세스 양쪽에 내장되는데, 구성이 다르다.
+
+> In general, the browser uses the single-threaded version as its main thread is cheap and light, whereas the renderer uses the multi-threaded version as its main thread (Blink) can be quite busy on some pages.
+
+멀티 스레드 구성은 지연을 추가하지만, 한 스레드가 바쁠 때 다른 스레드가 입력과 애니메이션을 처리할 수 있게 한다.
+
+<KnowledgeNote term="용어가 실제 동작과 어긋나 있다는 경고" kind="caution">
+
+문서는 `cc`가 쓰는 용어 두 개가 더 이상 실제를 가리키지 않는다고 명시한다.
+
+> cc unfortunately still uses the language of "draw" and "swap" in a number of places, despite the fact that it no longer does either of these things. "Draw" in cc means constructing a compositor frame full of quads and render passes for eventual drawing on screen. "Swap" in cc means submitting that frame to the display compositor via a CompositorFrameSink.
+
+`cc` 안에서 `Draw`를 본다면 그것은 실제로 그리는 것이 아니라 **그릴 지시 목록을 만드는 것**이고, `Swap`은 버퍼 교환이 아니라 **프레임을 제출하는 것**이다. 코드를 읽을 때 반드시 필요한 교정이다.
+
+</KnowledgeNote>
+
+### 6. 세 개의 트리와 커밋·활성화
+
+`cc`에는 레이어 트리가 네 종류 존재하고, 그중 2~3개가 항상 살아 있다. `docs/how_cc_works.md`의 정리다.
+
+> - Main thread tree (cc::Layers, main thread, always exists)
+> - Pending tree (cc::LayerImpl, compositor thread, staging for rasterization, optional)
+> - Active tree (cc::LayerImpl, compositor thread, staging for drawing, always exists)
+> - Recycle tree (cc::LayerImpl, compositor thread, mutually exclusive with pending tree)
+
+두 연산이 트리 사이의 데이터 이동을 담당한다.
+
+> Commit is the process of pushing layer trees and properties from the main thread layer list to the pending tree. Activation is the process of pushing layer trees and properties from the pending tree to the active tree.
+
+**pending tree가 존재하는 이유**는 원자성이다.
+
+> The reason the pending tree exists is that if there are multiple changes to webpage content in a single Javascript callstack (e.g. an html canvas has a line drawn on it, while a div moves, and some background-color changes to blue), these all must be presented to the user atomically.
+
+하나의 자바스크립트 콜스택에서 발생한 여러 변경은 사용자에게 한꺼번에 보여야 한다. 커밋이 그 변경들의 스냅숏을 pending tree로 넘기면, Blink는 다음 프레임을 위한 작업을 계속할 수 있다. 래스터가 모두 끝나야 활성화가 일어난다.
+
+그리고 그 사이에도 화면은 멈추지 않는다.
+
+> While the pending tree is staging all the rasterization work, the active tree can be updated with animations and scrolling to still be responsive to the user.
+
+**이것이 스크롤이 자바스크립트를 기다리지 않는 구조적 근거다.** 애니메이션과 스크롤은 active tree를 직접 수정하여 처리되며, 메인 스레드의 작업과 독립적이다.
+
+<KnowledgeNote term="recycle tree는 최적화일 뿐이다" kind="note">
+
+네 번째 트리의 역할은 할당 비용 절감이다.
+
+> Because allocation of Layer(Impl)s is expensive and most layer tree structures do not change from frame to frame, once a pending tree activates, it becomes the "recycle tree". This tree is never used for anything except for a cache of the last pending tree. This avoids allocation and property pushing work from main thread to pending tree. This is merely an optimization.
+
+문서가 "This is merely an optimization"이라고 명시하므로, 구조를 이해하는 데는 무시해도 된다.
+
+또한 "These are called 'trees' as historically they have been trees and they exist in cc/trees/, but they are all lists and not trees (sorry)"라는 단서가 붙어 있다. 4절의 속성 트리 도입에 따른 결과다.
+
+</KnowledgeNote>
+
+### 7. 스레드 경계 — `ProxyMain`과 `ProxyImpl`
+
+메인 스레드와 컴포지터 스레드 사이의 모든 상호작용은 두 객체를 통과한다. [`cc/trees/proxy.h:38`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy.h#L38)이 추상 인터페이스를 선언한다.
+
+> Abstract interface responsible for proxying commands from the main-thread side of the compositor over to the compositor implementation.
+
+구현은 대칭적인 한 쌍이다. [`cc/trees/proxy_main.h:36`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L36)의 주석이다.
+
+> This class aggregates all interactions that the impl side of the compositor needs to have with the main side. The class is created and lives on the main thread.
+
+`cc/trees/proxy_impl.h:53`은 정확히 반대 방향을 서술한다. 그리고 `ProxyImpl`의 위치가 특수하다.
+
+> ProxyImpl is the only class that accesses data structures on both the main thread and the compositor thread. It only accesses the LayerTreeHost and Layers on the main thread when the main thread is blocked and enforces this through accessor DCHECKs.
+
+커밋 파이프라인은 열거형으로 선언되어 있다. `cc/trees/proxy_main.h`다.
+
+```cpp
+// Commits between the main and impl threads are processed through a pipeline
+// with the following stages. For efficiency we can early out at any stage if
+// we decide that no further processing is necessary.
+enum CommitPipelineStage {
+  NO_PIPELINE_STAGE,
+  ANIMATE_PIPELINE_STAGE,
+  UPDATE_LAYERS_PIPELINE_STAGE,
+  COMMIT_PIPELINE_STAGE,
+};
+```
+
+각 단계에서 할 일이 없으면 조기 탈출한다. [`cc/trees/proxy_main.cc:484`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L484)에 그 경로가 있다.
+
+```cpp
+TRACE_EVENT_INSTANT("cc,raf_investigation", "EarlyOut_NoUpdates");
+```
+
+`requestAnimationFrame` 콜백이 아무것도 바꾸지 않았다면 커밋도, 레이어 갱신도 수행되지 않는다.
+
+### 8. 커밋은 메인 스레드를 블록하지 않는다
+
+여기서 저장소 내 문서와 코드가 어긋난다.
+
+`docs/life_of_a_frame.md`의 Commit 절은 다음과 같이 서술한다.
+
+> Commits updates back to Impl thread for activation. Specifically, the main thread copies its own version of layertree onto the pending tree (pending_tree_) on the impl thread. **The main thread is blocked during the copying process.**
+
+`docs/how_cc_works.md`도 같은 취지다.
+
+> Rather than sending an ipc, commit is done by blocking the main thread and copying data over.
+
+그러나 [`cc/trees/proxy_main.cc:551`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L551) 이하의 실제 구현은 조건부다.
+
+```cpp
+std::optional<DebugScopedSetMainThreadBlocked> main_thread_blocked;
+if (blocking)
+  main_thread_blocked.emplace(task_runner_provider_);
+
+ImplThreadTaskRunner()->PostTask(
+    FROM_HERE, base::BindOnce(&ProxyImpl::NotifyReadyToCommitOnImpl,
+                              /* ... */));
+current_pipeline_stage_ = NO_PIPELINE_STAGE;
+if (blocking)
+  layer_tree_host_->WaitForProtectedSequenceCompletion();
+```
+
+`blocking`이 거짓이면 메인 스레드는 커밋 작업을 컴포지터 스레드에 게시하고 **대기하지 않고 계속 진행한다.**
+
+이 플래그의 기본값은 거짓이다. [`cc/trees/proxy_main.h:240`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L240)이다.
+
+```cpp
+bool block_on_next_commit_ = false;
+```
+
+참으로 설정되는 지점은 한 곳뿐이다. [`cc/trees/proxy_main.cc:840`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L840)이다.
+
+```cpp
+void ProxyMain::SetInputResponsePending() {
+  // If the next main frame will contain the visual response to an input event,
+  // we pause execution on the main thread until the compositor thread finishes
+  // processing the commit. This is done to minimize thread contention while
+  // the compositor is doing critical-path work.
+  block_on_next_commit_ = true;
+}
+```
+
+즉 **다음 프레임이 입력 이벤트에 대한 시각적 응답을 담을 때만** 메인 스레드가 블록된다. 이유도 주석에 있다 — 컴포지터가 임계 경로 작업을 수행하는 동안 스레드 경합을 최소화하기 위해서다.
+
+<KnowledgeNote term="블록하지 않는다면 데이터 경쟁은 어떻게 막는가" kind="reason" defaultOpen>
+
+[`cc/base/protected_sequence_synchronizer.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h)(2022년 추가)가 그 수단이다. 스레드 안전성을 **타입 수준에서** 강제한다.
+
+```cpp
+// ProtectedSequenceSynchronizer can be used to enforce thread safety of data
+// that are owned and produced by an "owner" thread; and then passed by
+// reference to another thread to use for a limited duration (a "protected
+// sequence").
+```
+
+값을 세 종류의 래퍼로 감싼다.
+
+- `ProtectedSequenceForbidden` — 비소유 스레드는 읽기조차 불가
+- `ProtectedSequenceReadable` — 보호 구간 중 비소유 스레드가 읽을 수 있으나 쓸 수 없음
+- `ProtectedSequenceWritable`
+
+`ProtectedSequenceReadable`의 주석이 규칙을 정확히 열거한다.
+
+```cpp
+// ProtectedSequenceReadable values are...
+//   - readable by the owner thread at any time without blocking
+//   - writable by the owner thread, but not during a protected sequence
+//   - readable by a non-owner thread during a protected sequence
+//   - never writable by a non-owner thread
+```
+
+핵심은 두 번째 줄이다. 소유 스레드(메인 스레드)는 보호 구간 중에는 쓸 수 없다. 쓰려고 하면 그때 블록된다. [`cc/layers/layer.cc:162`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/layers/layer.cc#L162)가 그 사례다.
+
+```cpp
+// These two lines copied from ProtectedSequenceReadable::Write()
+DCHECK(IsOwnerThread());
+layer_tree_host()->WaitForProtectedSequenceCompletion();
+```
+
+따라서 **메인 스레드는 커밋이 시작될 때 멈추는 것이 아니라, 커밋 중에 보호된 상태를 건드리려 할 때 멈춘다.** 건드리지 않는 작업은 커밋과 병행된다.
+
+</KnowledgeNote>
+
+이 구조는 복사 대상의 분류와 맞물려 있다. [`cc/trees/commit_state.h:53`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/commit_state.h#L53)이다.
+
+> CommitState and ThreadUnsafeCommitState contain all of the information from LayerTreeHost that is needed to run compositor commit. CommitState is effectively POD; the compositor gets its own copy, which it may read or write without any concurrency issues. ThreadUnsafeCommitState is shared data that is *not* copied to the compositor. Main thread code must take care not to modify anything reachable from ThreadUnsafeCommitState while commit is running on the impl thread, typically by adding calls to LayerTreeHost::WaitForCommitCompletion() before attempting to mutate state.
+
+`CommitState`는 복사되므로 경쟁이 없다. `ThreadUnsafeCommitState`는 공유되므로 메인 스레드가 조심해야 하는 쪽이고, 그 "조심"이 `WaitForCommitCompletion` 호출이다.
+
+### 9. 입력은 반대 방향으로 흐른다
+
+`docs/how_cc_works.md`의 Input Data Flow Overview 절이다.
+
+> In the renderer process, input is forwarded from the browser process. It is processed by ui::InputHandlerProxy (a cc::InputHandlerClient).
+>
+> Some of this input is forwarded to the LayerTreeHostImpl (a cc::InputHandler) at specific times. This allows it to modify the active layer's property tree and scroll or pinch as needed.
+
+입력은 컴포지터 스레드에서 처리되어 active tree의 속성 트리를 직접 수정한다. 메인 스레드를 거치지 않는다.
+
+예외가 명시되어 있다.
+
+> Some input can't be handled by the compositor thread (e.g. there's a synchronous Javascript touch or wheel handler) and so that input is forwarded along to Blink to handle directly.
+
+**동기적 터치·휠 핸들러가 등록되어 있으면** 해당 입력은 Blink로 넘어간다. 핸들러가 `preventDefault()`를 호출할지 알 수 없으므로 컴포지터가 독자적으로 스크롤할 수 없다.
+
+<KnowledgeNote term="passive 이벤트 리스너의 구조적 근거" kind="reason">
+
+`addEventListener`의 `passive: true` 옵션은 핸들러가 `preventDefault()`를 호출하지 않겠다는 선언이다.
+
+이 선언이 있으면 컴포지터 스레드는 핸들러의 실행 결과를 기다릴 필요가 없으므로, 입력을 Blink로 넘기지 않고 직접 처리할 수 있다. 위 문서가 서술하는 분기의 조건이 해소되는 것이다.
+
+"`passive`를 쓰면 스크롤이 부드러워진다"는 경험적 조언의 근거가 이 분기다. 성능 조정이 아니라 처리 주체가 달라지는 문제다.
+
+</KnowledgeNote>
+
+### 10. 한 프레임의 전체 경로
+
+[`docs/life_of_a_frame.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/life_of_a_frame.md)는 vsync부터 화면 주사까지를 17단계로 번호 매겨 서술한다. 앞의 아홉 절에서 확인한 요소들이 이 안에 배치된다.
+
+| 단계 | 내용 | 수행 주체 |
+|---|---|---|
+| 1 | BeginImplFrame — vsync마다 프레임 시작 | 컴포지터 스레드 |
+| 2 | 컴포지터 갱신 — 스크롤, 줌 애니메이션 | 컴포지터 스레드 |
+| 3 | BeginMainFrame 전송 | 컴포지터 → 메인 |
+| 4 | 메인 스레드 갱신 — 입력 처리, 애니메이션, 스타일, 레이아웃 | 메인 스레드 |
+| 5 | Commit | 양쪽 |
+| 6 | 래스터 대기 | 워커 스레드 또는 별도 프로세스 |
+| 7 | Activation — pending → active | 컴포지터 스레드 |
+| 8 | 데드라인 대기 | 컴포지터 스레드 |
+| 9 | SubmitCompositorFrame | 컴포지터 → GPU |
+| 10 | AggregateSurfaces — 여러 프레임 합성 | GPU 프로세스 |
+| 11 | Draw Frame — 드로 커맨드 기록 | GPU 프로세스 |
+| 12 | RequestSwap | GPU 프로세스 |
+| 13 | 리소스 준비 대기 (SyncToken) | GPU 프로세스 |
+| 14 | 큐 지연 | GPU 메인 스레드 |
+| 15 | GPU draw — 커맨드 재생 | GPU |
+| 16 | Swap | 플랫폼 |
+| 17 | Presentation — 화면 주사 | 디스플레이 컨트롤러 |
+
+3단계에 조건이 붙는다.
+
+> If there is main thread damage, BeginMainFrame will be sent and if there is no main thread damage steps [3], [4] and [5] will be skipped (SchedulerStateMachine::ShouldSendBeginMainFrame()).
+
+메인 스레드에 변경이 없으면 3·4·5단계를 건너뛴다. 7절의 조기 탈출과 같은 설계다.
+
+**프레임 드랍의 발생 지점은 6단계와 9단계 사이로 특정된다.**
+
+> If rasterization cannot be finished before the deadline for activation, the pipeline will not perform the copying from pending tree to the active tree in step [7], and will instead proceed to step [8] with whatever is already in the active tree.
+
+그리고 9단계의 서술이 결론을 준다.
+
+> If any of the steps [2], [3], [4], [5], [6] takes so long that the update that step is responsible for cannot be delivered to the active tree by deadline, the pipeline will proceed to submit with the existing active tree without said update. **This is a possible source of a dropped frame.**
+
+즉 프레임이 누락되는 것이 아니다. **프레임은 제출되지만, 늦은 갱신이 빠진 상태로 제출된다.** 이것이 "프레임 드랍"의 정확한 의미다.
+
+<KnowledgeNote term="래스터는 다른 프로세스에서 일어날 수 있다" kind="definition">
+
+6단계의 서술이다.
+
+> Rasterization may occur asynchronously on separate threads, or even another process (OOP-R, or out-of-process rasterization).
+
+`docs/how_cc_works.md`는 두 가지 래스터 방식을 설명한다.
+
+> - software raster: generate software bitmaps in the raster worker
+> - gpu raster: generate gpu textures by sending paint commands over the command buffer
+
+둘 중 하나의 모드로만 동작하며, 모드를 전환하면 모든 리소스가 파괴된다. 전환의 흔한 원인도 명시되어 있다 — "the gpu process has crashed too much and all of Chrome switches from gpu to software raster and compositing modes."
+
+</KnowledgeNote>
+
+## 결론
+
+### 확인된 사실
+
+1. **네비게이션과 로딩은 별개 단계이며, 경계는 오류 처리 규칙이 달라지는 지점이다.** HTML 파싱과 렌더링, 스크립트 실행은 모두 로딩 단계에 속한다.
+
+2. **커밋 시점은 브라우저 프로세스가 렌더러의 확인 응답을 수신한 순간으로 정의된다.** 렌더러가 문서를 만든 시점이 아니다.
+
+3. **렌더링 단계는 열거형 상태 기계로 구현되어 있다.** 활성 문서는 스타일 재계산, 레이아웃, 합성 입력 갱신, 프리페인트, 페인트의 다섯 단계를 통과하며, 각 단계는 `In-`/`-Clean` 쌍을 갖는다.
+
+4. **레이어는 페인트 결과로부터 역산된다.** 속성 트리를 먼저 만들고, 같은 속성 상태를 공유하는 디스플레이 아이템을 묶고, 그 묶음을 보고 레이어를 결정한다.
+
+5. **속성 트리의 도입으로 레이어는 트리일 필요가 없어졌다.** 갱신 비용이 레이어 수가 아니라 변경된 노드 수에 비례한다.
+
+6. **`cc`는 컴포지터가 아니다.** 저장소 내 문서가 직접 이를 밝히며, 대안 명칭으로 "content collator"를 제시한다. 실제 합성은 GPU 프로세스의 viz가 수행한다.
+
+7. **커밋은 기본적으로 메인 스레드를 블록하지 않는다.** 저장소 내 문서 두 곳이 블록한다고 서술하지만, 구현은 조건부이며 기본값은 거짓이다. 참이 되는 경우는 다음 프레임이 입력 이벤트의 시각적 응답을 담을 때 한 곳뿐이다. 데이터 경쟁은 타입 수준 래퍼로 방지하고, 메인 스레드는 보호된 상태를 건드릴 때 비로소 블록된다.
+
+8. **입력은 컴포지터 스레드에서 처리되어 active tree를 직접 수정한다.** 동기적 터치·휠 핸들러가 있으면 Blink로 넘어간다. `passive` 옵션이 이 분기의 조건을 해소한다.
+
+9. **프레임 드랍은 프레임의 누락이 아니다.** 프레임은 제출되며, 데드라인을 넘긴 갱신만 빠진다.
+
+### 이 분석의 한계
+
+HTML 파서의 내부 동작, CSS 선택자 매칭, LayoutNG의 알고리즘은 다루지 않았다. 각각이 독립된 분석을 요구하는 규모다. 또한 7번 항목의 `blocking` 분기는 코드상 확인한 것이며, 실제 프로파일링으로 메인 스레드의 대기 시간을 측정하지는 않았다.
+
+`docs/life_of_a_frame.md`와 `docs/how_cc_works.md`가 현재 구현과 어긋나는 부분을 확인했으나, 이것이 문서의 지체인지 아니면 단일 스레드 구성을 포함한 다른 경로에서는 여전히 유효한 서술인지는 더 확인이 필요하다.
+
+### 다음 편
+
+3편은 4단계(메인 스레드 갱신)의 내부를 다룬다. 자바스크립트가 C++ 경계를 넘는 방식, 이벤트 루프의 실제 구현, 그리고 태스크 큐가 하나가 아니라는 사실이다.
+
+## 참조
+
+### 저장소
+
+| 저장소 | 고정 커밋 | 비고 |
+|---|---|---|
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 아래 모든 링크의 기준 |
+
+공식 코드 검색: [source.chromium.org](https://source.chromium.org/chromium/chromium/src) · 링크 형식과 재현 방법: [1편 서론](/blog/chromium-architecture-01-reading-the-source)
+
+### 1차 자료 — 본론 절별
+
+**1~2절 · 네비게이션과 로딩**
+
+- [`docs/navigation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md) — "Life of a Navigation" 전문. [Network Request and Response 35행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L35) · [Commit 74행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L74) · [Loading 102행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L102)
+- [`docs/navigation_concepts.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation_concepts.md) — same-document/cross-document, last committed·pending·visible URL, 리다이렉트, 동시 네비게이션
+- [`docs/session_history.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/session_history.md) — 2절의 세션 히스토리 항목 생성
+- [`docs/frame_trees.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/frame_trees.md) — MPArch, 내부 프레임 트리
+
+**3절 · 문서 수명주기**
+
+- [`core/dom/document_lifecycle.h#L49`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h#L49) — `LifecycleState` 열거형 전체
+- [`core/layout/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/layout/README.md) — 레이아웃이 담당하는 수명주기 상태, 박스 모델
+- [`core/layout/layout_ng.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/layout/layout_ng.md) — LayoutNG 구현 상세(이 편에서 다루지 않은 영역)
+
+**4절 · 속성 트리와 합성 입력**
+
+- [`core/paint/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md) — 전문(644행). [Overview 127행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md#L127) · [Compositing algorithm 154행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md#L154) · [PrePaint 212행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md#L212)
+- [`platform/graphics/paint/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/graphics/paint/README.md) — 디스플레이 리스트와 속성 트리의 구현
+- [`docs/how_cc_works.md#L106`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L106) — Property Trees 절, 도입 근거
+
+**5~6절 · `cc`와 세 개의 트리**
+
+- [`docs/how_cc_works.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md) — 전문(409행). [tl;dr 9행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L9) · [Commit Flow 62행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L62) · [Trees: commit / activation 190행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L190) · [Raster and tile management 231행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L231)
+- [`cc/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/README.md) — viz와의 관계, 용어 사전
+- [`components/viz/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/components/viz) — display compositor. `SurfaceAggregator`, `DirectRenderer`
+
+**7~8절 · 스레드 경계와 커밋 블로킹**
+
+- [`cc/trees/proxy.h#L38`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy.h#L38) — 추상 인터페이스 선언과 주석
+- [`cc/trees/proxy_main.h#L36`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L36) — `ProxyMain` 역할. [`CommitPipelineStage` 50행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L50) · [`block_on_next_commit_` 240행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L240)
+- [`cc/trees/proxy_impl.h#L53`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_impl.h#L53) — 대칭 구현의 주석
+- [`cc/trees/proxy_main.cc#L484`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L484) — `EarlyOut_NoUpdates` 조기 탈출. [조건부 블로킹 551행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L551) · [`SetInputResponsePending` 840행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L840)
+- [`cc/base/protected_sequence_synchronizer.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h) — 타입 수준 스레드 안전성. [`ProtectedSequenceSynchronizer` 19행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h#L19) · [`ProtectedSequenceReadable` 규칙 70행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h#L70)
+- [`cc/trees/commit_state.h#L53`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/commit_state.h#L53) — `CommitState`와 `ThreadUnsafeCommitState`의 구분
+- [`cc/trees/layer_tree_host.cc#L526`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/layer_tree_host.cc#L526) — `WaitForCommitCompletion`
+- [`cc/layers/layer.cc#L162`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/layers/layer.cc#L162) — 지연 블로킹의 실제 호출
+
+**9절 · 입력 경로**
+
+- [`docs/how_cc_works.md#L51`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L51) — Input Data Flow Overview, 컴포지터 처리와 Blink 전달의 분기
+- [`cc/input/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/cc/input) — `InputHandler`, `InputHandlerClient` 구현
+
+**10절 · 프레임 전체 경로**
+
+- [`docs/life_of_a_frame.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/life_of_a_frame.md) — 17단계 전문. 7번 항목(커밋 블로킹)이 현재 구현과 어긋나는 지점
+- [`cc/scheduler/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/cc/scheduler) — `SchedulerStateMachine`, 데드라인 판단
+
+### 2차 자료
+
+- [RenderingNG](https://developer.chrome.com/docs/chromium/renderingng) — Chrome 개발자 문서의 렌더링 아키텍처 개요. 이 편이 코드로 확인한 내용의 공식 설명
+- [Chromium Graphics 설계 문서 모음](https://www.chromium.org/developers/design-documents/chromium-graphics) — `cc/README.md`가 안내하는 그래픽 스택 문서 색인
+
+### 관련 공식 문서
+
+- [`docs/README.md`](https://chromium.googlesource.com/chromium/src/+/main/docs/README.md) — 저장소 내 문서 전체 색인
+- [`docs/render_document.md`](https://chromium.googlesource.com/chromium/src/+/main/docs/render_document.md) — `RenderFrameHost` 수명과 문서 교체
+- [`docs/bfcache.md`](https://chromium.googlesource.com/chromium/src/+/main/docs/bfcache.md) — 뒤로/앞으로 캐시. 2절의 커밋 모델과 맞물리는 주제

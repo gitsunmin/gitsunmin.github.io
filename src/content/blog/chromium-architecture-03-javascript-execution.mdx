@@ -1,0 +1,594 @@
+---
+title: "Chromium 구조 분석 (3) — 자바스크립트가 실행되는 자리"
+description: "이벤트 루프는 스펙 문서로는 널리 설명되었으나 구현의 위치는 거의 다루어지지 않았다. Blink의 EventLoop 클래스는 사실상 마이크로태스크 큐만 관리하며, 일반 태스크 큐는 프레임이 보유한다. 헤더 주석은 이것이 스펙에 대한 의도적 위반이라고 명시한다."
+pubDate: "2026-10-01"
+updatedDate: "2026-10-01"
+tags: ["technology", "chromium", "browser", "javascript", "event-loop", "blink", "architecture"]
+heroImage: "/assets/blog/chromium-architecture/thumbnail.webp"
+draft: true
+---
+
+import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
+
+> **Chromium 구조 분석** — 전체 4편 중 1편 공개. 2~4편은 준비 중이다.
+> 1. [저장소를 직접 읽는다](/blog/chromium-architecture-01-reading-the-source) — 분석 환경, 계층 구조, 프로세스 모델, IPC
+> 2. 주소에서 픽셀까지 — 네비게이션, 문서 수명주기, 합성 *(준비 중)*
+> 3. **자바스크립트가 실행되는 자리** — 바인딩, 이벤트 루프, 태스크 큐 ← 지금 글 *(준비 중)*
+> 4. 엔진 심층 — V8의 네 단계 티어, Wasm, 디옵티마이제이션 *(준비 중)*
+
+## 서론
+
+### 문제 제기
+
+이벤트 루프는 프론트엔드 영역에서 가장 많이 설명된 주제에 속한다. 콜 스택, 태스크 큐, 마이크로태스크 큐의 관계를 도식화한 자료가 다수 존재하고, HTML 표준의 [event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)도 공개되어 있다.
+
+그럼에도 두 가지가 다루어지지 않는다.
+
+첫째, **구현의 위치**다. "태스크 큐"라는 개념이 Chromium의 어느 클래스에 대응하는지, 큐가 실제로 몇 개인지, 누가 소유하는지는 대부분의 자료에서 생략된다.
+
+둘째, **구현과 스펙의 차이**다. 이 편에서 확인할 핵심 사실은 Blink의 이벤트 루프 구현이 스펙의 구조를 따르지 않으며, 헤더 주석이 이를 **의도적 위반**이라고 명시한다는 점이다. 스펙만 읽거나 구현만 읽으면 어느 쪽도 이 차이를 알 수 없다.
+
+또한 "매크로태스크 큐"라는 용어는 Chromium 코드에 존재하지 않는다. 실제로는 81개의 태스크 유형이 열거되어 있고, 큐는 유형과 프레임에 따라 분화되어 있다.
+
+### 범위
+
+이 편이 답하려는 질문은 둘이다. **자바스크립트는 어떤 경계를 통해 브라우저의 기능에 접근하는가. 그리고 그 실행은 누가 언제 스케줄링하는가.**
+
+V8 내부의 컴파일과 최적화는 4편에서 다룬다. 이 편은 V8과 Blink의 접면, 그리고 Blink의 스케줄러까지다.
+
+### 분석 대상
+
+1·2편과 동일한 커밋을 사용한다.
+
+| 저장소 | 고정 커밋 | 날짜 |
+|---|---|---|
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 2026-09-30 |
+
+인용 링크의 형식과 재현 방법은 [1편 서론](/blog/chromium-architecture-01-reading-the-source)에 정리해 두었다. 이 편의 모든 근거는 마지막 **참조** 절에서 본론 절 번호별 퍼머링크로 확인할 수 있다.
+
+## 본론
+
+### 1. 세 개의 격리 단위 — Isolate, Context, World
+
+[`blink/renderer/bindings/core/v8/V8BindingDesign.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/core/v8/V8BindingDesign.md)가 바인딩 계층의 기본 개념을 정의한다. 중요한 것은 격리 단위가 세 층으로 되어 있다는 점이다.
+
+**Isolate**와 **Context**는 V8의 개념이다. Isolate는 독립된 자바스크립트 힙과 실행 상태를 갖는 단위이고, Context는 전역 객체와 프로토타입 체인을 갖는 단위다.
+
+**World**는 V8이 모르는 개념이다. 문서가 이를 명시한다.
+
+> (Note: An isolated world is a concept of V8 binding, whereas an isolate and a context are a concept of V8. V8 does not know what isolated worlds are in an isolate.)
+
+World는 세 종류다.
+
+> There are three kinds of worlds: a main world, an isolated world and a worker world. A main world is a world where a normal JavaScript downloaded from the web is executed. An isolated world is a world where a content script of a Chrome extension is executed.
+>
+> An isolate of the main thread has 1 main world and N isolated worlds. An isolate of a worker thread has 1 worker world and 0 isolated world.
+
+World의 존재 이유는 Chrome 확장 프로그램의 content script를 격리하는 것이다. 핵심 규칙은 다음과 같다.
+
+> All worlds in one isolate share underlying C++ DOM objects, but each world has its own DOM wrappers. That way the worlds in one isolate can operate on the same C++ DOM object without sharing any DOM wrapper among the worlds.
+
+**C++ DOM 객체는 공유되지만, 자바스크립트 래퍼는 공유되지 않는다.** 각 World는 자기 Context를 가지므로 전역 스코프와 프로토타입 체인도 분리된다. 문서는 보안 모델로서의 의미를 명시한다.
+
+> That way we guarantee the security model that Chrome extensions doesn't share any JavaScript objects while sharing the underlying C++ DOM objects. This sandbox allows the Chrome extensions to run untrusted JavaScripts on a shared DOM structure.
+
+<KnowledgeNote term="확장 프로그램이 페이지 변수를 볼 수 없는 이유" kind="reason">
+
+content script에서 페이지의 전역 변수에 접근할 수 없다는 제약은 잘 알려져 있다. 그 근거가 World의 분리다.
+
+content script는 isolated world에서 실행되고, 페이지 스크립트는 main world에서 실행된다. 두 World는 각자의 Context를 가지므로 전역 스코프가 다르다. 반면 `document.body`는 같은 C++ 객체를 가리키므로, DOM 조작은 서로에게 보인다.
+
+같은 Isolate 안에 있으므로 힙은 공유한다. 즉 이것은 프로세스 격리가 아니라 바인딩 계층의 격리다.
+
+</KnowledgeNote>
+
+### 2. 래퍼 동일성이 요구사항이다
+
+World마다 별도의 래퍼를 갖는다면, 하나의 C++ 객체에 대해 같은 World 안에서는 **항상 같은 래퍼가 반환되어야** 한다. 문서가 이유를 코드로 제시한다.
+
+> For compatibility reasons, we need to make sure that the same DOM wrapper is returned to JavaScript as long as the underlying C++ DOM object is alive. We should not return different DOM wrappers for the same C++ DOM object.
+
+```js
+var div = document.createElement("div");
+div.foo = 1234;  // expando
+var p = document.createElement("p");
+p.appendChild(div);
+div = null;
+gc();
+console.log(p.firstChild.foo);  // This should be 1234, not undefined
+```
+
+`div.foo`는 C++ `Element` 객체에 존재하지 않는 속성이다. 자바스크립트 래퍼에만 붙어 있다. `div` 변수를 비우고 GC를 수행한 뒤 다시 `p.firstChild`로 같은 노드에 도달했을 때 `foo`가 유지되어야 한다면, **래퍼가 동일 객체여야 한다.**
+
+이를 위해 C++ 객체에서 래퍼로의 매핑이 필요하고, World별로 분리되어야 한다.
+
+> To meet the requirements, we make each world hold a DOM wrapper storage that stores a mapping from the C++ DOM objects to the DOM wrappers in that world.
+>
+> The mapping of the main world is written in `ScriptWrappable`. If `ScriptWrappable::main_world_wrapper_` has a non-empty value, it is a DOM wrapper of the C++ DOM object of the main world. The mapping of other worlds are written in `DOMDataStore`.
+
+main world는 자주 쓰이므로 `ScriptWrappable` 객체 안에 래퍼 참조를 직접 둔다. 나머지 World는 별도 저장소를 조회한다.
+
+<KnowledgeNote term="ScriptWrappable" kind="definition">
+
+[`blink/renderer/platform/bindings/script_wrappable.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/bindings/script_wrappable.h)에 정의되어 있다. 자바스크립트에 노출되는 Blink의 C++ 객체는 이 클래스를 상속한다.
+
+[`platform/bindings/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/bindings/README.md)는 이 디렉터리의 역할을 다음과 같이 정리한다.
+
+> - Functionality to wrap Blink C++ objects with a JavaScript object and maintain wrappers in multiple worlds (see ScriptWrappable, ActiveScriptWrappableBase)
+> - Implementation of wrapper tracing
+> - Important abstractions for script execution (see ScriptState, V8PerIsolateData, V8PerContextData)
+
+래퍼의 수명은 V8의 GC와 Blink의 GC(Oilpan)에 양쪽으로 걸쳐 있다. 이를 다루는 기법이 wrapper tracing이며 `TraceWrapperReference.md`가 별도로 설명한다.
+
+</KnowledgeNote>
+
+### 3. 바인딩 코드는 생성된다
+
+`document.querySelector`가 C++으로 넘어가는 경계는 손으로 작성된 코드가 아니다. [`blink/renderer/bindings/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/README.md)가 구조를 설명한다.
+
+> bindings/ contains code for V8-DOM bindings. bindings/ is a layer that implements high-performance C++ bindings between V8 and DOM per the [Web IDL spec](https://webidl.spec.whatwg.org/).
+
+생성 과정은 다음과 같다.
+
+> - `bindings/scripts/` implements the IDL compiler in Python. The IDL compiler is responsible for auto-generating C++ bindings code for all Web IDL files per the Web IDL spec.
+> - `bindings/templates/` is a set of Jinja templates used by the IDL compiler.
+> - `//out/*/gen/blink/bindings/` is a directory where the auto-generated code is generated.
+
+Web IDL 파일이 입력이고, Python으로 작성된 컴파일러가 C++ 코드를 생성하며, 결과는 빌드 출력 디렉터리에 놓인다. **저장소를 체크아웃해도 바인딩 코드는 존재하지 않는다.** 빌드해야 생성된다.
+
+<KnowledgeNote term="위 인용의 두 번째 항목은 현재 구조와 어긋난다" kind="caution" defaultOpen>
+
+`bindings/templates/` 디렉터리는 분석 시점의 저장소에 **존재하지 않는다.** `bindings/` 아래에는 `scripts`, `core`, `modules`, `extensions`와 몇 개의 `.gni`·`.md` 파일만 있다.
+
+현재 생성기는 [`bindings/scripts/bind_gen/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/scripts/bind_gen)이며, 자체 `README.md`가 설계를 설명한다.
+
+> The bindings code generator is implemented as a tree builder of `CodeNode` which is a fundamental building block.
+>
+> The code generator produces C++ source files (text files) but the content of each file is not represented as a single giant string nor a list of strings. The content of each file is represented as a CodeNode tree.
+
+즉 **텍스트 템플릿이 아니라 코드 노드 트리를 구축하는 방식**이다. 디렉터리에 있는 렌더러도 `mako_renderer.py`이므로 Jinja가 아니다.
+
+`bindings/README.md`가 경로를 `Source/bindings/...` 형태로 적고 있는 점도 단서다. `Source/` 접두사는 WebKit 시절의 디렉터리 구조이며 현재는 쓰이지 않는다. 이 문서가 오래 갱신되지 않았음을 가리킨다.
+
+1편 8절에서 "주석을 그대로 신뢰하지 않는다"고 적었던 이유가 이런 경우다. 상위 서술(IDL 입력 → Python 컴파일러 → 빌드 출력)은 유효하지만, 중간 항목은 확인해야 했다.
+
+</KnowledgeNote>
+
+문서는 유틸리티 클래스의 배치 규칙도 정한다.
+
+> Utility classes that purely depend on V8 APIs go to `platform/bindings/`. Utility classes that depend on `core/` go to `bindings/core/`. Utility classes that depend on `modules/` go to `bindings/modules/`.
+>
+> The point is that we should put all the complexity around V8 APIs into `bindings/` so that the code ie kept under control of the binding team.
+
+그리고 리뷰 요건이 별도 절로 명시되어 있다.
+
+> ## When you use V8 APIs, ask blink-reviews-bindings@ for review!
+>
+> V8 APIs are sometimes hard to use. It's easy to use a wrong v8::Context, it's easy to leak window objects, it's easy to ignore exceptions incorrectly etc.
+
+1절에서 확인한 Isolate·Context·World의 삼중 구조가 이 위험의 원인이다. 잘못된 Context를 쓰면 World 격리가 깨진다.
+
+### 4. 이벤트 루프의 구현은 스펙을 따르지 않는다
+
+[`blink/renderer/platform/scheduler/public/event_loop.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/public/event_loop.h)가 이벤트 루프를 구현한다. 헤더 주석이 스펙과의 대응을 먼저 선언한다.
+
+```cpp
+// Represents an event loop. The instance is held by ExecutionContexts.
+// https://html.spec.whatwg.org/C#event-loop
+//
+// Browsing contexts must share the same EventLoop if they have a chance to
+// access each other synchronously.
+// That is:
+//  - Two Documents must share the same EventLoop if they are scriptable with
+//    each other.
+//  - Workers and Worklets can have its own EventLoop, as no other browsing
+//    context can access it synchronously.
+```
+
+이 조건은 1편에서 확인한 principal instance의 정의와 동일하다. 동기적으로 서로에 접근할 수 있는 문서들은 같은 이벤트 루프를 공유한다.
+
+그 다음 문단이 이 편의 핵심이다.
+
+```cpp
+// The specification says an event loop has (non-micro) task queues. However,
+// we process regular tasks in a different granularity; in our implementation,
+// a frame has task queues. This is an intentional violation of the
+// specification.
+//
+// Therefore, currently, EventLoop is a unit that just manages a microtask
+// queue: <https://html.spec.whatwg.org/C#microtask-queue>
+```
+
+두 가지가 확정된다.
+
+**첫째, 일반 태스크 큐는 이벤트 루프가 소유하지 않는다. 프레임이 소유한다.** 주석은 이를 "an intentional violation of the specification"이라고 명시한다.
+
+**둘째, `EventLoop` 클래스는 사실상 마이크로태스크 큐만 관리한다.** 클래스 이름과 실제 역할이 일치하지 않는다.
+
+이 설계의 동기는 다음 절에서 확인한다. 프레임별로 큐를 두면 스케줄러가 프레임 단위로 우선순위를 조정하거나 동결할 수 있다.
+
+<KnowledgeNote term="V8의 기본 마이크로태스크 큐가 여전히 쓰인다" kind="caution" defaultOpen>
+
+같은 헤더의 구현 노트가 또 하나의 불일치를 기록한다.
+
+```cpp
+// Implementation notes: Originally, microtask queues were created in V8
+// for JavaScript promises. V8 allocates a default microtask queue per isolate,
+// and it still uses the default queue, not the one in this EventLoop class.
+// This is not correct in terms of the standards conformance, and we'll
+// eventually merge the queues so both Blink and V8 can use the microtask queue
+// allocated in the correct granularity.
+```
+
+마이크로태스크 큐는 원래 프로미스를 위해 V8에 도입되었고, V8은 Isolate당 기본 큐를 할당한다. 그리고 V8은 `EventLoop`가 가진 큐가 아니라 **여전히 기본 큐를 사용한다.**
+
+주석은 이것이 표준 준수 측면에서 올바르지 않다고 인정하며, 장래에 병합할 계획을 밝힌다.
+
+즉 마이크로태스크 큐의 입도(granularity)가 스펙과 다르다. Isolate 하나에 여러 World와 여러 Context가 존재할 수 있으므로(1절), 큐가 Isolate 단위라는 것은 격리 경계와 어긋난다.
+
+</KnowledgeNote>
+
+`EventLoop`가 제공하는 연산은 마이크로태스크 중심이다.
+
+```cpp
+// Queues |cb| to the backing v8::MicrotaskQueue.
+void EnqueueMicrotask(base::OnceClosure cb);
+
+// Runs |cb| at the end of microtask checkpoint.
+void EnqueueEndOfMicrotaskCheckpointTask(base::OnceClosure cb);
+void RunEndOfMicrotaskCheckpointTasks();
+
+// Runs pending microtasks until the queue is empty.
+void PerformMicrotaskCheckpoint();
+```
+
+`PerformMicrotaskCheckpoint`의 주석이 실행 시점을 정의한다.
+
+```cpp
+// Microtasks queued during a task are executed at the end of the task or
+// after a user script is executed (for the exact timings, refer to the
+// specification).
+```
+
+그리고 `EnqueueEndOfMicrotaskCheckpointTask`의 주석은 더 좁은 시점을 가리킨다.
+
+```cpp
+// The tasks are run when control is returning to C++ from script, after
+// executing a script task (e.g. callback, event) or microtasks
+// (e.g. promise). This is explicitly needed for Indexed DB transactions
+// per spec, but should in general be avoided.
+```
+
+제어가 스크립트에서 C++로 돌아오는 시점이 기준이며, 문서는 일반적으로는 사용을 피해야 한다고 덧붙인다.
+
+### 5. 태스크는 원자적 단위다
+
+[`blink/renderer/platform/scheduler/TaskSchedulingInBlink.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md)가 스케줄러의 설계를 설명한다. 전제는 단순하다.
+
+> Most of Blink is essentially single-threaded: most important things happen on the main thread (including JavaScript execution, DOM, CSS, layout calculations), which means that there are many things which want to run on the main thread at the same time. Therefore Blink needs a scheduling policy to prioritise the right thing — for example, to schedule input handling above everything else.
+
+스케줄링 단위는 태스크다.
+
+> The main scheduling unit in Blink is a task. A task is a `base::OnceClosure` posted via `TaskRunner::PostTask` or `TaskRunner::PostDelayedTask` interface.
+
+그리고 다음 문장이 "자바스크립트가 메인 스레드를 막는다"는 서술의 정확한 기술적 근거다.
+
+> At the moment Blink Scheduler treats tasks as an atomic unit — **if a task has started, it can't be interrupted until it completes.** The scheduler can only choose a new task to run from the eligible tasks or can elect not to run any task at all.
+
+스케줄러가 할 수 있는 일은 두 가지뿐이다. 실행 가능한 태스크 중에서 다음 것을 고르거나, 아무것도 실행하지 않는 것이다. **진행 중인 태스크를 선점할 수단이 없다.**
+
+태스크는 프레임과 연결되어야 한다.
+
+> Almost all main thread tasks should be associated with a frame to allow the scheduler to freeze or prioritise individual frames. This is a hard requirement backed by a `DCHECK` that a task running JavaScript should have this association.
+
+4절에서 확인한 "프레임이 태스크 큐를 갖는다"는 설계의 목적이 여기서 드러난다. **프레임 단위 동결과 우선순위 조정을 가능하게 하기 위해서다.**
+
+<KnowledgeNote term="프레임에 연결할 수 없는 태스크" kind="note">
+
+예외가 명시되어 있다.
+
+> Some tasks can't be associated with a particular frame. One example is garbage collection which interacts with all JavaScript heaps in the isolate.
+
+이 경우 스레드 단위 태스크 러너를 쓴다. 문서가 열거하는 목록은 다음과 같다.
+
+> - Compositor task runner
+> - GC task runner
+> - Default (deprecated)
+> - Input task runner (semi-deprecated)
+
+GC가 프레임에 묶일 수 없는 이유는 1절의 구조에서 나온다. Isolate 하나가 여러 World와 Context를 담으므로, 힙은 프레임보다 넓은 단위다.
+
+</KnowledgeNote>
+
+### 6. 태스크 큐는 하나가 아니다
+
+[`blink/public/platform/task_type.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/platform/task_type.h#L22)에 `TaskType` 열거형이 선언되어 있다. 값의 개수는 **81개**이며, 파일은 332행이다. 각 값에는 대응하는 HTML 스펙 절의 URL이 주석으로 붙어 있다.
+
+```cpp
+// https://html.spec.whatwg.org/multipage/webappapis.html#generic-task-sources
+
+// This task source is used for features that react to DOM manipulations, such
+// as things that happen in a non-blocking fashion when an element is inserted
+// into the document.
+kDOMManipulation = 1,
+// This task source is used for features that react to user interaction, for
+// example keyboard or mouse input. Events sent in response to user input
+// (e.g. click events) must be fired using tasks queued with the user
+// interaction task source.
+kUserInteraction = 2,
+// This task source is used for features that trigger in response to network
+// activity.
+kNetworking = 3,
+```
+
+`TaskSchedulingInBlink.md`가 이 열거형의 용도를 설명한다.
+
+> In addition to frame association, the scheduler also needs to know the nature of the task to correctly handle it. `blink::TaskType` encodes this information. `TaskType` is a required parameter of all `GetTaskRunner()` methods and `FrameScheduler` returns an appropriate task runner based on the `TaskType`.
+
+**`TaskType`은 선택 사항이 아니다.** 태스크 러너를 얻는 모든 메서드의 필수 인자이며, 그 값에 따라 다른 러너가 반환된다.
+
+스펙에 정의된 태스크와 그렇지 않은 태스크를 구분한다.
+
+> All tasks mentioned in the spec should have task source explicitly defined. For the non-speced tasks (for example, clean up caches or record metrics. Note that these tasks shouldn't run JavaScript), `kInternal*` task types should be used.
+
+큐 자체의 종류도 열거되어 있다. [`platform/scheduler/main_thread/main_thread_task_queue.h`의 `QueueType`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/main_thread/main_thread_task_queue.h#L53)이다.
+
+```text
+kControl  kDefault  kFrameLoading  kCompositor  kIdle  kTest
+kFrameLoadingControl  kFrameThrottleable  kFrameDeferrable
+kFramePausable  kFrameUnpausable  kInput  kDetached
+kWebScheduling  kNonWaking  kIPCTrackingForCachedPages  kOther
+```
+
+이름에서 정책이 읽힌다 — `Throttleable`, `Deferrable`, `Pausable`, `Unpausable`. **큐는 적용 가능한 스케줄링 정책에 따라 분화되어 있다.**
+
+<KnowledgeNote term="setTimeout의 중첩 수준이 태스크 유형을 바꾼다" kind="definition" defaultOpen>
+
+`task_type.h`는 자바스크립트 타이머를 세 유형으로 나눈다.
+
+```cpp
+// https://html.spec.whatwg.org/multipage/webappapis.html#timers
+// For tasks queued by setTimeout() or setInterval().
+
+// Task nesting level is < 5 and timeout is zero.
+kJavascriptTimerImmediate = 72,
+// Task nesting level is < 5 and timeout is > 0.
+kJavascriptTimerDelayedLowNesting = 73,
+// Task nesting level is >= 5.
+kJavascriptTimerDelayedHighNesting = 10,
+// Note: The timeout is increased to be at least 4ms when the task nesting
+// level is >= 5. Therefore, the timeout is necessarily > 0 for
+// kJavascriptTimerDelayedHighNesting.
+```
+
+`setTimeout(fn, 0)`이 실제로 0ms에 실행되지 않는다는 사실은 널리 알려져 있으나, 조건이 정확히 기술되는 경우는 드물다.
+
+조건은 **태스크 중첩 수준이 5 이상**일 때다. 이 경우 타임아웃이 최소 4ms로 증가한다. 중첩 수준이 5보다 작고 타임아웃이 0이면 `kJavascriptTimerImmediate`로 분류되며 이 하한이 적용되지 않는다.
+
+중첩 수준이란 타이머 콜백 안에서 다시 타이머를 등록할 때 올라가는 값이다. 즉 단발성 `setTimeout(fn, 0)`은 지연되지 않고, 재귀적으로 반복되는 타이머가 다섯 번째부터 4ms로 묶인다.
+
+</KnowledgeNote>
+
+### 7. 네 가지 스케줄링 정책
+
+[`TaskSchedulingInBlink.md`의 Scheduling policies 절](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L105)은 우선순위 외에 네 가지 정책을 정의한다. 각각 적용 조건과 수치가 명시되어 있다.
+
+**우선순위.** 규칙은 세 가지다.
+
+> - Input task runner has the highest priority.
+> - Compositor task runner has high priority when user gestures are observed.
+> - There are several ongoing experiments to increase or decrease priorities for individual frames.
+
+기본 우선순위는 normal이다. 컴포지터가 항상 높은 것이 아니라 **사용자 제스처가 관측될 때** 높아진다.
+
+**일시 정지(Pausing).**
+
+> During synchronous dialogs (`alert()` or `print()`) or inside v8 debugger breakpoints scheduler enters a nested run loop and stops running pauseable tasks. Specifically, no JavaScript can run when a page is paused.
+
+`alert()`이 모든 것을 멈추는 동작의 근거다. 중첩 실행 루프에 진입하고 일시 정지 가능한 태스크를 실행하지 않는다.
+
+**연기(Deferring).**
+
+> Scheduler defers tasks for two seconds after a user gesture, as it's very likely that another gesture will arrive soon. The majority of tasks can be deferred.
+
+사용자 제스처 후 **2초간** 태스크를 연기한다. 다음 제스처가 곧 도착할 가능성이 높다는 판단이다.
+
+**동결(Freezing).**
+
+> On mobile all pages are frozen after five minutes in the background. On desktop only eligible pages are frozen, which is determined by heuristics based on the APIs page is using.
+
+모바일에서는 백그라운드 **5분 후 모든 페이지**가 동결된다. 데스크톱은 페이지가 사용하는 API에 기반한 휴리스틱으로 대상을 판단한다.
+
+**스로틀링(Throttling).**
+
+> At the moment only JavaScript timers (`setTimeout`/`setInterval`) are throttleable. While there is a general desire to expand this list, this is a low priority effort as we are focused on making freezing better instead.
+
+스로틀링 대상은 **자바스크립트 타이머뿐이다.** 문서는 확대 의향은 있으나 우선순위가 낮으며, 동결을 개선하는 쪽에 집중하고 있다고 밝힌다.
+
+<KnowledgeNote term="백그라운드 탭에서 타이머가 늦는 이유와 아예 멈추는 이유는 다르다" kind="reason">
+
+두 현상이 구분된다.
+
+- **스로틀링**: 타이머가 지연되지만 실행된다. 대상은 `setTimeout`/`setInterval`뿐이다
+- **동결**: 태스크 자체가 실행되지 않는다. 대부분의 태스크가 동결 가능하다
+
+모바일에서 백그라운드 5분 후에는 동결이 적용되므로, 타이머가 늦는 수준이 아니라 멈춘다. 데스크톱에서는 페이지가 사용하는 API에 따라 동결 대상에서 제외될 수 있다.
+
+6절에서 확인한 `QueueType`의 `kFrameThrottleable`과 `kFrameUnpausable` 같은 이름이 이 정책들의 적용 범위를 큐 단위로 구현한 결과다.
+
+</KnowledgeNote>
+
+### 8. 렌더링은 태스크가 아니다
+
+2편에서 확인한 17단계 중 4단계가 메인 스레드 갱신이다. 이 단계의 내용은 다음과 같았다.
+
+> All updates on main thread such as HandleInputEvents, Animate, StyleUpdate and LayoutUpdate.
+
+이 작업은 태스크 큐에서 꺼내진 태스크가 아니다. 컴포지터 스레드가 `BeginMainFrame`을 보내면 시작된다. `docs/how_cc_works.md`가 경로를 서술한다.
+
+> When Blink is embedding cc, a BeginMainFrame applies any compositor scroll deltas to Blink, kicks off requestAnimationFrame logic, and finishes the Blink half of the rendering lifecycle.
+
+즉 **`requestAnimationFrame` 콜백은 이 지점에서 실행된다.** 태스크 큐에 들어가는 것이 아니라 프레임 생성 파이프라인의 일부다.
+
+커밋을 요청하는 경로도 같은 문서에 있다.
+
+> Most webpages request one via requestAnimationFrame, which eventually calls SetNeedsAnimate on LayerTreeHost. Additionally, modifying any of cc's inputs (e.g. a layer property, such as its transform or a change to the layer's content), will call either SetNeedsAnimate, SetNeedsUpdate, or SetNeedsCommit on LayerTreeHost.
+
+이 세 함수의 차이가 2편 7절의 조기 탈출과 연결된다.
+
+> The different SetNeeds functions allow for different levels of early-out aborts of the commit if no work is determined to be needed. (For example, if the requestAnimationFrame callback does no work, then there's no need to do the commit or even update layers.)
+
+`requestAnimationFrame` 콜백이 아무것도 바꾸지 않으면 커밋도 레이어 갱신도 생략된다.
+
+<KnowledgeNote term="setTimeout과 requestAnimationFrame은 다른 경로다" kind="definition">
+
+`setTimeout`으로 등록된 콜백은 태스크다. `TaskType`을 가지고, 프레임의 태스크 큐에 들어가고, 스로틀링과 동결의 대상이 된다(6·7절).
+
+`requestAnimationFrame`으로 등록된 콜백은 태스크가 아니다. 컴포지터 스레드가 `BeginMainFrame`을 보낼 때 실행되며, 그 시점은 vsync에 맞춰진다(2편 10절).
+
+두 API가 "비동기 콜백"으로 함께 설명되는 경우가 많지만, 스케줄링 주체와 경로가 다르다. 백그라운드 탭에서 `requestAnimationFrame`이 호출되지 않는 것은 스로틀링 때문이 아니라 프레임을 생성하지 않기 때문이다.
+
+</KnowledgeNote>
+
+### 9. 워커는 왜 객체를 공유하지 못하는가
+
+4절의 `EventLoop` 주석이 워커를 별도로 언급했다.
+
+> Workers and Worklets can have its own EventLoop, as no other browsing context can access it synchronously.
+
+다른 browsing context가 동기적으로 접근할 수 없으므로 자기 이벤트 루프를 가질 수 있다는 논리다. 이는 1편에서 확인한 principal instance의 정의와 같은 기준이다.
+
+1절의 World 구조도 워커를 구분한다.
+
+> An isolate of a worker thread has 1 worker world and 0 isolated world.
+
+워커 스레드의 Isolate는 worker world 하나만 갖는다. 확장 프로그램의 content script가 들어갈 자리가 없다.
+
+여기서 세 층의 격리가 일관된 결론으로 수렴한다.
+
+- **프로세스 수준**: 동기적으로 서로에 접근할 수 있는 문서는 같은 프로세스에 있어야 한다(1편 5절)
+- **Isolate 수준**: 워커는 별도 Isolate를 가지므로 힙이 분리된다
+- **스케줄링 수준**: 워커는 별도 이벤트 루프를 가지므로 메인 스레드의 태스크 원자성(5절)에 영향받지 않는다
+
+**`postMessage`가 구조적 복제를 요구하는 이유가 이 세 층 모두에서 나온다.** 힙이 분리되어 있으므로 참조를 넘길 수 없다. 그리고 참조를 넘길 수 있게 만들려면 동기적 상호 접근이 가능해지므로, 프로세스 수준의 제약까지 재검토해야 한다.
+
+`SharedArrayBuffer`는 이 규칙의 예외이며, 그래서 1편에서 확인한 principal instance 정의에 명시적으로 등장했다.
+
+> This access includes cross-document scripting and synchronous communication through shared memory (e.g., SharedArrayBuffer).
+
+공유 메모리를 허용하려면 같은 프로세스여야 하고, 따라서 COOP/COEP 헤더로 격리 조건을 먼저 만족시켜야 한다.
+
+## 결론
+
+### 확인된 사실
+
+1. **격리 단위가 세 층이다.** Isolate와 Context는 V8의 개념이고, World는 Blink 바인딩 계층의 개념이며 V8은 이를 모른다. 같은 Isolate의 World들은 C++ DOM 객체를 공유하지만 자바스크립트 래퍼는 공유하지 않는다.
+
+2. **래퍼 동일성은 호환성 요구사항이다.** C++ 객체가 살아 있는 동안 같은 래퍼가 반환되어야 하며, 이를 위해 World마다 매핑 저장소를 둔다. main world의 매핑은 `ScriptWrappable` 안에, 나머지는 `DOMDataStore`에 있다.
+
+3. **바인딩 코드는 빌드 시 생성된다.** Web IDL 파일을 입력으로 Python 컴파일러가 C++을 생성하며, 체크아웃만으로는 존재하지 않는다. 다만 `bindings/README.md`가 서술하는 Jinja 템플릿 디렉터리는 현재 저장소에 없고, 실제 생성기는 코드 노드 트리를 구축하는 방식이다.
+
+4. **`EventLoop` 클래스는 사실상 마이크로태스크 큐만 관리한다.** 일반 태스크 큐는 프레임이 소유하며, 헤더 주석은 이것이 스펙에 대한 의도적 위반이라고 명시한다. 또한 V8은 여전히 Isolate당 기본 마이크로태스크 큐를 사용하고 있고, 주석은 이것이 표준 준수 측면에서 올바르지 않다고 인정한다.
+
+5. **태스크는 원자적 단위이며 선점할 수 없다.** 스케줄러가 할 수 있는 것은 다음 태스크를 고르거나 아무것도 실행하지 않는 것뿐이다. 이것이 "자바스크립트가 메인 스레드를 막는다"는 서술의 정확한 내용이다.
+
+6. **"매크로태스크 큐"는 구현에 존재하지 않는다.** `TaskType`은 81개 값으로 열거되며 각각 HTML 스펙의 태스크 소스에 대응한다. 큐의 종류 또한 적용 가능한 정책에 따라 분화되어 있다.
+
+7. **`setTimeout`의 4ms 하한은 태스크 중첩 수준이 5 이상일 때 적용된다.** 단발성 `setTimeout(fn, 0)`에는 적용되지 않으며, 세 가지 타이머 태스크 유형이 이 조건으로 구분된다.
+
+8. **스케줄링 정책은 네 가지이고 수치가 명시되어 있다.** 사용자 제스처 후 2초 연기, 모바일 백그라운드 5분 후 동결, 스로틀링 대상은 자바스크립트 타이머뿐이다.
+
+9. **`requestAnimationFrame` 콜백은 태스크가 아니다.** 컴포지터의 `BeginMainFrame`에서 실행되며, 태스크 큐를 경유하지 않는다.
+
+10. **워커의 격리는 세 층 모두에서 성립한다.** 별도 Isolate(힙 분리), 별도 이벤트 루프(스케줄링 분리), 그리고 동기적 접근 불가(프로세스 모델). `postMessage`의 구조적 복제 요구가 여기서 나온다.
+
+### 이 분석의 한계
+
+`MainThreadSchedulerImpl`의 실제 우선순위 선택 알고리즘과 기아 방지 로직(`modulo some starvation logic`)은 확인하지 않았다. 문서가 언급만 하고 상세를 생략했으며, 구현을 직접 읽는 작업이 별도로 필요하다.
+
+생성된 바인딩 코드의 실제 형태도 확인하지 않았다. 빌드를 수행해야 하며, 이 시리즈는 코드 읽기에 범위를 한정했다.
+
+4절에서 확인한 스펙과 구현의 불일치가 실제 관측 가능한 동작 차이로 나타나는지는 검증하지 않았다. 마이크로태스크 큐의 입도 문제는 여러 World가 동시에 활성인 상황에서만 드러날 가능성이 있다.
+
+### 다음 편
+
+지금까지 세 편은 Chromium 저장소 안에 머물렀다. 4편은 별도 저장소인 V8로 넘어간다. 자바스크립트가 실행된다는 것이 기계어 수준에서 무엇을 의미하는지, 그리고 네 단계의 컴파일러 계단이 왜 필요한지를 다룬다.
+
+## 참조
+
+### 저장소
+
+| 저장소 | 고정 커밋 | 비고 |
+|---|---|---|
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 아래 모든 링크의 기준 |
+
+공식 코드 검색: [source.chromium.org](https://source.chromium.org/chromium/chromium/src) · 링크 형식과 재현 방법: [1편 서론](/blog/chromium-architecture-01-reading-the-source)
+
+### 1차 자료 — 본론 절별
+
+**1~2절 · Isolate, Context, World와 래퍼 동일성**
+
+- [`bindings/core/v8/V8BindingDesign.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/core/v8/V8BindingDesign.md) — 전문. [Isolate 9행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/core/v8/V8BindingDesign.md#L9) · [Context 18행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/core/v8/V8BindingDesign.md#L18) · [World 133행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/core/v8/V8BindingDesign.md#L133) · [DOM wrappers and worlds 201행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/core/v8/V8BindingDesign.md#L201)
+- [`platform/bindings/script_wrappable.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/bindings/script_wrappable.h) — `main_world_wrapper_`를 보유하는 래퍼 기반 클래스
+- [`platform/bindings/dom_data_store.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/bindings/dom_data_store.h) — main world 외 World의 래퍼 매핑
+- [`platform/bindings/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/bindings/README.md) — 디렉터리 역할, `ScriptState`·`V8PerIsolateData`·`V8PerContextData`
+- [`platform/bindings/TraceWrapperReference.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/bindings/TraceWrapperReference.md) — 래퍼 수명과 V8 GC의 연결(이 편에서 다루지 않은 영역)
+
+**3절 · 바인딩 코드 생성**
+
+- [`bindings/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/README.md) — IDL 컴파일러, 디렉터리 배치 규칙, 리뷰 요건
+- [`bindings/IDLCompiler.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/IDLCompiler.md) — 생성 과정 상세
+- [`bindings/IDLExtendedAttributes.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/IDLExtendedAttributes.md) — IDL 확장 속성 전체 목록
+- [`bindings/scripts/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/scripts) — Python으로 작성된 IDL 컴파일러
+- [`bindings/scripts/bind_gen/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/scripts/bind_gen/README.md) — 현재 생성기의 설계. `CodeNode` 트리 빌더
+- [`bindings/scripts/bind_gen/code_node.py`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/scripts/bind_gen/code_node.py) — `CodeNode` 구현
+- [`bindings/scripts/generate_bindings.py`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/bindings/scripts/generate_bindings.py) — 드라이버 스크립트
+
+**4절 · 이벤트 루프**
+
+- [`platform/scheduler/public/event_loop.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/public/event_loop.h) — 전문. [스펙 위반 선언 40행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/public/event_loop.h#L40) · [V8 기본 큐에 관한 구현 노트 52행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/public/event_loop.h#L52) · [클래스 선언 58행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/public/event_loop.h#L58)
+- [`platform/scheduler/common/event_loop.cc`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/common/event_loop.cc) — 구현
+- [`core/execution_context/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/execution_context/README.md) — `EventLoop`를 보유하는 `ExecutionContext`
+
+**5절 · 태스크 원자성**
+
+- [`platform/scheduler/TaskSchedulingInBlink.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md) — 전문. [Overview 8행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L8) · [Tasks 21행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L21) · [Task runners 36행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L36)
+- [`platform/scheduler/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/README.md) — 스케줄러 디렉터리 구조
+- [`docs/threading_and_tasks.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/threading_and_tasks.md) — Chromium 전체의 태스크 시스템(999행). Blink 스케줄러의 하부
+
+**6절 · 태스크 유형과 큐**
+
+- [`public/platform/task_type.h#L22`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/platform/task_type.h#L22) — `TaskType` 열거형. [타이머 3종 89행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/platform/task_type.h#L89) · [`kMaxValue` 327행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/platform/task_type.h#L327)
+- [`platform/scheduler/main_thread/main_thread_task_queue.h#L53`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/main_thread/main_thread_task_queue.h#L53) — `QueueType` 열거형
+- [`platform/scheduler/TaskSchedulingInBlink.md#L85`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L85) — Task types and task sources
+- [`platform/scheduler/main_thread/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/main_thread) — `MainThreadSchedulerImpl` 등 메인 스레드 스케줄링 정책
+
+**7절 · 스케줄링 정책**
+
+- [`TaskSchedulingInBlink.md#L105`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L105) — Scheduling policies. [Priorities 107행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L107) · [Pausing 119행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L119) · [Deferring 127행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L127) · [Freezing 137행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L137) · [Throttling 148행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/scheduler/TaskSchedulingInBlink.md#L148)
+
+**8절 · 렌더링과의 관계**
+
+- [`docs/how_cc_works.md#L62`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L62) — Commit Flow. `BeginMainFrame`과 `requestAnimationFrame`의 관계
+- [`core/animation_frame/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/animation_frame/README.md) — 애니메이션 프레임 구현
+- [`core/scheduler/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/scheduler/README.md) — `scheduler.postTask()`, 메인 스레드 스케줄링 API
+
+**9절 · 워커**
+
+- [`core/workers/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/workers/README.md) — 워커 구현 구조
+- [`core/messaging/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/messaging/README.md) — `postMessage`, 메시지 포트
+- [`docs/process_model_and_site_isolation.md#L75`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md#L75) — `SharedArrayBuffer`가 principal instance 정의에 등장하는 지점
+
+### 2차 자료
+
+- [HTML Standard — Event loop processing model](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model) — 4절의 구현이 위반을 선언한 대상
+- [HTML Standard — Microtask queue](https://html.spec.whatwg.org/multipage/webappapis.html#microtask-queue) — `EventLoop` 주석이 참조하는 절
+- [HTML Standard — Generic task sources](https://html.spec.whatwg.org/multipage/webappapis.html#generic-task-sources) — `TaskType` 주석이 참조하는 절
+- [HTML Standard — Timers](https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers) — 6절 타이머 3종 분류의 스펙 근거
+- [Web IDL Standard](https://webidl.spec.whatwg.org/) — 3절 바인딩 생성의 입력 명세
+- [Main Thread Scheduling APIs (WICG)](https://github.com/WICG/main-thread-scheduling) — `core/scheduler/README.md`가 구현 대상으로 지목하는 제안
+
+### 관련 공식 문서
+
+- [`docs/threading_and_tasks_faq.md`](https://chromium.googlesource.com/chromium/src/+/main/docs/threading_and_tasks_faq.md) — 태스크 시스템 사용 시의 질의응답
+- [Blink 개요](https://www.chromium.org/blink) — `third_party/blink/README.md`가 안내하는 공식 페이지

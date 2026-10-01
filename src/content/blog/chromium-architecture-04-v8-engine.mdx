@@ -1,0 +1,702 @@
+---
+title: "Chromium 구조 분석 (4) — 엔진 심층"
+description: "V8은 Chromium 저장소에 없다. 별도 저장소를 받아 컴파일러 계단을 확인한다. 티어는 CodeKind 열거형에 네 개로 선언되어 있고 순서는 static_assert로 고정된다. 승급 기준은 호출 횟수가 아니라 호출 횟수와 바이트코드 길이의 곱이며, Turboshaft는 티어가 아니다."
+pubDate: "2026-10-01"
+updatedDate: "2026-10-01"
+tags: ["technology", "chromium", "v8", "javascript", "wasm", "compiler", "architecture"]
+heroImage: "/assets/blog/chromium-architecture/thumbnail.webp"
+draft: true
+---
+
+import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
+
+> **Chromium 구조 분석** — 전체 4편 중 1편 공개. 2~4편은 준비 중이다.
+> 1. [저장소를 직접 읽는다](/blog/chromium-architecture-01-reading-the-source) — 분석 환경, 계층 구조, 프로세스 모델, IPC
+> 2. 주소에서 픽셀까지 — 네비게이션, 문서 수명주기, 합성 *(준비 중)*
+> 3. 자바스크립트가 실행되는 자리 — 바인딩, 이벤트 루프, 태스크 큐 *(준비 중)*
+> 4. **엔진 심층** — V8의 네 단계 티어, Wasm, 디옵티마이제이션 ← 지금 글 *(준비 중)*
+
+## 서론
+
+### 문제 제기
+
+자바스크립트 엔진의 최적화에 관한 조언은 널리 유통된다. "숨은 클래스를 유지하라", "객체의 형태를 바꾸지 말라", "큰 함수를 쪼개라", "`delete`를 쓰지 말라". 조언 자체는 대체로 유효하지만, 근거가 제시되는 경우는 드물다. 어떤 조건에서 어떤 판단이 일어나는지를 알 수 없으므로, 조언은 규칙으로 암기되고 적용 범위를 벗어나서도 반복된다.
+
+V8은 이 판단을 코드에 명시적으로 기록한다. 티어 구조는 열거형이고, 승급 임계값은 플래그이며, 최적화를 되돌리는 사유는 문자열 목록이다. 숫자와 조건을 직접 확인할 수 있다.
+
+이 편에서 확인할 사실은 다음과 같다.
+
+- 티어는 네 개이고 **순서가 컴파일 타임에 고정된다**
+- 승급 기준은 호출 횟수가 아니라 **호출 횟수와 바이트코드 길이의 곱**이다
+- Maglev 임계값은 플랫폼에 따라 2.5배 차이가 난다
+- **Turboshaft는 티어가 아니다**
+- 배터리 절약 모드에서는 TurboFan이 동작하지 않는다
+- WebAssembly는 **별개의 티어 체계**를 가지며 Maglev에 해당하는 단계가 없다
+- 최적화를 되돌리는 사유가 **67개 열거되어 있다**
+
+### 범위
+
+이 편이 답하려는 질문은 하나다. **왜 컴파일러가 네 개인가.**
+
+가비지 컬렉터(`src/heap`, 333 파일)는 다루지 않는다. 독립된 분석을 요구하는 규모이며, 이 편의 질문과 축이 다르다. 각 컴파일러의 최적화 기법 자체도 다루지 않는다. 티어 구조와 그 전환 조건에 범위를 한정한다.
+
+### 분석 대상
+
+1~3편과 달리 주 저장소가 바뀐다.
+
+| 저장소 | 고정 커밋 | 날짜 | 비고 |
+|---|---|---|---|
+| [v8/v8](https://github.com/v8/v8) | [`d44b084e`](https://github.com/v8/v8/commit/d44b084e33a4501c46b7fd01052228ce8e45d435) | 2026-09-30 | 이 편의 주 대상 |
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 2026-09-30 | `DEPS` 확인용 |
+
+공식 Git 호스팅은 [chromium.googlesource.com/v8/v8](https://chromium.googlesource.com/v8/v8)이며, GitHub 쪽은 커밋 해시를 공유하는 미러다. 인용 링크의 형식과 재현 방법은 [1편 서론](/blog/chromium-architecture-01-reading-the-source)에 정리해 두었다.
+
+[1편 4절](/blog/chromium-architecture-01-reading-the-source)에서 확인했듯 V8은 Chromium 저장소에 포함되지 않는다. 최상위 [`DEPS`의 3362행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3362)이 `src/v8`을 별도 저장소로 가져온다. 따라서 별도로 체크아웃해야 한다.
+
+```bash
+git clone --filter=blob:none --no-checkout --depth 1 \
+    https://github.com/v8/v8.git .
+git sparse-checkout init --cone
+git sparse-checkout set src/compiler src/maglev src/baseline src/interpreter \
+    src/wasm src/execution src/heap src/codegen src/objects src/flags \
+    src/deoptimizer include
+git checkout main
+```
+
+실측 결과는 **75MB**(`.git` 14MB 포함)다. Chromium의 869MB와 비교하면 10분의 1 미만이다. 주요 디렉터리의 규모는 다음과 같다.
+
+```text
+src/compiler      14M   511 파일   TurboFan, turboshaft/ 포함
+src/codegen      8.2M   254 파일
+src/wasm         7.1M   161 파일
+src/maglev       4.3M    98 파일
+src/heap         4.2M   333 파일
+src/execution    3.5M    94 파일   tiering-manager
+src/interpreter  1.1M    55 파일   Ignition
+src/baseline     468K    30 파일   Sparkplug
+```
+
+**티어 구조의 핵심은 작은 디렉터리에 있다.** Sparkplug는 30개 파일, Maglev는 98개, 승급 결정 전체는 `src/execution`의 94개 파일 중 일부다.
+
+## 본론
+
+### 1. 티어는 네 개이고 순서가 고정되어 있다
+
+[`src/objects/code-kind.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/objects/code-kind.h#L19)에 생성 가능한 코드의 종류가 열거되어 있다.
+
+```cpp
+// The order of INTERPRETED_FUNCTION to TURBOFAN_JS is important. We use it to
+// check the relative ordering of the tiers when fetching / installing optimized
+// code.
+#define CODE_KIND_LIST(V)  \
+  V(BYTECODE_HANDLER)      \
+  V(FOR_TESTING)           \
+  V(FOR_TESTING_JS)        \
+  V(BUILTIN)               \
+  V(REGEXP)                \
+  V(WASM_FUNCTION)         \
+  V(WASM_TO_CAPI_FUNCTION) \
+  V(WASM_TO_JS_FUNCTION)   \
+  V(JS_TO_WASM_FUNCTION)   \
+  V(C_WASM_ENTRY)          \
+  V(INTERPRETED_FUNCTION)  \
+  V(BASELINE)              \
+  V(MAGLEV)                \
+  V(TURBOFAN_JS)           \
+  V(WASM_STACK_ENTRY)
+```
+
+자바스크립트 함수에 해당하는 네 값이 연속 구간을 이룬다.
+
+| `CodeKind` | 구현 | 디렉터리 |
+|---|---|---|
+| `INTERPRETED_FUNCTION` | Ignition (인터프리터) | `src/interpreter` |
+| `BASELINE` | Sparkplug | `src/baseline` |
+| `MAGLEV` | Maglev | `src/maglev` |
+| `TURBOFAN_JS` | TurboFan | `src/compiler` |
+
+주석이 밝히듯 **순서가 의미를 갖는다.** 최적화된 코드를 가져오거나 설치할 때 티어의 상대적 순서를 비교하는 데 쓰인다. 그리고 그 순서는 단정문으로 고정된다.
+
+```cpp
+static_assert(CodeKind::INTERPRETED_FUNCTION < CodeKind::BASELINE);
+static_assert(CodeKind::BASELINE < CodeKind::TURBOFAN_JS);
+```
+
+구간 판정 함수도 열거형의 연속성에 의존한다.
+
+```cpp
+inline constexpr bool CodeKindIsUnoptimizedJSFunction(CodeKind kind) {
+  static_assert(static_cast<int>(CodeKind::INTERPRETED_FUNCTION) + 1 ==
+                static_cast<int>(CodeKind::BASELINE));
+  return base::IsInRange(kind, CodeKind::INTERPRETED_FUNCTION,
+                         CodeKind::BASELINE);
+}
+
+inline constexpr bool CodeKindIsOptimizedJSFunction(CodeKind kind) {
+  static_assert(static_cast<int>(CodeKind::MAGLEV) + 1 ==
+                static_cast<int>(CodeKind::TURBOFAN_JS));
+  return base::IsInRange(kind, CodeKind::MAGLEV, CodeKind::TURBOFAN_JS);
+}
+```
+
+**"최적화되지 않은" 티어는 Ignition과 Sparkplug이고, "최적화된" 티어는 Maglev와 TurboFan이다.** 이 분류가 코드에 명시되어 있다. 열거형 값 사이에 다른 값을 끼워 넣으면 `static_assert`가 컴파일을 중단시킨다.
+
+<KnowledgeNote term="CodeKind에는 Wasm 관련 값이 더 많다" kind="note">
+
+열거형 15개 값 중 5개가 WebAssembly 관련이다 — `WASM_FUNCTION`, `WASM_TO_CAPI_FUNCTION`, `WASM_TO_JS_FUNCTION`, `JS_TO_WASM_FUNCTION`, `C_WASM_ENTRY`, 그리고 `WASM_STACK_ENTRY`.
+
+경계를 넘는 호출마다 별도의 코드 종류가 필요하다는 뜻이다. JS가 Wasm을 호출하는 경로와 Wasm이 JS를 호출하는 경로가 다른 코드로 생성된다.
+
+주목할 점은 Wasm 함수 자체에는 `WASM_FUNCTION` 하나만 있다는 것이다. 자바스크립트처럼 티어가 열거형에 나타나지 않는다. 5절에서 그 이유를 확인한다.
+
+</KnowledgeNote>
+
+### 2. 각 티어의 설계 목표
+
+네 티어는 품질이 아니라 **컴파일 지연**을 축으로 배치되어 있다.
+
+**Ignition**은 바이트코드 인터프리터다. 소스를 바이트코드로 변환하여 실행한다. 기계어를 생성하지 않으므로 시작 비용이 가장 낮고, 메모리 사용도 적다.
+
+**Sparkplug**는 바이트코드를 기계어로 번역한다. 중간 표현(IR)을 만들지 않는 것이 핵심이다. [`src/baseline/baseline-compiler.cc:323`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/baseline/baseline-compiler.cc#L323)의 `GenerateCode`가 구조를 보여준다.
+
+```cpp
+void BaselineCompiler::GenerateCode() {
+  {
+    RCS_BASELINE_SCOPE(PreVisit);
+    // Mark exception handlers as valid indirect jump targets. This is required
+    // when CFI is enabled, to allow indirect jumps into baseline code.
+    HandlerTable table(*bytecode_);
+    for (uint32_t i = 0; i < table.NumberOfRangeEntries(); ++i) {
+      MarkIndirectJumpTarget(table.GetRangeHandler(i));
+    }
+    for (; !iterator_.done(); iterator_.Advance()) {
+      PreVisitSingleBytecode();
+    }
+    iterator_.Reset();
+  }
+  // ...
+```
+
+바이트코드 이터레이터를 두 번 순회한다. 첫 순회는 점프 대상을 표시하고, 두 번째 순회에서 바이트코드마다 기계어를 바로 방출한다. **그래프도, SSA도, 최적화 패스도 없다.** 그래서 컴파일이 거의 즉시 끝난다.
+
+**Maglev**는 그래프를 구축하고 최적화한다. `src/maglev`의 파일 이름이 파이프라인을 보여준다 — `maglev-graph-builder`, `maglev-graph-optimizer`, `maglev-cse`(공통 부분식 제거), `maglev-inlining`, `maglev-regalloc`(레지스터 할당), `maglev-code-generator`.
+
+컴파일이 메인 스레드를 막지 않는다. [`src/maglev/maglev-compiler.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/maglev/maglev-compiler.h#L24)의 주석이 스레드 경계를 명시한다.
+
+```cpp
+class MaglevCompiler : public AllStatic {
+ public:
+  // May be called from any thread.
+  static bool Compile(LocalIsolate* local_isolate,
+                      MaglevCompilationInfo* compilation_info);
+
+  // Called on the main thread after Compile has completed.
+  static std::pair<MaybeHandle<Code>, BailoutReason> GenerateCode(
+      Isolate* isolate, MaglevCompilationInfo* compilation_info);
+};
+```
+
+**컴파일은 어느 스레드에서든 가능하고, 코드 생성만 메인 스레드에서 수행된다.** `maglev-concurrent-dispatcher`가 작업 큐를 관리한다.
+
+**TurboFan**은 최고 품질의 코드를 생성한다. `src/compiler`의 511개 파일 중 다수가 개별 최적화 패스다 — `branch-elimination`, `constant-folding-reducer`, `dead-code-elimination`, `checkpoint-elimination`, `csa-load-elimination`. 그만큼 느리다.
+
+<KnowledgeNote term="공식 블로그가 제시한 컴파일 속도 비교" kind="note" defaultOpen>
+
+코드만으로는 각 티어의 상대적 속도를 알 수 없다. V8 공식 블로그가 Maglev 도입 시 수치를 제시했다.
+
+> In terms of compilation speed, Maglev is roughly 10x slower than Sparkplug, and 10x faster than TurboFan.
+
+Maglev는 Sparkplug보다 약 10배 느리고 TurboFan보다 약 10배 빠르다. Chrome M117에 도입되었다.
+
+Sparkplug 도입 당시(V8 v9.1, 2021년 5월)의 설명도 위치를 명확히 한다.
+
+> Enter Sparkplug: our new non-optimising JavaScript compiler we're releasing with V8 v9.1, which nestles between the Ignition interpreter and the TurboFan optimising compiler.
+
+즉 계단은 **코드 품질의 등급이 아니라 컴파일 지연의 등급**으로 설계되었다. 각 단계는 "더 좋은 코드"가 아니라 "주어진 시간 예산 안에서 낼 수 있는 최선"을 담당한다.
+
+이것은 2차 자료에 근거한 서술이므로, 코드로 검증한 다른 주장과 구분해 둔다.
+
+</KnowledgeNote>
+
+### 3. 승급 기준은 호출 횟수가 아니다
+
+승급 결정은 [`src/execution/tiering-manager.cc`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc)가 담당한다. 핵심 함수는 [187행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L187)에 있다.
+
+```cpp
+int ScaleInterruptBudget(int64_t invocations, int bytecode_length) {
+  int64_t budget = invocations * bytecode_length;
+  // ...
+}
+```
+
+**예산은 호출 횟수와 바이트코드 길이의 곱이다.** "1000번 호출되면 최적화된다"는 설명은 부정확하다. 같은 호출 횟수라도 함수의 바이트코드가 길면 예산이 커지고, 따라서 승급이 늦어진다.
+
+임계값은 플래그로 선언되어 있다. [`src/flags/flag-definitions.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1048)다.
+
+```cpp
+// Tiering: Sparkplug / feedback vector allocation.
+DEFINE_INT(invocation_count_for_feedback_allocation, 8,
+           "invocation count required for allocating feedback vectors")
+
+// Tiering: Maglev.
+#if defined(ANDROID)
+DEFINE_INT(invocation_count_for_maglev, 1000,
+           "invocation count required for optimizing with Maglev")
+#else
+DEFINE_INT(invocation_count_for_maglev, 400,
+           "invocation count required for optimizing with Maglev")
+#endif  // ANDROID
+DEFINE_INT(invocation_count_for_maglev_osr, 100,
+           "invocation count required for maglev OSR")
+
+// Tiering: Turbofan.
+DEFINE_INT(invocation_count_for_turbofan, 3000,
+           "invocation count required for optimizing with TurboFan")
+DEFINE_INT(invocation_count_for_osr, 500, "invocation count required for OSR")
+```
+
+정리하면 다음과 같다.
+
+| 플래그 | 기본값 |
+|---|---|
+| `invocation_count_for_feedback_allocation` | 8 |
+| `invocation_count_for_early_optimization` | 30 |
+| `invocation_count_for_maglev` | **400** (Android: **1000**) |
+| `invocation_count_for_maglev_osr` | 100 |
+| `invocation_count_for_maglev_with_delay` | 600 |
+| `invocation_count_for_turbofan` | **3000** |
+| `invocation_count_for_osr` | 500 |
+| `max_optimized_bytecode_size` | 60 × KB |
+
+**Maglev 임계값이 플랫폼에 따라 2.5배 차이가 난다.** Android에서는 1000, 그 외에서는 400이다. 컴파일 비용을 모바일에서 더 아낀다는 판단이다.
+
+<KnowledgeNote term="피드백 벡터는 8번째 호출에서 할당된다" kind="definition">
+
+`invocation_count_for_feedback_allocation`의 기본값은 8이다. 피드백 벡터는 각 연산 지점에서 관측된 타입 정보를 누적하는 구조이며, 최적화 컴파일러가 이 정보를 전제로 코드를 생성한다.
+
+즉 **8번 미만 호출된 함수는 타입 정보를 수집조차 하지 않는다.** 대부분의 함수가 몇 번만 호출되고 끝나므로, 모든 함수에 벡터를 할당하는 것이 낭비이기 때문이다.
+
+이 값이 전체 계단의 첫 문턱이다. 피드백 벡터 없이는 Maglev도 TurboFan도 작동할 수 없다.
+
+</KnowledgeNote>
+
+### 4. 승급을 거부하는 조건들
+
+[`TieringManager::ShouldOptimize`(434행)](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L434)가 실제 판단을 수행한다. 조건을 순서대로 읽으면 통념의 근거와 한계가 드러난다.
+
+```cpp
+OptimizationDecision TieringManager::ShouldOptimize(
+    Tagged<FeedbackVector> feedback_vector, CodeKind current_code_kind) {
+  Tagged<SharedFunctionInfo> shared = feedback_vector->shared_function_info();
+  if (current_code_kind == CodeKind::TURBOFAN_JS) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
+  if (TiersUpToMaglev(current_code_kind) &&
+      shared->PassesFilter(v8_flags.maglev_filter) &&
+      !shared->maglev_compilation_failed()) {
+    if (v8_flags.profile_guided_optimization &&
+        shared->cached_tiering_decision() ==
+            CachedTieringDecision::kEarlyTurbofan) {
+      return OptimizationDecision::TurbofanHotAndStable();
+    }
+    return OptimizationDecision::Maglev();
+  }
+
+  if (V8_UNLIKELY(!v8_flags.turbofan ||
+                  !shared->PassesFilter(v8_flags.turbo_filter) ||
+                  (v8_flags.efficiency_mode_disable_turbofan &&
+                   isolate_->EfficiencyModeEnabled()) ||
+                  isolate_->BatterySaverModeEnabled())) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
+  if (isolate_->EfficiencyModeEnabled() &&
+      v8_flags.efficiency_mode_delay_turbofan_multiply &&
+      feedback_vector->invocation_count() <
+          int64_t{v8_flags.invocation_count_for_turbofan} *
+              v8_flags.efficiency_mode_delay_turbofan_multiply) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
+  Tagged<BytecodeArray> bytecode = shared->GetBytecodeArray(isolate_);
+  if (bytecode->length() > v8_flags.max_optimized_bytecode_size) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
+  return OptimizationDecision::TurbofanHotAndStable();
+}
+```
+
+네 가지 사실이 확인된다.
+
+**첫째, 배터리 절약 모드에서는 TurboFan이 동작하지 않는다.** `isolate_->BatterySaverModeEnabled()`가 참이면 즉시 `DoNotOptimize`를 반환한다.
+
+**둘째, 효율 모드에서는 TurboFan 임계값이 배수로 늘어난다.** `efficiency_mode_delay_turbofan_multiply`의 기본값은 3이므로, 3000이 아니라 9000번 호출이 필요해진다. 별도 플래그 `efficiency_mode_disable_turbofan`을 켜면 완전히 비활성화된다.
+
+**셋째, 바이트코드 길이 제한이 TurboFan 직전에 검사된다.** `max_optimized_bytecode_size`의 기본값은 60KB다. 이보다 긴 함수는 Maglev까지는 올라갈 수 있으나 TurboFan 대상이 되지 않는다. "큰 함수를 쪼개라"는 조언의 정확한 근거이며, 동시에 그 **적용 범위가 TurboFan에 한정된다**는 사실도 함께 드러난다.
+
+**넷째, Maglev를 건너뛰는 경로가 있다.** `profile_guided_optimization`(기본값 `true`)이 켜져 있고 이전에 기록된 판단이 `kEarlyTurbofan`이면 Maglev를 생략하고 TurboFan으로 직행한다. 계단은 반드시 한 칸씩 오르는 구조가 아니다.
+
+<KnowledgeNote term="루프 안에 갇힌 함수를 위한 또 하나의 우회로" kind="reason">
+
+[`tiering-manager.cc:413`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L413)에 Maglev를 건너뛰는 두 번째 경로가 있다. 주석이 상황을 설명한다.
+
+```cpp
+// We might be stuck in a baseline frame that wants to tier up to Maglev, but
+// is in a loop, and can't OSR, because Maglev doesn't have OSR. Allow it to
+// skip over Maglev by re-checking ShouldOptimize as if we were in Maglev.
+```
+
+긴 루프를 실행 중인 함수는 호출이 반복되지 않으므로 호출 횟수 기반 승급이 작동하지 않는다. 이를 위한 기법이 OSR(on-stack replacement)이며, 실행 중인 스택 프레임을 최적화된 코드로 교체한다.
+
+이 경우 Maglev로 OSR할 수 없는 상황이면 Maglev를 건너뛰고 TurboFan을 재검사한다.
+
+`invocation_count_for_osr`(500)과 `invocation_count_for_maglev_osr`(100)이 OSR 전용 임계값이며, `osr_from_maglev`는 비트셋 모드 플래그(기본값 3)로 Maglev에서 TurboFan으로의 OSR 조건을 제어한다.
+
+</KnowledgeNote>
+
+### 5. Turboshaft는 티어가 아니다
+
+Turboshaft를 다섯 번째 티어로 소개하는 서술을 볼 수 있으나, 코드에 근거가 없다.
+
+**첫째, `CodeKind` 열거형에 존재하지 않는다.** 1절의 목록에 Turboshaft에 해당하는 값이 없다.
+
+**둘째, 플래그의 설명이 성격을 규정한다.** [`src/flags/flag-definitions.h:1661`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1661)이다.
+
+```cpp
+DEFINE_BOOL(turboshaft, true, "enable TurboFan's Turboshaft phases for JS")
+```
+
+"TurboFan**의** Turboshaft 단계(phases)"다. 기본값은 `true`이므로 이미 활성 상태다.
+
+**셋째, 디렉터리 구조가 이를 확인한다.** [`src/compiler/turboshaft/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/compiler/turboshaft)는 `src/compiler` 하위에 있고, 190개 파일 중 32개가 `*-phase.h`/`*-phase.cc` 쌍이다.
+
+```text
+build-graph-phase            instruction-selection-phase
+load-elimination-phase       loop-optimization-phase
+code-elimination-and-simplification-phase
+decompression-optimization-phase   int64-lowering-phase
+csa-branch-elimination-phase  csa-load-elimination-phase
+...
+```
+
+즉 Turboshaft는 TurboFan의 내부 단계들을 구성하는 프레임워크다. 개별 최적화도 플래그로 제어된다.
+
+```cpp
+DEFINE_BOOL(turboshaft_load_elimination, true, ...)
+DEFINE_BOOL(turboshaft_loop_unrolling, true, ...)
+DEFINE_BOOL(turboshaft_string_concat_escape_analysis, true, ...)
+DEFINE_BOOL(turboshaft_wasm_load_elimination, true, ...)
+```
+
+<KnowledgeNote term="Turboshaft가 바꾼 것은 중간 표현이다" kind="definition" defaultOpen>
+
+공식 블로그의 해당 글 제목이 변경의 성격을 요약한다 — "Land ahoy: **leaving the Sea of Nodes**".
+
+TurboFan은 Sea of Nodes라는 중간 표현을 사용했다. 제어 흐름과 데이터 흐름을 하나의 그래프로 표현하고 노드의 배치를 스케줄링 단계까지 늦추는 방식이다. Turboshaft는 이를 블록 기반 표현으로 교체했다.
+
+블로그가 밝힌 효과는 두 가지다 — 새 최적화를 추가하기 쉬워졌고, 컴파일이 빨라졌다. Chrome 120 이후 CPU 비의존 백엔드 단계가 모두 Turboshaft를 사용하며, 이전보다 약 두 배 빠르게 컴파일된다.
+
+**티어가 추가된 것이 아니라 기존 티어의 내부가 교체된 것이다.** 사용자가 관측하는 티어의 수는 여전히 네 개다.
+
+</KnowledgeNote>
+
+### 6. WebAssembly는 별개의 티어 체계를 갖는다
+
+[`src/wasm/wasm-tier.h:21`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/wasm/wasm-tier.h#L21)에 Wasm의 실행 티어가 선언되어 있다.
+
+```cpp
+enum class ExecutionTier : int8_t {
+  kNone,
+#if V8_ENABLE_DRUMBRAKE
+  kInterpreter,
+#endif  // V8_ENABLE_DRUMBRAKE
+  kLiftoff,
+  kTurbofan,
+};
+```
+
+**실질적으로 두 단계다.** `kInterpreter`(DrumBrake)는 빌드 플래그 뒤에 있으므로 기본 구성에 포함되지 않는다.
+
+자바스크립트와 비교하면 차이가 분명하다.
+
+| | 자바스크립트 | WebAssembly |
+|---|---|---|
+| 기본 티어 | Ignition (인터프리터) | Liftoff (기계어) |
+| 중간 티어 | Sparkplug, Maglev | 없음 |
+| 최상 티어 | TurboFan | TurboFan |
+| 단계 수 | 4 | 2 |
+
+**Maglev에 해당하는 중간 단계가 없다.** 또한 기본 티어가 인터프리터가 아니라 기계어 컴파일러다.
+
+관련 플래그의 수치도 전혀 다른 체계다.
+
+```cpp
+DEFINE_BOOL(liftoff, true, ...)
+DEFINE_BOOL(wasm_lazy_compilation, true, ...)
+DEFINE_BOOL(wasm_dynamic_tiering, V8_ENABLE_TURBOFAN_BOOL, ...)
+DEFINE_INT(wasm_tiering_budget, 13'000'000, ...)
+```
+
+`wasm_tiering_budget`은 **13,000,000**이다. 자바스크립트의 400이나 3000과 비교할 수 없는 규모이며, 같은 단위가 아니라는 뜻이다.
+
+<KnowledgeNote term="왜 Wasm에는 중간 티어가 없는가" kind="reason">
+
+이 질문에 대한 직접적인 답은 코드에서 확인하지 못했다. 다만 티어 구조의 설계 논리에서 추론할 수 있다.
+
+자바스크립트에서 중간 티어가 필요한 이유는 **타입이 실행 전에 확정되지 않기 때문**이다. 3절에서 확인한 피드백 벡터가 그 결과다. 관측된 타입을 전제로 투기적으로 최적화하고, 전제가 깨지면 되돌린다(7절). 이 과정에는 관측 기간이 필요하고, 그 기간 동안 실행할 코드가 필요하다.
+
+WebAssembly는 타입이 바이트코드에 명시되어 있다. 투기할 것이 없으므로 관측 기간도 필요하지 않다. Liftoff는 한 번의 순회로 기계어를 생성하면서도 타입 정보를 이미 알고 있으므로, Sparkplug보다 유리한 조건에서 시작한다.
+
+공식 블로그가 Liftoff의 목표를 서술한 문장이 이와 일치한다 — "to reduce startup time for WebAssembly-based apps by generating code as fast as possible, with code quality being secondary, and it generates machine code in a single pass over the bytecode of a WebAssembly function."
+
+이는 코드로 검증한 사실이 아니라 구조로부터의 추론이므로, 그렇게 표시해 둔다.
+
+</KnowledgeNote>
+
+### 7. 투기적 최적화는 되돌릴 수 있어야 한다
+
+최적화된 코드는 관측된 타입을 전제로 생성된다. 전제가 깨지면 그 코드는 올바르지 않으므로, 실행을 낮은 티어로 되돌려야 한다. 이것이 디옵티마이제이션이다.
+
+되돌리는 사유는 [`src/deoptimizer/deoptimize-reason.h`의 `DEOPTIMIZE_REASON_LIST`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/deoptimizer/deoptimize-reason.h#L20)에 열거되어 있다. 항목 수는 **67개**이며, 각 항목에 사람이 읽을 수 있는 문자열이 붙어 있다. 빌트인 전용 사유 목록(`DEOPTIMIZE_IN_BUILTIN_REASON_LIST`)은 별도다.
+
+주요 항목을 성격별로 묶으면 다음과 같다.
+
+**객체의 형태가 달라진 경우**
+
+```text
+"wrong map"
+"map changed during operation"
+"dependent map was deprecated"
+"dependent initial map changed"
+"dependent prototype chain changed"
+"instance migration failed"
+```
+
+**값의 타입이 예상과 다른 경우**
+
+```text
+"not a Smi"
+"not a heap number"
+"not a JavaScript object"
+"not a Number or Undefined"
+"not a BigInt"
+"hole or undefined"
+```
+
+**수치 연산의 가정이 깨진 경우**
+
+```text
+"minus zero"
+"lost precision"
+"lost precision or NaN"
+"division by zero"
+```
+
+**배열에 대한 가정이 깨진 경우**
+
+```text
+"out of bounds"
+"the array length changed"
+"copy-on-write array's elements changed"
+"array buffer was detached or immutable"
+"failed to grow elements store"
+"length is greater than the maximum for fast elements array"
+"not an array index"
+```
+
+**이 목록이 최적화 조언의 실제 근거다.** "숨은 클래스를 유지하라"는 조언은 `"wrong map"`과 `"map changed during operation"`에 대응한다. "배열에 구멍을 만들지 말라"는 `"hole or undefined"`에, "정수와 부동소수를 섞지 말라"는 `"not a Smi"`와 `"lost precision"`에 대응한다.
+
+<KnowledgeNote term="minus zero가 왜 별도 사유인가" kind="note">
+
+`"minus zero"`가 독립된 디옵티마이제이션 사유라는 점은 자바스크립트의 수치 모델을 드러낸다.
+
+IEEE 754에서 `-0`과 `+0`은 서로 다른 비트 패턴이지만 `===` 비교에서는 같다. 최적화 컴파일러가 어떤 연산의 결과를 정수(Smi)로 표현하기로 결정했다면, 그 결과가 `-0`이 되는 경우를 표현할 수 없다. Smi에는 `-0`이 없다.
+
+따라서 `-0`이 발생하는 순간 그 전제가 깨지고 되돌려야 한다. `Object.is(-0, 0)`이 `false`인 이유와 같은 뿌리의 문제다.
+
+</KnowledgeNote>
+
+### 8. 직접 확인하는 방법
+
+지금까지의 서술은 모두 코드에 근거하지만, 특정 코드가 어느 티어에서 실행되는지는 관측해야 알 수 있다. V8은 그 수단을 플래그로 제공한다. [`src/flags/flag-definitions.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h)에서 확인한 것들이다.
+
+```text
+--trace-opt            최적화 컴파일 추적            (3083행)
+--trace-deopt          디옵티마이제이션 추적          (3091행)
+--trace-deopt-verbose  상세 추적                     (3093행)
+--print-bytecode       Ignition 바이트코드 출력       (1144행)
+--print-bytecode-filter  대상 함수 필터 (기본값 "*")  (1162행)
+--maglev-print-bytecode  Maglev 입력 바이트코드 출력  (701행)
+--print-maglev-graph   Maglev 그래프 출력             (736행)
+```
+
+승급 임계값 자체도 플래그이므로 조정할 수 있다. 3절의 표에 있는 값은 모두 명령행에서 변경 가능하다.
+
+제어용 플래그도 존재한다.
+
+```cpp
+DEFINE_BOOL(maglev, true, "enable the maglev optimizing compiler")
+DEFINE_BOOL(always_sparkplug, false, "directly tier up to Sparkplug code")
+DEFINE_BOOL(liftoff_only, false, ...)
+```
+
+<KnowledgeNote term="Sparkplug는 빌드 구성에 따라 비활성일 수 있다" kind="caution">
+
+Sparkplug의 활성화는 조건부다.
+
+```cpp
+#if V8_ENABLE_SPARKPLUG
+#define FLAG FLAG_FULL
+#else
+#define FLAG FLAG_READONLY
+#endif
+DEFINE_BOOL(sparkplug, ENABLE_SPARKPLUG_BY_DEFAULT,
+            "enable Sparkplug baseline compiler")
+```
+
+`V8_ENABLE_SPARKPLUG`가 정의되지 않은 빌드에서는 플래그가 읽기 전용이 되어 켤 수 없다. `ENABLE_SPARKPLUG_BY_DEFAULT` 자체도 빌드 조건에 따라 `true` 또는 `false`로 정의된다.
+
+또한 같은 구간에 Apple Silicon 관련 조건이 있다.
+
+```cpp
+#if defined(V8_OS_DARWIN) && defined(V8_HOST_ARCH_ARM64) && ...
+// M1 requires W^X.
+```
+
+W^X(쓰기 권한과 실행 권한의 배타성)를 강제하는 플랫폼에서는 기계어를 즉시 생성하는 방식에 추가 제약이 따른다. 티어 구조가 플랫폼 중립적이지 않다는 또 하나의 사례다.
+
+</KnowledgeNote>
+
+## 결론
+
+### 확인된 사실
+
+1. **티어는 네 개이고 순서가 컴파일 타임에 고정된다.** `CodeKind` 열거형에 `INTERPRETED_FUNCTION`, `BASELINE`, `MAGLEV`, `TURBOFAN_JS`가 연속 구간으로 선언되고, `static_assert`가 순서와 인접성을 검사한다. "최적화되지 않은" 구간과 "최적화된" 구간의 분류도 코드에 명시되어 있다.
+
+2. **계단은 코드 품질이 아니라 컴파일 지연의 축에 배치되어 있다.** Sparkplug는 중간 표현 없이 바이트코드를 두 번 순회하며 기계어를 방출한다. Maglev는 그래프를 구축하되 메인 스레드 밖에서 컴파일하고 코드 생성만 메인 스레드에서 수행한다.
+
+3. **승급 예산은 호출 횟수와 바이트코드 길이의 곱이다.** 호출 횟수만으로 결정되지 않는다.
+
+4. **Maglev 임계값은 Android에서 1000, 그 외에서 400이다.** 2.5배 차이가 플랫폼 조건부 컴파일로 들어가 있다.
+
+5. **피드백 벡터는 8번째 호출에서 할당된다.** 이것이 전체 계단의 첫 문턱이며, 그 이전에는 타입 정보를 수집하지 않는다.
+
+6. **배터리 절약 모드에서 TurboFan은 동작하지 않는다.** 효율 모드에서는 임계값이 기본 3배로 늘어난다.
+
+7. **바이트코드 60KB 제한은 TurboFan에만 적용된다.** Maglev까지는 올라갈 수 있다. "큰 함수를 쪼개라"는 조언의 근거이자 적용 범위다.
+
+8. **계단을 한 칸씩 오르지 않는 경로가 둘 있다.** 프로필 기반 최적화가 이전 판단을 기억한 경우, 그리고 루프에 갇혀 Maglev로 OSR할 수 없는 경우다.
+
+9. **Turboshaft는 티어가 아니다.** `CodeKind`에 없고, 플래그 설명이 "TurboFan's Turboshaft phases"로 규정하며, 디렉터리가 `src/compiler` 하위에 있다. 중간 표현을 Sea of Nodes에서 블록 기반으로 교체한 것이다.
+
+10. **WebAssembly는 두 단계 체계이며 중간 티어가 없다.** 기본 티어가 인터프리터가 아니라 기계어 컴파일러(Liftoff)다. 티어링 예산도 13,000,000으로 자바스크립트와 단위가 다르다.
+
+11. **디옵티마이제이션 사유가 67개 열거되어 있다.** 통용되는 최적화 조언의 상당수가 이 목록의 항목에 일대일로 대응한다.
+
+### 이 분석의 한계
+
+가비지 컬렉터를 다루지 않았다. `src/heap`은 333개 파일이며, 이 편에서 확인한 티어 구조와 독립적인 축이다. 특히 Maglev와 TurboFan이 생성한 코드가 힙의 객체 배치에 어떤 가정을 두는지는 별도 분석이 필요하다.
+
+각 컴파일러의 최적화 기법 자체를 다루지 않았다. 인라이닝 결정, 이스케이프 분석, 레지스터 할당 알고리즘은 각각 독립된 주제다.
+
+**코드를 읽었을 뿐이며 실행하여 측정하지 않았다.** 3절과 4절에서 확인한 임계값이 실제 실행에서 어떤 승급 패턴으로 나타나는지는 8절의 플래그로 관측해야 확인된다. 이 시리즈는 코드 읽기에 범위를 한정했으므로, 측정은 수행하지 않았다.
+
+6절의 "Wasm에 중간 티어가 없는 이유"는 코드에서 직접 확인한 것이 아니라 구조로부터의 추론이다. 해당 단락에 그렇게 표시했다.
+
+2절의 티어별 컴파일 속도 비교는 2차 자료(V8 공식 블로그)에 근거한다. 코드만으로는 확인할 수 없는 값이다.
+
+### 시리즈 종합
+
+네 편에서 확인한 구조를 한 문장으로 정리하면 다음과 같다.
+
+**브라우저는 세 층에서 각각 다른 전략을 쓴다.**
+
+**프로세스 층에서는 신뢰하지 않는다.** 동기적으로 서로에 접근할 수 있는 문서만 한 프로세스에 두고, 그 바깥은 분리한다. 렌더러가 침해된 상황을 가정하여 브라우저 프로세스가 모든 요청을 검사한다(1편).
+
+**스레드 층에서는 기다리지 않는다.** 컴포지터는 메인 스레드의 작업과 독립적으로 스크롤과 애니메이션을 처리한다. 커밋은 기본적으로 메인 스레드를 블록하지 않으며, 보호된 상태를 건드릴 때만 멈춘다. 데드라인을 넘긴 갱신은 빠진 채로 프레임이 제출된다(2편, 3편).
+
+**실행 층에서는 서둘러 시작하고 나중에 잘한다.** 8번째 호출에서 타입 관측을 시작하고, 400번에서 빠른 최적화를, 3000번에서 느린 최적화를 적용한다. 전제가 깨지면 되돌린다(4편).
+
+세 전략은 모두 같은 제약에서 나온다. **브라우저는 임의의 신뢰할 수 없는 코드를 즉시 실행해야 한다.** 코드를 미리 검증할 수도, 컴파일을 기다릴 수도, 프레임을 미룰 수도 없다. 구조의 대부분이 이 제약을 수용하기 위한 장치다.
+
+### 이 시리즈의 한계
+
+가장 큰 한계는 **측정하지 않았다**는 점이다. 네 편 모두 코드와 저장소 내 문서에 근거하며, 빌드하여 동작을 관측하는 작업은 수행하지 않았다. 코드가 서술하는 바와 실제 실행의 양상은 다를 수 있다.
+
+읽지 않은 영역도 명시해 둔다 — 샌드박스 구현(`//sandbox`), 네트워크 스택(`//net`), 가비지 컬렉션(`src/heap`), HTML 파서와 CSS 선택자 매칭, GPU 프로세스 내부(`//gpu`, `//components/viz`). 각각이 이 시리즈와 동등한 분량을 요구하는 규모다.
+
+그리고 **분석 시점의 코드일 뿐이다.** 2026년 9월 30일 기준이며, 서론에 명시한 커밋에서만 재현된다. 1편에서 확인한 Rust 이식이나 3편에서 확인한 마이크로태스크 큐 병합 계획처럼, 진행 중인 변경이 여러 곳에 있다.
+
+## 참조
+
+### 저장소
+
+| 저장소 | 고정 커밋 | 비고 |
+|---|---|---|
+| [v8/v8](https://github.com/v8/v8) | [`d44b084e`](https://github.com/v8/v8/commit/d44b084e33a4501c46b7fd01052228ce8e45d435) | `src/` 링크의 기준 |
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | `DEPS` 링크의 기준 |
+
+공식 Git 호스팅: [chromium.googlesource.com/v8/v8](https://chromium.googlesource.com/v8/v8) · 공식 코드 검색: [source.chromium.org (v8)](https://source.chromium.org/chromium/chromium/src/+/main:v8/) · 링크 형식과 재현 방법: [1편 서론](/blog/chromium-architecture-01-reading-the-source)
+
+### 1차 자료 — 본론 절별
+
+**서론 · V8이 별도 저장소인 근거**
+
+- [Chromium `DEPS#L3362`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3362) — `src/v8`의 외부 저장소 정의
+
+**1절 · 티어 열거형**
+
+- [`src/objects/code-kind.h#L19`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/objects/code-kind.h#L19) — `CODE_KIND_LIST`, 순서 `static_assert`, `CodeKindIsOptimizedJSFunction` 등 구간 판정 함수
+
+**2절 · 각 티어의 구현**
+
+- [`src/interpreter/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/interpreter) — Ignition. 바이트코드 정의와 핸들러
+- [`src/interpreter/bytecodes.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/interpreter/bytecodes.h) — `BYTECODE_LIST` 매크로
+- [`src/baseline/baseline-compiler.cc#L323`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/baseline/baseline-compiler.cc#L323) — Sparkplug의 `GenerateCode`, 두 번 순회 구조
+- [`src/baseline/baseline-compiler.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/baseline/baseline-compiler.h) — `BaselineCompiler` 인터페이스
+- [`src/maglev/maglev-compiler.h#L24`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/maglev/maglev-compiler.h#L24) — 컴파일과 코드 생성의 스레드 분리
+- [`src/maglev/maglev-concurrent-dispatcher.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/maglev/maglev-concurrent-dispatcher.h) — 동시 컴파일 큐
+- [`src/maglev/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/maglev) — 그래프 빌더·최적화기·CSE·인라이닝·레지스터 할당(98 파일)
+- [`src/compiler/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/compiler) — TurboFan(511 파일)
+
+**3절 · 승급 예산과 임계값**
+
+- [`src/execution/tiering-manager.cc#L187`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L187) — `ScaleInterruptBudget`, `invocations * bytecode_length`
+- [`src/execution/tiering-manager.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.h) — `OptimizationDecision`, `ShouldOptimize` 선언
+- 임계값 플래그 — [`feedback_allocation` 1048행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1048) · [`maglev` Android 1053행 / 그 외 1056행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1052) · [`turbofan` 1073행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1073) · [`max_optimized_bytecode_size` 1503행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1503) · [`early_optimization` 1847행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1847)
+
+**4절 · 승급 거부 조건**
+
+- [`tiering-manager.cc#L434`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L434) — `ShouldOptimize` 전문. [바이트코드 길이 검사 282행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L282) · [Maglev 건너뛰기 413행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/execution/tiering-manager.cc#L413)
+- [`profile_guided_optimization` 1844행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1844) · [`efficiency_mode_*` 882행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L882) · [OSR 플래그 1059행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1059)
+
+**5절 · Turboshaft**
+
+- [`flag-definitions.h#L1661`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1661) — `"enable TurboFan's Turboshaft phases for JS"`
+- [`src/compiler/turboshaft/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/compiler/turboshaft) — 190 파일, 32개 단계 쌍
+- [`src/compiler/turboshaft/phase.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/compiler/turboshaft/phase.h) — 단계 정의의 기반
+
+**6절 · WebAssembly 티어**
+
+- [`src/wasm/wasm-tier.h#L21`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/wasm/wasm-tier.h#L21) — `ExecutionTier` 열거형
+- [`src/wasm/baseline/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/wasm/baseline) — Liftoff 구현
+- [`liftoff` 2060행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L2060) · [`wasm_dynamic_tiering` 2015행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L2015) · [`wasm_tiering_budget` 2019행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L2019) · [`wasm_lazy_compilation` 2231행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L2231)
+
+**7절 · 디옵티마이제이션**
+
+- [`src/deoptimizer/deoptimize-reason.h#L20`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/deoptimizer/deoptimize-reason.h#L20) — `DEOPTIMIZE_REASON_LIST`, 67개 사유. [빌트인 전용 목록 16행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/deoptimizer/deoptimize-reason.h#L16)
+- [`src/deoptimizer/`](https://github.com/v8/v8/tree/d44b084e33a4501c46b7fd01052228ce8e45d435/src/deoptimizer) — 디옵티마이저 구현
+
+**8절 · 관측 플래그**
+
+- [`src/flags/flag-definitions.h`](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h) — 전문. [`trace_opt` 3083행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L3083) · [`trace_deopt` 3091행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L3091) · [`print_bytecode` 1144행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1144) · [`maglev_print_bytecode` 701행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L701) · [`maglev` 520행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L520) · [`sparkplug` 1198행](https://github.com/v8/v8/blob/d44b084e33a4501c46b7fd01052228ce8e45d435/src/flags/flag-definitions.h#L1198)
+
+### 2차 자료 — V8 공식 블로그
+
+- [Sparkplug — a non-optimizing JavaScript compiler](https://v8.dev/blog/sparkplug) — Leszek Swirski, 2021-05-27. V8 v9.1 도입, 티어 위치
+- [Maglev - V8's Fastest Optimizing JIT](https://v8.dev/blog/maglev) — Chrome M117 도입, 컴파일 속도 비교
+- [Land ahoy: leaving the Sea of Nodes](https://v8.dev/blog/leaving-the-sea-of-nodes) — Turboshaft의 중간 표현 교체, Chrome 120
+- [Liftoff: a new baseline compiler for WebAssembly in V8](https://v8.dev/blog/liftoff) — V8 v6.9 도입, 단일 순회 설계
+- [WebAssembly Dynamic Tiering ready to try in Chrome 96](https://v8.dev/blog/wasm-dynamic-tiering) — Wasm 동적 티어링

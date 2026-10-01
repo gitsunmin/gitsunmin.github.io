@@ -1,0 +1,461 @@
+---
+title: "Chromium 구조 분석 (1) — 저장소를 직접 읽는다"
+description: "브라우저 내부를 다룬 한국어 자료는 2012년 D2 글과 그 파생물에 묶여 있다. 이 시리즈는 재해석된 2차 자료 대신 Chromium 저장소의 코드와 저장소 내 문서만을 근거로 삼는다. 1편은 분석 환경을 구성하고, 저장소의 계층 구조와 프로세스 모델, 그리고 프로세스 간 통신 방식을 확인한다."
+pubDate: "2026-10-01"
+updatedDate: "2026-10-01"
+tags: ["technology", "chromium", "browser", "architecture", "mojo", "security"]
+heroImage: "/assets/blog/chromium-architecture/thumbnail.webp"
+draft: false
+---
+
+import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
+
+> **Chromium 구조 분석** — 전체 4편 중 1편 공개. 2~4편은 준비 중이다.
+> 1. **저장소를 직접 읽는다** — 분석 환경, 계층 구조, 프로세스 모델, IPC ← 지금 글
+> 2. 주소에서 픽셀까지 — 네비게이션, 문서 수명주기, 합성 *(준비 중)*
+> 3. 자바스크립트가 실행되는 자리 — 바인딩, 이벤트 루프, 태스크 큐 *(준비 중)*
+> 4. 엔진 심층 — V8의 네 단계 티어, Wasm, 디옵티마이제이션 *(준비 중)*
+
+## 서론
+
+### 문제 제기
+
+개발자로서 브라우저 위에 실행되는 웹 프로그램을 만들고 있지만, 내부 원리, 로직에 대해서는 2차 가공 글로만 학습을 해왔습니다. 사실 코드도 공개되어있는 오픈 소스 프로젝트인데, 관심이 너무 없었던 것 같습니다. 이를 문제라고 인지하고, LLM을 이용해서 직접 소스 코드를 분석해보려고 시도했고, 학습하면서 정리도 할 겸, 블로그 글을 작성해보려고 합니다.
+
+### 접근
+
+이 시리즈는 2차 자료를 경유하지 않는다. 근거는 두 종류만 사용한다.
+
+- **1차 자료**: Chromium 및 V8 저장소의 소스 코드, 그리고 저장소 안에 함께 배포되는 설계 문서(`docs/`, 각 모듈의 `README.md`)
+- **2차 자료**: V8 공식 블로그. 날짜와 버전 확인, 그리고 설계 의도의 공식적 진술이 필요한 경우에만 인용한다
+
+모든 주장에는 `파일:행` 형태의 근거를 붙인다. 각 편 마지막의 **참조** 절에 고정 커밋 기준 퍼머링크를 본론 절 번호별로 정리해 두었다.
+
+### 분석 대상
+
+코드는 계속 변경되므로 분석 시점의 커밋을 고정한다.
+
+| 저장소 | 고정 커밋 | 날짜 | 코드 검색 |
+|---|---|---|---|
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 2026-09-30 | [source.chromium.org](https://source.chromium.org/chromium/chromium/src) |
+| [v8/v8](https://github.com/v8/v8) | [`d44b084e`](https://github.com/v8/v8/commit/d44b084e33a4501c46b7fd01052228ce8e45d435) | 2026-09-30 | [source.chromium.org](https://source.chromium.org/chromium/chromium/src/+/main:v8/) |
+
+이 글의 모든 인용은 위 커밋에서 재현된다.
+
+<KnowledgeNote term="인용 링크의 형식과 재현 방법" kind="note">
+
+참조 절의 링크는 **GitHub 퍼머링크**를 사용한다. 형식은 다음과 같다.
+
+```text
+https://github.com/chromium/chromium/blob/<커밋>/<경로>#L<행>
+```
+
+커밋 해시가 URL에 포함되어 있으므로 `main`이 갱신되어도 링크가 가리키는 내용은 변하지 않는다. 행 번호 앵커(`#L2543`)도 함께 고정된다.
+
+공식 코드 검색인 [source.chromium.org](https://source.chromium.org/chromium/chromium/src)도 같은 커밋을 지원한다. 형식이 다르다.
+
+```text
+https://source.chromium.org/chromium/chromium/src/+/<커밋>:<경로>;l=<행>
+```
+
+이쪽은 심볼 교차 참조(정의로 이동, 호출부 찾기)를 제공하므로 코드를 따라 읽을 때 유리하다. 반면 GitHub 쪽은 로그인 없이 가볍게 열린다. 이 시리즈는 후자를 기본으로 쓴다.
+
+`git` 저장소에서 직접 확인하려면 본론 1절의 명령에 커밋을 지정한다.
+
+```bash
+git checkout fca8b75c7d7962742759debada81051bc99e3eb3
+```
+
+</KnowledgeNote>
+
+### 범위
+
+1편이 다루는 것은 분석 환경 구성, 저장소의 계층 구조, 계층 간 경계 규칙, 프로세스 모델, 격리의 집행 방식, 프로세스 간 통신이다. 렌더링 파이프라인은 2편, 자바스크립트 실행은 3편, V8 내부는 4편에서 다룬다.
+
+<KnowledgeNote term="LLM을 사용한 분석에 대하여" kind="note" defaultOpen>
+
+이 시리즈가 성립한 전제는 대규모 오픈소스를 탐색하는 비용이 낮아졌다는 점이다. Chromium은 저장소 전체가 수십 GB이고 파일 수가 수십만 개에 달한다. 어디서 시작해야 하는지를 판단하는 것 자체가 과거에는 상당한 진입 장벽이었다.
+
+다만 LLM의 역할은 **탐색 범위를 좁히는 것**에 한정했다. 이 글의 모든 사실 주장은 해당 파일을 직접 열어 확인한 것이며, 주석과 코드가 어긋나는 경우에는 코드를 기준으로 삼았다. 구체적인 방법과 그 한계는 본론 8절에서 다룬다.
+
+</KnowledgeNote>
+
+## 본론
+
+### 1. 분석 환경 구성
+
+Chromium 공식 체크아웃은 `depot_tools`와 `gclient`를 사용하며, 빌드까지 고려하면 수십 GB의 디스크를 요구한다. 코드를 읽는 것만이 목적이라면 이 비용은 불필요하다.
+
+Git의 두 기능을 조합하면 필요한 디렉터리만 받을 수 있다.
+
+```bash
+git clone --filter=blob:none --no-checkout --depth 1 \
+    https://github.com/chromium/chromium.git .
+git sparse-checkout init --cone
+git sparse-checkout set content third_party/blink/renderer cc mojo base \
+    docs services gpu net
+git checkout main
+```
+
+<KnowledgeList title="짚고 넘어가기">
+
+<KnowledgeNote term="--filter=blob:none" kind="definition">
+
+부분 클론(partial clone)이다. 커밋과 트리 객체는 모두 받되, 파일 내용(blob)은 받지 않는다. 체크아웃하는 시점에 필요한 blob만 서버에서 가져온다.
+
+`--depth 1`(shallow clone)과 조합하면 히스토리와 blob을 모두 줄인다. 다만 이 경우 과거 커밋을 조회할 수 없으므로, 특정 코드가 언제 도입되었는지를 추적하려면 `git fetch --unshallow`가 필요하다.
+
+</KnowledgeNote>
+
+<KnowledgeNote term="sparse-checkout --cone" kind="definition">
+
+작업 디렉터리에 체크아웃할 경로를 제한한다. `--cone` 모드는 디렉터리 단위 패턴만 허용하는 대신 매칭 비용이 낮다.
+
+`git sparse-checkout add <경로>`로 나중에 범위를 넓힐 수 있다. 분석 과정에서 필요한 디렉터리가 추가로 발견되는 것이 일반적이므로, 처음부터 넓게 잡을 이유는 없다.
+
+</KnowledgeNote>
+
+</KnowledgeList>
+
+위 구성의 실측 결과는 다음과 같다.
+
+```text
+전체                 869M  (.git 250M 포함)
+
+third_party/blink/renderer   186M   19,025 파일
+content                      165M   16,965 파일
+net                           93M    5,699 파일
+docs                          40M    1,075 파일
+base                          38M    4,131 파일
+services                      37M    3,867 파일
+gpu                           18M    1,230 파일
+cc                            17M    1,165 파일
+mojo                          12M    1,693 파일
+```
+
+V8은 별도 저장소이며, 동일한 방식으로 받을 경우 **75MB**(`.git` 14MB 포함)에 불과하다. 이유는 4편에서 다룬다.
+
+### 2. 저장소는 네 계층으로 나뉜다
+
+최상위 디렉터리의 역할 구분은 추측할 필요가 없다. [`docs/source_tree_overview.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/source_tree_overview.md)가 직접 분류한다.
+
+| 계층 | 디렉터리 | 역할 |
+|---|---|---|
+| Core Application Logic | `//chrome`, `//components` | Chrome이라는 제품. UI, 제품 고유 기능 |
+| Core Abstraction Layers | `//content`, `//third_party/blink` | 멀티프로세스 렌더링 엔진. 웹 플랫폼 구현 |
+| Foundational Libraries | `//base`, `//net`, `//mojo`, `//services` | 자료구조·스레딩, 네트워크, IPC, 프로세스 서비스 |
+| UI Toolkits | `//ui`, `//ui/views` | 크로스 플랫폼 위젯 프레임워크 |
+
+문서는 `//content`를 "the core multi-process rendering engine abstraction"으로 규정하고, "It encapsulates the sandbox and the browser/renderer process model"이라고 명시한다. `//third_party/blink`는 "where the open web platform is implemented"이며 "runs inside the sandboxed renderer process"다.
+
+의존 방향은 위에서 아래로만 흐른다. `content/README.md`는 이를 다음과 같이 서술한다.
+
+> A module can include code directly from lower modules. However, a module can not include code from a module that is higher than it. This is enforced through DEPS rules.
+
+즉 `//content`는 `//chrome`을 참조할 수 없다. 이것은 관례가 아니라 빌드 단계에서 검사되는 제약이다.
+
+<KnowledgeNote term="DEPS 파일에 의한 의존성 검사" kind="definition">
+
+Chromium의 각 디렉터리에는 `DEPS` 파일이 놓일 수 있고, 여기에 해당 디렉터리가 포함할 수 있는 경로가 열거된다. 커밋 전 검사(presubmit)와 빌드 과정에서 이 규칙을 위반하는 `#include`가 검출된다.
+
+최상위 `DEPS`는 성격이 다르다. 그쪽은 외부 저장소를 가져오는 정의 파일이다. 같은 이름이 두 용도로 쓰인다.
+
+</KnowledgeNote>
+
+### 3. 경계의 규칙 — `//content`와 `//chrome`
+
+계층 구분이 의미를 갖는 것은 경계가 명시적으로 정의되어 있기 때문이다. [`content/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/README.md)는 어떤 기능이 `//content`에 들어갈 수 있는지를 세 조건으로 규정한다.
+
+> Generally, a feature belongs in this category if and only if all of the following are true:
+> - Its launch is tracked on the https://chromestatus.com/ dashboard.
+> - It has an associated spec.
+> - It is going through the feature development lifecycle.
+
+세 조건을 모두 만족해야 한다. 문서는 이어서 만족하지 않는 기능의 목록을 제시한다 — Extensions, SpellCheck, Autofill, Sync, Safe Browsing, Translate.
+
+이 기능들은 모든 현대 브라우저가 제공하지만 웹 플랫폼의 일부가 아니므로 `//chrome`에 구현된다. `//content`는 이들이 필요한 사건을 구독할 수 있도록 **확장 지점만 제공한다**.
+
+문서는 이 분리의 동기를 다음과 같이 밝힌다.
+
+> As the Chromium code has grown, features inevitably hooked into the wrong places, causing layering violations and dependencies that shouldn't exist.
+
+파일 수를 보면 이 분리의 실질적 효과가 드러난다. `//chrome`은 51,795개 이상, `//components`는 41,789개다. 두 디렉터리를 합치면 9만 개를 넘는다. 반면 웹 플랫폼의 핵심인 `//content`와 `blink/renderer`는 합계 36,000개 수준이다.
+
+**브라우저의 동작 원리를 파악하려는 목적이라면 `//chrome`과 `//components`는 읽을 필요가 없다.** 전체 코드의 과반이 제품 기능이며, 구조와 무관하다. 이것이 분석에서 가장 먼저 확보해야 할 판단이다.
+
+<KnowledgeNote term="content_shell" kind="note">
+
+`//content`만으로 구성된 최소 브라우저가 저장소에 포함되어 있다. `content/shell/`이며, `content/README.md`는 이를 "a basic browser built on top of content"로 설명한다.
+
+웹 플랫폼 기능을 작업하는 개발자가 Chrome 전체를 빌드하지 않고 테스트할 수 있도록 하는 것이 목적이다. 계층 분리가 선언에 그치지 않고 실제로 동작함을 증명하는 장치이기도 하다.
+
+</KnowledgeNote>
+
+### 4. 저장소에 없는 것
+
+"Chromium을 읽는다"는 표현은 부정확하다. 분석에 필요한 구성 요소 상당수가 이 저장소에 존재하지 않는다.
+
+최상위 디렉터리 목록에 `v8`이 있지만, 체크아웃 결과는 빈 디렉터리다. 최상위 [`DEPS`의 3362행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3362)이 그 이유를 보여준다.
+
+```text
+'src/v8':
+```
+
+V8은 독립 저장소이며 `gclient`가 해당 위치로 가져온다. Skia(`DEPS:3095`), ANGLE(`DEPS:2038`), Dawn(`DEPS:2125`), PDFium(`DEPS:2840`), WebRTC(`DEPS:3289`)도 동일하다.
+
+자바스크립트 엔진, 2D 그래픽 엔진, OpenGL ES 변환 계층, WebGPU 구현, PDF 렌더러, 실시간 통신 스택이 모두 외부 저장소다. 이 시리즈가 4편에서 V8을 별도로 다루는 것은 임의의 구성이 아니라 저장소 구조를 따른 것이다.
+
+<KnowledgeNote term="GitHub 미러와 공식 체크아웃의 차이" kind="caution">
+
+`github.com/chromium/chromium`은 미러이며, 일부 외부 의존성이 `third_party/` 아래에 펼쳐진 상태로 포함되어 있다. 따라서 미러에서는 Skia나 ANGLE의 코드를 볼 수 있지만, `src/v8`은 gitlink 플레이스홀더로 남아 빈 디렉터리가 된다.
+
+미러에서 보이는 `third_party/skia`를 수정해도 상류 Skia 저장소와는 무관하다. 코드를 읽는 목적에는 문제가 없으나, 기여를 고려한다면 각 프로젝트의 원본 저장소를 확인해야 한다.
+
+</KnowledgeNote>
+
+### 5. 프로세스 모델 — 무엇을 하나의 단위로 볼 것인가
+
+[`docs/process_model_and_site_isolation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md)는 580행의 문서이며, 프로세스 분할의 설계 근거를 다룬다. 서두의 문제 정의는 다음과 같다.
+
+> First, the process model must identify which parts of a "program" on the web need to coexist in a single process. Somewhat surprisingly, a program on the web is not a single document plus its subresources, but rather a group of same (or similar) origin documents that can fully access each other's contents.
+
+즉 분할의 단위는 문서가 아니다. **서로의 내용에 완전히 접근할 수 있는 문서들의 집합**이다. 이들을 분리된 프로세스에 두면 데이터 경쟁이나 교착이 발생한다.
+
+문서는 세 단계의 추상을 정의한다.
+
+**Security Principal** (`content/browser/site_info.h`). 보안 용어에서 principal은 특정 권한을 가진 주체다. Chromium은 실행 컨텍스트에 principal을 연결하여, 그 프로세스가 접근할 수 있는 데이터를 추적한다. 통상 **site**(스킴 + eTLD+1)가 principal이 된다. origin이 아니라 site인 이유는 `document.domain` 조작을 통해 same-site 문서 간 접근이 가능하기 때문이다.
+
+**Principal Instance** (`content/public/browser/site_instance.h`). 프로세스 모델의 핵심 단위다. 같은 browsing context group 안에서 같은 principal을 갖는 두 문서는 반드시 같은 프로세스에 있어야 한다. 문서는 그 이유를 명확히 한다.
+
+> This access includes cross-document scripting and synchronous communication through shared memory (e.g., SharedArrayBuffer). If such documents were in different processes, data races or deadlocks would occur if they concurrently accessed objects in their shared DOM or JavaScript heaps.
+
+**Browsing Context Group** (`content/browser/browsing_instance.h`). 서로에 대한 참조를 가진 탭과 프레임의 묶음이다. 같은 페이지 안의 프레임, `window.opener` 참조를 가진 팝업 등이 해당한다. 이 그룹 안에서는 이름으로 서로를 찾을 수 있으므로, 같은 principal을 가진 문서가 같은 프로세스에 있어야 한다는 제약이 발생한다.
+
+<KnowledgeNote term="agent cluster와의 관계" kind="definition">
+
+Principal Instance는 HTML 표준의 [agent cluster](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism)에 대응한다. 문서는 "roughly corresponds"라고 표현하며, 정확히 일치하지 않는 경우를 명시한다.
+
+- 여러 agent cluster가 하나의 principal instance를 공유할 수 있다. 예: 생성자와 같은 principal instance에 놓이는 `data:` URL
+- principal은 agent cluster key보다 많은 요소를 추적할 수 있다. 예: StoragePartition의 차이
+
+구현이 스펙을 그대로 따르지 않는 지점이며, 이 시리즈에서 반복적으로 관찰되는 양상이다. 3편에서는 더 명시적인 사례를 다룬다.
+
+</KnowledgeNote>
+
+Site Isolation은 항상 완전하게 적용되지 않는다. 문서는 세 가지 모드를 구분한다.
+
+- **Full Site Isolation** (site-per-process): 모든 site가 전용 프로세스를 가진다
+- **Partial Site Isolation**: 일부 site만 격리한다. 메모리 제약이 있는 Android가 해당한다
+- **No Site Isolation**
+
+### 6. 격리는 어떻게 집행되는가
+
+프로세스를 분리하는 것만으로는 보호가 완성되지 않는다. 렌더러 프로세스가 침해된 상황을 가정해야 한다. 문서는 집행 수단을 두 축으로 정리한다.
+
+> - **Locked Renderer Processes**: A renderer process can be limited to documents and workers from a single web site or origin, even if such documents are in iframes.
+> - **Browser-Enforced Restrictions**: The privileged browser process can monitor IPC messages from renderer processes to limit their actions or access to site data.
+
+두 번째 축이 다시 두 종류로 나뉜다.
+
+> - _"Jail" checks_: Ensure that a process locked to a particular site can only access data belonging to that site. If all processes are locked, this is sufficient protection.
+> - _"Citadel" checks_: Ensure that unlocked processes cannot access data for sites that require a dedicated process. This adds protection in cases where full Site Isolation is not available, such as Android.
+
+이 두 검사는 구현에 그대로 반영되어 있다. `content/browser/security/cpsp/child_process_security_policy_impl.cc`의 [2543행에 `PerformJailAndCitadelChecks`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2543)가 정의되어 있고, 2689행과 2756행의 주석이 각각의 역할을 설명한다.
+
+```text
+2689:  // Jail-style enforcement - a process with a lock can only access data
+2756:  // Citadel-style enforcement - an unlocked process should not be able to
+```
+
+구현 파일은 4,380행이다. 프로세스 분리라는 설계가 실제로는 "렌더러가 요청할 수 있는 것의 목록을 브라우저 프로세스가 일일이 검사한다"는 형태로 구현되어 있음을 분량이 보여준다.
+
+<KnowledgeNote term="같은 디렉터리에 Rust 구현이 있다" kind="note" defaultOpen>
+
+해당 디렉터리에는 `child_process_security_policy_impl.rs`와 `process_state.rs`가 함께 존재한다. 저작권 표기는 2026년이며, `cxx::bridge`를 통해 C++과 연결된다.
+
+```rust
+/// This block defines the Foreign Function Interface for C++ code to call the
+/// specified Rust functions. The functions operate on a
+/// ChildProcessSecurityPolicyImpl singleton defined further below.
+#[cxx::bridge(namespace = "content::rust::child_process_security_policy")]
+mod ffi {
+```
+
+보안 경계를 집행하는 코드가 메모리 안전성이 보장되는 언어로 이식되고 있다는 의미다. `child_process_security_policy_shim.h`(44행)와 `shim.cc`(33행)가 양쪽을 중개한다.
+
+이 시리즈의 분석 시점(2026년 9월)에 진행 중인 작업이므로, 최종 형태는 달라질 수 있다.
+
+</KnowledgeNote>
+
+### 7. 프로세스 간 통신 — Mojo
+
+프로세스를 분리하면 통신 수단이 필요하다. Chromium은 Mojo를 사용한다. [`docs/mojo_and_services.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/mojo_and_services.md)(576행)가 기본 개념을 정의한다.
+
+> A **message pipe** is a pair of **endpoints**. Each endpoint has a queue of incoming messages, and writing a message at one endpoint effectively enqueues that message on the other (**peer**) endpoint. Message pipes are thus bidirectional.
+
+인터페이스는 `.mojom` 파일로 선언한다. 문서는 이를 protobuf에 대응시킨다.
+
+> A **mojom** file describes **interfaces**, which are strongly-typed collections of **messages**. Each interface message is roughly analogous to a single proto message, for developers who are familiar with Google protobufs.
+
+파이프의 두 끝에는 역할이 부여된다.
+
+> Given a mojom interface and a message pipe, one of the endpoints can be designated as a **`Remote`** and is used to *send* messages described by the interface. The other endpoint can be designated as a **`Receiver`** and is used to *receive* interface messages.
+
+문서는 이를 한 문장으로 요약한다.
+
+> **a `Remote` makes calls on a remote implementation of its interface associated with a corresponding remote `Receiver`.**
+
+실제 `.mojom` 파일의 형태는 다음과 같다. [`third_party/blink/public/mojom/browser_interface_broker.mojom`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/mojom/browser_interface_broker.mojom#L11)이다.
+
+```text
+interface BrowserInterfaceBroker {
+    // Asks the browser to bind |receiver| to its remote implementation
+    // in the browser process.
+    GetInterface(mojo_base.mojom.GenericPendingReceiver receiver);
+};
+```
+
+메서드 하나뿐이지만 역할이 중요하다. 렌더러가 브라우저 프로세스의 임의 인터페이스를 직접 얻는 것이 아니라, **브로커를 통해 요청하고 브라우저가 바인딩 여부를 결정한다.** 5절과 6절에서 확인한 불신의 구조가 통신 계층에도 동일하게 적용되어 있다.
+
+이 시리즈의 체크아웃 범위 안에 `.mojom` 파일은 833개가 존재한다.
+
+<KnowledgeNote term="양방향성과 응답" kind="caution">
+
+`Remote`가 송신, `Receiver`가 수신이라는 설명은 단순화된 것이다. 문서 자체가 이를 밝힌다.
+
+> NOTE: The above generalization is a bit oversimplified. Remember that the message pipe is still bidirectional, and it's possible for a mojom message to expect a reply. Replies are sent from the `Receiver` endpoint and received by the `Remote` endpoint.
+
+응답을 기대하는 메시지를 정의할 수 있으며, 이 경우 데이터는 반대 방향으로도 흐른다.
+
+</KnowledgeNote>
+
+### 8. 저장소를 읽는 방법
+
+앞 일곱 절의 근거는 대부분 저장소 안의 문서에서 나왔다. 이 사실 자체가 분석 방법의 핵심이다.
+
+**첫째, 설계 문서가 코드와 함께 배포된다.** `docs/` 디렉터리에는 1,075개의 파일이 있고, 각 모듈에도 `README.md`가 놓여 있다. `blink/renderer` 아래에만 40개 이상의 `README.md`가 존재한다. 외부 블로그를 찾기 전에 해당 디렉터리의 문서를 확인하는 것이 순서다.
+
+**둘째, 학습 순서가 문서에 명시되어 있는 경우가 있다.** `content/README.md`에는 `//content`의 최상위 OWNER가 되기 위해 숙지해야 할 항목이 열거되어 있다.
+
+```text
+- Render(Frame|FrameProxy|Process|Widget|View)Host
+- Render(Frame|Widget|Thread)
+- WebContents and WebContentsObserver
+- FrameTree and FrameTreeNode
+- RenderFrameHostManager
+- NavigationHandle and NavigationRequest, their ownership and lifetime
+- Page vs RenderFrameHost vs blink's Document
+- SiteInstance and BrowsingInstance, SiteInfo
+- NavigationController, NavigationEntry vs FrameNavigationEntry
+- ChildProcessSecurityPolicy
+- BrowserContext, StoragePartition
+- ContentBrowserClient
+```
+
+이 목록은 리뷰어 자격 요건으로 작성된 것이지만, 결과적으로 `//content`를 이해하는 데 필요한 클래스의 목록으로 기능한다. 어떤 클래스가 중요한지를 외부에서 추정할 필요가 없다.
+
+**셋째, 열거형과 정적 단정문이 설계를 직접 서술한다.** 이 시리즈에서 반복적으로 활용하는 방법이다. 상태 기계는 `enum`으로, 불변 조건은 `static_assert`로 코드에 박혀 있는 경우가 많다. 산문으로 된 설명보다 정확하고, 코드와 어긋날 수 없다. 2편의 문서 수명주기, 3편의 태스크 유형, 4편의 컴파일러 티어가 모두 이 형태로 확인된다.
+
+**넷째, 주석을 그대로 신뢰하지 않는다.** 주석은 코드보다 느리게 갱신된다. 2편에서 다룰 사례가 이에 해당한다 — `docs/life_of_a_frame.md`는 커밋 중 메인 스레드가 블록된다고 서술하지만, 현재 구현은 그렇게 동작하지 않는다. 주석에서 얻은 주장은 호출부를 `grep`으로 확인하는 절차가 필요하다.
+
+<KnowledgeNote term="LLM에게 맡긴 범위와 맡기지 않은 범위" kind="reason" defaultOpen>
+
+맡긴 것은 **탐색**이다. "컴포지터의 스레드 경계를 담당하는 코드가 어디인가"와 같은 질문에서 후보 디렉터리와 파일을 좁히는 작업이다. 수십만 개의 파일에서 이것을 수동으로 하는 비용이 과거의 진입 장벽이었다.
+
+맡기지 않은 것은 **사실 확정**이다. 지목된 파일은 직접 열어 확인했고, 인용은 해당 행을 그대로 옮겼다. 이 절차를 생략하면 결과물이 "재해석된 2차 자료"가 되며, 이 시리즈가 피하려는 대상과 같아진다.
+
+실제로 이 과정에서 몇 가지 통념이 코드와 어긋남을 확인했다. 2편의 컴포지터 동기화, 3편의 이벤트 루프 구현, 4편의 Turboshaft 분류가 그 예다. 탐색 결과를 검증 없이 수용했다면 모두 놓쳤을 지점이다.
+
+</KnowledgeNote>
+
+## 결론
+
+### 확인된 사실
+
+1. **저장소는 네 계층으로 분류되어 있고, 의존 방향이 빌드 단계에서 강제된다.** 분류는 `docs/source_tree_overview.md`에 명시되어 있으며, `DEPS` 규칙으로 집행된다.
+
+2. **웹 플랫폼과 제품 기능의 경계가 세 조건으로 정의되어 있다.** chromestatus 추적, 스펙 존재, 기능 출시 절차. 자동완성·확장·번역 등은 이를 만족하지 않으므로 `//chrome`에 있다. 전체 코드의 과반이 여기에 속하며, 구조 분석 대상이 아니다.
+
+3. **분석 대상의 상당 부분이 이 저장소에 없다.** V8, Skia, ANGLE, Dawn, PDFium, WebRTC는 모두 외부 저장소이며 `DEPS`로 연결된다.
+
+4. **프로세스 분할의 단위는 문서가 아니라 principal instance다.** 동기적으로 서로의 내용에 접근할 수 있는 문서들은 같은 프로세스에 있어야 한다. 이는 성능 선택이 아니라 데이터 경쟁을 피하기 위한 제약이다.
+
+5. **격리는 jail 검사와 citadel 검사로 집행된다.** 전자는 잠긴 프로세스가 자기 site의 데이터만 접근하게 하고, 후자는 잠기지 않은 프로세스가 전용 프로세스를 요구하는 site의 데이터에 접근하지 못하게 한다. 구현은 4,380행이며, 현재 Rust로 이식되는 중이다.
+
+6. **프로세스 간 통신은 타입이 지정된 양방향 파이프 위에서 이루어진다.** 렌더러는 브라우저의 인터페이스를 직접 얻지 않고 브로커에 요청하며, 바인딩 여부는 브라우저가 결정한다.
+
+### 이 분석의 한계
+
+샌드박스 자체의 구현(`//sandbox`)은 다루지 않았다. 운영체제별 기법이 크게 다르며, 이 시리즈의 범위를 넘는다. 네트워크 스택(`//net`, 5,699 파일)도 다루지 않았다. 또한 코드를 읽었을 뿐이며, 빌드하여 동작을 측정하지는 않았다.
+
+### 다음 편
+
+2편은 이 구조 위에서 하나의 요청이 흐르는 경로를 추적한다. 주소창 입력부터 화면에 픽셀이 나타나기까지이며, 중심 자료는 [`docs/navigation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md), [`core/dom/document_lifecycle.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h), [`docs/how_cc_works.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md)다.
+
+2~4편은 작성을 마쳤으나 아직 공개하지 않았다. 본문의 "2편에서 다룬다" 형태의 참조는 공개 시점에 링크로 연결된다.
+
+## 참조
+
+### 저장소
+
+| 저장소 | 고정 커밋 | 비고 |
+|---|---|---|
+| [chromium/chromium](https://github.com/chromium/chromium) | [`fca8b75c`](https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3) | 아래 모든 링크의 기준 |
+| [v8/v8](https://github.com/v8/v8) | [`d44b084e`](https://github.com/v8/v8/commit/d44b084e33a4501c46b7fd01052228ce8e45d435) | 4편에서 사용 |
+
+공식 코드 검색: [source.chromium.org](https://source.chromium.org/chromium/chromium/src) · 공식 Git 호스팅: [chromium.googlesource.com](https://chromium.googlesource.com/chromium/src)
+
+### 1차 자료 — 본론 절별
+
+**2절 · 저장소의 계층 구조**
+
+- [`docs/source_tree_overview.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/source_tree_overview.md) — 최상위 디렉터리 4계층 분류
+- [`third_party/blink/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/README.md) — Blink 디렉터리 구조, `common`/`public`/`renderer` 구분
+
+**3절 · `//content`와 `//chrome`의 경계**
+
+- [`content/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/README.md) — 입주 조건 3항, 제외 기능 목록, 분리의 동기
+- [`content/shell/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/content/shell) — `content_shell`, `//content`만으로 구성된 최소 브라우저
+
+**4절 · 저장소에 없는 것**
+
+- [`DEPS`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS) — 외부 저장소 정의. [ANGLE 2038행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L2038) · [Dawn 2125행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L2125) · [PDFium 2840행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L2840) · [Skia 3095행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3095) · [WebRTC 3289행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3289) · [V8 3362행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/DEPS#L3362)
+
+**5절 · 프로세스 모델**
+
+- [`docs/process_model_and_site_isolation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md) — 전문(580행). [Abstractions and Implementations 75행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md#L75)에 principal 3단 정의
+- [`content/browser/site_info.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/site_info.h) — Security Principal 구현
+- [`content/public/browser/site_instance.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/public/browser/site_instance.h) — Principal Instance 구현
+- [`content/browser/browsing_instance.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/browsing_instance.h) — Browsing Context Group 구현
+
+**6절 · 격리의 집행**
+
+- [`docs/process_model_and_site_isolation.md#L60`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/process_model_and_site_isolation.md#L60) — jail 검사와 citadel 검사의 정의
+- [`child_process_security_policy_impl.cc#L2543`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2543) — `PerformJailAndCitadelChecks`. [jail 주석 2689행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2689) · [citadel 주석 2756행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.cc#L2756)
+- [`child_process_security_policy_impl.rs`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp/child_process_security_policy_impl.rs) — Rust 이식, `cxx::bridge` FFI
+- [`content/browser/security/cpsp/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/content/browser/security/cpsp) — 디렉터리 전체. C++ 구현 4,380행, Rust 2개 파일, shim 2개 파일
+
+**7절 · Mojo**
+
+- [`docs/mojo_and_services.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/mojo_and_services.md) — 전문(576행). [Mojo Terminology 15행](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/mojo_and_services.md#L15)에 message pipe·Remote·Receiver 정의
+- [`browser_interface_broker.mojom#L11`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/public/mojom/browser_interface_broker.mojom#L11) — `BrowserInterfaceBroker` 인터페이스
+- [`mojo/README.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/mojo/README.md) — Mojo 디렉터리 구조
+
+**8절 · 저장소를 읽는 방법**
+
+- [`docs/`](https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/docs) — 설계 문서 디렉터리(1,075 파일)
+- [`content/README.md` OWNER 요건 목록](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/content/README.md#L151) — 핵심 클래스 열거
+
+### 2차 자료
+
+- [Content not Chrome](http://blog.chromium.org/2008/10/content-not-chrome.html) — Chromium Blog, 2008-10. `//content` 분리의 명칭 유래. `content/README.md`가 인용하는 원문
+- [브라우저는 어떻게 동작하는가?](https://d2.naver.com/helloworld/59361) — NAVER D2. 서론에서 다룬 선행 자료
+- [HTML Standard — Agent clusters](https://html.spec.whatwg.org/multipage/webappapis.html#integration-with-the-javascript-agent-cluster-formalism) — 5절의 principal instance가 대응하는 스펙 개념
+- [HTML Standard — Site](https://html.spec.whatwg.org/multipage/origin.html#site) — 5절의 security principal 단위
+
+### 관련 공식 문서
+
+- [Chromium Docs 목차](https://chromium.googlesource.com/chromium/src/+/main/docs/README.md) — 저장소 내 문서 전체 색인
+- [Get the Code](https://chromium.googlesource.com/chromium/src/+/main/docs/get_the_code.md) — `depot_tools`를 사용한 공식 체크아웃 절차. 본론 1절의 sparse checkout은 읽기 전용 대안
+- [Site Isolation](https://www.chromium.org/Home/chromium-security/site-isolation) — 6절 주제의 개요
+- [compromised-renderers.md](https://chromium.googlesource.com/chromium/src/+/main/docs/security/compromised-renderers.md) — 침해된 렌더러를 가정한 방어 설계
