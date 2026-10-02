@@ -507,6 +507,33 @@
   .prose ul ul, .prose ol ol, .prose ul ol, .prose ol ul {
     padding-inline-start: 1.5rem;
   }
+
+  /* 본문 인라인 code에는 content/browser/security/cpsp/child_process_security_policy_impl.cc
+     같은 파일 경로가 들어온다. `/`와 `_`로만 이어진 토큰에는 줄바꿈 지점이 없어
+     문단의 min-content가 모바일 폭을 넘고, 그 폭이 조상으로 전파되어 가로 스크롤이 생긴다.
+     break-word는 min-content를 줄이지 못하므로 anywhere를 쓴다
+     (KnowledgeNote 요약 줄에서 같은 이유로 이미 쓰고 있다).
+     pre 안의 code는 제외한다 — 코드 블록은 줄바꿈이 아니라 가로 스크롤이 맞다. */
+  .prose :not(pre) > code {
+    overflow-wrap: anywhere;
+  }
+
+  /* 인용문의 평문에도 SchedulerStateMachine::ShouldSendBeginMainFrame() 같은
+     긴 식별자가 code 표시 없이 들어올 수 있다. 본문 텍스트 요소에 같은 규칙을
+     안전망으로 둔다. typography 플러그인은 이들을 overflow-wrap: normal로 두므로
+     여기서 덮어야 한다.
+     anywhere는 들어갈 자리가 없을 때만 단어 안을 끊으므로, 보이는 결과는
+     break-word와 같고 min-content만 줄어든다 */
+  .prose p,
+  .prose li,
+  .prose blockquote,
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose summary {
+    overflow-wrap: anywhere;
+  }
 }
 
 /* 화면에서는 감추고 인쇄물에만 노출되는 요소 */
