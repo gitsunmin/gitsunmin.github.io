@@ -1,7 +1,8 @@
 import { Career } from '@/data/careers';
-import { Works } from '@/data/works';
 import { cn } from '@/lib/utils';
-import { Award, Briefcase, Building2, Calendar, Code2, ExternalLink } from 'lucide-react';
+import { Award, Briefcase, Building2, Calendar, Code2 } from 'lucide-react';
+import { CareerLinks, CareerLogo, RelatedWorks, TIMELINE_RAIL_X } from '@/components/CareerParts';
+import { PersonalCareerBranch } from '@/components/PersonalCareerBranch';
 import { TechFilterBar } from '@/components/TechFilterBar';
 import { TechTag } from '@/components/TechTag';
 import { useInView } from '@/hooks/useInView';
@@ -16,28 +17,17 @@ import {
   useState,
 } from 'react';
 
-// --- Helpers ---
-
-const getInitials = (name: string): string => {
-  const cleaned = name.replace(/^\(주\)\s*/, '');
-  return cleaned.slice(0, 2);
-};
-
-const LogoFallback = ({ name, className }: { name: string; className?: string }) => (
-  <div
-    className={cn(
-      'flex items-center justify-center rounded-xl bg-muted border border-border/50 font-semibold text-muted-foreground text-sm select-none',
-      className,
-    )}
-  >
-    {getInitials(name)}
-  </div>
-);
-
 // --- Module-level constants ---
 
 const VISIBLE_CAREERS = Career.filter((c) => !c.isDraft);
 const ALL_TECHS = [...new Set(VISIBLE_CAREERS.flatMap((c) => c.techs))].sort();
+
+const DOT_SIZE = 20; // md 기준 size-5
+
+const laneOf = (career: (typeof Career)[number]) => career.kind ?? 'employment';
+
+const isCareerFiltered = (career: (typeof Career)[number], activeFilter: string | null) =>
+  activeFilter !== null && !career.techs.includes(activeFilter);
 
 // --- Helpers ---
 
@@ -57,8 +47,11 @@ const computeStats = (careers: (typeof Career)[number][]) => {
     };
   };
 
-  // 재직 기간만 합산한다. 공백기는 제외하고, 겹치는 기간은 한 번만 센다.
+  // 경력 연수는 고용 이력만 센다. 개인 작업은 기간이 겹치기도 하고, 이력서에 적는
+  // '경력 N년'은 통상 재직 기준으로 읽히므로 부풀리지 않는다.
+  // 공백기는 제외하고, 겹치는 기간은 한 번만 센다.
   const ranges = careers
+    .filter((c) => laneOf(c) === 'employment')
     .map((c) => toRange(c.range))
     .map(({ start, end }) => ({ start: toMonthIndex(start), end: toMonthIndex(end) }))
     .sort((a, b) => a.start - b.start);
@@ -286,7 +279,7 @@ const StatsHeader = ({ careers }: { careers: (typeof Career)[number][] }) => {
       <StatItem
         icon={<Building2 className="size-4 md:size-5" />}
         value={stats.companyCount}
-        label="재직 회사"
+        label="소속"
         trigger={trigger}
       />
     </div>
@@ -298,11 +291,18 @@ const StatsHeader = ({ careers }: { careers: (typeof Career)[number][] }) => {
 const CareerCard = ({
   career,
   index,
+  isFirst,
+  isLast,
+  receivesBranch = false,
   activeFilter,
   onTechClick,
 }: {
   career: (typeof Career)[number];
   index: number;
+  isFirst: boolean;
+  isLast: boolean;
+  /** 위쪽 개인 작업 분기점에서 레일을 넘겨받는 카드. 데스크톱(lg)에서 세그먼트를 카드 처음부터 그린다. */
+  receivesBranch?: boolean;
   activeFilter: string | null;
   onTechClick: (tech: string) => void;
 }) => {
@@ -311,7 +311,7 @@ const CareerCard = ({
   const { ref: tiltRef, tiltStyle } = useTilt(6);
   const skewStyle = useScrollSkew(2.5);
   const isCurrentRole = career.range.trim().endsWith('~');
-  const isFiltered = activeFilter !== null && !career.techs.includes(activeFilter);
+  const isFiltered = isCareerFiltered(career, activeFilter);
   const fromLeft = index % 2 === 0;
 
   return (
@@ -338,8 +338,43 @@ const CareerCard = ({
           )}
           style={{ ...skewStyle, transitionDelay: `${index * 150}ms` }}
         >
+          {/* 타임라인 레일 세그먼트. 카드마다 자기 높이만큼 그려서 필터로 접힐 때
+              레일도 함께 접히게 한다. 카드 사이 gap-8은 음수 bottom으로 메운다. */}
+          <div
+            className={cn(
+              'hidden md:block absolute w-px overflow-hidden',
+              // 분기점과 맞닿는 쪽은 여백 없이 카드 경계까지 그려야 선이 이어진다.
+              // 분기점은 lg 이상에서만 보이므로 그 아래에서는 평소처럼 띄운다.
+              isFirst ? (receivesBranch ? 'top-7 lg:top-0' : 'top-7') : 'top-0',
+            )}
+            style={{
+              left: TIMELINE_RAIL_X,
+              bottom: isLast ? '1.75rem' : '-2rem',
+            }}
+          >
+            <div
+              className={cn(
+                'w-full h-full',
+                isFirst
+                  ? 'bg-linear-to-b from-primary/40 to-border'
+                  : isLast
+                    ? 'bg-linear-to-b from-border to-transparent'
+                    : 'bg-border',
+              )}
+              style={{
+                transform: isVisible ? 'scaleY(1)' : 'scaleY(0)',
+                transformOrigin: 'top',
+                transition: 'transform 1s cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: `${index * 150}ms`,
+              }}
+            />
+          </div>
+
           {/* 타임라인 도트 */}
-          <div className="hidden md:block absolute left-1.75 md:left-3.75 top-7 z-10 pt-12 md:pt-16">
+          <div
+            className="hidden md:block absolute top-7 z-10 pt-12 md:pt-16"
+            style={{ left: TIMELINE_RAIL_X - DOT_SIZE / 2 }}
+          >
             <div
               className={cn(
                 'group/dot relative size-4 md:size-5 rounded-full border-2',
@@ -378,22 +413,10 @@ const CareerCard = ({
               {/* 헤더 */}
               <div className="flex items-start gap-4">
                 <div className="shrink-0">
-                  {career.logo ? (
-                    <img
-                      src={career.logo}
-                      alt={`${career.name} 로고`}
-                      className={cn(
-                        'size-12 md:size-14 rounded-xl border border-border/50 object-contain bg-white p-1',
-                        'transition-all duration-300 ease-out',
-                        'group-hover:scale-105 group-hover:shadow-md',
-                      )}
-                    />
-                  ) : (
-                    <LogoFallback
-                      name={career.name}
-                      className="size-12 md:size-14 transition-all duration-300 ease-out group-hover:scale-105 group-hover:shadow-md"
-                    />
-                  )}
+                  <CareerLogo
+                    career={career}
+                    className="size-12 md:size-14 transition-all duration-300 ease-out group-hover:scale-105 group-hover:shadow-md"
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h2 className="text-lg md:text-xl font-bold text-foreground tracking-tight">
@@ -435,66 +458,10 @@ const CareerCard = ({
               )}
 
               {/* 링크 */}
-              <div className="flex flex-wrap gap-2 mt-6 pt-5 border-t border-border/40">
-                {career.links.map(({ label, url }) => (
-                  <a
-                    key={url}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      'group/link inline-flex items-center gap-1.5',
-                      'px-3.5 py-2 rounded-lg text-xs font-medium',
-                      'bg-secondary/60 text-secondary-foreground/80',
-                      'transition-all duration-200 ease-out',
-                      'hover:bg-primary hover:text-primary-foreground',
-                      'hover:shadow-md hover:shadow-primary/15',
-                      'hover:-translate-y-0.5',
-                      'active:translate-y-0 active:shadow-sm',
-                    )}
-                  >
-                    {label}
-                    <ExternalLink className="size-3 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                  </a>
-                ))}
-              </div>
+              <CareerLinks career={career} className="mt-6 pt-5 border-t border-border/40" />
 
               {/* 관련 프로젝트 */}
-              {(() => {
-                const careerWorks = Works.filter((w) => !w.isDraft && w.careerId === career.id);
-                if (careerWorks.length === 0) return null;
-                return (
-                  <div className="mt-5 pt-5 border-t border-border/40">
-                    <p className="text-[11px] font-semibold text-muted-foreground tracking-wide uppercase mb-3">
-                      관련 프로젝트
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      {careerWorks.map((work) => (
-                        <a
-                          key={work.id}
-                          href={`/work/${work.id}`}
-                          // WorkCard와 같은 이유로 뷰 트랜지션을 건너뛴다.
-                          data-astro-reload
-                          className={cn(
-                            'group/work flex items-center gap-3 px-3 py-2.5 rounded-lg',
-                            'border border-border/50 bg-muted/20',
-                            'hover:border-primary/30 hover:bg-primary/5',
-                            'transition-all duration-200',
-                          )}
-                        >
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-medium text-foreground truncate group-hover/work:text-primary transition-colors duration-200">
-                              {work.title}
-                            </p>
-                            <p className="text-[10px] text-muted-foreground">{work.range}</p>
-                          </div>
-                          <ExternalLink className="size-3 text-muted-foreground/40 group-hover/work:text-primary/60 shrink-0 transition-colors duration-200" />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })()}
+              <RelatedWorks career={career} className="mt-5 pt-5 border-t border-border/40" />
             </div>
           </div>
         </div>
@@ -514,29 +481,31 @@ const Content = ({
   activeFilter: string | null;
   onTechClick: (tech: string) => void;
 }) => {
-  const timelineContainerRef = useRef<HTMLDivElement>(null);
-  const timelineVisible = useInView(timelineContainerRef as RefObject<HTMLElement | null>, 0.05);
+  const containerRef = useRef<HTMLDivElement>(null);
+  // 개인 작업은 고용 레일 맨 위에서 갈라져 나온 창으로 따로 그린다.
+  const personal = careers.find((c) => laneOf(c) === 'personal');
+  const employment = careers.filter((c) => laneOf(c) === 'employment');
 
   return (
     <article className="py-10 px-4 md:px-0 w-full">
-      <div ref={timelineContainerRef} className="relative flex flex-col gap-8">
-        {/* 타임라인 라인 */}
-        <div className="hidden md:block absolute left-3.75 md:left-5.75 top-7 bottom-7 w-px overflow-hidden">
-          <div
-            className="w-full h-full bg-linear-to-b from-primary/40 via-border to-transparent"
-            style={{
-              transform: timelineVisible ? 'scaleY(1)' : 'scaleY(0)',
-              transformOrigin: 'top',
-              transition: 'transform 2s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
+      <div ref={containerRef} className="relative flex flex-col gap-8">
+        {personal && (
+          <PersonalCareerBranch
+            career={personal}
+            containerRef={containerRef}
+            collapsed={isCareerFiltered(personal, activeFilter)}
+            activeFilter={activeFilter}
+            onTechClick={onTechClick}
           />
-        </div>
-
-        {careers.map((career, index) => (
+        )}
+        {employment.map((career, index) => (
           <CareerCard
             key={career.id}
             career={career}
             index={index}
+            isFirst={index === 0}
+            isLast={index === employment.length - 1}
+            receivesBranch={index === 0 && personal !== undefined}
             activeFilter={activeFilter}
             onTechClick={onTechClick}
           />

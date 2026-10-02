@@ -4,7 +4,6 @@ export type WorkCategory = 'side-project' | 'service' | 'library' | 'vscode-exte
 
 export const WORK_IDS = [
   'doldeuls-forest',
-  'namat-deonga',
   'gitsunmin-github-io',
   'k-number',
   'graph-man',
@@ -47,28 +46,15 @@ export const Works: Work[] = [
     icon: '/assets/logos/forest-of-stones.webp',
     category: 'side-project',
     description: `디지털 환경에서의 정서적 고립을 해소하고 싶어 만든 익명 P2P 힐링 커뮤니티입니다.
-누군가와 연결되고 싶지만 신분을 드러내기 어려운 순간을 위해, 완전한 익명성을 보장하면서도 진심 어린 대화가 가능한 공간을 만들었습니다.`,
-    techs: ['React', 'TypeScript', 'TanStack Router', 'Relay', 'Tailwind CSS', 'Three.js', 'Expo', 'React Native', 'Cloudflare Workers', 'Hono', 'GraphQL', 'Prisma', 'Astro', 'Turborepo', 'Bun'],
+누군가와 연결되고 싶지만 신분을 드러내기 어려운 순간을 위해, 완전한 익명성을 보장하면서도 진심 어린 대화가 가능한 공간을 만들었습니다.
+2026년 3월 1.x(WebView 하이브리드)로 정식 출시한 뒤, 2.0.0에서 순수 React Native 앱으로 전면 재구현하고 2.1.0에서 영어·일본어를 더했습니다.`,
+    techs: ['React Native', 'Expo', 'Expo Router', 'TypeScript', 'Relay', 'Reanimated', 'Zustand', 'i18next', 'Cloudflare Workers', 'Hono', 'GraphQL', 'Pothos', 'Prisma', 'Cloudflare D1', 'Durable Objects', 'React', 'TanStack Router', 'Tailwind CSS', 'Astro', 'Turborepo', 'Bun'],
     links: [
       { label: '돌들의 숲', url: 'https://forest.seonhamlabs.com' },
+      { label: 'App Store', url: 'https://apps.apple.com/app/id6759519062' },
+      { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.seonhamlabs.forestofstones' },
     ],
-    range: '2025.01 ~',
-    careerId: 'seonhamlabs',
-    isFeatured: true,
-  },
-  {
-    id: 'namat-deonga',
-    title: '남았던가',
-    icon: '/assets/logos/namat-deonga.webp',
-    category: 'side-project',
-    description: `냉장고 식재료를 사진으로 기록해 음식물 낭비를 줄이는 모바일 앱입니다.
-서버 없이 기기 로컬 스토리지만 사용하는 완전 프라이빗 아키텍처로, 찍고 닫는 2초가 전부입니다.`,
-    techs: ['React Native', 'Expo', 'TypeScript', 'SQLite', 'Zustand', 'Tailwind CSS', 'Astro', 'Turborepo', 'Bun'],
-    links: [
-      { label: 'App Store', url: 'https://apps.apple.com/kr/app/%EB%82%A8%EC%95%98%EB%8D%98%EA%B0%80/id6760313673' },
-      { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.seonhamlabs.namatdeonga&hl=ko' },
-    ],
-    range: '2026.02 ~',
+    range: '2026.01 ~',
     careerId: 'seonhamlabs',
     isFeatured: true,
   },

@@ -15,7 +15,7 @@ const PEBBLE_BOTTOM = ['8.8em', '12.5em', '16.2em', '19.9em'];
 const GUIDE_ITEMS = [
   { label: '🪨 원석', labelBg: 'rgba(196,168,130,0.22)', labelColor: '#5a3a22', text: '고민을 글로 담아\n익명으로 내려놓아요' },
   { label: '💬 조약돌', labelBg: 'rgba(212,196,176,0.3)', labelColor: '#5a3a22', text: '경험에서 나온 진심 어린\n응원을 전해요' },
-  { label: '📋 탁본', labelBg: 'rgba(180,196,160,0.3)', labelColor: '#3a5a22', text: '소중한 위로를 탁본으로\n영원히 간직해요' },
+  { label: '✉️ 쪽지', labelBg: 'rgba(180,196,160,0.3)', labelColor: '#3a5a22', text: '받은 위로에 답하며\n익명으로 대화를 이어가요' },
 ];
 
 function computeState(progress: number) {
@@ -461,27 +461,26 @@ export default function DoldeulsForestStory() {
                 ]} />
               </div>
 
-              {/* Callout 2: 탁본 & 쪽지 */}
+              {/* Callout 2: 쪽지 대화 */}
               <div style={calloutStyle(2)}>
-                <Badge color="#3a5a22" bg="rgba(160,196,130,0.15)">탁본 & 쪽지</Badge>
+                <Badge color="#3a5a22" bg="rgba(160,196,130,0.15)">쪽지 대화</Badge>
                 <h3
                   className="dolsup-callout-title"
                   style={{ fontSize: '1.25rem', fontWeight: 700, lineHeight: 1.25, margin: 0, letterSpacing: '-0.025em', color: 'hsl(var(--foreground))' }}
                 >
-                  소중한 위로를<br />영원히 간직해요
+                  돌 사이에 끼운 쪽지로<br />대화를 이어가요
                 </h3>
                 <p
                   className="dolsup-callout-desc"
                   style={{ fontSize: '0.875rem', lineHeight: 1.75, margin: 0, color: 'hsl(var(--muted-foreground))' }}
                 >
-                  전통 탁본(拓本)처럼 마음에 남는 글을 스냅샷으로 보관합니다.
-                  원본이 삭제되어도 탁본은 사라지지 않습니다.
-                  원석 작성자는 마음에 드는 조약돌에 <strong>쪽지</strong>를 끼워 감사를 전할 수 있습니다.
+                  원석 작성자가 마음에 남는 <strong>조약돌</strong>에 쪽지를 끼우면, 받은 사람이 답장하며
+                  대화가 이어집니다. 사람이 아니라 <strong>조약돌에 붙는 대화</strong>라 익명성은 그대로입니다.
                 </p>
                 <CalloutList items={[
-                  '탁본: 원본 삭제 후에도 영구 보존',
-                  '한지·화선지 느낌의 베이지 그라데이션 UI',
-                  '쪽지: 조약돌에 첨부되는 단방향 감사 메시지',
+                  '원석 작성자가 시작하고, 교대로만 주고받음',
+                  '서버는 닉네임을 내려주지 않음',
+                  '10일간 답이 없으면 스스로 닫히고 7일 뒤 삭제',
                 ]} />
               </div>
 
@@ -499,13 +498,13 @@ export default function DoldeulsForestStory() {
                   style={{ fontSize: '0.875rem', lineHeight: 1.75, margin: 0, color: 'hsl(var(--muted-foreground))' }}
                 >
                   닉네임·프로필 없이 익명 캐릭터(쉐도우)로만 활동합니다.
-                  조약돌 작성·출석 체크·탁본 받기로 <strong>선함 포인트</strong>를 쌓고,
-                  커뮤니티 원칙을 함께 지킵니다.
+                  가려진 조약돌은 돌탑에서 빠지지 않고 <strong>자리를 지킨 채 글자리만 덮여</strong>,
+                  차단이 돌탑의 정원을 흔들지 않습니다.
                 </p>
                 <CalloutList items={[
                   'Apple App Store Guideline 1.2 (UGC Safety) 충족',
                   '콘텐츠 차단·사용자 차단·신고·이의 신청',
-                  '만 19세 이상, 이메일·소셜 로그인(Apple·Google)',
+                  '만 19세 이상, 소셜 로그인(Apple·Google) 우선',
                 ]} />
               </div>
             </div>
@@ -536,7 +535,7 @@ export default function DoldeulsForestStory() {
 
       <noscript>
         <p style={{ padding: '1rem', fontSize: '0.875rem', color: '#71717a', border: '1px solid #27272a', borderRadius: '0.5rem', marginTop: '1rem' }}>
-          돌들의 숲: 익명 커뮤니티. 원석(고민)에 조약돌(위로)을 쌓고, 탁본으로 영원히 간직해요.
+          돌들의 숲: 익명 커뮤니티. 원석(고민)에 조약돌(위로)을 쌓고, 쪽지로 익명 대화를 이어가요.
         </p>
       </noscript>
     </section>

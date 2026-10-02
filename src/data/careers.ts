@@ -15,6 +15,13 @@ type Career = {
     label: string;
     url: string;
   }[];
+  /**
+   * 타임라인에서 어느 레인에 놓일지 결정한다.
+   * 'personal'은 고용 이력에서 갈라져 나온 개인 작업 트랙으로 그린다. 기본값은 'employment'.
+   */
+  kind?: 'employment' | 'personal';
+  /** kind가 'personal'일 때, 고용 트랙에서 갈라져 나온 시점에 붙일 캡션. */
+  branchCaption?: string;
   isDraft?: boolean; // 추가된 isDraft 속성
 };
 
@@ -23,14 +30,13 @@ export const Career: Career[] = [
     id: 'seonhamlabs',
     name: '선함연구소',
     logo: '/assets/logos/seonhamlabs_logo.webp',
-    introduce: `선함연구소는 '선함의 데이터화'를 슬로건으로 두 개의 서비스를 기획·개발·운영하는 1인 스타트업입니다. 대표 겸 개발자로서 기획·설계·개발·앱스토어 배포·운영까지 전 과정을 직접 수행하고 있습니다.
+    introduce: `풀고 싶은 문제를 직접 정의하고 끝까지 만들어보고 싶어 시작한 개인 작업입니다. 마켓보로 퇴사 후 2026년 1월부터 앱을 만들고 운영하고 있습니다.
 
-· 돌들의 숲 — 익명 P2P 힐링 커뮤니티. 2026년 3월 iOS·Android 정식 출시. React 웹 앱을 Expo 네이티브 Shell로 감싼 하이브리드 구조이며, 백엔드는 Cloudflare Workers 서버리스로 운영합니다.
-· 남았던가 — 냉장고 식재료를 사진으로 기록해 음식물 낭비를 줄이는 앱. 2026년 3월 App Store 출시, 5월 v1.1.0 배포. 서버 없이 기기 로컬 SQLite만 사용하는 완전 프라이빗 아키텍처입니다.
-
-두 서비스 모두 하이브리드 앱·서버리스·모노레포 환경에서 출시부터 운영까지의 사이클을 직접 다루고 있습니다.`,
-    position: '대표 / 개발자',
-    range: '2025.01 ~',
+기획·설계·개발·앱스토어 심사·배포·운영까지 혼자 수행하며, 두 개의 앱을 출시해 운영 중입니다.`,
+    position: '개인 개발 · 운영',
+    range: '2026.01 ~',
+    kind: 'personal',
+    branchCaption: '퇴사 후 작업',
     techs: [
       'TypeScript',
       'React',
@@ -43,8 +49,7 @@ export const Career: Career[] = [
       'Tailwind CSS',
       'Vite',
       'Astro',
-      'Three.js',
-      'SQLite',
+      'Cloudflare D1',
       'Zustand',
       'Turborepo',
       'Bun',
@@ -59,7 +64,6 @@ export const Career: Career[] = [
         url: 'https://forest.seonhamlabs.com',
       },
     ],
-    isDraft: true, // draft 처리
   },
   {
     id: 'marketboro',
