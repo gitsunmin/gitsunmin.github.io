@@ -61,7 +61,7 @@ export const Career: Career[] = [
       },
       {
         label: '돌들의 숲',
-        url: '/work/doldeuls-forest',
+        url: '/work/doldeuls-forest/',
       },
     ],
   },

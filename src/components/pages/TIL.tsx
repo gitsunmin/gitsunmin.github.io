@@ -10,7 +10,7 @@ export const TILPage = ({ children, title, category }: Props) => (
   <div className="px-6 pt-16 pb-4 md:pt-24 md:pb-8 md:px-0 w-full md:max-w-(--breakpoint-md) mx-auto">
     <nav className="flex items-center gap-1 text-sm text-muted-foreground mb-8 flex-wrap">
       <a
-        href="/til/README"
+        href="/til/README/"
         className={cn(
           'flex items-center gap-1 px-1.5 py-0.5 rounded-md',
           'hover:text-foreground hover:bg-accent/60',
@@ -32,7 +32,7 @@ export const TILPage = ({ children, title, category }: Props) => (
             className="shrink-0 text-muted-foreground/50"
           />
           <a
-            href={`/til/README?category=${encodeURIComponent(category)}`}
+            href={`/til/README/?category=${encodeURIComponent(category)}`}
             className={cn(
               'capitalize px-1.5 py-0.5 rounded-md',
               'hover:text-foreground hover:bg-accent/60',

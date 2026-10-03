@@ -24,7 +24,7 @@ const { Content, headings } = await render(post);
 const readingTime = calcReadingTime(post.body ?? '');
 const siteURL = 'https://gitsunmin.github.io';
 const postSlug = post.id.replace(/\.mdx$/, '');
-const canonicalURL = `${siteURL}/blog/${postSlug}`;
+const canonicalURL = `${siteURL}/blog/${postSlug}/`;
 const heroImage = post.data.heroImage || `/og/blog/${postSlug}.png`;
 const ogImageURL = heroImage.startsWith('http') ? heroImage : `${siteURL}${heroImage}`;
 

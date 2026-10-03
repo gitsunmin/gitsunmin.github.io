@@ -203,7 +203,7 @@ export const INTERVIEW: Interview = {
       content: {
         __t: 'link',
         label: '참고: TIL',
-        url: '/til/README',
+        url: '/til/README/',
       },
     },
     {

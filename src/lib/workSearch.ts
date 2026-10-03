@@ -303,7 +303,7 @@ export function topTechs(index: SearchRecord[], limit = 6): string[] {
 /** 결과가 가리키는 주소. 검색어를 ?q=로 실어 보내 도착한 슬라이드가 하이라이트할 수 있게 한다. */
 export function hrefOf(hit: SearchHit, query: string): string {
   const { record } = hit;
-  const base = `/work/${record.workId}`;
+  const base = `/work/${record.workId}/`;
   const search = query ? `?q=${encodeURIComponent(query)}` : '';
   const hash = record.slug ? `#${record.slug}` : '';
   return `${base}${search}${hash}`;

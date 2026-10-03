@@ -31,7 +31,7 @@ const FeaturedCard = ({ post }: { post: PostItem }) => {
       )}
     >
       <a
-        href={`/blog/${post.slug}`}
+        href={`/blog/${post.slug}/`}
         className={cn(
           'group flex flex-col md:flex-row overflow-hidden',
           'rounded-2xl border border-border/60 bg-card',
@@ -112,7 +112,7 @@ const GridCard = ({ post, index }: { post: PostItem; index: number }) => {
       style={{ transitionDelay: `${(index % 3) * 80}ms` }}
     >
       <a
-        href={`/blog/${post.slug}`}
+        href={`/blog/${post.slug}/`}
         className={cn(
           'group block h-full rounded-xl overflow-hidden',
           'border border-border/60 bg-card',

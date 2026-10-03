@@ -5,11 +5,16 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import { rehypeHeadingIds, unified } from '@astrojs/markdown-remark';
 import { rehypeWorkSections } from './src/lib/rehype-work-sections.mjs';
+import { rehypeTrailingSlash } from './src/lib/rehype-trailing-slash.mjs';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://gitsunmin.github.io',
   base: '/',
+  // GitHub Pages는 슬래시 없는 주소를 슬래시 붙은 주소로 301 리다이렉트한다.
+  // canonical·sitemap·내부 링크를 모두 슬래시 붙은 주소로 통일해 색인 신호가 어긋나지 않게 하고,
+  // 개발 서버에서도 슬래시 없는 링크가 404가 나도록 해 실수를 바로 드러낸다.
+  trailingSlash: 'always',
   // Astro 7의 기본값은 'jsx'로, 인라인 요소 사이 줄바꿈 공백을 없앤다. 본문이
   // MDX라 인라인 마크업 사이 공백이 의미를 갖는 곳이 많아 기존 동작을 유지한다.
   compressHTML: true,
@@ -52,6 +57,6 @@ export default defineConfig({
     // 헤딩 id를 먼저 박는다. rehypeWorkSections가 케이스 제목 안에 '문제 N' 머리표를
     // 넣기 때문에, 순서가 뒤집히면 슬러그가 '문제-1재현되지-않는-…'이 되어
     // 이력서가 가리키는 딥링크가 전부 끊긴다.
-    rehypePlugins: [rehypeHeadingIds, rehypeWorkSections],
+    rehypePlugins: [rehypeHeadingIds, rehypeWorkSections, rehypeTrailingSlash],
   },
 });

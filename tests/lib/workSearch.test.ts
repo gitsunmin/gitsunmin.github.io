@@ -144,10 +144,10 @@ describe('suggestAlternatives / topTechs', () => {
 describe('hrefOf', () => {
   it('프로젝트 레코드는 표지가 아니라 소개 슬라이드(#intro)로 간다', () => {
     const hit = search([{ ...INDEX[0], slug: 'intro' }], '유통사')[0];
-    expect(hrefOf(hit, '유통사')).toBe('/work/marketbom-pro?q=%EC%9C%A0%ED%86%B5%EC%82%AC#intro');
+    expect(hrefOf(hit, '유통사')).toBe('/work/marketbom-pro/?q=%EC%9C%A0%ED%86%B5%EC%82%AC#intro');
   });
   it('slug가 없으면 해시 없이 프로젝트로 간다', () => {
     const hit = search(INDEX, 'graphql')[0];
-    expect(hrefOf(hit, '')).toBe(`/work/${hit.record.workId}`);
+    expect(hrefOf(hit, '')).toBe(`/work/${hit.record.workId}/`);
   });
 });

@@ -83,7 +83,7 @@ export const WorkCard = ({ work, index, activeFilter, onTechClick }: Props) => {
           평범한 이동으로 두면 브라우저가 바로 반응하고, 로딩 표시는 도착한
           페이지가 스스로 띄운다. */}
       <a
-        href={`/work/${work.id}`}
+        href={`/work/${work.id}/`}
         data-astro-reload
         className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 print:hidden"
       >

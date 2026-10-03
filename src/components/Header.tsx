@@ -52,7 +52,7 @@ export const Header = ({ title = 'Gitsunmin', className }: Props) => {
         </span>
       </a>
       <a
-        href="/settings"
+        href="/settings/"
         aria-label="설정"
         className="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"
       >

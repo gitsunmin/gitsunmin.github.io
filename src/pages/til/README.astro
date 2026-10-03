@@ -34,7 +34,7 @@ const categoriesWithDisplay = sortedCategories.map(([category, entries]) => ({
     const displayName = fileName.replace(/-/g, ' ');
 
     return {
-      url: `/til/${cleanId}`,
+      url: `/til/${cleanId}/`,
       title: entry.data.title || displayName,
     };
   }),
