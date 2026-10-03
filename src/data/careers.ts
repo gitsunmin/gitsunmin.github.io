@@ -32,7 +32,7 @@ export const Career: Career[] = [
     logo: '/assets/logos/seonhamlabs_logo.webp',
     introduce: `풀고 싶은 문제를 직접 정의하고 끝까지 만들어보고 싶어 시작한 개인 작업입니다. 마켓보로 퇴사 후 2026년 1월부터 앱을 만들고 운영하고 있습니다.
 
-기획·설계·개발·앱스토어 심사·배포·운영까지 혼자 수행하며, 두 개의 앱을 출시해 운영 중입니다.`,
+기획·설계·개발·앱스토어 심사·배포·운영까지 혼자 수행하며, 앱을 출시해 운영 중입니다.`,
     position: '개인 개발 · 운영',
     range: '2026.01 ~',
     kind: 'personal',
@@ -61,7 +61,7 @@ export const Career: Career[] = [
       },
       {
         label: '돌들의 숲',
-        url: 'https://forest.seonhamlabs.com',
+        url: '/work/doldeuls-forest',
       },
     ],
   },

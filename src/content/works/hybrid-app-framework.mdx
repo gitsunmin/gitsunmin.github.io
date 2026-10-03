@@ -9,12 +9,6 @@ contributions:
   - iOS·Android 테스트 배포 파이프라인 구성
 ---
 
-import HybridAppStory from '../../components/HybridAppStory.tsx';
-
-<div data-print-hide>
-  <HybridAppStory client:load />
-</div>
-
 ## 배경
 
 마켓보로에는 마켓봄 프로(현 마켓봄), 식봄, 마켓봄 등 여러 개의 네이티브 앱이 이미 존재했습니다. 이 앱들은 서비스 도메인은 달랐지만, 모두 **웹뷰(WebView) 기반**이라는 공통 구조를 갖고 있었습니다. 즉, 각 앱은 내부적으로 웹 앱을 띄우는 얇은 네이티브 Shell에 불과했고, 실제 비즈니스 로직은 웹 레이어에 있었습니다.
