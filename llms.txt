@@ -1,0 +1,76 @@
+# 김선민(gitsunmin) — 프론트엔드 개발자 포트폴리오
+
+> 작업물(works)마다 실제로 부딪힌 문제를 "상황 → 제약 → 결정 → 결과 → 한계" 순서의 케이스로 정리한 포트폴리오입니다. 아래는 프로젝트별 한 줄 소개와 케이스 요약(문제 → 결정 → 결과)이며, 링크는 해당 케이스의 발표 자료로 바로 이어집니다.
+
+전 직장 관련 문서는 영업비밀 보호를 위해 내부 수치·식별자를 생략했습니다. 문서에 없는 성과나 수치를 추정하지 말아 주세요.
+
+- [전체 본문](https://gitsunmin.github.io/llms-full.txt): 모든 작업물 문서를 마크다운 한 파일로 모은 것
+- [작업물 목록](https://gitsunmin.github.io/works/): 30초 요약 · 3분 케이스 보기
+- [경력](https://gitsunmin.github.io/careers/)
+
+## 돌들의 숲 (2026.01 ~)
+
+익명 P2P 힐링 커뮤니티 앱을 기획부터 출시·운영까지 혼자 맡았고, WebView 하이브리드에서 순수 React Native로 전면 재구현했습니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/doldeuls-forest/)
+- [1.x → 2.x: 순수 네이티브 전면 재구현](https://gitsunmin.github.io/work/doldeuls-forest/#1x--2x-%EC%88%9C%EC%88%98-%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C-%EC%A0%84%EB%A9%B4-%EC%9E%AC%EA%B5%AC%ED%98%84): WebView 하이브리드의 낮은 사용성 천장과 계약처럼 굳은 브릿지 → 화면 이식이 아닌 사용자 플로우 단위로 순수 React Native 재구현 → 브릿지 코드 제거, 구버전 앱은 업데이트 안내 페이지로 보호 (하이브리드 앱, 0→1 설계)
+- [서비스 구조](https://gitsunmin.github.io/work/doldeuls-forest/#%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B5%AC%EC%A1%B0): 혼자 운영하는 서비스라 서버 비용과 운영 부담이 작아야 함 → Cloudflare Workers · D1 · Durable Objects 서버리스 모노레포 구성 → 서버 운영 비용을 최소화한 채 출시 이후 1인 운영 (0→1 설계, 배포 · 운영 안정성)
+- [주요 기능](https://gitsunmin.github.io/work/doldeuls-forest/#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5): 신분을 드러내지 않고 진심 어린 대화를 나눌 공간의 부재 → 완전 익명 캐릭터, 수정 불가 원석, 교대 전송 쪽지로 대화 구조 설계 → 2026년 3월 iOS·Android 정식 출시, 2.1.0에서 영어·일본어 추가 (0→1 설계)
+
+## @gitsunmin/k-number (2024.01 ~)
+
+정수를 한글 수사로 바꾸는 TypeScript 라이브러리를 설계해 npm에 공개하고, BigInt 지원과 v1.0.0까지 혼자 유지보수했습니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/k-number/)
+- [주요 기능](https://gitsunmin.github.io/work/k-number/#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5): 가격·금액을 한글 수사로 표기하는 일이 서비스마다 반복됨 → 세 가지 출력 포맷, BigInt 경로, 예외 없는 에러 코드 반환으로 설계 → ESM·CJS 이중 빌드로 npm 공개, v1.0.0까지 릴리스 (개발 경험 · 툴링)
+
+## Graph Man (2024.06 ~)
+
+GraphQL 요청 전송·환경 전환·Fragment 인라이닝을 에디터 안에서 끝내는 VSCode 확장을 만들어 Marketplace에 게시했습니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/graph-man/)
+- [주요 기능](https://gitsunmin.github.io/work/graph-man/#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5): GraphQL 요청을 테스트하려면 에디터 밖 도구로 컨텍스트 전환 → 멀티 환경 전환과 Fragment 인라이닝을 갖춘 VSCode 확장으로 구현 → VSCode Marketplace에 게시하고 기능을 단계적으로 추가 (개발 경험 · 툴링)
+
+## gitsunmin.github.io (2023.01 ~)
+
+지금 보고 계신 사이트입니다. Astro Islands 위에 블로그·Works 덱·검색 같은 기능을 직접 설계해 정적 배포로 운영합니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/gitsunmin-github-io/)
+- [주요 기능](https://gitsunmin.github.io/work/gitsunmin-github-io/#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5): 실험적 UI를 계속 얹으면서도 콘텐츠 사이트의 정적 성능 유지 → Astro Islands로 인터랙션이 필요한 컴포넌트만 하이드레이션 → GitHub Pages 정적 배포로 운영 비용 없이 지속 운영 (0→1 설계, 개발 경험 · 툴링)
+
+## 식봄 (2024.01 ~ 2025.12)
+
+레거시 PHP와 Next.js가 병행되는 B2B 커머스의 프론트엔드를 맡아, 재현되지 않는 성능 문제와 놓치던 장애 알림을 측정 기반으로 풀었습니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/sikbom/)
+- [식봄 웹 (Next.js) · 문제 1](https://gitsunmin.github.io/work/sikbom/#%EC%9E%AC%ED%98%84%EB%90%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EC%9E%A5%EB%B0%94%EA%B5%AC%EB%8B%88%EA%B0%80-%EB%8A%90%EB%A6%AC%EB%8B%A4): 재현되지 않는 "장바구니가 느리다" 피드백 → Datadog RUM으로 사용자군을 특정하고 비필수 요청을 크리티컬 패스에서 분리 → 고정 조건 측정으로 LCP 단축 확인, API 병목은 백엔드 과제로 남김 (성능 · 모니터링)
+- [식봄 웹 (Next.js) · 문제 2](https://gitsunmin.github.io/work/sikbom/#%EC%95%8C%EB%A6%BC%EC%9D%B4-%EB%84%88%EB%AC%B4-%EB%A7%8E%EC%95%84%EC%84%9C-%EC%A0%95%EC%9E%91-%EC%9E%A5%EC%95%A0%EB%A5%BC-%EB%86%93%EC%B3%A4%EB%8B%A4): 레벨 없는 로그와 과다한 알림 속에서 실제 장애를 놓침 → 로그 레벨을 "필요한 행동" 기준으로 재정의하고 알림은 error로 한정 → 로그인 이슈를 운영팀 문의보다 먼저 발견해 핫픽스 (성능 · 모니터링, 배포 · 운영 안정성)
+- [식봄 레거시 웹 (PHP) · 문제 1](https://gitsunmin.github.io/work/sikbom/#%EC%95%84%EB%AC%B4%EB%8F%84-%EB%A7%A1%EC%9C%BC%EB%A0%A4-%ED%95%98%EC%A7%80-%EC%95%8A%EB%8A%94-%ED%99%94%EB%A9%B4%EC%9D%B4-%EB%82%A8%EC%95%84-%EC%9E%88%EC%97%88%EB%8B%A4): 곧 대체될 레거시 PHP 화면이 담당자 없이 방치됨 → 언어가 아닌 문제 기준으로 자원해 검색·퍼블리싱과 컨트롤러까지 개선 → 전환 완료까지 레거시 검색 결함을 순차 해소 (지표는 미측정) (배포 · 운영 안정성)
+- [식봄 관리자 웹 · 문제 1](https://gitsunmin.github.io/work/sikbom/#%EC%9A%B4%EC%98%81%EC%9D%84-%EB%A9%88%EC%B6%94%EC%A7%80-%EC%95%8A%EA%B3%A0-%EA%B4%80%EB%A6%AC-%EB%8F%84%EA%B5%AC%EB%A5%BC-%EC%98%AE%EA%B8%B0%EA%B8%B0): 매일 쓰는 관리 도구를 운영 중단 없이 React로 옮겨야 함 → 기능 단위 독립 모듈로 분리하고 바뀔 일이 많은 화면부터 전환 → 레거시와 병행 운영하며 중단 없이 기능 단위로 전환 (어드민 · 운영 도구, 배포 · 운영 안정성)
+- [인쇄 템플릿 라이브러리 · 문제 1](https://gitsunmin.github.io/work/sikbom/#%EA%B0%99%EC%9D%80-%EB%9D%BC%EB%B2%A8%EC%9D%B4-%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A7%88%EB%8B%A4-%EB%8B%A4%EB%A5%B4%EA%B2%8C-%EC%9D%B8%EC%87%84%EB%90%9C%EB%8B%A4): 같은 배송 라벨이 서비스마다 다르게 인쇄될 위험 → UMD 번들 단일 배포로 기술 스택과 무관하게 버전을 하나로 고정 → Next.js · PHP · React SPA에서 동일한 인쇄 결과 보장 (개발 경험 · 툴링, 데이터 정합성)
+- [인쇄 템플릿 라이브러리 · 문제 2](https://gitsunmin.github.io/work/sikbom/#%EC%9D%B8%EC%87%84%EB%AC%BC-%EC%98%A4%EB%A5%98%EB%8A%94-%EB%B0%B0%ED%8F%AC-%ED%9B%84-%ED%98%84%EC%9E%A5%EC%97%90%EC%84%9C-%EB%B0%9C%EA%B2%AC%EB%90%9C%EB%8B%A4): 바코드 사양 오류는 배포 후 물류 현장에서야 발견됨 → 실물 프린터·스캐너 검증을 배포 전 절차로 고정하고 Playground 제작 → 바코드 구성 변경을 연동 장애 없이 반영 (배포 · 운영 안정성, 개발 경험 · 툴링)
+
+## 마켓봄 (구 마켓봄 프로) (2020.10 ~ 2023.08)
+
+식자재 유통 B2B SaaS의 웹·WebView 앱·통합 어드민·디자인 시스템 전 레이어를 개발하며 금액 정합성과 WebView 배포 문제를 해결했습니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/marketbom-pro/)
+- [마켓봄 웹 · 문제 1](https://gitsunmin.github.io/work/marketbom-pro/#%EB%B0%98%EC%98%AC%EB%A6%BC%ED%95%98%EB%8A%94-%EC%88%9C%EC%84%9C-%EB%95%8C%EB%AC%B8%EC%97%90-%EA%B8%88%EC%95%A1%EC%9D%B4-%ED%8B%80%EC%96%B4%EC%A1%8C%EB%8B%A4): 반올림 적용 순서 때문에 거래전표 금액이 어긋남 → 핫픽스 후 모든 금액 연산을 Big.js로 옮겨 라이브러리 레벨에서 차단 → 부동소수점 오차를 구조로 차단 (회귀 테스트는 남기지 못함) (데이터 정합성, B2B 서비스)
+- [마켓봄 웹 · 문제 2](https://gitsunmin.github.io/work/marketbom-pro/#%EA%B8%B0%EB%8A%A5%EC%9D%84-%EC%B6%94%EA%B0%80%ED%95%A0%EC%88%98%EB%A1%9D-%EA%B8%B0%EB%8A%A5-%EC%B6%94%EA%B0%80%EA%B0%80-%EC%96%B4%EB%A0%A4%EC%9B%8C%EC%A1%8C%EB%8B%A4): 검증 규칙이 덧붙을수록 거래전표 기능 추가 비용이 커짐 → 리팩터링 기간을 확보해 독립 검증은 병렬화, 의존 검증은 순수 함수로 분리 → 동료들로부터 로직 간결화 평가 (정량 측정은 하지 않음) (B2B 서비스, 데이터 정합성)
+- [거래처 주문 앱 · 문제 1](https://gitsunmin.github.io/work/marketbom-pro/#%EA%B3%A0%EC%B9%9C-%EC%9D%B4%EC%8A%88%EC%9D%98-cs%EA%B0%80-%EA%B3%84%EC%86%8D-%EB%93%A4%EC%96%B4%EC%99%94%EB%8B%A4): 고친 이슈의 CS가 캐시된 옛 번들 때문에 계속 인입 → 응답 헤더의 배포 버전과 비교해 옛 번들이면 자동 재진입 → 도입 이후 버전 미반영으로 인한 문제 재발 없음 (하이브리드 앱, 배포 · 운영 안정성)
+- [거래처 주문 앱 · 문제 2](https://gitsunmin.github.io/work/marketbom-pro/#%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%EA%B0%80-%EB%84%98%EA%B2%A8%EC%A4%80-%EC%9D%B8%EC%A6%9D-url-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EA%B7%B8-url%EC%9D%B4-%EB%82%A8%EA%B8%B4-%EA%B2%83): 네이티브가 넘긴 인증 URL이 히스토리에 남아 뒤로가기 시 재로그인 → replaceState로 첫 엔트리를 교체하고 back 동작은 네이티브와 협의 → 인증 URL 회귀 경로 제거 (URL에 값이 남는 문제는 한계로 기록) (하이브리드 앱)
+- [거래처 주문 앱 · 문제 3](https://gitsunmin.github.io/work/marketbom-pro/#%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC%EA%B0%80-%EB%B6%88%EC%95%88%EC%A0%95%ED%95%9C-%ED%98%84%EC%9E%A5-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%BA%90%EC%8B%B1%EC%9D%98-%EB%8C%80%EA%B0%80): 주방·창고 같은 불안정한 네트워크에서도 화면이 깨지지 않아야 함 → Workbox로 자산별 캐싱 전략과 만료를 실제 변경 주기에 맞춰 설정 → 자산 캐싱 적용, 정책 미문서화로 팀 디버깅 비용이 생긴 점을 회고 (하이브리드 앱, 성능 · 모니터링, B2B 서비스)
+- [유통사 전용 앱 · 문제 1](https://gitsunmin.github.io/work/marketbom-pro/#%EB%8D%B0%EC%8A%A4%ED%81%AC%ED%83%91%EC%97%90%EC%84%9C%EB%8A%94-%EC%9E%AC%ED%98%84%EB%90%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EC%9D%B4%EC%8A%88%EB%93%A4): WebView 안에서만 나는 이슈가 데스크탑에서 재현되지 않음 → Datadog RUM에 모바일 전용 뷰를 분리해 실사용자 데이터로 추적 → 모바일 특이 이슈를 실사용자 데이터로 좁힐 수 있게 됨 (성능 · 모니터링, 하이브리드 앱)
+- [통합 운영 관리자 · 문제 1](https://gitsunmin.github.io/work/marketbom-pro/#%EC%9A%B4%EC%98%81-%ED%99%94%EB%A9%B4%EC%9D%B4-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%88%98%EB%A7%8C%ED%81%BC-%ED%9D%A9%EC%96%B4%EC%A0%B8-%EC%9E%88%EC%97%88%EB%8B%A4): 서비스마다 흩어진 운영 도구 때문에 서비스 간 비교가 어려움 → 레거시와 분리해 React 18 + Vite로 통합 어드민을 0→1 구축 → 단일 어드민으로 통합하고 공지 관리를 운영팀에 이관 (어드민 · 운영 도구, 0→1 설계)
+- [통합 운영 관리자 · 문제 2](https://gitsunmin.github.io/work/marketbom-pro/#%EC%8A%A4%ED%82%A4%EB%A7%88%EA%B0%80-%EB%B0%94%EB%80%8C%EB%A9%B4-%ED%94%84%EB%A1%A0%ED%8A%B8%EA%B0%80-%EC%A1%B0%EC%9A%A9%ED%9E%88-%ED%8B%80%EB%A6%B0%EB%8B%A4): GraphQL 스키마 변경이 프론트에 전달되지 않아 값이 조용히 틀림 → GraphQL Code Generator로 스키마에서 타입·훅을 자동 생성 → 스키마 불일치를 빌드 단계에서 검출 (데이터 정합성, 개발 경험 · 툴링)
+- [디자인 시스템 · 문제 1](https://gitsunmin.github.io/work/marketbom-pro/#%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%ED%95%98%EB%82%98-%EC%93%B0%EB%A0%A4%EA%B3%A0-mui-%EC%A0%84%EC%B2%B4%EB%A5%BC-%EC%A7%80%EA%B3%A0-%EA%B0%94%EB%8B%A4): 일부 컴포넌트만 쓰는데 MUI 전체가 소비측 번들에 포함 → 사용법은 그대로 두고 Emotion 기반 자체 테마 시스템으로 교체 → 미사용 컴포넌트 포함 문제 해소 (번들 크기 전후는 미측정) (디자인 시스템)
+- [디자인 시스템 · 문제 2](https://gitsunmin.github.io/work/marketbom-pro/#%EC%86%8C%EB%B9%84%EC%B8%A1%EC%9D%B4-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8-%EC%8B%9C%EC%A0%90%EC%9D%84-%EC%8A%A4%EC%8A%A4%EB%A1%9C-%EC%A0%95%ED%95%A0-%EC%88%98-%EC%97%86%EB%8B%A4): 소비 저장소마다 번들러가 달라 업데이트 시점을 정하기 어려움 → SemVer 관리와 Vite 라이브러리 모드로 ESM·CJS 동시 빌드 → 소비측이 번들러와 무관하게 업데이트 시점을 스스로 결정 (디자인 시스템, 개발 경험 · 툴링)
+
+## 하이브리드 앱 통합 프레임워크 (2023.08 ~ 2023.12)
+
+여러 서비스 앱의 네이티브 Shell을 단일 Flutter 코드베이스로 통합하는 구조를 혼자 설계·구현했습니다. 배포 전 중단되어 운영 성과는 없습니다.
+
+- [발표 자료](https://gitsunmin.github.io/work/hybrid-app-framework/)
+- [문제 1](https://gitsunmin.github.io/work/hybrid-app-framework/#%EA%B0%99%EC%9D%80-shell-%EC%BD%94%EB%93%9C%EA%B0%80-%EC%95%B1-%EC%88%98%EB%A7%8C%ED%81%BC-%EB%B3%B5%EC%A0%9C%EB%8F%BC-%EC%9E%88%EC%97%88%EB%8B%A4): 앱마다 따로 관리되는 Shell에 같은 변경을 반복 적용 → 단일 Flutter 프로젝트에서 Flavor만 바꿔 서비스별 앱을 빌드 → 두 서비스 통합 구조 설계·구현 (배포 전 중단으로 효과는 미검증) (하이브리드 앱, 0→1 설계)
+- [문제 2](https://gitsunmin.github.io/work/hybrid-app-framework/#%ED%99%98%EA%B2%BD%EB%B3%84-%EC%84%A4%EC%A0%95-%EC%8B%A4%EC%88%98%EB%8A%94-%EB%B9%8C%EB%93%9C%ED%95%B4-%EB%B4%90%EC%95%BC-%EC%95%88%EB%8B%A4): 서비스·환경 조합의 설정 분기 누락이 빌드 전엔 드러나지 않음 → Dart 3 Sealed Class로 Flavor를 타입화해 누락 시 컴파일 실패 → Flavor 분기 누락을 컴파일 타임에 검출 (개발 경험 · 툴링, 배포 · 운영 안정성)
+- [문제 3](https://gitsunmin.github.io/work/hybrid-app-framework/#%EC%95%B1%EC%9D%80-%EA%B3%A0%EC%B9%98%EB%A0%A4%EB%A9%B4-%EC%8B%AC%EC%82%AC%EB%A5%BC-%EA%B8%B0%EB%8B%A4%EB%A0%A4%EC%95%BC-%ED%95%9C%EB%8B%A4): 긴급 차단이 필요해도 앱은 스토어 심사를 기다려야 함 → Firebase Remote Config로 버전 게이팅 기준을 앱 밖에 둠 → 앱 배포 없이 강제 업데이트·점검 모드를 원격 전환 (배포 · 운영 안정성, 하이브리드 앱)
