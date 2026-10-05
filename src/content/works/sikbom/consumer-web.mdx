@@ -11,6 +11,18 @@ contributions:
   - 팀 개발·테스트 기준 정리 — 커스텀 ESLint, 테스트 계층 분리
   - 상품 상세·추가주문·업종 정보 개발
   - 그 외 커머스 플로우 — 팀 공동 개발
+briefs:
+  - case: 1
+    problem: '재현되지 않는 "장바구니가 느리다" 피드백'
+    decision: 'Datadog RUM으로 사용자군을 특정하고 비필수 요청을 크리티컬 패스에서 분리'
+    result: '고정 조건 측정으로 LCP 단축 확인, API 병목은 백엔드 과제로 남김'
+    tags: [observability]
+    featured: true
+  - case: 2
+    problem: '레벨 없는 로그와 과다한 알림 속에서 실제 장애를 놓침'
+    decision: '로그 레벨을 "필요한 행동" 기준으로 재정의하고 알림은 error로 한정'
+    result: '로그인 이슈를 운영팀 문의보다 먼저 발견해 핫픽스'
+    tags: [observability, release-ops]
 ---
 
 ## 문제 1. 재현되지 않는 "장바구니가 느리다"

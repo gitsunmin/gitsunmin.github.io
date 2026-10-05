@@ -223,15 +223,91 @@ function checkFile(fullPath: string): Finding[] {
   return findings;
 }
 
+/**
+ * 요약(briefs)과 본문의 동기화 검사.
+ *
+ * 요약은 본문을 줄인 것이라 본문이 바뀌면 같이 바뀌어야 한다. 케이스를 추가·삭제했는데
+ * 요약을 안 고치면 30초·3분 보기와 직무 렌즈가 없는 케이스를 가리키거나 새 케이스를
+ * 빠뜨린다. 그래서 케이스가 있는 문서는 케이스마다 요약이 정확히 하나씩 있어야 한다.
+ *
+ * 프론트매터의 문장 자체는 위의 RULES가 본문과 똑같이 훑는다(줄 단위 검사라서).
+ */
+type Brief = { case?: number; section?: string; featured?: boolean };
+
+const CASE_HEADING = /^##\s*문제\s*(\d+)\./;
+
+function frontmatterOf(source: string): Record<string, unknown> {
+  const matched = source.match(/^---\n([\s\S]*?)\n---/);
+  return matched ? (Bun.YAML.parse(matched[1]) as Record<string, unknown>) : {};
+}
+
+function checkBriefs(relPath: string, source: string): Finding[] {
+  const findings: Finding[] = [];
+  const briefs = (frontmatterOf(source).briefs ?? []) as Brief[];
+  const lines = source.split('\n');
+  const fenced = codeFenceLines(lines);
+  const h2 = lines.filter((line, i) => !fenced.has(i) && /^##\s/.test(line));
+  const cases = h2.flatMap((line) => {
+    const matched = line.match(CASE_HEADING);
+    return matched ? [Number(matched[1])] : [];
+  });
+  const sections = new Set(h2.map((line) => line.replace(/^##\s+/, '').trim()));
+
+  const fail = (match: string, message: string) =>
+    findings.push({ file: relPath, line: 1, rule: 'brief-sync', match, message });
+
+  const briefed = briefs.flatMap((b) => (b.case === undefined ? [] : [b.case]));
+  for (const n of cases) {
+    const count = briefed.filter((c) => c === n).length;
+    if (count === 0) fail(`문제 ${n}`, '이 케이스의 요약이 없습니다. 프론트매터 briefs에 case: N 항목을 추가하세요.');
+    if (count > 1) fail(`문제 ${n}`, '같은 케이스를 가리키는 요약이 둘 이상입니다.');
+  }
+  for (const n of briefed) {
+    if (!cases.includes(n)) fail(`case: ${n}`, '본문에 없는 케이스를 가리키는 요약입니다. 케이스를 지웠다면 요약도 지우세요.');
+  }
+  for (const b of briefs) {
+    if (b.section !== undefined && !sections.has(b.section)) {
+      fail(`section: ${b.section}`, '본문에 이 제목의 h2가 없습니다. 제목을 바꿨다면 요약의 section도 바꾸세요.');
+    }
+  }
+
+  return findings;
+}
+
+/** featured 요약은 프로젝트(최상위 문서 + 그 장들)마다 하나만. */
+function checkFeatured(files: string[]): Finding[] {
+  const byWork = new Map<string, string[]>();
+  for (const full of files) {
+    const relPath = relative(WORKS_DIR, full);
+    const workId = relPath.replace(/\.mdx$/, '').split('/')[0];
+    const briefs = (frontmatterOf(readFileSync(full, 'utf-8')).briefs ?? []) as Brief[];
+    const featured = briefs.filter((b) => b.featured).map(() => relPath);
+    byWork.set(workId, [...(byWork.get(workId) ?? []), ...featured]);
+  }
+  return [...byWork.entries()]
+    .filter(([, owners]) => owners.length > 1)
+    .map(([workId, owners]) => ({
+      file: owners[0],
+      line: 1,
+      rule: 'brief-featured',
+      match: `${workId}: ${owners.join(', ')}`,
+      message: '대표 요약(featured)은 프로젝트마다 하나만 둘 수 있습니다.',
+    }));
+}
+
 const files = collectMdx(WORKS_DIR).sort();
-const findings = files.flatMap(checkFile);
+const findings = [
+  ...files.flatMap(checkFile),
+  ...files.flatMap((full) => checkBriefs(relative(WORKS_DIR, full), readFileSync(full, 'utf-8'))),
+  ...checkFeatured(files),
+];
 
 if (findings.length === 0) {
   console.log(`✓ works 문서 검사 통과 (${files.length}개 파일)`);
   process.exit(0);
 }
 
-console.error(`\n✗ works 문서에서 ${findings.length}건의 민감 정보 후보를 발견했습니다.\n`);
+console.error(`\n✗ works 문서에서 ${findings.length}건의 문제를 발견했습니다.\n`);
 for (const f of findings) {
   console.error(`  src/content/works/${f.file}:${f.line}  [${f.rule}]`);
   console.error(`    발견: ${f.match}`);

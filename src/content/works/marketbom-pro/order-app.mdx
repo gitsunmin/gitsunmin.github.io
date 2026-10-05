@@ -10,6 +10,23 @@ contributions:
   - WebView 인증·히스토리 처리
   - 유통사별 가격 표기와 주문 유효성 검증
   - 이후 추가된 화면·기능 — 팀 공동 개발
+briefs:
+  - case: 1
+    problem: '고친 이슈의 CS가 캐시된 옛 번들 때문에 계속 인입'
+    decision: '응답 헤더의 배포 버전과 비교해 옛 번들이면 자동 재진입'
+    result: '도입 이후 버전 미반영으로 인한 문제 재발 없음'
+    tags: [hybrid-webview, release-ops]
+    featured: true
+  - case: 2
+    problem: '네이티브가 넘긴 인증 URL이 히스토리에 남아 뒤로가기 시 재로그인'
+    decision: 'replaceState로 첫 엔트리를 교체하고 back 동작은 네이티브와 협의'
+    result: '인증 URL 회귀 경로 제거 (URL에 값이 남는 문제는 한계로 기록)'
+    tags: [hybrid-webview]
+  - case: 3
+    problem: '주방·창고 같은 불안정한 네트워크에서도 화면이 깨지지 않아야 함'
+    decision: 'Workbox로 자산별 캐싱 전략과 만료를 실제 변경 주기에 맞춰 설정'
+    result: '자산 캐싱 적용, 정책 미문서화로 팀 디버깅 비용이 생긴 점을 회고'
+    tags: [hybrid-webview, observability, b2b]
 ---
 
 ## 문제 1. 고친 이슈의 CS가 계속 들어왔다

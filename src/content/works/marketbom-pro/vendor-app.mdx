@@ -7,6 +7,12 @@ summary: >-
 contributions:
   - 수주 관리 화면 — 발주 목록·상세·출고 수량 수정 구현
   - 모바일 전용 모니터링 뷰 구성
+briefs:
+  - case: 1
+    problem: 'WebView 안에서만 나는 이슈가 데스크탑에서 재현되지 않음'
+    decision: 'Datadog RUM에 모바일 전용 뷰를 분리해 실사용자 데이터로 추적'
+    result: '모바일 특이 이슈를 실사용자 데이터로 좁힐 수 있게 됨'
+    tags: [observability, hybrid-webview]
 ---
 
 ## 문제 1. 데스크탑에서는 재현되지 않는 이슈들

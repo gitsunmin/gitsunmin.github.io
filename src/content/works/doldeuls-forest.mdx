@@ -2,6 +2,23 @@
 title: 돌들의 숲
 release: 2026.03 iOS App Store · Google Play 정식 출시 — 기획·설계·개발·배포·운영 1인 수행. 2.0.0에서 WebView 하이브리드 → 순수 React Native 앱으로 전면 재구현.
 draft: false
+briefs:
+  - section: '1.x → 2.x: 순수 네이티브 전면 재구현'
+    problem: 'WebView 하이브리드의 낮은 사용성 천장과 계약처럼 굳은 브릿지'
+    decision: '화면 이식이 아닌 사용자 플로우 단위로 순수 React Native 재구현'
+    result: '브릿지 코드 제거, 구버전 앱은 업데이트 안내 페이지로 보호'
+    tags: [hybrid-webview, architecture-0to1]
+    featured: true
+  - section: '서비스 구조'
+    problem: '혼자 운영하는 서비스라 서버 비용과 운영 부담이 작아야 함'
+    decision: 'Cloudflare Workers · D1 · Durable Objects 서버리스 모노레포 구성'
+    result: '서버 운영 비용을 최소화한 채 출시 이후 1인 운영'
+    tags: [architecture-0to1, release-ops]
+  - section: '주요 기능'
+    problem: '신분을 드러내지 않고 진심 어린 대화를 나눌 공간의 부재'
+    decision: '완전 익명 캐릭터, 수정 불가 원석, 교대 전송 쪽지로 대화 구조 설계'
+    result: '2026년 3월 iOS·Android 정식 출시, 2.1.0에서 영어·일본어 추가'
+    tags: [architecture-0to1]
 ---
 
 ## 배경

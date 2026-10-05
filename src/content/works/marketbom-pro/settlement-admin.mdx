@@ -8,6 +8,17 @@ contributions:
   - 정산 집계·매입처 관리·초기화 처리 화면
   - 공지 관리와 롤링 설정 기능
   - React 18 + Vite 신규 구축과 GraphQL 타입 자동 생성 도입
+briefs:
+  - case: 1
+    problem: '서비스마다 흩어진 운영 도구 때문에 서비스 간 비교가 어려움'
+    decision: '레거시와 분리해 React 18 + Vite로 통합 어드민을 0→1 구축'
+    result: '단일 어드민으로 통합하고 공지 관리를 운영팀에 이관'
+    tags: [admin, architecture-0to1]
+  - case: 2
+    problem: 'GraphQL 스키마 변경이 프론트에 전달되지 않아 값이 조용히 틀림'
+    decision: 'GraphQL Code Generator로 스키마에서 타입·훅을 자동 생성'
+    result: '스키마 불일치를 빌드 단계에서 검출'
+    tags: [data-integrity, dx-tooling]
 ---
 
 ## 문제 1. 운영 화면이 서비스 수만큼 흩어져 있었다

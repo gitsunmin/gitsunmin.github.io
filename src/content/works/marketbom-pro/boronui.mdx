@@ -8,6 +8,17 @@ contributions:
   - MUI 의존 제거와 Emotion 기반 자체 테마 시스템 전환
   - Bottom Navigation·DatePicker 등 모바일 핵심 컴포넌트 개발
   - Storybook 문서화와 Semantic Versioning 기반 패키지 배포
+briefs:
+  - case: 1
+    problem: '일부 컴포넌트만 쓰는데 MUI 전체가 소비측 번들에 포함'
+    decision: '사용법은 그대로 두고 Emotion 기반 자체 테마 시스템으로 교체'
+    result: '미사용 컴포넌트 포함 문제 해소 (번들 크기 전후는 미측정)'
+    tags: [design-system]
+  - case: 2
+    problem: '소비 저장소마다 번들러가 달라 업데이트 시점을 정하기 어려움'
+    decision: 'SemVer 관리와 Vite 라이브러리 모드로 ESM·CJS 동시 빌드'
+    result: '소비측이 번들러와 무관하게 업데이트 시점을 스스로 결정'
+    tags: [design-system, dx-tooling]
 ---
 
 ## 문제 1. 컴포넌트 하나 쓰려고 MUI 전체를 지고 갔다

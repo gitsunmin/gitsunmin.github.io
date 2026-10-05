@@ -8,6 +8,17 @@ contributions:
   - 기술 스택과 무관한 단일 배포 구조 설계
   - 배송 라벨·거래명세서 6종 템플릿과 mm 단위 그리드 레이아웃 구현
   - 인쇄물 변경의 실물 프린터·스캐너 검증 절차 수립
+briefs:
+  - case: 1
+    problem: '같은 배송 라벨이 서비스마다 다르게 인쇄될 위험'
+    decision: 'UMD 번들 단일 배포로 기술 스택과 무관하게 버전을 하나로 고정'
+    result: 'Next.js · PHP · React SPA에서 동일한 인쇄 결과 보장'
+    tags: [dx-tooling, data-integrity]
+  - case: 2
+    problem: '바코드 사양 오류는 배포 후 물류 현장에서야 발견됨'
+    decision: '실물 프린터·스캐너 검증을 배포 전 절차로 고정하고 Playground 제작'
+    result: '바코드 구성 변경을 연동 장애 없이 반영'
+    tags: [release-ops, dx-tooling]
 ---
 
 ## 문제 1. 같은 라벨이 서비스마다 다르게 인쇄된다

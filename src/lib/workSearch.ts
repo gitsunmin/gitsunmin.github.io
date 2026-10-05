@@ -55,7 +55,7 @@ export type SearchGroup = {
  * 별칭. 한글 표기·약어로 쳐도 기술 칩에 닿게 한다.
  * 값은 전부 정규화된 소문자여야 한다.
  */
-const ALIASES: Record<string, string[]> = {
+export const ALIASES: Record<string, string[]> = {
   리액트: ['react'],
   rn: ['react native'],
   '리액트 네이티브': ['react native'],

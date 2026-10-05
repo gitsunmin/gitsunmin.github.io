@@ -7,6 +7,23 @@ contributions:
   - 아키텍처 설계부터 전체 구현까지 1인 수행
   - Flavor 시스템·JS Bridge·원격 버전 게이팅 설계
   - iOS·Android 테스트 배포 파이프라인 구성
+briefs:
+  - case: 1
+    problem: '앱마다 따로 관리되는 Shell에 같은 변경을 반복 적용'
+    decision: '단일 Flutter 프로젝트에서 Flavor만 바꿔 서비스별 앱을 빌드'
+    result: '두 서비스 통합 구조 설계·구현 (배포 전 중단으로 효과는 미검증)'
+    tags: [hybrid-webview, architecture-0to1]
+    featured: true
+  - case: 2
+    problem: '서비스·환경 조합의 설정 분기 누락이 빌드 전엔 드러나지 않음'
+    decision: 'Dart 3 Sealed Class로 Flavor를 타입화해 누락 시 컴파일 실패'
+    result: 'Flavor 분기 누락을 컴파일 타임에 검출'
+    tags: [dx-tooling, release-ops]
+  - case: 3
+    problem: '긴급 차단이 필요해도 앱은 스토어 심사를 기다려야 함'
+    decision: 'Firebase Remote Config로 버전 게이팅 기준을 앱 밖에 둠'
+    result: '앱 배포 없이 강제 업데이트·점검 모드를 원격 전환'
+    tags: [release-ops, hybrid-webview]
 ---
 
 ## 배경

@@ -7,6 +7,12 @@ summary: >-
 contributions:
   - 쿠폰 관리 — 목록 조회와 쿠폰 템플릿 관리 구현
   - 레거시 관리 도구의 기능 단위 React 전환
+briefs:
+  - case: 1
+    problem: '매일 쓰는 관리 도구를 운영 중단 없이 React로 옮겨야 함'
+    decision: '기능 단위 독립 모듈로 분리하고 바뀔 일이 많은 화면부터 전환'
+    result: '레거시와 병행 운영하며 중단 없이 기능 단위로 전환'
+    tags: [admin, release-ops]
 ---
 
 ## 문제 1. 운영을 멈추지 않고 관리 도구를 옮기기

@@ -26,6 +26,11 @@ type Work = {
   title: string;
   icon?: string;
   description: string;
+  /**
+   * 30초 보기의 한두 문장. description이 "무엇인가"라면 이것은 "내가 무엇을 했나"다.
+   * 채용 담당자가 카드 한 장만 읽고 넘어가도 남아야 하는 말만 적는다.
+   */
+  tldr: string;
   category: WorkCategory;
   techs: string[];
   links: {
@@ -44,6 +49,7 @@ export const Works: Work[] = [
     id: 'doldeuls-forest',
     title: '돌들의 숲',
     icon: '/assets/logos/forest-of-stones.webp',
+    tldr: '익명 P2P 힐링 커뮤니티 앱을 기획부터 출시·운영까지 혼자 맡았고, WebView 하이브리드에서 순수 React Native로 전면 재구현했습니다.',
     category: 'side-project',
     description: `디지털 환경에서의 정서적 고립을 해소하고 싶어 만든 익명 P2P 힐링 커뮤니티입니다.
 누군가와 연결되고 싶지만 신분을 드러내기 어려운 순간을 위해, 완전한 익명성을 보장하면서도 진심 어린 대화가 가능한 공간을 만들었습니다.
@@ -62,6 +68,7 @@ export const Works: Work[] = [
     id: 'k-number',
     title: '@gitsunmin/k-number',
     icon: '/assets/logos/github_logo.webp',
+    tldr: '정수를 한글 수사로 바꾸는 TypeScript 라이브러리를 설계해 npm에 공개하고, BigInt 지원과 v1.0.0까지 혼자 유지보수했습니다.',
     category: 'library',
     description: `정수를 한글 수사로 변환하는 TypeScript 라이브러리입니다.
 korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대수, 10⁶⁸까지) 지원, 예외 없는 에러 처리를 제공하며 ESM·CJS 이중 빌드로 npm에 배포되어 있습니다.`,
@@ -77,6 +84,7 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
     id: 'graph-man',
     title: 'Graph Man',
     icon: '/assets/logos/graph-man.webp',
+    tldr: 'GraphQL 요청 전송·환경 전환·Fragment 인라이닝을 에디터 안에서 끝내는 VSCode 확장을 만들어 Marketplace에 게시했습니다.',
     category: 'vscode-extension',
     description: `GraphQL 쿼리·뮤테이션을 VSCode 안에서 바로 테스트할 수 있는 확장 프로그램입니다.
 멀티 환경 전환, URL 기반 스키마 로드, Fragment 인라이닝 등 GraphQL 개발에 필요한 기능을 에디터 내에서 완결합니다.`,
@@ -92,6 +100,7 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
     id: 'gitsunmin-github-io',
     title: 'gitsunmin.github.io',
     icon: '/assets/logos/github_logo.webp',
+    tldr: '지금 보고 계신 사이트입니다. Astro Islands 위에 블로그·Works 덱·검색 같은 기능을 직접 설계해 정적 배포로 운영합니다.',
     category: 'website',
     description: `개인 블로그 겸 포트폴리오 사이트입니다.
 단순한 정적 사이트가 아니라, 다양한 실험적 UI와 인터랙션을 직접 만들어보는 공간으로 활용하고 있습니다.`,
@@ -106,6 +115,7 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
   {
     id: 'sikbom',
     title: '식봄',
+    tldr: '레거시 PHP와 Next.js가 병행되는 B2B 커머스의 프론트엔드를 맡아, 재현되지 않는 성능 문제와 놓치던 장애 알림을 측정 기반으로 풀었습니다.',
     category: 'service',
     description: `전화·팩스로 이뤄지던 식자재 발주를 온라인으로 옮긴 B2B 커머스 식봄의 프론트엔드를 담당했습니다.
 레거시 PHP 웹과 Next.js 신규 웹이 같은 도메인에서 병행 운영되는 구조라, 양쪽을 함께 다루며 검색·상세·주문·쿠폰 등 핵심 사용자 흐름을 개발하고 대형 장바구니 성능을 측정 기반으로 최적화했습니다. 관리자 웹과 인쇄 템플릿 라이브러리까지 여러 레이어를 함께 맡았습니다.`,
@@ -146,6 +156,7 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
   {
     id: 'marketbom-pro',
     title: '마켓봄 (구 마켓봄 프로)',
+    tldr: '식자재 유통 B2B SaaS의 웹·WebView 앱·통합 어드민·디자인 시스템 전 레이어를 개발하며 금액 정합성과 WebView 배포 문제를 해결했습니다.',
     category: 'service',
     description: `식자재 유통사를 위한 B2B SaaS 플랫폼 마켓봄(구 마켓봄 프로)의 프론트엔드를 담당했습니다.
 네이티브 WebView 안에서 동작하는 인앱 하이브리드 앱을 개발하며 배포 버전 불일치 진단·금액 계산 정합성 등 운영 이슈를 해결했고, 웹 서비스·정산 관리자·디자인 시스템까지 전 레이어에 걸쳐 개발했습니다.`,
@@ -192,6 +203,7 @@ korean-only · unit-only · mixed 세 가지 출력 포맷과 BigInt(무량대�
   {
     id: 'hybrid-app-framework',
     title: '하이브리드 앱 통합 프레임워크',
+    tldr: '여러 서비스 앱의 네이티브 Shell을 단일 Flutter 코드베이스로 통합하는 구조를 혼자 설계·구현했습니다. 배포 전 중단되어 운영 성과는 없습니다.',
     category: 'framework',
     description: `마켓보로의 여러 서비스 앱을 단일 Flutter 코드베이스로 통합하기 위해 설계한 하이브리드 앱 프레임워크입니다.
 Flutter를 얇은 Shell로, 기존 React·Vue·Nuxt 웹 자산을 WebView로 렌더링하고, JS Bridge(\`window.nativeBridge\`)로 네이티브 기능을 웹에 노출합니다. Dart 3.0 Sealed Class Flavor 시스템으로 2개 서비스 × 3개 환경(LOCAL/TEST/PROD) = 6개 빌드 타깃을 관리하며, Firebase Remote Config로 배포 없이 버전 게이팅을 원격 제어합니다.`,

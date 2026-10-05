@@ -16,6 +16,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { DeckController } from '@/components/deck/DeckController';
 import { MDXReplacer } from '@/components/MDXReplacer';
 import { Works } from '@/data/works';
+import { type BriefSource, resolveBriefs, type WorkBrief } from '@/lib/workBriefs';
 import '@/components/deck/deck.css';
 
 export const getStaticPaths = (async () => {
@@ -38,7 +39,25 @@ type Props = {
 
 const { entry, work } = Astro.props;
 const { id } = Astro.params;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+
+/**
+ * 케이스 지도 — 간지(또는 소개) 슬라이드에 이 장의 케이스를 문제 한 줄씩 늘어놓고
+ * 그 슬라이드로 바로 건너뛰게 한다. 문구는 /works의 3분 보기와 같은 요약(briefs)이다.
+ * 사이드 프로젝트의 절 요약은 케이스가 아니므로 덱에는 싣지 않는다.
+ */
+const caseBriefs = (doc: { chapter?: string; techs: string[]; entry: CollectionEntry<'works'>; headings: Parameters<typeof resolveBriefs>[0]['headings'] }): WorkBrief[] =>
+  resolveBriefs({
+    workId: id,
+    workTitle: work?.title ?? entry.data.title,
+    chapter: doc.chapter,
+    techs: doc.techs,
+    briefs: (doc.entry.data.briefs ?? []) as BriefSource[],
+    body: doc.entry.body ?? '',
+    headings: doc.headings,
+  }).filter((brief) => brief.kind === 'case');
+
+const ownCases = caseBriefs({ entry, headings, techs: work?.techs ?? [] });
 
 // 서브 레포는 간지 슬라이드를 앞에 두고 본문을 이어 붙인다.
 const allEntries = await getCollection('works');
@@ -49,6 +68,7 @@ type Chapter = {
   summary?: string;
   contributions?: string[];
   hasCases: boolean;
+  cases: WorkBrief[];
   Content: Awaited<ReturnType<typeof render>>['Content'];
 };
 const chapters: Chapter[] = [];
@@ -65,13 +85,14 @@ const hasCases = (body: string | undefined) => /^##\s*문제\s*\d+\./m.test(body
 for (const repo of work?.subRepos ?? []) {
   const subEntry = allEntries.find((e: CollectionEntry<'works'>) => e.id.replace(/\.mdx$/, '') === `${id}/${repo.slug}`);
   if (!subEntry) continue;
-  const { Content: SubContent } = await render(subEntry);
+  const { Content: SubContent, headings: subHeadings } = await render(subEntry);
   chapters.push({
     slug: repo.slug,
     name: repo.name,
     summary: subEntry.data.summary,
     contributions: subEntry.data.contributions,
     hasCases: hasCases(subEntry.body),
+    cases: caseBriefs({ chapter: repo.name, entry: subEntry, headings: subHeadings, techs: repo.techs }),
     Content: SubContent,
   });
 }
@@ -228,6 +249,13 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
         {chapters.length === 0 && hasCases(entry.body) && (
           <p class="deck-note mt-8">{CASE_GUIDE}</p>
         )}
+        {chapters.length === 0 && ownCases.length > 0 && (
+          <ol class="deck-case-map mt-4">
+            {ownCases.map((brief) => (
+              <li><a href={`#${brief.slug}`}><span>{brief.label}</span>{brief.problem}</a></li>
+            ))}
+          </ol>
+        )}
 
         {entry.data.disclaimer && (
           <p class="deck-note mt-10">
@@ -274,6 +302,13 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
               </ul>
             ) : null}
             {chapter.hasCases && <p class="deck-note mt-8 text-left">{CASE_GUIDE}</p>}
+            {chapter.cases.length > 0 && (
+              <ol class="deck-case-map mt-4 text-left">
+                {chapter.cases.map((brief) => (
+                  <li><a href={`#${brief.slug}`}><span>{brief.label}</span>{brief.problem}</a></li>
+                ))}
+              </ol>
+            )}
           </div>
         </section>
         <div class={PROSE}>

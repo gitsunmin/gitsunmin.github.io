@@ -2,6 +2,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'zod';
+import { COMPETENCY_IDS } from './data/competencies';
 
 const til = defineCollection({
   loader: glob({
@@ -38,6 +39,32 @@ const blogCollection = defineCollection({
   }),
 });
 
+/** 요약 한 칸의 길이. 3분 목록에서 한 줄, 30초 카드에서 두 줄을 넘기지 않는 정도다. */
+const BRIEF_LINE = z.string().min(1).max(60);
+
+/**
+ * 케이스(또는 절) 하나를 문제 → 결정 → 결과 세 줄로 줄인 것.
+ * /works의 30초·3분 보기, 직무 렌즈, llms.txt가 모두 이것만 읽는다 — 화면마다 따로
+ * 요약을 지어내지 않도록 사람이 검수한 문장을 한곳에 둔다.
+ * 본문에 없는 사실(특히 수치)을 여기서 새로 쓰지 않는다. 검사는 check:works가 한다.
+ */
+const briefSchema = z
+  .object({
+    /** 가리키는 케이스 번호(`## 문제 N.`). 케이스가 없는 문서는 section을 쓴다. */
+    case: z.number().int().positive().optional(),
+    /** 가리키는 h2 제목 그대로(예: `주요 기능`). */
+    section: z.string().optional(),
+    problem: BRIEF_LINE,
+    decision: BRIEF_LINE,
+    result: BRIEF_LINE,
+    tags: z.array(z.enum(COMPETENCY_IDS)).min(1).max(3),
+    /** 30초 보기에서 프로젝트를 대표하는 요약. 프로젝트(장 포함)마다 하나만. */
+    featured: z.boolean().optional(),
+  })
+  .refine((brief) => (brief.case === undefined) !== (brief.section === undefined), {
+    message: 'brief는 case와 section 중 하나만 가리켜야 합니다.',
+  });
+
 const worksCollection = defineCollection({
   loader: glob({
     pattern: '**/*.mdx',
@@ -57,6 +84,8 @@ const worksCollection = defineCollection({
      * 전담/주도 같은 등급 라벨은 쓰지 않는다. 등급만으로는 무엇을 했는지 알 수 없다.
      */
     contributions: z.array(z.string()).optional(),
+    /** 케이스별 세 줄 요약. 위의 briefSchema 참고. */
+    briefs: z.array(briefSchema).optional(),
     /**
      * 본문에 앞서 밝혀 둘 고지(예: 영업비밀 때문에 일부를 생략했다는 안내).
      * 본문에 두면 덱에서 한 문장짜리 슬라이드 한 장 · 인쇄 한 쪽을 통째로 쓰므로,
