@@ -1,0 +1,1053 @@
+<!DOCTYPE html><html lang="ko"> <head><script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('darkMode');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'true' || (saved === null && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+
+        // 글자 크기도 첫 페인트 전에 확정한다. useFontSize가 하이드레이션 뒤에
+        // 붙이도록 두면, 글이 기본 크기로 한 번 그려졌다가 저장된 배율로
+        // 줄었다 커진다 — 읽는 사람에게는 글자 크기가 저 혼자 바뀌는 것으로 보인다.
+        try {
+          var size = localStorage.getItem('fontSize');
+          if (size !== 'small' && size !== 'medium' && size !== 'large') size = 'medium';
+          document.documentElement.classList.add('text-' + size);
+          document.documentElement.style.setProperty(
+            '--font-size-scale',
+            size === 'small' ? '0.875' : size === 'large' ? '1.125' : '1',
+          );
+        } catch (e) {}
+      })();
+    </script><script>
+      document.addEventListener('astro:before-swap', function (e) {
+        var from = document.documentElement;
+        var to = e.newDocument.documentElement;
+
+        if (from.classList.contains('dark')) {
+          to.classList.add('dark');
+        } else {
+          to.classList.remove('dark');
+        }
+
+        // 글자 크기도 새 문서로 넘긴다. 넘기지 않으면 페이지를 옮길 때마다
+        // 기본 크기로 한 번 돌아갔다가 다시 줄어든다.
+        to.classList.remove('text-small', 'text-medium', 'text-large');
+        ['text-small', 'text-medium', 'text-large'].forEach(function (name) {
+          if (from.classList.contains(name)) to.classList.add(name);
+        });
+        to.style.setProperty(
+          '--font-size-scale',
+          from.style.getPropertyValue('--font-size-scale') || '1',
+        );
+      });
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="주소창에 입력된 URL이 화면의 픽셀이 되는 경로를 추적한다. Chromium은 이 과정을 navigation과 loading 두 단계로 분리하며, 문서의 렌더링 상태는 열거형 상태 기계로 선언되어 있다. 컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 달리 기본적으로 메인 스레드를 블록하지 않는다."><title>Chromium 구조 분석 (2) — 주소에서 픽셀까지 | Gitsunmin</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="canonical" href="https://gitsunmin.github.io/blog/chromium-architecture-02-url-to-pixels/"><link rel="alternate" type="application/rss+xml" title="gitsunmin 블로그 RSS" href="/rss.xml"><!-- Open Graph --><meta property="og:title" content="Chromium 구조 분석 (2) — 주소에서 픽셀까지 | Gitsunmin"><meta property="og:description" content="주소창에 입력된 URL이 화면의 픽셀이 되는 경로를 추적한다. Chromium은 이 과정을 navigation과 loading 두 단계로 분리하며, 문서의 렌더링 상태는 열거형 상태 기계로 선언되어 있다. 컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 달리 기본적으로 메인 스레드를 블록하지 않는다."><meta property="og:type" content="article"><meta property="og:url" content="https://gitsunmin.github.io/blog/chromium-architecture-02-url-to-pixels/"><meta property="og:image" content="https://gitsunmin.github.io/assets/blog/chromium-architecture/thumbnail.webp"><meta property="og:site_name" content="Gitsunmin"><meta property="og:locale" content="ko_KR"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Chromium 구조 분석 (2) — 주소에서 픽셀까지 | Gitsunmin"><meta name="twitter:description" content="주소창에 입력된 URL이 화면의 픽셀이 되는 경로를 추적한다. Chromium은 이 과정을 navigation과 loading 두 단계로 분리하며, 문서의 렌더링 상태는 열거형 상태 기계로 선언되어 있다. 컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 달리 기본적으로 메인 스레드를 블록하지 않는다."><meta name="twitter:image" content="https://gitsunmin.github.io/assets/blog/chromium-architecture/thumbnail.webp"><!-- JSON-LD Structured Data --><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Chromium 구조 분석 (2) — 주소에서 픽셀까지","description":"주소창에 입력된 URL이 화면의 픽셀이 되는 경로를 추적한다. Chromium은 이 과정을 navigation과 loading 두 단계로 분리하며, 문서의 렌더링 상태는 열거형 상태 기계로 선언되어 있다. 컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 달리 기본적으로 메인 스레드를 블록하지 않는다.","image":"https://gitsunmin.github.io/assets/blog/chromium-architecture/thumbnail.webp","datePublished":"2026-10-06T00:00:00.000Z","dateModified":"2026-10-06T00:00:00.000Z","author":{"@type":"Person","name":"Sunmin Kim","url":"https://gitsunmin.github.io"},"publisher":{"@type":"Person","name":"Sunmin Kim","url":"https://gitsunmin.github.io"},"url":"https://gitsunmin.github.io/blog/chromium-architecture-02-url-to-pixels/","keywords":"technology, chromium, browser, rendering, architecture, compositor","inLanguage":"ko-KR"}</script><!-- LCP 이미지 preload: 히어로 이미지를 조기에 fetch하여 LCP 개선 --><link rel="preload" as="image" href="/assets/blog/chromium-architecture/thumbnail.webp" fetchpriority="high"><!-- Google tag (gtag.js): defer로 HTML 파싱 완료 후 실행 --><script defer src="https://www.googletagmanager.com/gtag/js?id=G-CHCGLXSCJN"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CHCGLXSCJN');
+    </script><meta name="astro-view-transitions-enabled" content="true"> <meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.Bwsu7jgA.js"></script><style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media (prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*),[data-astro-transition-scope]{animation:none!important}}
+.giscus,.giscus-frame{width:100%!important}.code-block-wrapper:hover .copy-button{opacity:1!important}
+</style><link rel="stylesheet" href="/_astro/BaseLayout.DE7_xbQ_.css"><script type="module" src="/_astro/page.9pYLC08D.js"></script><style>[data-astro-transition-scope="astro-vsev7mas-1"] { view-transition-name: blog-image-chromium-architecture-02-url-to-pixels; }@layer astro { ::view-transition-old(blog-image-chromium-architecture-02-url-to-pixels) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(blog-image-chromium-architecture-02-url-to-pixels) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(blog-image-chromium-architecture-02-url-to-pixels) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(blog-image-chromium-architecture-02-url-to-pixels) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-vsev7mas-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-vsev7mas-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-ellcb6ao-2"] { view-transition-name: site-header; }@layer astro { ::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-header) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-ellcb6ao-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-ellcb6ao-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-phexilqp-3"] { view-transition-name: site-footer; }@layer astro { ::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(site-footer) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-phexilqp-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-phexilqp-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var g=Object.defineProperty;var w=(a,s,c)=>s in a?g(a,s,{enumerable:!0,configurable:!0,writable:!0,value:c}):a[s]=c;var l=(a,s,c)=>w(a,typeof s!="symbol"?s+"":s,c);var E=new Set(["__proto__","constructor","prototype"]);{let a={0:t=>y(t),1:t=>c(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(c(t)),5:t=>new Set(c(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>Number.POSITIVE_INFINITY*t},s=t=>{let[p,e]=t;return p in a?a[p](e):void 0},c=t=>t.map(s),y=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([p,e])=>[p,s(e)]));class f extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),n={},d=this.querySelectorAll("template[data-astro-template]");for(let o of d){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("data-astro-template")||"default"]=o.innerHTML,o.remove())}for(let o of r){let i=o.closest(this.tagName);i!=null&&i.isSameNode(this)&&(n[o.getAttribute("name")||"default"]=o.innerHTML)}let u;try{u=this.hasAttribute("props")?y(JSON.parse(this.getAttribute("props"))):{}}catch(o){let i=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(i+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${i}`,this.getAttribute("props"),o),o}let h;await this.hydrator(this)(this.Component,u,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}getRetryImportUrl(e){let r=new URL(e,document.baseURI);return r.searchParams.set("astro-retry",Date.now().toString()),r.toString()}async importWithRetry(e){try{return await import(e)}catch(r){return await new Promise(n=>setTimeout(n,1e3)),import(this.getRetryImportUrl(e))}}handleHydrationError(e){let r=this.getAttribute("component-url"),n=new CustomEvent("astro:hydration-error",{cancelable:!0,bubbles:!0,composed:!0,detail:{error:e,componentUrl:r}});this.dispatchEvent(n)&&console.error(`[astro-island] Error hydrating ${r}`,e)}async start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}try{await Astro[r](async()=>{let n=this.getAttribute("renderer-url");try{let[d,{default:u}]=await Promise.all([this.importWithRetry(this.getAttribute("component-url")),n?this.importWithRetry(n):Promise.resolve({default:()=>()=>{}})]),h=this.getAttribute("component-export")||"default";if(h.includes(".")){this.Component=d;for(let m of h.split(".")){if(E.has(m)||!this.Component||typeof this.Component!="object"&&typeof this.Component!="function"||!Object.hasOwn(this.Component,m))throw new Error(`Invalid component export path: ${h}`);this.Component=this.Component[m]}}else{if(E.has(h))throw new Error(`Invalid component export path: ${h}`);this.Component=d[h]}return this.hydrator=u,this.hydrate}catch(d){return this.handleHydrationError(d),()=>{}}},e,this)}catch(n){this.handleHydrationError(n)}}attributeChangedCallback(){this.hydrate()}}l(f,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",f)}})();</script><astro-island uid="2bsdcc" prefix="r5" component-url="/_astro/LivingBackground.DDJ15FEX.js" component-export="LivingBackground" renderer-url="/_astro/client.Dda4loRL.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;LivingBackground&quot;,&quot;value&quot;:true}" await-children><div aria-hidden="true" class="fixed inset-0 overflow-hidden pointer-events-none" style="z-index:-1"><div class="living-bg-blob living-bg-blob-1"></div><div class="living-bg-blob living-bg-blob-2"></div><div class="living-bg-blob living-bg-blob-3"></div><div class="living-bg-grid absolute inset-0"></div><canvas class="absolute inset-0"></canvas><canvas class="absolute inset-0"></canvas></div><!--astro:end--></astro-island> <script type="module">function e(){let e=document.getElementById(`toc-mobile-toggle`),t=document.getElementById(`toc-mobile-content`),n=document.getElementById(`toc-chevron`);if(e&&t&&n){let n=e.cloneNode(!0);e.parentNode?.replaceChild(n,e),n.addEventListener(`click`,()=>{let e=n.getAttribute(`aria-expanded`)===`true`;n.setAttribute(`aria-expanded`,String(!e)),t.classList.toggle(`hidden`,e),n.querySelector(`#toc-chevron`)?.classList.toggle(`rotate-180`,!e)}),t.querySelectorAll(`.toc-mobile-link`).forEach(e=>{e.addEventListener(`click`,()=>{t.classList.add(`hidden`),n.setAttribute(`aria-expanded`,`false`),n.querySelector(`#toc-chevron`)?.classList.remove(`rotate-180`)})})}let r=document.querySelectorAll(`.toc-link`);if(r.length===0)return;let i=e=>{r.forEach(t=>{let n=t.dataset.slug===e;t.classList.toggle(`text-blue-600`,n),t.classList.toggle(`dark:text-blue-400`,n),t.classList.toggle(`font-medium`,n),t.classList.toggle(`text-gray-500`,!n),t.classList.toggle(`dark:text-gray-400`,!n)})},a=Array.from(r).map(e=>document.getElementById(e.dataset.slug)).filter(Boolean);if(a.length===0)return;let o=new IntersectionObserver(e=>{let t=e.filter(e=>e.isIntersecting).sort((e,t)=>e.boundingClientRect.top-t.boundingClientRect.top);t.length>0&&i(t[0].target.id)},{rootMargin:`-10% 0px -80% 0px`});a.forEach(e=>o.observe(e))}document.readyState===`loading`?document.addEventListener(`DOMContentLoaded`,e):e(),document.addEventListener(`astro:page-load`,e);</script><astro-island uid="Z2mIWGl" prefix="r1365" component-url="/_astro/Providers.NFxsitL0.js" component-export="Providers" renderer-url="/_astro/client.Dda4loRL.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;Providers&quot;,&quot;value&quot;:true}" await-children><astro-slot>  <astro-island uid="ZXqhuO" prefix="r3" component-url="/_astro/Header.B1DlrrA2.js" component-export="Header" renderer-url="/_astro/client.Dda4loRL.js" props="{&quot;title&quot;:[0],&quot;data-astro-transition-scope&quot;:[0,&quot;astro-ellcb6ao-2&quot;],&quot;data-astro-transition-persist&quot;:[0,&quot;site-header&quot;]}" ssr client="load" opts="{&quot;name&quot;:&quot;Header&quot;,&quot;value&quot;:true}" data-astro-transition-scope="astro-ellcb6ao-2" data-astro-transition-persist="site-header" await-children><header class="px-4 py-1 md:py-2 shadow-xs dark:shadow-gray-800 backdrop-blur-md md:justify-start md:gap-4 flex items-center justify-between fixed top-0 left-0 right-0 z-header"><button type="button" class="cursor-pointer transition-colors duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50 bg-transparent p-1 lg:hidden"><div class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div></button><a href="/" class="flex items-center gap-2 py-1 justify-center md:justify-start"><span class="hidden md:block"><img src="/assets/avatar/gitsunmin.webp" alt="logo" class="h-10 w-10 rounded-full"/></span><span><h1 class="text-2xl font-bold hidden md:block" aria-label="테크스탑용 제목">Gitsunmin</h1><h1 class="text-2xl font-bold md:hidden" aria-label="모바일용 제목">Gitsunmin</h1></span></a><a href="/settings/" aria-label="설정" class="p-1 rounded-md text-muted-foreground hover:text-foreground transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></a></header><!--astro:end--></astro-island> <main class="flex flex-col justify-center min-h-[calc(100dvh-48px)] md:min-h-[calc(100dvh-64px)] w-full">   <div id="reading-progress" class="fixed top-0 left-0 h-1 bg-blue-500 dark:bg-blue-400 z-50 transition-none" style="width: 0%" aria-hidden="true"></div> <div class="max-w-6xl mx-auto px-4 py-12 md:px-8 md:py-24"> <!-- Mobile TOC --><div class="lg:hidden mb-6">  <!-- Desktop TOC: hidden on mobile, shown on lg+ --><nav class="toc-desktop hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto" aria-label="목차"> <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+목차
+</p> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="서론"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="문제-제기"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="범위"> 범위 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="분석-대상"> 분석 대상 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="본론"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-네비게이션과-로딩은-별개-단계다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1-네비게이션과-로딩은-별개-단계다"> 1. 네비게이션과 로딩은 별개 단계다 </a> </li><li style="padding-left: 12px"> <a href="#2-커밋-시점의-정의" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2-커밋-시점의-정의"> 2. 커밋 시점의 정의 </a> </li><li style="padding-left: 12px"> <a href="#3-문서-수명주기는-열거형-상태-기계다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="3-문서-수명주기는-열거형-상태-기계다"> 3. 문서 수명주기는 열거형 상태 기계다 </a> </li><li style="padding-left: 12px"> <a href="#4-레이아웃에서-합성으로--속성-트리의-구축" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="4-레이아웃에서-합성으로--속성-트리의-구축"> 4. 레이아웃에서 합성으로 — 속성 트리의 구축 </a> </li><li style="padding-left: 12px"> <a href="#5-cc는-컴포지터가-아니다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="5-cc는-컴포지터가-아니다"> 5. cc는 컴포지터가 아니다 </a> </li><li style="padding-left: 12px"> <a href="#6-레이어-트리와-커밋활성화" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="6-레이어-트리와-커밋활성화"> 6. 레이어 트리와 커밋·활성화 </a> </li><li style="padding-left: 12px"> <a href="#7-스레드-경계--proxymain과-proxyimpl" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="7-스레드-경계--proxymain과-proxyimpl"> 7. 스레드 경계 — ProxyMain과 ProxyImpl </a> </li><li style="padding-left: 12px"> <a href="#8-커밋은-메인-스레드를-블록하지-않는다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="8-커밋은-메인-스레드를-블록하지-않는다"> 8. 커밋은 메인 스레드를 블록하지 않는다 </a> </li><li style="padding-left: 12px"> <a href="#9-입력은-반대-방향으로-흐른다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="9-입력은-반대-방향으로-흐른다"> 9. 입력은 반대 방향으로 흐른다 </a> </li><li style="padding-left: 12px"> <a href="#10-한-프레임의-전체-경로" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="10-한-프레임의-전체-경로"> 10. 한 프레임의 전체 경로 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="결론"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="확인된-사실"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="이-분석의-한계"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="다음-편"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="참조"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="저장소"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1차-자료--본론-절별"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2차-자료"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="관련-공식-문서"> 관련 공식 문서 </a> </li> </ul> </nav> <!-- Mobile TOC: collapsible, shown below lg --> <div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"> <button id="toc-mobile-toggle" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-expanded="false" aria-controls="toc-mobile-content"> <span>목차</span> <svg id="toc-chevron" class="w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <polyline points="6 9 12 15 18 9"></polyline> </svg> </button> <div id="toc-mobile-content" class="hidden px-4 py-3 bg-white dark:bg-gray-900"> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 범위 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 분석 대상 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-네비게이션과-로딩은-별개-단계다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1. 네비게이션과 로딩은 별개 단계다 </a> </li><li style="padding-left: 12px"> <a href="#2-커밋-시점의-정의" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2. 커밋 시점의 정의 </a> </li><li style="padding-left: 12px"> <a href="#3-문서-수명주기는-열거형-상태-기계다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 3. 문서 수명주기는 열거형 상태 기계다 </a> </li><li style="padding-left: 12px"> <a href="#4-레이아웃에서-합성으로--속성-트리의-구축" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 4. 레이아웃에서 합성으로 — 속성 트리의 구축 </a> </li><li style="padding-left: 12px"> <a href="#5-cc는-컴포지터가-아니다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 5. cc는 컴포지터가 아니다 </a> </li><li style="padding-left: 12px"> <a href="#6-레이어-트리와-커밋활성화" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 6. 레이어 트리와 커밋·활성화 </a> </li><li style="padding-left: 12px"> <a href="#7-스레드-경계--proxymain과-proxyimpl" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 7. 스레드 경계 — ProxyMain과 ProxyImpl </a> </li><li style="padding-left: 12px"> <a href="#8-커밋은-메인-스레드를-블록하지-않는다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 8. 커밋은 메인 스레드를 블록하지 않는다 </a> </li><li style="padding-left: 12px"> <a href="#9-입력은-반대-방향으로-흐른다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 9. 입력은 반대 방향으로 흐른다 </a> </li><li style="padding-left: 12px"> <a href="#10-한-프레임의-전체-경로" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 10. 한 프레임의 전체 경로 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 관련 공식 문서 </a> </li> </ul> </div> </div>  </div> <div class="flex gap-10 items-start"> <article class="prose dark:prose-invert prose-lg min-w-0 flex-1 overflow-x-clip" data-pagefind-body data-pagefind-meta="title:Chromium 구조 분석 (2) — 주소에서 픽셀까지, tags:technology,chromium,browser,rendering,architecture,compositor"> <img data-astro-transition-scope="astro-vsev7mas-1" src="/assets/blog/chromium-architecture/thumbnail.webp" onerror="this.src='/og/blog.png';" alt="Chromium 구조 분석 (2) — 주소에서 픽셀까지" class="w-full h-auto rounded-lg mb-8 shadow-lg" fetchpriority="high" loading="eager"> <h1 class="text-3xl md:text-4xl font-extrabold mb-4">Chromium 구조 분석 (2) — 주소에서 픽셀까지</h1> <div class="text-sm md:text-base text-gray-500 dark:text-gray-400 mb-8 border-b border-gray-200 dark:border-gray-700 pb-4"> <span>작성일: 2026. 10. 6.</span> <span class="ml-2">(수정일: 2026. 10. 6.)</span> <span class="ml-2">· 약 50분 읽기</span> <div class="mt-3 flex flex-wrap gap-2"> <span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># technology</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># chromium</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># browser</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># rendering</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># architecture</span><span class="inline-block bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 dark:text-gray-200"># compositor</span> </div> </div> <blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>Chromium 구조 분석</strong> — 전체 4편 중 2편 공개. 3~4편은 준비 중이다.</p>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a href="/blog/chromium-architecture-01-reading-the-source/" class="text-blue-500 dark:text-blue-400 hover:underline">저장소를 직접 읽는다</a> — 분석 환경, 계층 구조, 프로세스 모델, IPC</li>
+<li class="mb-2 ml-0"><strong>주소에서 픽셀까지</strong> — 네비게이션, 문서 수명주기, 합성 ← 지금 글</li>
+<li class="mb-2 ml-0">자바스크립트가 실행되는 자리 — 바인딩, 이벤트 루프, 태스크 큐 <em>(준비 중)</em></li>
+<li class="mb-2 ml-0">엔진 심층 — V8의 네 단계 티어, Wasm, 디옵티마이제이션 <em>(준비 중)</em></li>
+</ol>
+</blockquote>
+<h2 id="서론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">서론</h2>
+<h3 id="문제-제기" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">문제 제기</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">“주소창에 URL을 입력하면 어떤 일이 일어나는가”는 널리 알려진 질문이다. 통상적인 답변은 DNS 조회, TCP 연결, HTTP 요청, 응답 수신, 그리고 “브라우저가 렌더링한다”로 끝난다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">마지막 항목이 문제다. 네트워크 계층까지는 RFC와 교과서로 검증 가능한 영역이지만, 그 이후는 브라우저 구현의 영역이며 설명이 급격히 추상화된다. “파싱하여 DOM 트리를 만들고, CSS를 적용하여 렌더 트리를 만들고, 레이아웃과 페인트를 수행한다”는 서술은 2012년 기준으로는 정확했으나 현재 Chromium의 구조와는 상당히 다르다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 편에서 확인할 차이는 다음과 같다.</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Chromium은 네비게이션과 로딩을 <strong>별개 단계로 분리</strong>하며, 그 경계에 명확한 기술적 이유가 있다</li>
+<li class="mb-2 ml-0">렌더링 단계는 “렌더 트리”가 아니라 <strong>문서 수명주기 상태 기계</strong>로 구현되어 있고, 상태 목록이 열거형으로 선언되어 있다</li>
+<li class="mb-2 ml-0">레이아웃 결과는 페인트로 직행하지 않는다. 그 사이에 <strong>속성 트리를 구축하는 단계</strong>가 있으며, 이것이 현대 Chromium 합성의 핵심이다</li>
+<li class="mb-2 ml-0">컴포지터의 커밋은 저장소 내 문서가 서술하는 것과 <strong>다르게 동작한다</strong></li>
+</ul>
+<h3 id="범위" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">범위</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 편이 답하려는 질문은 하나다. <strong>URL 하나가 화면이 되기까지 어떤 단계를 거치며, 각 단계의 경계는 왜 거기에 있는가.</strong></p>
+<p class="text-foreground leading-relaxed mb-4 w-full">자바스크립트의 실행 자체는 3편에서 다룬다. 이 편에서는 그것이 렌더링 파이프라인의 어느 지점에 끼어드는지만 확인한다. 네트워크 스택 내부(<code>//net</code>)는 다루지 않는다.</p>
+<h3 id="분석-대상" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">분석 대상</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">1편과 동일한 커밋을 사용한다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">저장소</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">고정 커밋</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">날짜</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium">chromium/chromium</a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3"><code>fca8b75c</code></a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2026-09-30</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">인용 링크의 형식과 재현 방법은 <a href="/blog/chromium-architecture-01-reading-the-source/" class="text-blue-500 dark:text-blue-400 hover:underline">1편 서론</a>에 정리해 두었다. 이 편의 모든 근거는 마지막 <strong>참조</strong> 절에서 본론 절 번호별 퍼머링크로 확인할 수 있다.</p>
+<h2 id="본론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">본론</h2>
+<h3 id="1-네비게이션과-로딩은-별개-단계다" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1. 네비게이션과 로딩은 별개 단계다</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md"><code>docs/navigation.md</code></a>는 제목이 “Life of a Navigation”이며, 주소 입력부터 문서 로드 완료까지를 추적한다. 이 문서의 Loading 절이 밝히는 구분이 중요하다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Most people use the word “navigation” to describe the act of moving from one page to another, but in Chromium we separate that process into two phases.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>네비게이션 단계</strong>는 응답을 받아 새 문서를 생성하고 커밋하는 것까지다. <strong>로딩 단계</strong>는 그 이후다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Loading consists of reading the remaining response data from the server, parsing it, rendering the document so it is visible to the user, executing any script accompanying it, and loading any subresources specified by the document.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">즉 HTML 파싱, 렌더링, 스크립트 실행, 서브리소스 로드가 모두 로딩 단계에 속한다. 네비게이션은 그보다 앞에서 끝난다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">분리의 이유는 문서가 직접 밝힌다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The main reason for splitting into these two phases is that errors are treated differently before and after a navigation commits.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">커밋 전에 HTTP 오류가 발생하면 브라우저는 여전히 새 문서를 커밋하지만, 그 문서는 오류 페이지다. 커밋 후에 네트워크 연결이 끊기면 오류 페이지를 보여주지 않고, 받은 만큼의 문서를 표시한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">In that case the browser displays as much of the new document as it can, without showing an error page.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>오류 처리 규칙이 달라지는 지점이 곧 단계의 경계다.</strong> 이것은 임의의 구획이 아니다.</p>
+<details data-component="knowledge-note" data-kind="note" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">네비게이션이 문서 생성 없이 끝나는 경우</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/navigation.md</code>는 네트워크 요청이 성공했는데도 새 문서가 렌더링되지 않는 두 경우를 명시한다.</p><ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>HTTP 204 또는 205</strong>: 응답은 성공이지만 본문이 없다. 현재 문서가 그대로 유지되어야 한다</li>
+<li class="mb-2 ml-0"><strong><code>Content-Disposition</code> 헤더</strong>: 응답을 네비게이션이 아니라 다운로드로 처리해야 한다</li>
+</ul><p class="text-foreground leading-relaxed mb-4 w-full">링크를 클릭했는데 페이지가 바뀌지 않고 파일 다운로드만 시작되는 동작의 근거다.</p></div></details>
+<h3 id="2-커밋-시점의-정의" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2. 커밋 시점의 정의</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">네비게이션 단계의 종결점인 커밋은 정확한 정의를 갖는다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L74"><code>docs/navigation.md</code>의 Commit 절</a>이다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The browser process then sends the response to the chosen process via a “commit” IPC, waiting for it to create the document and send an acknowledgement via a Mojo callback. The browser process’s receipt of this acknowledgement from the renderer process marks the authoritative <em>commit</em> time for the navigation, which is when the browser process changes its security state to reflect the new document and creates a session history entry for the previous document.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">주목할 점은 <strong>권위 있는 커밋 시점이 브라우저 프로세스가 확인 응답을 수신한 순간</strong>이라는 것이다. 렌더러가 문서를 만든 시점이 아니다. 1편 6절에서 확인했듯 보안 상태의 권위는 브라우저 프로세스에 있으며, 브라우저는 렌더러의 확인 응답을 받은 뒤에 비로소 자신의 보안 상태를 갱신하고 세션 히스토리 항목을 만든다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">렌더러 프로세스 선택도 이 단계에서 일어난다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The browser process selects an appropriate renderer process for the new document based on the origin and headers of the response as well as the current process model and isolation policy.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">응답 헤더가 origin에 영향을 줄 수 있다. 문서는 <code>Content-Security-Policy: sandbox;</code> 헤더가 문서에 opaque origin을 부여하는 경우를 예로 든다. 즉 1편에서 다룬 principal 결정이 응답 헤더를 읽은 뒤에 확정된다.</p>
+<details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">이전 문서의 unload 처리</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">같은 렌더러 프로세스에 머무는 네비게이션과 프로세스를 넘는 네비게이션의 동작이 다르다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">In navigations that stay in the same renderer process, the old document is unloaded by Blink before the new document is created, including running any registered unload handlers. In the case of a navigation that goes cross-process, any unload handlers are executed in the previous document’s process concurrently with the creation of the new document in the new process.</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">프로세스를 넘는 경우 <code>unload</code> 핸들러 실행과 새 문서 생성이 <strong>병행된다</strong>. 두 프로세스가 동시에 동작하므로 순서를 보장할 수 없다.</p></div></details>
+<h3 id="3-문서-수명주기는-열거형-상태-기계다" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">3. 문서 수명주기는 열거형 상태 기계다</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">로딩 단계에서 일어나는 렌더링은 “렌더 트리 구축 → 레이아웃 → 페인트”라는 선형 절차로 설명되는 경우가 많다. Chromium의 구현은 <strong>상태 기계</strong>다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h#L49"><code>third_party/blink/renderer/core/dom/document_lifecycle.h</code></a>에 전체 상태가 선언되어 있다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#F97583">enum</span><span style="color:#B392F0"> LifecycleState</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">  kUninitialized</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kInactive</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // When the document is active, it traverses these states.</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">  kVisualUpdatePending</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">  kInStyleRecalc</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kStyleClean</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">  kInPerformLayout</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kAfterPerformLayout</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kLayoutClean</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">  kInCompositingInputsUpdate</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kCompositingInputsClean</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // In InPrePaint step, any data needed by painting are prepared.</span></span>
+<span class="line"><span style="color:#6A737D">  // Paint property trees are built and paint invalidations are issued.</span></span>
+<span class="line"><span style="color:#79B8FF">  kInPrePaint</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kPrePaintClean</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // In InPaint step, paint artifacts are generated and raster invalidations</span></span>
+<span class="line"><span style="color:#6A737D">  // are issued.</span></span>
+<span class="line"><span style="color:#6A737D">  // In CAP, composited layers are generated/updated.</span></span>
+<span class="line"><span style="color:#79B8FF">  kInPaint</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kPaintClean</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">  // Once the document starts shutting down, we cannot return</span></span>
+<span class="line"><span style="color:#6A737D">  // to the style/layout/compositing states.</span></span>
+<span class="line"><span style="color:#79B8FF">  kStopping</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  kStopped</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 열거형에서 읽을 수 있는 사실이 여럿 있다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>첫째, 각 단계가 <code>In-</code> 상태와 <code>-Clean</code> 상태의 쌍으로 구성된다.</strong> <code>kInStyleRecalc</code>/<code>kStyleClean</code>, <code>kInPerformLayout</code>/<code>kLayoutClean</code>과 같은 형태다. “진행 중”과 “완료되어 유효함”을 구분하는 것이며, 어떤 데이터를 읽어도 되는 시점을 상태 값으로 추적하기 위한 구조다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>둘째, 널리 알려진 3단계보다 많다.</strong> 활성 문서가 통과하는 단계는 스타일 재계산, 레이아웃, 합성 입력 갱신, 프리페인트, 페인트의 다섯이다. 특히 <code>kInPrePaint</code>는 통상적인 설명에 등장하지 않는다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>셋째, 종료 상태로 넘어가면 되돌아올 수 없다.</strong> 주석이 이를 명시한다 — “Once the document starts shutting down, we cannot return to the style/layout/compositing states.”</p>
+<details data-component="knowledge-note" data-kind="note" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">레이아웃 담당 디렉터리가 선언하는 상태</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>blink/renderer/core/layout/README.md</code>는 자신이 담당하는 수명주기 상태를 직접 열거한다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">It covers the following document lifecycle states:</p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">LayoutSubtreeChange (<code>InLayoutSubtreeChange</code> and <code>LayoutSubtreeChangeClean</code>)</li>
+<li class="mb-2 ml-0">PreLayout (<code>InPreLayout</code>)</li>
+<li class="mb-2 ml-0">PerformLayout (<code>InPerformLayout</code>)</li>
+<li class="mb-2 ml-0">AfterPerformLayout (<code>AfterPerformLayout</code> and <code>LayoutClean</code>)</li>
+</ul>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">디렉터리와 수명주기 상태가 대응되도록 코드가 조직되어 있다는 뜻이다. 특정 단계의 구현을 찾으려면 해당 상태를 담당하는 디렉터리의 <code>README.md</code>를 먼저 보면 된다.</p><p class="text-foreground leading-relaxed mb-4 w-full">이 README가 열거하는 상태 중 일부(<code>InLayoutSubtreeChange</code>, <code>InPreLayout</code>)는 위의 <code>LifecycleState</code> 열거형에 현재 존재하지 않는다. 문서와 코드가 어긋난 지점이며, 1편 8절에서 언급한 “주석을 그대로 신뢰하지 않는다”의 실례다.</p></div></details>
+<h3 id="4-레이아웃에서-합성으로--속성-트리의-구축" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">4. 레이아웃에서 합성으로 — 속성 트리의 구축</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md"><code>blink/renderer/core/paint/README.md</code></a>는 644행이며, 자신의 역할을 다음과 같이 규정한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The primary responsibility of this directory is to convert the outputs from layout (the <code>LayoutObject</code> tree) to the inputs of the compositor (the <code>cc::Layer</code> list, which contains display items, and the associated <code>cc::PropertyNode</code>s).</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">입력은 <code>LayoutObject</code> 트리이고, 출력은 <strong><code>cc::Layer</code>의 리스트와 <code>cc::PropertyNode</code>들</strong>이다. 트리가 아니라 리스트라는 점이 중요하다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 변환은 두 수명주기 단계에 걸쳐 수행된다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><strong>PrePaint</strong> (<code>kInPrePaint</code>)
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Paint invalidation which invalidates display items which need to be painted.</li>
+<li class="mb-2 ml-0">Builds paint property trees.</li>
+</ul>
+</li>
+<li class="mb-2 ml-0"><strong>Paint</strong> (<code>kInPaint</code>)
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Walks the LayoutObject tree and creates a display item list.</li>
+<li class="mb-2 ml-0">Groups the display list into paint chunks which share the same property tree state.</li>
+<li class="mb-2 ml-0">Commits the results to the compositor.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">문서는 실제 함수 호출 경로까지 제시한다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span>from layout</span></span>
+<span class="line"><span>  |</span></span>
+<span class="line"><span>  v</span></span>
+<span class="line"><span>+------------------------------+</span></span>
+<span class="line"><span>| LayoutObject/PaintLayer tree |</span></span>
+<span class="line"><span>+------------------------------+</span></span>
+<span class="line"><span>  |     |</span></span>
+<span class="line"><span>  |     | PrePaintTreeWalk::Walk()</span></span>
+<span class="line"><span>  |     |   PaintPropertyTreeBuider::UpdatePropertiesForSelf()</span></span>
+<span class="line"><span>  |     v</span></span>
+<span class="line"><span>  |   +--------------------------------+</span></span>
+<span class="line"><span>  |&lt;--|         Property trees         |</span></span>
+<span class="line"><span>  |   +--------------------------------+</span></span>
+<span class="line"><span>  |                                  |</span></span>
+<span class="line"><span>  | LocalFrameView::PaintTree()      |</span></span>
+<span class="line"><span>  |   FramePainter::Paint()          |</span></span>
+<span class="line"><span>  |     PaintLayerPainter::Paint()   |</span></span>
+<span class="line"><span>  |       ObjectPainter::Paint()     |</span></span>
+<span class="line"><span>  v                                  |</span></span>
+<span class="line"><span>+---------------------------------+  |</span></span>
+<span class="line"><span>| DisplayItemList/PaintChunk list |  |</span></span>
+<span class="line"><span>+---------------------------------+  |</span></span>
+<span class="line"><span>  |                                  |</span></span>
+<span class="line"><span>  |&lt;---------------------------------+</span></span>
+<span class="line"><span>  | LocalFrameView::PushPaintArtifactToCompositor()</span></span>
+<span class="line"><span>  |   PaintArtifactCompositor::Update()</span></span>
+<span class="line"><span>  |</span></span>
+<span class="line"><span>  +---+---------------------------------+</span></span>
+<span class="line"><span>  |   v                                 |</span></span>
+<span class="line"><span>  | +----------------------+            |</span></span>
+<span class="line"><span>  | | Chunk list for layer |            |</span></span>
+<span class="line"><span>  | +----------------------+            |</span></span>
+<span class="line"><span>  |   |                                 |</span></span>
+<span class="line"><span>  |   | PaintChunksToCcLayer::Convert() |</span></span>
+<span class="line"><span>  v   v                                 v</span></span>
+<span class="line"><span>+----------------+ +-----------------------+</span></span>
+<span class="line"><span>| cc::Layer list | |   cc property trees   |</span></span>
+<span class="line"><span>+----------------+ +-----------------------+</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">합성 알고리즘의 요지는 다음과 같다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The process starts with pre-paint to generate property trees. During paint, each generated display item will be associated with a property tree state. Adjacent display items having the same property tree state will be grouped as <code>PaintChunk</code>. The list of paint chunks then will be processed by <code>PaintArtifactCompositor</code> for layerization.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>레이어는 페인트 결과로부터 역산된다.</strong> 먼저 속성 트리를 만들고, 페인트한 결과를 같은 속성 상태를 공유하는 덩어리(<code>PaintChunk</code>)로 묶고, 그 덩어리들을 보고 어떤 <code>cc::Layer</code>를 만들 것인지 결정한다. “요소가 레이어를 만든다”는 방향이 아니다.</p>
+<details data-component="knowledge-note" data-kind="reason" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-sky-400 dark:before:bg-sky-500 open:bg-sky-50/40 dark:open:bg-sky-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-sky-50 text-sky-600 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:ring-sky-800"><span aria-hidden="true">🤔</span>왜</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">속성 트리가 왜 도입되었는가</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/how_cc_works.md</code>가 이전 방식의 문제를 서술한다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The historical way (and the way that ui/ manages this) is to provide a tree of Layers. If a parent layer has a transform (e.g. a translation, scale, or perspective), a clip, or an effect (e.g. a blur filter, or a mask, or an opacity) then this applies recursively to its children. This abstraction has a lot of corner cases (fixed position layers, scroll parents, scroll children) as well as not being performant (requires traversing a very large tree and calculating all properties at all steps).</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">속성이 레이어 트리를 따라 상속되는 구조에서는 <code>position: fixed</code>처럼 상속을 벗어나는 경우가 예외 처리의 집합이 되고, 매 단계 전체 트리를 순회해야 한다.</p><p class="text-foreground leading-relaxed mb-4 w-full">해결 방식은 속성을 레이어에서 분리하는 것이다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Instead, cc is provided with separate trees of properties: a transform tree, a clip tree, an effect tree. Each layer then has a node id for which transform, clip, and effect node that the layer is using. In this way, the update is O(interesting nodes) instead of O(layers).</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">변환·클립·효과가 각각 독립된 트리가 되고, 레이어는 자신이 참조하는 노드의 id만 갖는다. 갱신 비용이 레이어 수가 아니라 실제로 변경된 노드 수에 비례한다.</p><p class="text-foreground leading-relaxed mb-4 w-full">그리고 문서가 덧붙이는 결론이 중요하다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">When there are property trees, there is also no longer a need for a tree of layers, and instead an ordered list of layers can be used.</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">속성 트리가 있으면 레이어는 트리일 필요가 없다. 이것이 앞서 “출력이 <code>cc::Layer</code>의 리스트”였던 이유다.</p></div></details>
+<h3 id="5-cc는-컴포지터가-아니다" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">5. <code>cc</code>는 컴포지터가 아니다</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">렌더링의 뒷단은 <code>//cc</code> 디렉터리가 담당한다. 파일 수는 1,165개로 작지만 역할이 결정적이다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md"><code>docs/how_cc_works.md</code></a>의 첫 문단이 이름 문제를 먼저 정리한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>cc/</code> is historically but inaccurately called the Chrome Compositor. It’s neither “the” chrome compositor (of course we have many), nor a compositor at all any more. danakj suggests “content collator” as an alternative name.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">실제 역할은 다음과 같다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">cc is responsible for taking painted inputs from its embedder, figuring out where and if they appear on screen, rasterizing and decoding and animating images from the painted input into gpu textures, and finally forwarding those textures on to the display compositor in the form of a compositor frame.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">최종 합성은 <code>//components/viz</code>의 display compositor가 GPU 프로세스에서 수행한다. <code>cc/README.md</code>가 이를 명시한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">CompositorFrames from individual compositors are sent to the SurfaceManager (which is in the GPU process). The SurfaceAggregator combines all CompositorFrames together when asked to by the Display.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>cc</code>는 브라우저 프로세스와 렌더러 프로세스 양쪽에 내장되는데, 구성이 다르다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">In general, the browser uses the single-threaded version as its main thread is cheap and light, whereas the renderer uses the multi-threaded version as its main thread (Blink) can be quite busy on some pages.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">멀티 스레드 구성은 지연을 추가하지만, 한 스레드가 바쁠 때 다른 스레드가 입력과 애니메이션을 처리할 수 있게 한다.</p>
+<details data-component="knowledge-note" data-kind="caution" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-amber-400 dark:before:bg-amber-500 open:bg-amber-50/40 dark:open:bg-amber-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:ring-amber-800"><span aria-hidden="true">⚠️</span>주의</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">용어가 실제 동작과 어긋나 있다는 경고</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">문서는 <code>cc</code>가 쓰는 용어 두 개가 더 이상 실제를 가리키지 않는다고 명시한다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">cc unfortunately still uses the language of “draw” and “swap” in a number of places, despite the fact that it no longer does either of these things. “Draw” in cc means constructing a compositor frame full of quads and render passes for eventual drawing on screen. “Swap” in cc means submitting that frame to the display compositor via a CompositorFrameSink.</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full"><code>cc</code> 안에서 <code>Draw</code>를 본다면 그것은 실제로 그리는 것이 아니라 <strong>그릴 지시 목록을 만드는 것</strong>이고, <code>Swap</code>은 버퍼 교환이 아니라 <strong>프레임을 제출하는 것</strong>이다. 코드를 읽을 때 반드시 필요한 교정이다.</p></div></details>
+<h3 id="6-레이어-트리와-커밋활성화" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">6. 레이어 트리와 커밋·활성화</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>cc</code>에는 레이어 트리가 네 종류 존재하고, 그중 2~3개가 항상 살아 있다. <code>docs/how_cc_works.md</code>의 정리다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">Main thread tree (cc::Layers, main thread, always exists)</li>
+<li class="mb-2 ml-0">Pending tree (cc::LayerImpl, compositor thread, staging for rasterization, optional)</li>
+<li class="mb-2 ml-0">Active tree (cc::LayerImpl, compositor thread, staging for drawing, always exists)</li>
+<li class="mb-2 ml-0">Recycle tree (cc::LayerImpl, compositor thread, mutually exclusive with pending tree)</li>
+</ul>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">두 연산이 트리 사이의 데이터 이동을 담당한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Commit is the process of pushing layer trees and properties from the main thread layer list to the pending tree. Activation is the process of pushing layer trees and properties from the pending tree to the active tree.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>pending tree가 존재하는 이유</strong>는 원자성이다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The reason the pending tree exists is that if there are multiple changes to webpage content in a single Javascript callstack (e.g. an html canvas has a line drawn on it, while a div moves, and some background-color changes to blue), these all must be presented to the user atomically.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">하나의 자바스크립트 콜스택에서 발생한 여러 변경은 사용자에게 한꺼번에 보여야 한다. 커밋이 그 변경들의 스냅숏을 pending tree로 넘기면, Blink는 다음 프레임을 위한 작업을 계속할 수 있다. 래스터가 모두 끝나야 활성화가 일어난다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">그리고 그 사이에도 화면은 멈추지 않는다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">While the pending tree is staging all the rasterization work, the active tree can be updated with animations and scrolling to still be responsive to the user.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>이것이 스크롤이 자바스크립트를 기다리지 않는 구조적 근거다.</strong> 애니메이션과 스크롤은 active tree를 직접 수정하여 처리되며, 메인 스레드의 작업과 독립적이다.</p>
+<details data-component="knowledge-note" data-kind="note" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-gray-300 dark:before:bg-gray-600 open:bg-gray-50/60 dark:open:bg-gray-800/30"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-gray-100 text-gray-600 ring-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700"><span aria-hidden="true">📝</span>참고</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">recycle tree는 최적화일 뿐이다</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">네 번째 트리의 역할은 할당 비용 절감이다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Because allocation of Layer(Impl)s is expensive and most layer tree structures do not change from frame to frame, once a pending tree activates, it becomes the “recycle tree”. This tree is never used for anything except for a cache of the last pending tree. This avoids allocation and property pushing work from main thread to pending tree. This is merely an optimization.</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">문서가 “This is merely an optimization”이라고 명시하므로, 구조를 이해하는 데는 무시해도 된다.</p><p class="text-foreground leading-relaxed mb-4 w-full">또한 “These are called ‘trees’ as historically they have been trees and they exist in cc/trees/, but they are all lists and not trees (sorry)“라는 단서가 붙어 있다. 4절의 속성 트리 도입에 따른 결과다.</p></div></details>
+<h3 id="7-스레드-경계--proxymain과-proxyimpl" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">7. 스레드 경계 — <code>ProxyMain</code>과 <code>ProxyImpl</code></h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">렌더러가 쓰는 멀티 스레드 구성에서 메인 스레드와 컴포지터 스레드 사이의 상호작용은 두 객체를 통과한다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy.h#L38"><code>cc/trees/proxy.h:38</code></a>이 추상 인터페이스를 선언한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Abstract interface responsible for proxying commands from the main-thread side of the compositor over to the compositor implementation.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">구현은 대칭적인 한 쌍이다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L35"><code>cc/trees/proxy_main.h:35</code></a>의 주석이다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">This class aggregates all interactions that the impl side of the compositor needs to have with the main side. The class is created and lives on the main thread.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>cc/trees/proxy_impl.h:53</code>은 정확히 반대 방향을 서술한다. <code>docs/how_cc_works.md</code>는 <code>ProxyImpl</code>의 위치가 특수하다고 설명한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">ProxyImpl is the only class that accesses data structures on both the main thread and the compositor thread. It only accesses the LayerTreeHost and Layers on the main thread when the main thread is blocked and enforces this through accessor DCHECKs.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">“메인 스레드가 블록된 동안에만”이라는 전제는 8절에서 다시 확인한다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">커밋 파이프라인은 열거형으로 선언되어 있다. <code>cc/trees/proxy_main.h</code>다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">// Commits between the main and impl threads are processed through a pipeline</span></span>
+<span class="line"><span style="color:#6A737D">// with the following stages. For efficiency we can early out at any stage if</span></span>
+<span class="line"><span style="color:#6A737D">// we decide that no further processing is necessary.</span></span>
+<span class="line"><span style="color:#F97583">enum</span><span style="color:#B392F0"> CommitPipelineStage</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">  NO_PIPELINE_STAGE</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  ANIMATE_PIPELINE_STAGE</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  UPDATE_LAYERS_PIPELINE_STAGE</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#79B8FF">  COMMIT_PIPELINE_STAGE</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">각 단계에서 할 일이 없으면 조기 탈출한다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L484"><code>cc/trees/proxy_main.cc:484</code></a>에 그 경로가 있다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">TRACE_EVENT_INSTANT</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">&quot;cc,raf_investigation&quot;</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">&quot;EarlyOut_NoUpdates&quot;</span><span style="color:#E1E4E8">);</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/how_cc_works.md</code>의 Commit Flow 절이 이 설계의 의도를 밝힌다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">The different SetNeeds functions allow for different levels of early-out aborts of the commit if no work is determined to be needed. (For example, if the requestAnimationFrame callback does no work, then there’s no need to do the commit or even update layers.)</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>requestAnimationFrame</code> 콜백이 아무것도 바꾸지 않았다면 커밋도, 레이어 갱신도 수행되지 않는다.</p>
+<h3 id="8-커밋은-메인-스레드를-블록하지-않는다" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">8. 커밋은 메인 스레드를 블록하지 않는다</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">여기서 저장소 내 문서와 코드가 어긋난다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/life_of_a_frame.md</code>의 Commit 절은 다음과 같이 서술한다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Commits updates back to Impl thread for activation. Specifically, the main thread copies its own version of layertree onto the pending tree (pending_tree_) on the impl thread. <strong>The main thread is blocked during the copying process.</strong></p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/how_cc_works.md</code>도 같은 취지다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Rather than sending an ipc, commit is done by blocking the main thread and copying data over.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">그러나 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L551"><code>cc/trees/proxy_main.cc:551</code></a> 이하의 실제 구현은 조건부다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#B392F0">std</span><span style="color:#E1E4E8">::optional</span><span style="color:#F97583">&lt;</span><span style="color:#E1E4E8">DebugScopedSetMainThreadBlocked</span><span style="color:#F97583">&gt;</span><span style="color:#E1E4E8"> main_thread_blocked;</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (blocking)</span></span>
+<span class="line"><span style="color:#E1E4E8">  main_thread_blocked.</span><span style="color:#B392F0">emplace</span><span style="color:#E1E4E8">(task_runner_provider_);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">ImplThreadTaskRunner</span><span style="color:#E1E4E8">()-&gt;</span><span style="color:#B392F0">PostTask</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">    FROM_HERE, </span><span style="color:#B392F0">base</span><span style="color:#E1E4E8">::</span><span style="color:#B392F0">BindOnce</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">&amp;</span><span style="color:#B392F0">ProxyImpl</span><span style="color:#E1E4E8">::NotifyReadyToCommitOnImpl,</span></span>
+<span class="line"><span style="color:#6A737D">                              /* ... */</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">current_pipeline_stage_ </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> NO_PIPELINE_STAGE;</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (blocking)</span></span>
+<span class="line"><span style="color:#E1E4E8">  layer_tree_host_-&gt;</span><span style="color:#B392F0">WaitForProtectedSequenceCompletion</span><span style="color:#E1E4E8">();</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>blocking</code>이 거짓이면 메인 스레드는 커밋 작업을 컴포지터 스레드에 게시하고 <strong>대기하지 않고 계속 진행한다.</strong></p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 플래그의 기본값은 거짓이다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L240"><code>cc/trees/proxy_main.h:240</code></a>이다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#F97583">bool</span><span style="color:#E1E4E8"> block_on_next_commit_ </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">참으로 설정되는 지점은 한 곳뿐이다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L840"><code>cc/trees/proxy_main.cc:840</code></a>이다.</p>
+<div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#F97583">void</span><span style="color:#B392F0"> ProxyMain</span><span style="color:#E1E4E8">::</span><span style="color:#B392F0">SetInputResponsePending</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">  // If the next main frame will contain the visual response to an input event,</span></span>
+<span class="line"><span style="color:#6A737D">  // we pause execution on the main thread until the compositor thread finishes</span></span>
+<span class="line"><span style="color:#6A737D">  // processing the commit. This is done to minimize thread contention while</span></span>
+<span class="line"><span style="color:#6A737D">  // the compositor is doing critical-path work.</span></span>
+<span class="line"><span style="color:#E1E4E8">  block_on_next_commit_ </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">즉 <strong>다음 프레임이 입력 이벤트에 대한 시각적 응답을 담을 때만</strong> 메인 스레드가 블록된다. 이유도 주석에 있다 — 컴포지터가 임계 경로 작업을 수행하는 동안 스레드 경합을 최소화하기 위해서다.</p>
+<details data-component="knowledge-note" data-kind="reason" open="" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-sky-400 dark:before:bg-sky-500 open:bg-sky-50/40 dark:open:bg-sky-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-sky-50 text-sky-600 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:ring-sky-800"><span aria-hidden="true">🤔</span>왜</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">블록하지 않는다면 데이터 경쟁은 어떻게 막는가</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h"><code>cc/base/protected_sequence_synchronizer.h</code></a>(저작권 표기 2022년)가 그 수단이다. 공유 데이터를 <strong>래퍼 타입으로 감싸</strong> 접근 경로를 <code>Read()</code>/<code>Write()</code>로 강제하고, 접근 규칙 위반은 <code>DCHECK</code>로 검출한다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">// ProtectedSequenceSynchronizer can be used to enforce thread safety of data</span></span>
+<span class="line"><span style="color:#6A737D">// that are owned and produced by an &quot;owner&quot; thread; and then passed by</span></span>
+<span class="line"><span style="color:#6A737D">// reference to another thread to use for a limited duration (a &quot;protected</span></span>
+<span class="line"><span style="color:#6A737D">// sequence&quot;).</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">값을 세 종류의 래퍼로 감싼다.</p><ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><code>ProtectedSequenceForbidden</code> — 비소유 스레드는 읽기조차 불가</li>
+<li class="mb-2 ml-0"><code>ProtectedSequenceReadable</code> — 보호 구간 중 비소유 스레드가 읽을 수 있으나 쓸 수 없음</li>
+<li class="mb-2 ml-0"><code>ProtectedSequenceWritable</code> — 보호 구간 중 비소유 스레드가 읽고 쓸 수 있으나, 그동안 소유 스레드는 읽기도 쓰기도 할 수 없음</li>
+</ul><p class="text-foreground leading-relaxed mb-4 w-full"><code>ProtectedSequenceReadable</code>의 주석이 규칙을 정확히 열거한다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">// ProtectedSequenceReadable values are...</span></span>
+<span class="line"><span style="color:#6A737D">//   - readable by the owner thread at any time without blocking</span></span>
+<span class="line"><span style="color:#6A737D">//   - writable by the owner thread, but not during a protected sequence</span></span>
+<span class="line"><span style="color:#6A737D">//   - readable by a non-owner thread during a protected sequence</span></span>
+<span class="line"><span style="color:#6A737D">//   - never writable by a non-owner thread</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">핵심은 두 번째 줄이다. 소유 스레드(메인 스레드)는 보호 구간 중에는 쓸 수 없다. 실제로 <code>ProtectedSequenceReadable::Write()</code>는 반환 전에 <code>WaitForProtectedSequenceCompletion()</code>을 호출하므로, 쓰려고 하면 그때 블록된다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/layers/layer.cc#L162"><code>cc/layers/layer.cc:162</code></a>가 그 사례다.</p><div class="relative my-6 group code-block-wrapper w-full [contain:inline-size] overflow-hidden rounded-lg shadow-md"><div class="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-md group-hover:border-gray-300 dark:group-hover:border-gray-600"><pre style="background-color:#24292e;color:#e1e4e8;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="cpp" class="p-5 min-w-max bg-transparent text-foreground"><code><span class="line"><span style="color:#6A737D">// These two lines copied from ProtectedSequenceReadable::Write()</span></span>
+<span class="line"><span style="color:#B392F0">DCHECK</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">IsOwnerThread</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#B392F0">layer_tree_host</span><span style="color:#E1E4E8">()-&gt;</span><span style="color:#B392F0">WaitForProtectedSequenceCompletion</span><span style="color:#E1E4E8">();</span></span></code></pre></div><button class="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md" aria-label="Copy code" type="button"><svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copy</title><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><svg class="check-icon hidden text-green-400" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>Copied</title><polyline points="20 6 9 17 4 12"></polyline></svg></button></div><p class="text-foreground leading-relaxed mb-4 w-full">따라서 <strong>메인 스레드는 커밋이 시작될 때 멈추는 것이 아니라, 커밋 중에 보호된 상태를 건드리려 할 때 멈춘다.</strong> 건드리지 않는 작업은 커밋과 병행된다.</p></div></details>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 구조는 복사 대상의 분류와 맞물려 있다. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/commit_state.h#L53"><code>cc/trees/commit_state.h:53</code></a>이다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">CommitState and ThreadUnsafeCommitState contain all of the information from LayerTreeHost that is needed to run compositor commit. CommitState is effectively POD; the compositor gets its own copy, which it may read or write without any concurrency issues. ThreadUnsafeCommitState is shared data that is <em>not</em> copied to the compositor. Main thread code must take care not to modify anything reachable from ThreadUnsafeCommitState while commit is running on the impl thread, typically by adding calls to LayerTreeHost::WaitForCommitCompletion() before attempting to mutate state.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>CommitState</code>는 복사되므로 경쟁이 없다. <code>ThreadUnsafeCommitState</code>는 공유되므로 메인 스레드가 조심해야 하는 쪽이고, 그 “조심”이 <code>WaitForCommitCompletion</code> 호출이다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">이 변경에는 공식 기록이 있다. Chrome 개발자 문서의 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://developer.chrome.com/docs/chromium/blinkng">RenderingNG deep-dive: BlinkNG</a>는 커밋 중 메인 스레드가 멈춘다는 기존 동작을 설명한 뒤, 이를 없애는 <strong>Non-Blocking Commit</strong>을 예고한다. 2022년 3월 기준으로 프로토타입이 동작하고 있었다고 적혀 있다. 7절에서 인용한 <code>ProxyImpl</code> 서술과 위 두 문서는 그 이전의 설계를 서술하고 있는 셈이다.</p>
+<h3 id="9-입력은-반대-방향으로-흐른다" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">9. 입력은 반대 방향으로 흐른다</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/how_cc_works.md</code>의 Input Data Flow Overview 절이다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">In the renderer process, input is forwarded from the browser process. It is processed by ui::InputHandlerProxy (a cc::InputHandlerClient).</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">Some of this input is forwarded to the LayerTreeHostImpl (a cc::InputHandler) at specific times. This allows it to modify the active layer’s property tree and scroll or pinch as needed.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">입력은 컴포지터 스레드에서 처리되어 active tree의 속성 트리를 직접 수정한다. 메인 스레드를 거치지 않는다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">다만 문서의 클래스 경로는 낡았다. 고정 커밋에 <code>ui/events/blink/input_handler_proxy.h</code>는 존재하지 않으며, 해당 클래스는 <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/widget/input/input_handler_proxy.h#L94"><code>third_party/blink/renderer/platform/widget/input/input_handler_proxy.h:94</code></a>의 <code>blink::InputHandlerProxy</code>다. <code>cc::InputHandlerClient</code>를 구현한다는 관계는 그대로다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full">예외가 명시되어 있다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Some input can’t be handled by the compositor thread (e.g. there’s a synchronous Javascript touch or wheel handler) and so that input is forwarded along to Blink to handle directly.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>동기적 터치·휠 핸들러가 등록되어 있으면</strong> 해당 입력은 Blink로 넘어간다. 핸들러가 <code>preventDefault()</code>를 호출할지 알 수 없으므로 컴포지터가 독자적으로 스크롤할 수 없다.</p>
+<details data-component="knowledge-note" data-kind="reason" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-sky-400 dark:before:bg-sky-500 open:bg-sky-50/40 dark:open:bg-sky-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-sky-50 text-sky-600 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:ring-sky-800"><span aria-hidden="true">🤔</span>왜</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">passive 이벤트 리스너의 구조적 근거</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full"><code>addEventListener</code>의 <code>passive: true</code> 옵션은 핸들러가 <code>preventDefault()</code>를 호출하지 않겠다는 선언이다.</p><p class="text-foreground leading-relaxed mb-4 w-full">이 선언이 있으면 컴포지터 스레드는 핸들러의 실행 결과를 기다릴 필요가 없으므로, 스크롤을 먼저 처리할 수 있다. 이벤트 자체는 여전히 Blink로 전달되어 핸들러가 실행되지만, 스크롤이 그 결과를 기다리지 않는다. 위 문서가 서술하는 분기의 조건이 해소되는 것이다.</p><p class="text-foreground leading-relaxed mb-4 w-full">Chrome은 56부터 <code>window</code>, <code>document</code>, <code>body</code>에 등록된 <code>touchstart</code>·<code>touchmove</code> 리스너를 기본적으로 passive로 취급한다(<a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://developer.chrome.com/blog/scrolling-intervention">Chrome for Developers</a>).</p><p class="text-foreground leading-relaxed mb-4 w-full">“<code>passive</code>를 쓰면 스크롤이 부드러워진다”는 경험적 조언의 근거가 이 분기다. 성능 조정이 아니라 처리 주체가 달라지는 문제다.</p></div></details>
+<h3 id="10-한-프레임의-전체-경로" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">10. 한 프레임의 전체 경로</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/life_of_a_frame.md"><code>docs/life_of_a_frame.md</code></a>는 vsync부터 화면 주사까지를 17단계로 번호 매겨 서술한다. 앞의 아홉 절에서 확인한 요소들이 이 안에 배치된다.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">단계</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">내용</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">수행 주체</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">1</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">BeginImplFrame — vsync마다 프레임 시작</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 스레드</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">2</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 갱신 — 스크롤, 줌 애니메이션</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 스레드</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">3</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">BeginMainFrame 전송</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 → 메인</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">4</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">메인 스레드 갱신 — 입력 처리, 애니메이션, 스타일, 레이아웃</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">메인 스레드</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">5</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Commit</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">양쪽</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">6</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">래스터 대기</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">워커 스레드 또는 별도 프로세스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">7</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Activation — pending → active</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 스레드</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">8</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">데드라인 대기</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 스레드</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">9</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">SubmitCompositorFrame</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">컴포지터 → GPU</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">10</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">AggregateSurfaces — 여러 프레임 합성</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU 프로세스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">11</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Draw Frame — 드로 커맨드 기록</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU 프로세스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">12</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">RequestSwap</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU 프로세스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">13</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">리소스 준비 대기 (SyncToken)</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU 프로세스</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">14</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">큐 지연</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU 메인 스레드</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">15</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU draw — 커맨드 재생</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">GPU</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">16</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Swap</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">플랫폼</td></tr><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">17</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">Presentation — 화면 주사</td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">디스플레이 컨트롤러</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">3단계에 조건이 붙는다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">If there is main thread damage, BeginMainFrame will be sent and if there is no main thread damage steps [3], [4] and [5] will be skipped (SchedulerStateMachine::ShouldSendBeginMainFrame()).</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">메인 스레드에 변경이 없으면 3·4·5단계를 건너뛴다. 7절의 조기 탈출과 같은 설계다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>문서는 프레임 드랍의 한 원인을 활성화 데드라인으로 설명한다.</strong></p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">If rasterization cannot be finished before the deadline for activation, the pipeline will not perform the copying from pending tree to the active tree in step [7], and will instead proceed to step [8] with whatever is already in the active tree.</p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">그리고 9단계의 서술이 결론을 준다.</p>
+<blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">If any of the steps [2], [3], [4], [5], [6] takes so long that the update that step is responsible for cannot be delivered to the active tree by deadline, the pipeline will proceed to submit with the existing active tree without said update. <strong>This is a possible source of a dropped frame.</strong></p>
+</blockquote>
+<p class="text-foreground leading-relaxed mb-4 w-full">즉 이 경로에서는 프레임 자체가 누락되는 것이 아니다. <strong>프레임은 제출되지만, 늦은 갱신이 빠진 상태로 제출된다.</strong> 2~6단계 중 어느 것이든 데드라인을 넘기면 이 형태의 드랍이 생긴다. 문서는 이를 “a possible source”라고 표현하며, 10단계 이후 GPU 쪽 지연은 별개의 원인이다.</p>
+<details data-component="knowledge-note" data-kind="definition" class="not-prose group relative my-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white/60 dark:bg-gray-900/40 transition-colors duration-200 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:content-[&quot;&quot;] before:bg-indigo-400 dark:before:bg-indigo-500 open:bg-indigo-50/40 dark:open:bg-indigo-950/20"><summary class="flex cursor-pointer list-none items-center gap-2 py-2.5 pl-4 pr-3 select-none [&amp;::-webkit-details-marker]:hidden hover:bg-gray-50/80 dark:hover:bg-gray-800/40 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"><span class="inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ring-1 ring-inset bg-indigo-50 text-indigo-600 ring-indigo-200 dark:bg-indigo-950/60 dark:text-indigo-300 dark:ring-indigo-800"><span aria-hidden="true">📖</span>용어</span><span class="min-w-0 flex-1 text-sm font-semibold text-gray-800 [overflow-wrap:anywhere] dark:text-gray-100">래스터는 다른 프로세스에서 일어날 수 있다</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform duration-200 group-open:rotate-90"><polyline points="9 18 15 12 9 6"></polyline></svg></summary><div class="knowledge-note-body px-4 pb-4 pl-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300 [&amp;&gt;p]:mb-3 [&amp;&gt;p:last-child]:mb-0 [&amp;&gt;ul]:mb-3 [&amp;&gt;ul]:list-disc [&amp;&gt;ul]:pl-5 [&amp;&gt;ul:last-child]:mb-0 [&amp;&gt;ol]:mb-3 [&amp;&gt;ol]:list-decimal [&amp;&gt;ol]:pl-5 [&amp;&gt;ol:last-child]:mb-0 [&amp;_li]:mb-1 [&amp;_code]:rounded [&amp;_code]:bg-gray-100 [&amp;_code]:px-1 [&amp;_code]:py-0.5 [&amp;_code]:font-mono [&amp;_code]:text-[0.85em] [&amp;_code]:text-red-600 dark:[&amp;_code]:bg-gray-800 dark:[&amp;_code]:text-red-400 [&amp;_strong]:font-semibold [&amp;_strong]:text-gray-900 dark:[&amp;_strong]:text-gray-100 [&amp;_a]:text-blue-600 [&amp;_a]:underline dark:[&amp;_a]:text-blue-400"><p class="text-foreground leading-relaxed mb-4 w-full">6단계의 서술이다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<p class="text-foreground leading-relaxed mb-4 w-full">Rasterization may occur asynchronously on separate threads, or even another process (OOP-R, or out-of-process rasterization).</p>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/how_cc_works.md</code>는 두 가지 래스터 방식을 설명한다.</p><blockquote class="border-l-4 border-gray-300 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-400 my-4">
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">software raster: generate software bitmaps in the raster worker</li>
+<li class="mb-2 ml-0">gpu raster: generate gpu textures by sending paint commands over the command buffer</li>
+</ul>
+</blockquote><p class="text-foreground leading-relaxed mb-4 w-full">둘 중 하나의 모드로만 동작하며, 모드를 전환하면 모든 리소스가 파괴된다. 전환의 흔한 원인도 명시되어 있다 — “the gpu process has crashed too much and all of Chrome switches from gpu to software raster and compositing modes.”</p></div></details>
+<h2 id="결론" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">결론</h2>
+<h3 id="확인된-사실" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">확인된 사실</h3>
+<ol class="list-decimal list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>네비게이션과 로딩은 별개 단계이며, 경계는 오류 처리 규칙이 달라지는 지점이다.</strong> HTML 파싱과 렌더링, 스크립트 실행은 모두 로딩 단계에 속한다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>커밋 시점은 브라우저 프로세스가 렌더러의 확인 응답을 수신한 순간으로 정의된다.</strong> 렌더러가 문서를 만든 시점이 아니다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>렌더링 단계는 열거형 상태 기계로 구현되어 있다.</strong> 활성 문서는 스타일 재계산, 레이아웃, 합성 입력 갱신, 프리페인트, 페인트의 다섯 단계를 통과하며, 각 단계는 <code>In-</code>/<code>-Clean</code> 쌍을 갖는다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>레이어는 페인트 결과로부터 역산된다.</strong> 속성 트리를 먼저 만들고, 같은 속성 상태를 공유하는 디스플레이 아이템을 묶고, 그 묶음을 보고 레이어를 결정한다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>속성 트리의 도입으로 레이어는 트리일 필요가 없어졌다.</strong> 갱신 비용이 레이어 수가 아니라 변경된 노드 수에 비례한다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong><code>cc</code>는 컴포지터가 아니다.</strong> 저장소 내 문서가 직접 이를 밝히며, 대안 명칭으로 “content collator”를 제시한다. 실제 합성은 GPU 프로세스의 viz가 수행한다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>커밋은 기본적으로 메인 스레드를 블록하지 않는다.</strong> 저장소 내 문서 두 곳이 블록한다고 서술하지만, 구현은 조건부이며 기본값은 거짓이다. 참이 되는 경우는 다음 프레임이 입력 이벤트의 시각적 응답을 담을 때 한 곳뿐이다. 데이터 경쟁은 래퍼 타입과 접근자로 방지하고, 메인 스레드는 보호된 상태를 건드릴 때 비로소 블록된다. 이 변경은 Chrome 개발자 문서에 Non-Blocking Commit으로 기록되어 있다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>입력은 컴포지터 스레드에서 처리되어 active tree를 직접 수정한다.</strong> 동기적 터치·휠 핸들러가 있으면 Blink로 넘어간다. <code>passive</code> 옵션이 이 분기의 조건을 해소한다.</p>
+</li>
+<li class="mb-2 ml-0">
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>활성화 데드라인에 의한 프레임 드랍은 프레임의 누락이 아니다.</strong> 프레임은 제출되며, 데드라인을 넘긴 갱신만 빠진다.</p>
+</li>
+</ol>
+<h3 id="이-분석의-한계" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">이 분석의 한계</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">HTML 파서의 내부 동작, CSS 선택자 매칭, LayoutNG의 알고리즘은 다루지 않았다. 각각이 독립된 분석을 요구하는 규모다. 또한 7번 항목의 <code>blocking</code> 분기는 코드상 확인한 것이며, 실제 프로파일링으로 메인 스레드의 대기 시간을 측정하지는 않았다.</p>
+<p class="text-foreground leading-relaxed mb-4 w-full"><code>docs/life_of_a_frame.md</code>와 <code>docs/how_cc_works.md</code>가 현재 구현과 어긋나는 부분은 Non-Blocking Commit 이전의 서술로 보인다. 다만 단일 스레드 구성(브라우저 프로세스의 <code>cc</code>)에서도 같은 차이가 성립하는지는 확인하지 않았다.</p>
+<h3 id="다음-편" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">다음 편</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full">3편은 4단계(메인 스레드 갱신)의 내부를 다룬다. 자바스크립트가 C++ 경계를 넘는 방식, 이벤트 루프의 실제 구현, 그리고 태스크 큐가 하나가 아니라는 사실이다.</p>
+<h2 id="참조" class="text-3xl font-semibold text-foreground mt-8 mb-4 w-full">참조</h2>
+<h3 id="저장소" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">저장소</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w-full [contain:inline-size] my-6 rounded-xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden"><div class="overflow-x-auto w-full"><table class="w-full table-fixed text-sm text-left border-collapse"><thead class="bg-gray-50/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 uppercase text-xs tracking-wider"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">저장소</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">고정 커밋</th><th class="px-4 py-3 font-semibold border-b border-gray-200 dark:border-gray-700 break-all">비고</th></tr></thead><tbody class="divide-y divide-gray-100 dark:divide-gray-700"><tr class="odd:bg-white even:bg-gray-50/50 dark:odd:bg-gray-900 dark:even:bg-gray-800/30 hover:bg-blue-50/50 dark:hover:bg-blue-900/20 transition-colors duration-150"><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium">chromium/chromium</a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/commit/fca8b75c7d7962742759debada81051bc99e3eb3"><code>fca8b75c</code></a></td><td class="px-4 py-3 text-gray-700 dark:text-gray-300 align-top break-all">아래 모든 링크의 기준</td></tr></tbody></table></div></div>
+<p class="text-foreground leading-relaxed mb-4 w-full">공식 코드 검색: <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://source.chromium.org/chromium/chromium/src">source.chromium.org</a> · 링크 형식과 재현 방법: <a href="/blog/chromium-architecture-01-reading-the-source/" class="text-blue-500 dark:text-blue-400 hover:underline">1편 서론</a></p>
+<h3 id="1차-자료--본론-절별" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">1차 자료 — 본론 절별</h3>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>1~2절 · 네비게이션과 로딩</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md"><code>docs/navigation.md</code></a> — “Life of a Navigation” 전문. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L35">Network Request and Response 35행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L74">Commit 74행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md#L102">Loading 102행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation_concepts.md"><code>docs/navigation_concepts.md</code></a> — same-document/cross-document, last committed·pending·visible URL, 리다이렉트, 동시 네비게이션</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/session_history.md"><code>docs/session_history.md</code></a> — 2절의 세션 히스토리 항목 생성</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/frame_trees.md"><code>docs/frame_trees.md</code></a> — MPArch, 내부 프레임 트리</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>3절 · 문서 수명주기</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h#L49"><code>core/dom/document_lifecycle.h#L49</code></a> — <code>LifecycleState</code> 열거형 전체</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/layout/README.md"><code>core/layout/README.md</code></a> — 레이아웃이 담당하는 수명주기 상태, 박스 모델</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/layout/layout_ng.md"><code>core/layout/layout_ng.md</code></a> — LayoutNG 구현 상세(이 편에서 다루지 않은 영역)</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>4절 · 속성 트리와 합성 입력</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md"><code>core/paint/README.md</code></a> — 전문(644행). <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md#L127">Overview 127행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md#L154">Compositing algorithm 154행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/paint/README.md#L212">PrePaint 212행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/graphics/paint/README.md"><code>platform/graphics/paint/README.md</code></a> — 디스플레이 리스트와 속성 트리의 구현</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L106"><code>docs/how_cc_works.md#L106</code></a> — Property Trees 절, 도입 근거</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>5~6절 · <code>cc</code>와 레이어 트리</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md"><code>docs/how_cc_works.md</code></a> — 전문(409행). <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L9">tl;dr 9행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L62">Commit Flow 62행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L190">Trees: commit / activation 190행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L231">Raster and tile management 231행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/README.md"><code>cc/README.md</code></a> — viz와의 관계, 용어 사전</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/components/viz"><code>components/viz/</code></a> — display compositor. <code>SurfaceAggregator</code>, <code>DirectRenderer</code></li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>7~8절 · 스레드 경계와 커밋 블로킹</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy.h#L38"><code>cc/trees/proxy.h#L38</code></a> — 추상 인터페이스 선언과 주석</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L35"><code>cc/trees/proxy_main.h#L35</code></a> — <code>ProxyMain</code> 역할. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L50"><code>CommitPipelineStage</code> 50행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.h#L240"><code>block_on_next_commit_</code> 240행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_impl.h#L53"><code>cc/trees/proxy_impl.h#L53</code></a> — 대칭 구현의 주석</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L484"><code>cc/trees/proxy_main.cc#L484</code></a> — <code>EarlyOut_NoUpdates</code> 조기 탈출. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L551">조건부 블로킹 551행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/proxy_main.cc#L840"><code>SetInputResponsePending</code> 840행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h"><code>cc/base/protected_sequence_synchronizer.h</code></a> — 타입 수준 스레드 안전성. <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h#L19"><code>ProtectedSequenceSynchronizer</code> 19행</a> · <a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/base/protected_sequence_synchronizer.h#L70"><code>ProtectedSequenceReadable</code> 규칙 70행</a></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/commit_state.h#L53"><code>cc/trees/commit_state.h#L53</code></a> — <code>CommitState</code>와 <code>ThreadUnsafeCommitState</code>의 구분</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/trees/layer_tree_host.cc#L526"><code>cc/trees/layer_tree_host.cc#L526</code></a> — <code>WaitForCommitCompletion</code></li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/cc/layers/layer.cc#L162"><code>cc/layers/layer.cc#L162</code></a> — 지연 블로킹의 실제 호출</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>9절 · 입력 경로</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md#L51"><code>docs/how_cc_works.md#L51</code></a> — Input Data Flow Overview, 컴포지터 처리와 Blink 전달의 분기</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/cc/input"><code>cc/input/</code></a> — <code>InputHandler</code>, <code>InputHandlerClient</code> 구현</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/platform/widget/input/input_handler_proxy.h#L94"><code>platform/widget/input/input_handler_proxy.h#L94</code></a> — <code>blink::InputHandlerProxy</code>. 문서가 <code>ui::InputHandlerProxy</code>로 적은 클래스의 현재 위치</li>
+</ul>
+<p class="text-foreground leading-relaxed mb-4 w-full"><strong>10절 · 프레임 전체 경로</strong></p>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/life_of_a_frame.md"><code>docs/life_of_a_frame.md</code></a> — 17단계 전문. 7번 항목(커밋 블로킹)이 현재 구현과 어긋나는 지점</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://github.com/chromium/chromium/tree/fca8b75c7d7962742759debada81051bc99e3eb3/cc/scheduler"><code>cc/scheduler/</code></a> — <code>SchedulerStateMachine</code>, 데드라인 판단</li>
+</ul>
+<h3 id="2차-자료" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">2차 자료</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://developer.chrome.com/docs/chromium/renderingng">RenderingNG</a> — Chrome 개발자 문서의 렌더링 아키텍처 개요. 이 편이 코드로 확인한 내용의 공식 설명</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://developer.chrome.com/docs/chromium/blinkng">RenderingNG deep-dive: BlinkNG</a> — Chrome 개발자 문서, 2022. 8절의 Non-Blocking Commit 도입 배경</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://developer.chrome.com/blog/scrolling-intervention">Making touch scrolling fast by default</a> — Chrome 개발자 블로그. 9절의 passive 기본값 개입(Chrome 56)</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://www.chromium.org/developers/design-documents/chromium-graphics">Chromium Graphics 설계 문서 모음</a> — <code>cc/README.md</code>가 안내하는 그래픽 스택 문서 색인</li>
+</ul>
+<h3 id="관련-공식-문서" class="text-2xl font-medium text-foreground mt-6 mb-3 w-full">관련 공식 문서</h3>
+<ul class="list-disc list-outside mb-4 w-full pl-6">
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src/+/main/docs/README.md"><code>docs/README.md</code></a> — 저장소 내 문서 전체 색인</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src/+/main/docs/render_document.md"><code>docs/render_document.md</code></a> — <code>RenderFrameHost</code> 수명과 문서 교체</li>
+<li class="mb-2 ml-0"><a class="text-blue-500 dark:text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" href="https://chromium.googlesource.com/chromium/src/+/main/docs/bfcache.md"><code>docs/bfcache.md</code></a> — 뒤로/앞으로 캐시. 2절의 커밋 모델과 맞물리는 주제</li>
+</ul> <section class="pb-16 pt-8"> <script src="https://giscus.app/client.js" data-repo="gitsunmin/gitsunmin.github.io" data-repo-id="R_kgDOMZl2kA" data-category="Comments" data-category-id="DIC_kwDOMZl2kM4C3wBs" data-mapping="pathname" data-strict="1" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="preferred_color_scheme" data-lang="ko" data-loading="lazy" crossorigin="anonymous" async>
+          </script></section> </article> <!-- Desktop TOC sidebar --> <aside class="hidden lg:block w-56 xl:w-64 shrink-0 sticky top-24 self-start">  <!-- Desktop TOC: hidden on mobile, shown on lg+ --><nav class="toc-desktop hidden lg:block max-h-[calc(100vh-8rem)] overflow-y-auto" aria-label="목차"> <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+목차
+</p> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="서론"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="문제-제기"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="범위"> 범위 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="분석-대상"> 분석 대상 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="본론"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-네비게이션과-로딩은-별개-단계다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1-네비게이션과-로딩은-별개-단계다"> 1. 네비게이션과 로딩은 별개 단계다 </a> </li><li style="padding-left: 12px"> <a href="#2-커밋-시점의-정의" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2-커밋-시점의-정의"> 2. 커밋 시점의 정의 </a> </li><li style="padding-left: 12px"> <a href="#3-문서-수명주기는-열거형-상태-기계다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="3-문서-수명주기는-열거형-상태-기계다"> 3. 문서 수명주기는 열거형 상태 기계다 </a> </li><li style="padding-left: 12px"> <a href="#4-레이아웃에서-합성으로--속성-트리의-구축" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="4-레이아웃에서-합성으로--속성-트리의-구축"> 4. 레이아웃에서 합성으로 — 속성 트리의 구축 </a> </li><li style="padding-left: 12px"> <a href="#5-cc는-컴포지터가-아니다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="5-cc는-컴포지터가-아니다"> 5. cc는 컴포지터가 아니다 </a> </li><li style="padding-left: 12px"> <a href="#6-레이어-트리와-커밋활성화" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="6-레이어-트리와-커밋활성화"> 6. 레이어 트리와 커밋·활성화 </a> </li><li style="padding-left: 12px"> <a href="#7-스레드-경계--proxymain과-proxyimpl" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="7-스레드-경계--proxymain과-proxyimpl"> 7. 스레드 경계 — ProxyMain과 ProxyImpl </a> </li><li style="padding-left: 12px"> <a href="#8-커밋은-메인-스레드를-블록하지-않는다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="8-커밋은-메인-스레드를-블록하지-않는다"> 8. 커밋은 메인 스레드를 블록하지 않는다 </a> </li><li style="padding-left: 12px"> <a href="#9-입력은-반대-방향으로-흐른다" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="9-입력은-반대-방향으로-흐른다"> 9. 입력은 반대 방향으로 흐른다 </a> </li><li style="padding-left: 12px"> <a href="#10-한-프레임의-전체-경로" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="10-한-프레임의-전체-경로"> 10. 한 프레임의 전체 경로 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="결론"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="확인된-사실"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="이-분석의-한계"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="다음-편"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="참조"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="저장소"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="1차-자료--본론-절별"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="2차-자료"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-link block py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug" data-slug="관련-공식-문서"> 관련 공식 문서 </a> </li> </ul> </nav> <!-- Mobile TOC: collapsible, shown below lg --> <div class="lg:hidden border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"> <button id="toc-mobile-toggle" class="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-expanded="false" aria-controls="toc-mobile-content"> <span>목차</span> <svg id="toc-chevron" class="w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <polyline points="6 9 12 15 18 9"></polyline> </svg> </button> <div id="toc-mobile-content" class="hidden px-4 py-3 bg-white dark:bg-gray-900"> <ul class="space-y-1"> <li style="padding-left: 0px"> <a href="#서론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 서론 </a> </li><li style="padding-left: 12px"> <a href="#문제-제기" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 문제 제기 </a> </li><li style="padding-left: 12px"> <a href="#범위" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 범위 </a> </li><li style="padding-left: 12px"> <a href="#분석-대상" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 분석 대상 </a> </li><li style="padding-left: 0px"> <a href="#본론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 본론 </a> </li><li style="padding-left: 12px"> <a href="#1-네비게이션과-로딩은-별개-단계다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1. 네비게이션과 로딩은 별개 단계다 </a> </li><li style="padding-left: 12px"> <a href="#2-커밋-시점의-정의" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2. 커밋 시점의 정의 </a> </li><li style="padding-left: 12px"> <a href="#3-문서-수명주기는-열거형-상태-기계다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 3. 문서 수명주기는 열거형 상태 기계다 </a> </li><li style="padding-left: 12px"> <a href="#4-레이아웃에서-합성으로--속성-트리의-구축" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 4. 레이아웃에서 합성으로 — 속성 트리의 구축 </a> </li><li style="padding-left: 12px"> <a href="#5-cc는-컴포지터가-아니다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 5. cc는 컴포지터가 아니다 </a> </li><li style="padding-left: 12px"> <a href="#6-레이어-트리와-커밋활성화" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 6. 레이어 트리와 커밋·활성화 </a> </li><li style="padding-left: 12px"> <a href="#7-스레드-경계--proxymain과-proxyimpl" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 7. 스레드 경계 — ProxyMain과 ProxyImpl </a> </li><li style="padding-left: 12px"> <a href="#8-커밋은-메인-스레드를-블록하지-않는다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 8. 커밋은 메인 스레드를 블록하지 않는다 </a> </li><li style="padding-left: 12px"> <a href="#9-입력은-반대-방향으로-흐른다" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 9. 입력은 반대 방향으로 흐른다 </a> </li><li style="padding-left: 12px"> <a href="#10-한-프레임의-전체-경로" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 10. 한 프레임의 전체 경로 </a> </li><li style="padding-left: 0px"> <a href="#결론" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 결론 </a> </li><li style="padding-left: 12px"> <a href="#확인된-사실" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 확인된 사실 </a> </li><li style="padding-left: 12px"> <a href="#이-분석의-한계" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 이 분석의 한계 </a> </li><li style="padding-left: 12px"> <a href="#다음-편" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 다음 편 </a> </li><li style="padding-left: 0px"> <a href="#참조" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 참조 </a> </li><li style="padding-left: 12px"> <a href="#저장소" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 저장소 </a> </li><li style="padding-left: 12px"> <a href="#1차-자료--본론-절별" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 1차 자료 — 본론 절별 </a> </li><li style="padding-left: 12px"> <a href="#2차-자료" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 2차 자료 </a> </li><li style="padding-left: 12px"> <a href="#관련-공식-문서" class="toc-mobile-link block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors leading-snug"> 관련 공식 문서 </a> </li> </ul> </div> </div>  </aside> </div> </div>  <div id="image-lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-200" role="dialog" aria-modal="true" aria-label="이미지 확대 보기"> <button type="button" data-lightbox-close class="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 cursor-pointer" aria-label="닫기"> <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"> <title>닫기</title> <path d="M18 6L6 18M6 6l12 12"></path> </svg> </button> <figure class="flex max-h-full max-w-full flex-col items-center gap-3"> <img data-lightbox-image src="" alt="" class="max-h-[85vh] max-w-full rounded-lg object-contain"> <figcaption data-lightbox-caption class="max-w-2xl text-center text-sm text-gray-300"></figcaption> </figure> </div> <script>
+    function initImageLightbox() {
+      // document에 위임하므로 페이지 전환마다 리스너가 쌓이지 않도록 한 번만 등록한다
+      if (window.__lightboxBound) return;
+      window.__lightboxBound = true;
+
+      function el(selector) {
+        const lightbox = document.getElementById('image-lightbox');
+        return lightbox ? lightbox.querySelector(selector) : null;
+      }
+
+      function open(target) {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox) return;
+        const image = el('[data-lightbox-image]');
+        const caption = el('[data-lightbox-caption]');
+        image.src = target.currentSrc || target.src;
+        image.alt = target.alt || '';
+        caption.textContent = target.alt || '';
+        caption.classList.toggle('hidden', !target.alt);
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        // 다음 프레임에 opacity를 올려 페이드 인이 적용되게 한다
+        requestAnimationFrame(() => lightbox.classList.remove('opacity-0'));
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        const lightbox = document.getElementById('image-lightbox');
+        if (!lightbox || lightbox.classList.contains('hidden')) return;
+        lightbox.classList.add('opacity-0');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          lightbox.classList.add('hidden');
+          lightbox.classList.remove('flex');
+          const image = el('[data-lightbox-image]');
+          if (image) image.src = '';
+        }, 200);
+      }
+
+      // 본문 이미지는 MDX 렌더 결과라 개별 바인딩 대신 위임으로 처리한다
+      document.addEventListener('click', (e) => {
+        if (!(e.target instanceof Element)) return;
+        const zoomable = e.target.closest('[data-zoomable]');
+        if (zoomable) {
+          open(zoomable);
+          return;
+        }
+        // 라이트박스 안에서는 확대된 이미지 위가 아닌 곳을 누르면 닫는다
+        const lightbox = document.getElementById('image-lightbox');
+        if (lightbox && lightbox.contains(e.target) && !e.target.closest('[data-lightbox-image]')) {
+          close();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') close();
+      });
+
+      document.addEventListener('astro:before-swap', close);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initImageLightbox);
+    } else {
+      initImageLightbox();
+    }
+    document.addEventListener('astro:page-load', initImageLightbox);
+  </script><script>
+    function initReadingProgress() {
+      const bar = document.getElementById('reading-progress');
+      if (!bar) return;
+
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = `${Math.min(pct, 100)}%`;
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+      update();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initReadingProgress);
+    } else {
+      initReadingProgress();
+    }
+    document.addEventListener('astro:page-load', initReadingProgress);
+  </script><script>
+    function initCopyButtons() {
+      const wrappers = document.querySelectorAll('.code-block-wrapper');
+      
+      wrappers.forEach((wrapper) => {
+        const button = wrapper.querySelector('.copy-button');
+        const pre = wrapper.querySelector('pre');
+        const copyIcon = button?.querySelector('.copy-icon');
+        const checkIcon = button?.querySelector('.check-icon');
+        
+        if (!button || !pre) return;
+        
+        // Remove existing listener if any (by cloning)
+        const newButton = button.cloneNode(true);
+        button.parentNode?.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', async () => {
+          const codeElement = pre.querySelector('code');
+          const code = codeElement?.innerText || pre.innerText || '';
+          
+          try {
+            await navigator.clipboard.writeText(code);
+            
+            const btnCopyIcon = newButton.querySelector('.copy-icon');
+            const btnCheckIcon = newButton.querySelector('.check-icon');
+            
+            // Show check icon
+            btnCopyIcon?.classList.add('hidden');
+            btnCheckIcon?.classList.remove('hidden');
+            newButton.classList.add('opacity-100');
+            newButton.classList.remove('opacity-0');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              btnCopyIcon?.classList.remove('hidden');
+              btnCheckIcon?.classList.add('hidden');
+              newButton.classList.remove('opacity-100');
+              newButton.classList.add('opacity-0', 'group-hover:opacity-100');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy code:', err);
+          }
+        });
+      });
+    }
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCopyButtons);
+    } else {
+      initCopyButtons();
+    }
+
+    // Re-initialize on view transitions
+    document.addEventListener('astro:page-load', initCopyButtons);
+  </script><script>
+    function animatePromptBlock(block) {
+      if (block.getAttribute('data-animated')) return;
+      block.setAttribute('data-animated', 'true');
+      var text = block.getAttribute('data-text') || '';
+      var speed = parseInt(block.getAttribute('data-speed') || '15', 10);
+      var textEl = block.querySelector('[data-prompt-text]');
+      var cursorEl = block.querySelector('[data-prompt-cursor]');
+      if (!textEl || !text) return;
+      textEl.textContent = '';
+      var i = 0;
+      var timer = setInterval(function() {
+        i++;
+        textEl.textContent = text.slice(0, i);
+        if (i >= text.length) {
+          clearInterval(timer);
+          if (cursorEl) cursorEl.style.display = 'none';
+        }
+      }, speed);
+    }
+
+    function initFlipCompare() {
+      document.querySelectorAll('[data-component="flip-compare"]').forEach(function(container) {
+        var buttons = container.querySelectorAll('[data-flip-btn]');
+        var isAnimating = false;
+
+        // 초기 상태(then)의 prompt block 애니메이션 — 뷰포트 진입 시
+        var thenObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            thenObserver.unobserve(entry.target);
+            entry.target.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+          });
+        }, { threshold: 0.1 });
+        var thenPanel = container.querySelector('[data-flip-role="then"]');
+        if (thenPanel) thenObserver.observe(thenPanel);
+
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (isAnimating) return;
+            var target = btn.getAttribute('data-flip-btn');
+            var current = container.getAttribute('data-view');
+            if (current === target) return;
+
+            isAnimating = true;
+
+            // 모바일에서 토글이 sticky 상태일 때(컨테이너 상단이 헤더 아래로 올라간 경우)
+            // 클릭 후 컨테이너 상단이 헤더 바로 아래 오도록 스크롤
+            if (window.innerWidth < 1024) {
+              var headerEl = document.querySelector('header');
+              var headerH = headerEl ? headerEl.getBoundingClientRect().height : 48;
+              var containerRect = container.getBoundingClientRect();
+              if (containerRect.top < headerH) {
+                window.scrollTo({ top: window.scrollY + containerRect.top - headerH, behavior: 'smooth' });
+              }
+            }
+
+            var outPanel = container.querySelector('[data-flip-role="' + current + '"]');
+            var inPanel = container.querySelector('[data-flip-role="' + target + '"]');
+
+            // 버튼 상태 즉시 업데이트
+            buttons.forEach(function(b) {
+              b.setAttribute('data-active', b.getAttribute('data-flip-btn') === target ? 'true' : 'false');
+            });
+
+            var direction = target === 'now' ? 1 : -1;
+
+            // 나가는 패널: 슬라이드 아웃
+            if (outPanel) {
+              outPanel.style.transition = 'opacity 180ms ease, transform 180ms ease';
+              outPanel.style.opacity = '0';
+              outPanel.style.transform = 'translateX(' + (-direction * 20) + 'px)';
+            }
+
+            setTimeout(function() {
+              // CSS가 패널 display를 제어하도록 data-view 전환
+              container.setAttribute('data-view', target);
+
+              if (inPanel) {
+                // 들어오는 패널: 초기 위치 설정 후 슬라이드 인
+                inPanel.style.transition = 'none';
+                inPanel.style.opacity = '0';
+                inPanel.style.transform = 'translateX(' + (direction * 20) + 'px)';
+
+                // 다음 프레임에서 애니메이션 시작
+                requestAnimationFrame(function() {
+                  requestAnimationFrame(function() {
+                    inPanel.style.transition = 'opacity 250ms ease, transform 250ms ease';
+                    inPanel.style.opacity = '1';
+                    inPanel.style.transform = 'translateX(0)';
+
+                    setTimeout(function() {
+                      inPanel.style.transition = '';
+                      inPanel.style.opacity = '';
+                      inPanel.style.transform = '';
+                      isAnimating = false;
+
+                      // 새 패널의 prompt block 애니메이션 시작
+                      inPanel.querySelectorAll('[data-component="prompt-block"]').forEach(animatePromptBlock);
+                    }, 260);
+                  });
+                });
+              } else {
+                isAnimating = false;
+              }
+
+              // 나가는 패널 인라인 스타일 정리 (CSS display:none이 처리)
+              if (outPanel) {
+                outPanel.style.transition = '';
+                outPanel.style.opacity = '';
+                outPanel.style.transform = '';
+              }
+            }, 180);
+          });
+        });
+      });
+    }
+
+    function initPromptBlocks() {
+      // FlipCompare 밖에 있는 독립 prompt block 처리 (IntersectionObserver)
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          animatePromptBlock(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('[data-component="prompt-block"]').forEach(function(block) {
+        // FlipCompare 내부 block은 탭 전환 시 처리하므로 제외
+        if (!block.closest('[data-component="flip-compare"]')) {
+          observer.observe(block);
+        }
+      });
+    }
+
+    function initBlogInteractions() {
+      initFlipCompare();
+      initPromptBlocks();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBlogInteractions);
+    } else {
+      initBlogInteractions();
+    }
+    document.addEventListener('astro:page-load', initBlogInteractions);
+  </script>  </main> <footer class="p-4 mt-4 flex justify-between text-foreground"><div class="flex items-center"><span>Powered by Gitsunmin</span></div><ul class="flex gap-2 justify-end"><li><a href="https://github.com/gitsunmin" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">GitHub</a></li><li><a href="https://www.linkedin.com/in/gitsunmin/" target="_blank" rel="noreferrer" class="text-blue-500 hover:underline">LinkedIn</a></li></ul></footer>  </astro-slot><!--astro:end--></astro-island> </body> </html>
