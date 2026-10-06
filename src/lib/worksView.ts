@@ -7,7 +7,7 @@ export const WORKS_VIEWS = [
 
 export type WorksView = (typeof WORKS_VIEWS)[number]['id'];
 
-export const DEFAULT_VIEW: WorksView = 'brief';
+export const DEFAULT_VIEW: WorksView = 'all';
 
 export const isWorksView = (value: string | null): value is WorksView =>
   WORKS_VIEWS.some((v) => v.id === value);

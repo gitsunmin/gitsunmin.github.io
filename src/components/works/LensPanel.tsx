@@ -200,7 +200,7 @@ export const LensPanel = ({ briefs }: Props) => {
           </div>
 
           {hits.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">아래 30초 요약에서 전체를 먼저 훑어보시는 것을 권합니다.</p>
+            <p className="mt-2 text-sm text-muted-foreground">아래 목록에서 전체를 먼저 훑어보시는 것을 권합니다.</p>
           ) : (
             <ol className="mt-3 flex flex-col gap-2">
               {hits.map(({ brief, matchedTags, matchedTechs }) => (
