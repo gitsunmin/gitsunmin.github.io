@@ -2,7 +2,7 @@
 title: "Chromium 구조 분석 (1) — 저장소를 직접 읽는다"
 description: "브라우저 내부를 다룬 한국어 자료는 2012년 D2 글과 그 파생물에 묶여 있다. 이 시리즈는 재해석된 2차 자료 대신 Chromium 저장소의 코드와 저장소 내 문서만을 근거로 삼는다. 1편은 분석 환경을 구성하고, 저장소의 계층 구조와 프로세스 모델, 그리고 프로세스 간 통신 방식을 확인한다."
 pubDate: "2026-10-01"
-updatedDate: "2026-10-01"
+updatedDate: "2026-10-06"
 tags: ["technology", "chromium", "browser", "architecture", "mojo", "security"]
 heroImage: "/assets/blog/chromium-architecture/thumbnail.webp"
 draft: false
@@ -10,9 +10,9 @@ draft: false
 
 import { KnowledgeList, KnowledgeNote } from '@/components/KnowledgeNote';
 
-> **Chromium 구조 분석** — 전체 4편 중 1편 공개. 2~4편은 준비 중이다.
+> **Chromium 구조 분석** — 전체 4편 중 2편 공개. 3~4편은 준비 중이다.
 > 1. **저장소를 직접 읽는다** — 분석 환경, 계층 구조, 프로세스 모델, IPC ← 지금 글
-> 2. 주소에서 픽셀까지 — 네비게이션, 문서 수명주기, 합성 *(준비 중)*
+> 2. [주소에서 픽셀까지](/blog/chromium-architecture-02-url-to-pixels) — 네비게이션, 문서 수명주기, 합성
 > 3. 자바스크립트가 실행되는 자리 — 바인딩, 이벤트 루프, 태스크 큐 *(준비 중)*
 > 4. 엔진 심층 — V8의 네 단계 티어, Wasm, 디옵티마이제이션 *(준비 중)*
 
@@ -70,7 +70,7 @@ git checkout fca8b75c7d7962742759debada81051bc99e3eb3
 
 ### 범위
 
-1편이 다루는 것은 분석 환경 구성, 저장소의 계층 구조, 계층 간 경계 규칙, 프로세스 모델, 격리의 집행 방식, 프로세스 간 통신이다. 렌더링 파이프라인은 2편, 자바스크립트 실행은 3편, V8 내부는 4편에서 다룬다.
+1편이 다루는 것은 분석 환경 구성, 저장소의 계층 구조, 계층 간 경계 규칙, 프로세스 모델, 격리의 집행 방식, 프로세스 간 통신이다. 렌더링 파이프라인은 [2편](/blog/chromium-architecture-02-url-to-pixels), 자바스크립트 실행은 3편, V8 내부는 4편에서 다룬다.
 
 <KnowledgeNote term="LLM을 사용한 분석에 대하여" kind="note" defaultOpen>
 
@@ -356,7 +356,7 @@ interface BrowserInterfaceBroker {
 
 **셋째, 열거형과 정적 단정문이 설계를 직접 서술한다.** 이 시리즈에서 반복적으로 활용하는 방법이다. 상태 기계는 `enum`으로, 불변 조건은 `static_assert`로 코드에 박혀 있는 경우가 많다. 산문으로 된 설명보다 정확하고, 코드와 어긋날 수 없다. 2편의 문서 수명주기, 3편의 태스크 유형, 4편의 컴파일러 티어가 모두 이 형태로 확인된다.
 
-**넷째, 주석을 그대로 신뢰하지 않는다.** 주석은 코드보다 느리게 갱신된다. 2편에서 다룰 사례가 이에 해당한다 — `docs/life_of_a_frame.md`는 커밋 중 메인 스레드가 블록된다고 서술하지만, 현재 구현은 그렇게 동작하지 않는다. 주석에서 얻은 주장은 호출부를 `grep`으로 확인하는 절차가 필요하다.
+**넷째, 주석을 그대로 신뢰하지 않는다.** 주석은 코드보다 느리게 갱신된다. [2편 8절](/blog/chromium-architecture-02-url-to-pixels#8-커밋은-메인-스레드를-블록하지-않는다)의 사례가 이에 해당한다 — `docs/life_of_a_frame.md`는 커밋 중 메인 스레드가 블록된다고 서술하지만, 현재 구현은 입력 응답을 담는 프레임 외에는 블록하지 않는다. 주석에서 얻은 주장은 호출부를 `grep`으로 확인하는 절차가 필요하다.
 
 <KnowledgeNote term="LLM에게 맡긴 범위와 맡기지 않은 범위" kind="reason" defaultOpen>
 
@@ -390,9 +390,9 @@ interface BrowserInterfaceBroker {
 
 ### 다음 편
 
-2편은 이 구조 위에서 하나의 요청이 흐르는 경로를 추적한다. 주소창 입력부터 화면에 픽셀이 나타나기까지이며, 중심 자료는 [`docs/navigation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md), [`core/dom/document_lifecycle.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h), [`docs/how_cc_works.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md)다.
+[2편](/blog/chromium-architecture-02-url-to-pixels)은 이 구조 위에서 하나의 요청이 흐르는 경로를 추적한다. 주소창 입력부터 화면에 픽셀이 나타나기까지이며, 중심 자료는 [`docs/navigation.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/navigation.md), [`core/dom/document_lifecycle.h`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/third_party/blink/renderer/core/dom/document_lifecycle.h), [`docs/how_cc_works.md`](https://github.com/chromium/chromium/blob/fca8b75c7d7962742759debada81051bc99e3eb3/docs/how_cc_works.md)다.
 
-2~4편은 작성을 마쳤으나 아직 공개하지 않았다. 본문의 "2편에서 다룬다" 형태의 참조는 공개 시점에 링크로 연결된다.
+3~4편은 작성을 마쳤으나 아직 공개하지 않았다. 본문의 "3편에서 다룬다" 형태의 참조는 공개 시점에 링크로 연결된다.
 
 ## 참조
 
