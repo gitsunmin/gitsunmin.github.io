@@ -27,7 +27,7 @@ type Work = {
   icon?: string;
   description: string;
   /**
-   * 30초 보기의 한두 문장. description이 "무엇인가"라면 이것은 "내가 무엇을 했나"다.
+   * /works 전체 작업 목록의 한두 문장. description이 "무엇인가"라면 이것은 "내가 무엇을 했나"다.
    * 채용 담당자가 카드 한 장만 읽고 넘어가도 남아야 하는 말만 적는다.
    */
   tldr: string;

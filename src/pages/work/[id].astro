@@ -43,7 +43,7 @@ const { Content, headings } = await render(entry);
 
 /**
  * 케이스 지도 — 간지(또는 소개) 슬라이드에 이 장의 케이스를 문제 한 줄씩 늘어놓고
- * 그 슬라이드로 바로 건너뛰게 한다. 문구는 /works의 3분 보기와 같은 요약(briefs)이다.
+ * 그 슬라이드로 바로 건너뛰게 한다. 문구는 llms.txt와 같은 요약(briefs)이다.
  * 사이드 프로젝트의 절 요약은 케이스가 아니므로 덱에는 싣지 않는다.
  */
 const caseBriefs = (doc: { chapter?: string; techs: string[]; entry: CollectionEntry<'works'>; headings: Parameters<typeof resolveBriefs>[0]['headings'] }): WorkBrief[] =>

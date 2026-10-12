@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type BriefSource, featuredBrief, groupByChapter, resolveBriefs, type WorkDigest } from '../../src/lib/workBriefs';
+import { type BriefSource, resolveBriefs } from '../../src/lib/workBriefs';
 import type { Heading } from '../../src/lib/workSearchIndex';
 
 const BODY = `
@@ -72,27 +72,5 @@ describe('resolveBriefs', () => {
   it('본문에 없는 케이스를 가리키면 멈춘다', () => {
     expect(() => resolve([brief({ case: 9 })])).toThrow(/문제 9/);
     expect(() => resolve([brief({ section: '없는 절' })])).toThrow(/없는 절/);
-  });
-});
-
-describe('featuredBrief / groupByChapter', () => {
-  const briefs = [
-    ...resolve([brief({ case: 1 })], '장 A'),
-    ...resolve([brief({ case: 2, featured: true })], '장 B'),
-    ...resolve([brief({ section: '주요 기능' })], '장 B'),
-  ];
-  const digest = { briefs } as WorkDigest;
-
-  it('featured를 고르고, 없으면 첫 요약을 쓴다', () => {
-    expect(featuredBrief(digest)?.label).toBe('문제 2');
-    expect(featuredBrief({ briefs: briefs.slice(0, 1) } as WorkDigest)?.label).toBe('문제 1');
-    expect(featuredBrief({ briefs: [] } as unknown as WorkDigest)).toBeUndefined();
-  });
-
-  it('장 이름으로 묶되 등장 순서를 지킨다', () => {
-    expect(groupByChapter(briefs).map((g) => [g.chapter, g.briefs.length])).toEqual([
-      ['장 A', 1],
-      ['장 B', 2],
-    ]);
   });
 });

@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
 /**
- * 주소의 쿼리를 상태처럼 읽고 쓴다 — /works의 보기(?view=)와 직무 렌즈(?lens=, ?tech=).
+ * 주소의 쿼리를 상태처럼 읽고 쓴다 — /works의 검색어(?q=).
  *
  * 쿼리가 곧 상태라서 따로 useState를 두지 않는다. 정적 HTML은 빈 쿼리(서버 스냅샷)로
  * 그려지고, 하이드레이션 뒤에 실제 주소로 다시 그려진다.

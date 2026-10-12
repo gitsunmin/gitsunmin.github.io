@@ -5,7 +5,7 @@
  * 여기서는 그 둘을 합치고, 요약마다 덱 딥링크를 붙인다. 딥링크는 검색 인덱스와 같은
  * sliceSlides로 구한다 — 같은 규칙으로 만들어야 덱 앵커와 이름이 어긋나지 않는다.
  *
- * /works의 30초·3분 보기, 직무 렌즈, llms.txt, 덱의 케이스 목록이 모두 이 결과를 읽는다.
+ * llms.txt와 덱의 케이스 목록이 이 결과를 읽는다.
  */
 import type { CompetencyId } from '@/data/competencies';
 import type { WorkCategory } from '@/data/works';
@@ -25,7 +25,7 @@ export type BriefSource = {
 };
 
 export type WorkBrief = {
-  /** `workId#slug` — 렌즈 결과·목록의 key. */
+  /** `workId#slug` — 목록의 key. */
   id: string;
   workId: string;
   workTitle: string;
@@ -42,7 +42,7 @@ export type WorkBrief = {
   result: string;
   tags: CompetencyId[];
   featured: boolean;
-  /** 이 요약이 속한 장(없으면 프로젝트)의 기술. 렌즈가 JD의 기술과 맞춰 본다. */
+  /** 이 요약이 속한 장(없으면 프로젝트)의 기술. */
   techs: string[];
   /** 덱 안의 앵커(`#` 없이). */
   slug: string;
@@ -116,20 +116,5 @@ export function resolveBriefs({ workId, workTitle, chapter, techs, briefs, body,
   });
 }
 
-/** 30초 보기의 대표 요약. 표시한 것이 없으면 첫 요약을 쓴다. */
-export const featuredBrief = (digest: WorkDigest): WorkBrief | undefined =>
-  digest.briefs.find((b) => b.featured) ?? digest.briefs[0];
-
 /** 요약이 가리키는 위치. `마켓봄 웹 · 문제 1` */
 export const briefLocation = (brief: WorkBrief) => [brief.chapter, brief.label].filter(Boolean).join(' · ');
-
-/** 장 이름으로 묶는다. 최상위 문서의 요약은 이름 없는 묶음 하나가 된다. 순서는 등장 순. */
-export function groupByChapter(briefs: WorkBrief[]): { chapter?: string; briefs: WorkBrief[] }[] {
-  const groups: { chapter?: string; briefs: WorkBrief[] }[] = [];
-  for (const brief of briefs) {
-    const last = groups[groups.length - 1];
-    if (last && last.chapter === brief.chapter) last.briefs.push(brief);
-    else groups.push({ chapter: brief.chapter, briefs: [brief] });
-  }
-  return groups;
-}

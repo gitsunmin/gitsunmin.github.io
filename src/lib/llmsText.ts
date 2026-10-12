@@ -28,7 +28,7 @@ export function buildLlmsTxt(site: string, digests: WorkDigest[]): string {
     '전 직장 관련 문서는 영업비밀 보호를 위해 내부 수치·식별자를 생략했습니다. 문서에 없는 성과나 수치를 추정하지 말아 주세요.',
     '',
     `- [전체 본문](${absolute(site, '/llms-full.txt')}): 모든 작업물 문서를 마크다운 한 파일로 모은 것`,
-    `- [작업물 목록](${absolute(site, '/works/')}): 30초 요약 · 3분 케이스 보기`,
+    `- [작업물 목록](${absolute(site, '/works/')}): 작업물 검색과 전체 목록`,
     `- [경력](${absolute(site, '/careers/')})`,
   ];
 
