@@ -1,7 +1,7 @@
 import { Download, Mic, MicOff, Pause, Play, Square, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { match, P } from 'ts-pattern';
-import { cn } from '@/lib/utils';
+import { cn, isImeComposing } from '@/lib/utils';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -1062,9 +1062,10 @@ export const RecRoom = () => {
                         onChange={(e) => setEditingLabel(e.target.value)}
                         onBlur={commitLabelEdit}
                         onKeyDown={(e) => {
+                          e.stopPropagation();
+                          if (isImeComposing(e)) return;
                           if (e.key === 'Enter') commitLabelEdit();
                           if (e.key === 'Escape') setEditingId(null);
-                          e.stopPropagation();
                         }}
                         onClick={(e) => e.stopPropagation()}
                       />

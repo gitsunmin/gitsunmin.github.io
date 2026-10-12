@@ -2,7 +2,7 @@ import { Clock, Search, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { highlight, normalize } from '@/lib/workSearch';
 import { suggest, type Suggestion, type SuggestionKind } from '@/lib/workSuggest';
-import { cn } from '@/lib/utils';
+import { cn, isImeComposing } from '@/lib/utils';
 
 const KIND_LABEL: Record<SuggestionKind, string> = {
   recent: '최근 검색',
@@ -70,6 +70,7 @@ export const SearchBox = ({ value, onChange, onSubmit, vocabulary, recent, onFor
   };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (isImeComposing(event)) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       if (!open) return;
       event.preventDefault();

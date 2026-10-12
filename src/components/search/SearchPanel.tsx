@@ -2,7 +2,7 @@ import { ArrowRight, Clock, CornerDownLeft, FolderOpen, Search, X } from 'lucide
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { SearchState } from '@/components/search/useWorkSearch';
 import { tokenize, type MatchKind, type SearchHit } from '@/lib/workSearch';
-import { cn } from '@/lib/utils';
+import { cn, isImeComposing } from '@/lib/utils';
 
 /**
  * 검색 오버레이의 속 — 입력·스코프 칩·결과·빈 상태.
@@ -72,6 +72,7 @@ export function SearchPanel({ state, onSelect, onClose, autoFocus = true }: Sear
   const select = (hit: SearchHit) => onSelect(hit, trimmed);
 
   const onKeyDown = (event: React.KeyboardEvent) => {
+    if (isImeComposing(event)) return;
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       setCursor((c) => Math.min(visible.length - 1, c + 1));
