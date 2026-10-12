@@ -1,8 +1,9 @@
-git stash push -k --include-untracked
+bunx lint-staged
 
-bun run lint
-bun run build
+# 블로그 PNG/JPG가 스테이징됐을 때만 WebP 변환 후 결과(새 webp, 삭제된 원본, 경로가 바뀐 mdx)를 스테이징
+if git diff --cached --name-only --diff-filter=ACMR | grep -qiE '^public/assets/blog/.*\.(png|jpe?g)$'; then
+  bun .scripts/optimize-blog-images.ts
+  git add -A public/assets/blog src/content/blog
+fi
+
 bun test
-
-git add .
-git stash pop
