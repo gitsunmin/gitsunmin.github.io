@@ -1,6 +1,15 @@
-/* ─── 덱(발표 슬라이드) 공통 스타일 ────────────────────────────────
+/* ─── work 상세 공통 스타일 ────────────────────────────────────────
    슬라이드 경계는 rehype-work-sections가 빌드 타임에 만든 <section data-slide>다.
-   여기서는 그 경계를 화면 한 장씩으로 배치하는 일만 한다. */
+
+   보기는 두 가지다.
+     문서(기본)  — 슬라이드를 이어 붙인 긴 글. 스크롤·Ctrl+F·인쇄가 평범하게 동작한다.
+     발표        — html[data-deck-present]. 한 장이 한 화면이고 스냅으로 넘긴다.
+   채용 담당자는 혼자 훑어 읽고, 발표는 면접에서 화면을 공유할 때나 쓴다. 그래서
+   한 화면 고정·스냅·자동 축소·안쪽 스크롤·등장 연출은 전부 발표 모드에만 건다.
+   모드 표시는 [id].astro의 인라인 스크립트(?present)와 DeckController가 붙이고 뗀다. */
+html:has([data-deck]) {
+  scroll-behavior: smooth;
+}
 
 /* 전용 스크롤 div가 아니라 문서 스크롤에 스냅을 건다. 별도 컨테이너를 쓰면
    iOS에서 주소창이 접히지 않아 100dvh가 계속 흔들린다.
@@ -9,18 +18,20 @@
    원인은 스냅이 아니라 스크롤 중에 끼어들던 자동 축소 계산이었고, 그쪽을
    고치고 나니 mandatory로도 충분히 매끄럽다. 한 장이 정확히 한 화면이라는
    덱의 성격은 이 값이 지킨다. */
-html:has([data-deck]) {
+html[data-deck-present]:has([data-deck]) {
   scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
 }
 
-/* 슬라이드는 정확히 한 화면이다.
+[data-deck] [data-slide] {
+  position: relative;
+}
+
+/* 발표 모드의 슬라이드는 정확히 한 화면이다.
    min-height로 두면 내용이 많을 때 슬라이드가 화면보다 길어지고, mandatory 스냅은
    그 안에서 쉴 자리를 주지 않아 스크롤을 다음 스냅 지점으로 확 끌어당긴다.
    높이를 확정해 두어야 스냅이 사용자와 다투지 않고, 안쪽 max-height도 비로소
    먹으며, 화면 밖 슬라이드의 렌더를 건너뛰어도 문서 높이가 흔들리지 않는다. */
-[data-deck] [data-slide] {
-  position: relative;
+html[data-deck-present] [data-deck] [data-slide] {
   scroll-snap-align: start;
   /* 플링 한 번에 여러 장을 건너뛰지 않게 한다. */
   scroll-snap-stop: always;
@@ -35,8 +46,12 @@ html:has([data-deck]) {
 
 /* 인터랙티브 컴포넌트를 품은 슬라이드는 스스로 높이를 정한다(Story는 300svh에
    sticky 패널). 여백을 주면 sticky 정렬이 어긋나고, 스냅도 그 슬라이드 안에서
-   씬마다 멈춰야 하므로 바깥 스냅을 끈다. */
+   씬마다 멈춰야 하므로 바깥 스냅을 끈다. 문서 모드에서도 여백은 주지 않는다. */
 [data-deck] [data-slide][data-slide-full] {
+  padding: 0;
+}
+
+html[data-deck-present] [data-deck] [data-slide][data-slide-full] {
   height: auto;
   overflow: visible;
   display: block;
@@ -50,8 +65,11 @@ html:has([data-deck]) {
    슬라이드 높이는 100dvh로 이미 확정돼 있으므로 렌더를 건너뛰어도 문서 높이가
    흔들리지 않는다 — 이 규칙을 안전하게 쓸 수 있는 이유다.
    스스로 높이를 정하는 Story 슬라이드는 제외한다.
-   자동 축소가 높이를 잴 때는 DeckController가 잠깐 강제로 켠다. */
-[data-deck] [data-slide]:not([data-slide-full]) {
+   자동 축소가 높이를 잴 때는 DeckController가 잠깐 강제로 켠다.
+
+   문서 모드에서는 쓰지 않는다. 높이가 내용대로라 예약 크기가 실제와 어긋나고,
+   멀리 있는 딥링크로 뛰면 아직 그리지 않은 장의 어림 높이 때문에 엉뚱한 곳에 선다. */
+html[data-deck-present] [data-deck] [data-slide]:not([data-slide-full]) {
   content-visibility: auto;
   contain-intrinsic-size: auto 100dvh;
 }
@@ -201,24 +219,28 @@ html[data-deck-booting] .deck-loading {
    문단이 세로로 쌓이고 prose의 마진 상쇄도 그대로다.
    넘칠 때만 이 상자가 스크롤된다. 상자 끝에 닿은 뒤의 스크롤은 문서로 이어지지
    않게 가둔다(contain) — 브라우저의 연쇄는 데스크톱과 iOS가 제각각이라, 끝에서
-   한 번 더 밀면 다음 장으로 가는 일은 DeckController가 직접 맡는다. */
+   한 번 더 밀면 다음 장으로 가는 일은 DeckController가 직접 맡는다.
+   문서 모드는 읽기 좋은 폭만 남긴다. */
 [data-deck] [data-slide] > * {
   width: 100%;
   max-width: 52rem;
   margin-inline: auto;
+}
+
+html[data-deck-present] [data-deck] [data-slide] > * {
   max-height: 100%;
   overflow-y: auto;
 }
 
 /* 실제로 넘치는 상자만 가둔다. 넘치지 않는 상자에도 contain을 걸면 iOS가 그 위의
    드래그를 상자에서 삼켜 버려, 본문을 잡고 끌어도 덱이 넘어가지 않는다. */
-[data-deck] [data-slide][data-slide-overflow] > * {
+html[data-deck-present] [data-deck] [data-slide][data-slide-overflow] > * {
   overscroll-behavior-y: contain;
 }
 
 /* 가장 작게 줄여도 한 화면에 안 들어가는 슬라이드. 아래가 잘린 게 아니라
    더 있다는 것을 알리려고 바닥을 흐린다. */
-[data-deck] [data-slide][data-slide-overflow]::after {
+html[data-deck-present] [data-deck] [data-slide][data-slide-overflow]::after {
   content: '';
   position: absolute;
   left: 0;
@@ -235,22 +257,103 @@ html[data-deck-booting] .deck-loading {
   overflow: visible;
 }
 
-/* 헤딩이 곧 슬라이드 맨 위다. 문서 뷰에서 쓰던 sticky 헤더 보정이 필요 없다. */
+/* 발표 모드에서는 헤딩이 곧 슬라이드 맨 위다. 문서 모드에서는 위에 떠 있는
+   위치 표시줄(PC)·아치(모바일)에 제목이 가리지 않게 그만큼 내려 멈춘다. */
+[data-deck] [data-slide],
 [data-deck] [data-slide] :is(h2, h3)[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+html[data-deck-present] [data-deck] [data-slide],
+html[data-deck-present] [data-deck] [data-slide] :is(h2, h3)[id] {
   scroll-margin-top: 0;
+}
+
+/* ─── 문서 모드 배치 ─────────────────────────────────────────────
+   슬라이드를 위아래로 이어 붙인다. 슬라이드 경계는 그대로 남아 있으므로
+   목차·위치 표시줄·딥링크·검색 하이라이트는 두 모드에서 똑같이 동작한다. */
+html:not([data-deck-present]) [data-deck] {
+  padding-top: clamp(4.5rem, 10vh, 6rem);
+  padding-bottom: 6rem;
+}
+
+html:not([data-deck-present]) [data-deck] [data-slide]:not([data-slide-full]) {
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+}
+
+/* 표지는 머리말이 된다 — 한 화면을 다 쓰지 않고 위아래 숨만 둔다. */
+html:not([data-deck-present]) [data-deck] [data-slide='cover'] {
+  padding-block: 2rem 3rem;
+}
+
+html:not([data-deck-present]) [data-deck] [data-slide='intro'] {
+  padding-bottom: 1rem;
+}
+
+/* 간지와 마무리는 장이 바뀌는 자리라 실선으로 끊고 넉넉히 띄운다. */
+html:not([data-deck-present]) [data-deck] :is([data-slide^='chapter-'], [data-slide='thanks']) {
+  margin-top: 5rem;
+  padding-top: 3.5rem;
+  border-top: 1px solid hsl(var(--border) / 0.6);
+}
+
+html:not([data-deck-present]) [data-deck] [data-slide='thanks'] {
+  padding-bottom: 2rem;
+}
+
+/* 절 사이의 숨. 슬라이드마다 첫 헤딩이 절의 시작이다. */
+html:not([data-deck-present]) [data-deck] .deck-prose h2:first-child {
+  margin-top: 3.5rem;
+}
+
+html:not([data-deck-present]) [data-deck] .deck-prose h3:first-child {
+  margin-top: 2.25rem;
+}
+
+/* 단계 띠는 발표에서 "지금 어느 단계인가"를 매 장 알려 주려던 것이다. 이어 읽는
+   글에서는 케이스 제목 아래의 전체 띠 하나면 충분하고, 절마다 되풀이되면 소음이다. */
+html:not([data-deck-present]) [data-deck] .deck-prose h3 + ol[data-case-steps] {
+  display: none;
+}
+
+/* PC의 위치 표시줄은 좌상단에 떠 있어, 이어 읽는 글이 그 아래를 지나가면 글자끼리
+   겹쳐 보인다. 화면 위쪽만 배경색으로 흐려 글이 알약 밑으로 사라지듯 지나가게 한다.
+   모바일은 아치의 유리 띠가 같은 일을 한다. */
+html:not([data-deck-present]) .deck-chrome::before {
+  content: '';
+  position: fixed;
+  z-index: 55;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rem;
+  background: linear-gradient(to bottom, hsl(var(--background)) 45%, hsl(var(--background) / 0));
+  pointer-events: none;
+}
+
+/* 모바일은 아래 떠 있는 버튼 묶음에 마지막 줄이 가리지 않게 한다. */
+@media (max-width: 640px) {
+  html:not([data-deck-present]) .deck-chrome::before {
+    display: none;
+  }
+
+  html:not([data-deck-present]) [data-deck] {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 3.5rem);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 7rem);
+  }
 }
 
 /* ─── 등장 연출 ──────────────────────────────────────────────
    슬라이드가 자리를 잡으면 내용이 살짝 떠오른다. DeckController가 런타임에
    [data-deck-animate]를 붙인 뒤에만 적용되므로, JS가 없거나 죽어도 본문은
    그대로 보인다 — 검색엔진과 인쇄가 보는 것도 그 상태다. */
-[data-deck][data-deck-animate] [data-slide]:not([data-slide-full]) > * {
+html[data-deck-present] [data-deck][data-deck-animate] [data-slide]:not([data-slide-full]) > * {
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 240ms ease, transform 240ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-[data-deck][data-deck-animate] [data-slide][data-slide-shown] > * {
+html[data-deck-present] [data-deck][data-deck-animate] [data-slide][data-slide-shown] > * {
   opacity: 1;
   transform: none;
 }
@@ -399,8 +502,8 @@ html[data-deck-booting] .deck-loading {
 
 /* ─── 본문 슬라이드 ──────────────────────────────────────────
    문서 뷰와 같은 prose를 쓰되, 한 화면에 들어가도록 크기를 올리고
-   첫 헤딩 위 여백을 지운다. */
-[data-deck] .deck-prose :is(h2, h3):first-child {
+   첫 헤딩 위 여백을 지운다. 문서 모드에서는 그 여백이 곧 절 사이의 숨이다. */
+html[data-deck-present] [data-deck] .deck-prose :is(h2, h3):first-child {
   margin-top: 0;
 }
 
@@ -418,9 +521,12 @@ html[data-deck-booting] .deck-loading {
   font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
 }
 
-/* 넘치는 표·코드는 슬라이드 안에서만 스크롤시키고 부모 스냅과 격리한다. */
+/* 넘치는 표·코드는 가로로만 스크롤시킨다. 발표 모드에서는 부모 스냅과도 격리한다. */
 [data-deck] .deck-prose :is(pre, .deck-table-wrap) {
   overflow-x: auto;
+}
+
+html[data-deck-present] [data-deck] .deck-prose :is(pre, .deck-table-wrap) {
   overscroll-behavior: contain;
 }
 
@@ -1047,7 +1153,7 @@ html[data-deck-booting] .deck-loading {
 @media (max-width: 640px) {
   /* 슬라이드는 아치의 위 띠와 하단 바를 비켜난다. 양옆으로 내려온 글자는
      본문 여백 위를 지나며, 배경색 테두리가 겹침을 감당한다. */
-  [data-deck] [data-slide]:not([data-slide-full]) {
+  html[data-deck-present] [data-deck] [data-slide]:not([data-slide-full]) {
     padding-top: calc(env(safe-area-inset-top, 0px) + 2.5rem);
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.25rem);
     padding-inline: 1.75rem;
@@ -1112,17 +1218,25 @@ html[data-deck-booting] .deck-loading {
   .deck-outline { transition: none; }
 }
 
-/* ─── 인쇄 — 슬라이드 한 장이 페이지 한 장 ──────────────────────
-   덱은 발표 자료이므로 가로로 눕힌다. 이 파일은 덱 라우트에만 실리므로
-   @page가 다른 페이지의 인쇄를 건드리지 않는다. */
+/* ─── 인쇄 ─────────────────────────────────────────────────────
+   보던 모드 그대로 나간다.
+     문서 — 세로 A4(전역 @page)에 이어서 흐르고, 장이 바뀔 때만 쪽을 넘긴다.
+     발표 — 가로로 눕혀 슬라이드 한 장이 한 쪽. @page는 선택자로 가를 수 없어
+            이름 붙은 페이지(page: deck-slide)로 고른다. 지원하지 않는 브라우저는
+            세로로 나오지만 쪽 나눔은 그대로다.
+   이 파일은 work 상세에만 실리므로 다른 페이지의 인쇄를 건드리지 않는다. */
 @media print {
-  @page {
+  @page deck-slide {
     size: landscape;
     margin: 12mm;
   }
 
+  html[data-deck-present] [data-deck] {
+    page: deck-slide;
+  }
+
   html:has([data-deck]) {
-    scroll-snap-type: none;
+    scroll-snap-type: none !important;
   }
 
   .deck-chrome,
@@ -1145,18 +1259,43 @@ html[data-deck-booting] .deck-loading {
     visibility: visible !important;
   }
 
+  [data-deck] {
+    padding: 0 !important;
+  }
+
   [data-deck] [data-slide] {
     height: auto !important;
     overflow: visible !important;
     display: block !important;
     padding: 0 0 1.5rem !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  html[data-deck-present] [data-deck] [data-slide] {
     break-after: page;
     page-break-after: always;
   }
 
-  [data-deck] [data-slide]:last-child {
+  html[data-deck-present] [data-deck] [data-slide]:last-child {
     break-after: auto;
     page-break-after: auto;
+  }
+
+  /* 문서 — 장(서브 레포)과 마무리만 새 쪽에서 시작한다. */
+  html:not([data-deck-present]) [data-deck] :is([data-slide^='chapter-'], [data-slide='thanks']) {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  html:not([data-deck-present]) [data-deck] .deck-prose h2:first-child {
+    margin-top: 1.5rem !important;
+  }
+
+  /* 제목만 쪽 끝에 남고 본문이 다음 쪽으로 넘어가지 않게 한다. */
+  [data-deck] .deck-prose :is(h2, h3) {
+    break-after: avoid;
+    page-break-after: avoid;
   }
 
   /* 종이에는 "화면 밖"이 없다. 렌더 건너뛰기를 켠 채로 두면 안 될 이유는
@@ -1175,6 +1314,12 @@ html[data-deck-booting] .deck-loading {
     /* 화면에서 넣은 자동 축소(인라인 zoom)를 되돌린다. 종이는 높이가 남으므로
        줄일 이유가 없고, 줄인 채로 인쇄하면 글자만 작아진다. */
     zoom: 1 !important;
+  }
+
+  /* 가로로 넘치던 표·코드는 종이에서 잘리지 않게 줄바꿈한다. */
+  [data-deck] .deck-prose pre {
+    white-space: pre-wrap !important;
+    word-break: break-word;
   }
 
   [data-deck] [data-slide][data-slide-overflow]::after {

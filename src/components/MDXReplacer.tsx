@@ -151,7 +151,7 @@ export const MDXReplacer = ({ components = {}, eagerImages = false }: Props): MD
           />
         </div>
         <button
-          className="copy-button absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md"
+          className="copy-button print:hidden absolute top-3 right-3 p-2.5 rounded-lg transition-all duration-200 z-10 cursor-pointer bg-gray-700/90 hover:bg-gray-600 text-gray-300 hover:text-white opacity-0 group-hover:opacity-100 shadow-sm hover:shadow-md"
           aria-label="Copy code"
           type="button"
         >

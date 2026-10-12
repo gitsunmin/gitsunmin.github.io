@@ -1,4 +1,4 @@
-import { ChevronDown, List } from 'lucide-react';
+import { BookOpen, ChevronDown, List, Presentation } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { DeckArch } from '@/components/deck/DeckArch';
 import { DeckArrival } from '@/components/deck/DeckArrival';
@@ -12,11 +12,16 @@ import type { SearchHit } from '@/lib/workSearch';
 import { cn } from '@/lib/utils';
 
 /**
- * 덱(슬라이드쇼) 컨트롤러 — 0단계 프로토타입.
+ * work 상세 컨트롤러 — 문서 모드(기본)와 발표 모드.
  *
  * 슬라이드 마크업 자체는 페이지가 소유하고, 이 컴포넌트는 DOM에 이미 있는
  * `[data-slide]`를 훑어서 이동·표시만 담당한다. 그래야 콘텐츠가 서버 렌더 HTML에
  * 그대로 남아 SEO·인쇄·딥링크가 유지된다.
+ *
+ * 목차·위치 표시줄·검색·딥링크는 두 모드가 같이 쓴다. 자동 축소, 스냅 지점, 등장 연출,
+ * 장 단위 키보드 이동, 넘치는 장의 끝에서 다음 장으로 넘기기, iOS 가로 스크롤 보정은
+ * 한 장이 한 화면인 발표 모드에서만 필요하므로 그때만 켠다. 문서 모드의 스크롤은
+ * 전부 브라우저 몫이다. 모드는 <html data-deck-present>와 주소(?present)에 함께 둔다.
  *
  * 진행은 전적으로 사용자 몫이다. 자동 스크롤은 두었다가 걷어냈다 — 발표자가
  * 말하는 속도와 맞을 리 없고, 읽는 사람의 스크롤과도 계속 다퉜다.
@@ -93,6 +98,23 @@ function jumpToHash() {
   const target = document.getElementById(id);
   if (!target) return;
   (target.closest<HTMLElement>('[data-slide]') ?? target).scrollIntoView({ behavior: 'instant', block: 'start' });
+}
+
+const isPresentNow = () =>
+  typeof document !== 'undefined' && document.documentElement.dataset.deckPresent !== undefined;
+
+/**
+ * 지금 주소에서 쿼리 몇 개만 바꾼 주소. 검색어(?q)와 모드(?present)가 서로를
+ * 지우지 않도록 주소를 고치는 곳은 모두 이것을 거친다.
+ */
+function urlWith(params: Record<string, string | null>, hash = location.hash) {
+  const url = new URL(location.href);
+  for (const [key, value] of Object.entries(params)) {
+    if (value === null) url.searchParams.delete(key);
+    else url.searchParams.set(key, value);
+  }
+  url.hash = hash;
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 /** 검색에서 넘어올 때 실어 보낸 검색어(?q=). */
@@ -191,6 +213,12 @@ export function DeckController() {
   const [active, setActive] = useState(0);
   const [outlineOpen, setOutlineOpen] = useState(false);
   const isMobile = useMediaQuery(MOBILE_QUERY);
+  /** 발표 모드인가. 첫 값은 인라인 스크립트가 ?present를 보고 붙여 둔 표시다. */
+  const [present, setPresent] = useState(isPresentNow);
+  /** 표지 고정·딥링크 이동·검색 도착 처리는 페이지에 들어온 뒤 딱 한 번. 모드를 바꿔도 다시 하지 않는다. */
+  const arrivedOnce = useRef(false);
+  /** 모드를 바꾼 뒤 다시 세울 슬라이드. 배치가 바뀌어도 읽던 자리를 잃지 않게 한다. */
+  const keepAt = useRef<number | null>(null);
   /** 검색에서 넘어왔을 때의 검색어. 위치 표시줄에 칩으로 남고, 도착한 장을 하이라이트한다. */
   const [arrived, setArrived] = useState('');
   const clearMarks = useRef<() => void>(() => {});
@@ -291,10 +319,9 @@ export function DeckController() {
     const root = document.documentElement;
     // 표지 고정은 딱 한 번. 배치가 늦어져 실패 안전장치가 대신 드러낼 때,
     // 그 사이 이미 읽기 시작한 사람을 맨 위로 끌어올리지 않기 위해서다.
-    let pinned = false;
     const reveal = () => {
-      if (!pinned) {
-        pinned = true;
+      if (!arrivedOnce.current) {
+        arrivedOnce.current = true;
         pinToTopIfFresh();
         jumpToHash();
         // 검색에서 왔으면 도착한 장을 밝히고 검색어를 표시한다.
@@ -308,6 +335,37 @@ export function DeckController() {
       }
       delete root.dataset.deckBooting;
     };
+
+    // 문서 모드는 맞출 것이 없다. 높이는 내용대로이고, 넘치면 그냥 문서가 길어진다.
+    // 대신 그 높이가 폰트·이미지 도착에 따라 바뀌므로, 딥링크는 폰트가 온 뒤에 서고
+    // 로드가 끝났을 때 한 번 더 선다 — 그 사이 사람이 직접 움직였으면 그대로 둔다.
+    // 발표 모드는 슬라이드 높이가 한 화면으로 고정이라 이 문제가 없다.
+    if (!present) {
+      if (arrivedOnce.current) return;
+      let disposed = false;
+      let moved = false;
+      const onMove = () => {
+        moved = true;
+      };
+      const moveEvents = ['wheel', 'touchstart', 'keydown'] as const;
+      for (const type of moveEvents) window.addEventListener(type, onMove, { passive: true });
+      const settle = () => {
+        if (!disposed) reveal();
+      };
+      const reland = () => {
+        if (!disposed && !moved) jumpToHash();
+      };
+      if (document.fonts) document.fonts.ready.then(settle);
+      else settle();
+      const failsafe = window.setTimeout(settle, 3000);
+      if (document.readyState !== 'complete') window.addEventListener('load', reland, { once: true });
+      return () => {
+        disposed = true;
+        window.clearTimeout(failsafe);
+        window.removeEventListener('load', reland);
+        for (const type of moveEvents) window.removeEventListener(type, onMove);
+      };
+    }
 
     const targets = slides.filter((slide) => !isStorySlide(slide));
     if (targets.length === 0) {
@@ -388,14 +446,34 @@ export function DeckController() {
       }
       reveal();
     };
-  }, [slides, spotlight]);
+  }, [slides, spotlight, present]);
+
+  /* ── 모드를 바꾼 뒤 읽던 슬라이드로 ────────────────────────────
+     위 효과가 배치(발표 모드의 자동 축소)를 끝낸 다음에 돈다 — 효과는 선언 순서대로다. */
+  useEffect(() => {
+    const index = keepAt.current;
+    keepAt.current = null;
+    if (index === null) return;
+    slides[index]?.scrollIntoView({ behavior: 'instant', block: 'start' });
+  }, [present, slides]);
+
+  const togglePresent = useCallback(() => {
+    const next = !present;
+    keepAt.current = active;
+    const root = document.documentElement;
+    if (next) root.dataset.deckPresent = '';
+    else delete root.dataset.deckPresent;
+    history.replaceState(history.state, '', urlWith({ present: next ? '' : null }));
+    setPresent(next);
+  }, [present, active]);
 
   /* ── 등장 연출 ──────────────────────────────────────────────
      슬라이드가 화면에 자리 잡으면 내용이 한 번 떠오른다.
      숨김 상태를 CSS에 그냥 두면 JS가 죽었을 때 본문이 영영 보이지 않으므로,
      연출을 켜는 표시(data-deck-animate)를 런타임에 붙인 뒤에만 적용한다. */
   useEffect(() => {
-    if (slides.length === 0) return;
+    // 문서 모드에서 글이 스크롤마다 떠오르면 읽는 데 방해만 된다.
+    if (!present || slides.length === 0) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const deck = slides[0].closest('[data-deck]');
@@ -436,13 +514,14 @@ export function DeckController() {
       delete deck.dataset.deckAnimate;
       for (const slide of slides) delete slide.dataset.slideShown;
     };
-  }, [slides]);
+  }, [slides, present]);
 
   /* ── 씬 스냅 지점 ───────────────────────────────────────────
      Story 슬라이드는 뷰포트 몇 배 높이에 씬이 그만큼 들어 있다. 씬마다 멈추려면
      그 높이에 스냅 지점이 하나씩 있어야 하는데, MDX에는 쓸 자리가 없다.
      슬라이드 높이를 재서 여기서 심고, 언마운트할 때 걷어 낸다. */
   useEffect(() => {
+    if (!present) return;
     const anchors: HTMLElement[] = [];
 
     for (const slide of slides) {
@@ -460,7 +539,7 @@ export function DeckController() {
     }
 
     return () => anchors.forEach((anchor) => anchor.remove());
-  }, [slides]);
+  }, [slides, present]);
 
   const goTo = useCallback(
     (index: number) => {
@@ -486,7 +565,7 @@ export function DeckController() {
       const index = target ? slides.indexOf(target) : -1;
       if (index === -1) return false;
       goTo(index);
-      history.replaceState(null, '', `?q=${encodeURIComponent(query)}#${slug}`);
+      history.replaceState(null, '', urlWith({ q: query }, `#${slug}`));
       setArrived(query);
       spotlight(target ?? undefined, query);
       return true;
@@ -515,6 +594,14 @@ export function DeckController() {
         setOutlineOpen(false);
         return;
       }
+      if (event.key === 'p' || event.key === 'P') {
+        event.preventDefault();
+        togglePresent();
+        return;
+      }
+
+      // 문서 모드의 화살표·스페이스·Home/End는 브라우저의 평범한 스크롤이다.
+      if (!present) return;
 
       const step = { ArrowDown: 1, PageDown: 1, ' ': 1, ArrowRight: 1, ArrowUp: -1, PageUp: -1, ArrowLeft: -1 }[event.key];
       if (step !== undefined) {
@@ -534,7 +621,7 @@ export function DeckController() {
 
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [active, goTo, slides.length]);
+  }, [active, goTo, slides.length, present, togglePresent]);
 
   /* ── 넘치는 슬라이드의 끝에서 한 번 더 밀면 다음 장 ──────────────
      한 화면에 안 들어가는 슬라이드는 안쪽 상자가 스크롤된다. 그 상자의 끝에 닿은 뒤
@@ -545,6 +632,8 @@ export function DeckController() {
      끝에 닿자마자 넘어가면 실수로 지나친다. 끝에서 더 민 거리가 문턱을 넘어야
      넘어가고, 방향이 바뀌거나 잠깐 쉬면 다시 센다. */
   useEffect(() => {
+    // 문서 모드에는 안쪽 스크롤 상자가 없다.
+    if (!present) return;
     const WHEEL_THRESHOLD = 90;
     const TOUCH_THRESHOLD = 72;
     const REST_MS = 400;
@@ -627,7 +716,7 @@ export function DeckController() {
       window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('touchcancel', onTouchEnd);
     };
-  }, [active, goTo, slides]);
+  }, [active, goTo, slides, present]);
 
   /* ── 코드·표의 가로 스크롤(터치) ─────────────────────────────
      iOS Safari는 세로 mandatory 스냅 컨테이너 안에 든 가로 스크롤러를 손가락으로
@@ -635,6 +724,8 @@ export function DeckController() {
      드래그를 여기서 받아 직접 scrollLeft를 움직이고, 손을 떼면 남은 속도만큼 미끄러진다.
      세로로 시작한 드래그는 건드리지 않아 문서 스크롤이 그대로 동작한다. */
   useEffect(() => {
+    // 스냅 컨테이너가 가로 제스처를 가져가는 문제라, 스냅이 없는 문서 모드에서는 브라우저에 맡긴다.
+    if (!present) return;
     const AXIS_LOCK = 6;
     const FRICTION = 0.94;
 
@@ -731,14 +822,22 @@ export function DeckController() {
       window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('touchcancel', onTouchEnd);
     };
-  }, []);
+  }, [present]);
 
-  /* 인쇄 중에는 스냅이 페이지 분할을 방해한다. */
+  /* 인쇄 준비. 스냅은 페이지 분할을 방해하고, 접힌 보조 자료는 종이에 안 나온다.
+     발표 모드는 처음부터 다 펼쳐 두므로, 문서 모드에서 접혀 있던 것만 잠깐 펼쳤다가 되돌린다. */
   useEffect(() => {
+    let opened: HTMLDetailsElement[] = [];
     const before = () => {
       document.documentElement.style.scrollSnapType = 'none';
+      opened = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-deck] details:not([open])'));
+      for (const details of opened) details.open = true;
     };
-    const after = () => document.documentElement.style.removeProperty('scroll-snap-type');
+    const after = () => {
+      document.documentElement.style.removeProperty('scroll-snap-type');
+      for (const details of opened) details.open = false;
+      opened = [];
+    };
 
     window.addEventListener('beforeprint', before);
     window.addEventListener('afterprint', after);
@@ -757,7 +856,7 @@ export function DeckController() {
   const dismissArrival = () => {
     setArrived('');
     clearMarks.current();
-    history.replaceState(null, '', location.pathname + location.hash);
+    history.replaceState(null, '', urlWith({ q: null }));
   };
 
   // 검색은 단축키와 시트를 하나만 가져야 하므로 한 곳에만 그린다.
@@ -769,6 +868,20 @@ export function DeckController() {
       onNavigateWithin={navigateWithin}
       className={isMobile ? 'deck-fab-button' : 'deck-position-search'}
     />
+  );
+
+  // 모드 전환. PC는 위치 표시줄 옆, 모바일은 목차 시트 아래에 둔다.
+  const modeToggle = (
+    <button
+      type="button"
+      onClick={togglePresent}
+      aria-pressed={present}
+      aria-label={present ? '문서로 보기' : '발표 모드로 보기'}
+      title={present ? '문서로 보기 (P)' : '발표 모드 (P)'}
+      className="deck-position-search"
+    >
+      {present ? <BookOpen className="size-4" strokeWidth={1.75} /> : <Presentation className="size-4" strokeWidth={1.75} />}
+    </button>
   );
 
   return (
@@ -789,7 +902,12 @@ export function DeckController() {
           total={slides.length}
           outlineOpen={outlineOpen}
           onToggleOutline={toggleOutline}
-          search={search}
+          search={
+            <>
+              {search}
+              {modeToggle}
+            </>
+          }
           arrivedQuery={arrived}
           onDismissArrival={dismissArrival}
         />
@@ -802,6 +920,8 @@ export function DeckController() {
         open={outlineOpen}
         onOpenChange={setOutlineOpen}
         onGoTo={goTo}
+        present={present}
+        onTogglePresent={togglePresent}
       />
 
       {/* 진행 레일(PC) — 장마다 한 칸. 도트 93개를 세로로 늘어놓던 자리다.
@@ -851,8 +971,8 @@ export function DeckController() {
         </div>
       )}
 
-      {/* 다음 슬라이드 힌트 */}
-      {!isLast && (
+      {/* 다음 슬라이드 힌트 — 발표 모드에서만. 문서는 그냥 스크롤하면 된다. */}
+      {present && !isLast && (
         <button type="button" onClick={() => goTo(active + 1)} className="deck-next" aria-label="다음 슬라이드">
           <ChevronDown className="size-5" />
         </button>

@@ -1,10 +1,12 @@
 ---
 /**
- * work 상세 — 발표 덱 (/work/<id>)
+ * work 상세 (/work/<id>) — 기본은 문서, `?present`면 발표 덱.
  *
- * 문서형 뷰를 덱으로 완전히 대체했다. 슬라이드 본문은 rehype-work-sections가
- * MDX에서 만들어 낸 <section data-slide>를 그대로 쓰고, 이 파일은 표지·간지·마무리처럼
- * 문서에는 없고 발표에만 필요한 슬라이드와 그 순서를 더한다.
+ * 한때 문서형 뷰를 덱으로 완전히 대체했지만, 한 장이 한 화면에 스냅되는 덱은 혼자
+ * 훑어 읽기에 불편해 문서를 기본으로 되돌렸다. 마크업은 하나다 — 슬라이드 본문은
+ * rehype-work-sections가 MDX에서 만들어 낸 <section data-slide>를 그대로 쓰고,
+ * 이 파일은 표지·간지·마무리 슬라이드와 그 순서를 더한다. 두 모드의 차이는
+ * deck.css(html[data-deck-present])와 DeckController가 전부 맡는다.
  *
  * 서브 레포는 탭이 아니라 간지 뒤에 이어지는 장(章)이다. 탭이 사라져서
  * 이력서의 헤딩 딥링크(#슬러그)는 오히려 단순해졌다 — 모든 내용이 한 문서에
@@ -130,20 +132,30 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
 
 <BaseLayout title={`${title} - Gitsunmin`} description={description} ogImage={ogImage} ogType="article">
   {/*
-    덱은 첫 배치(슬라이드마다 한 화면에 맞추는 자동 축소)를 끝낸 뒤에 드러난다.
+    기본은 문서 모드다 — 슬라이드를 이어 붙인 긴 글. `?present`로 들어오면 발표 모드로
+    시작한다(한 장이 한 화면, 스냅). 모드 표시는 첫 페인트 전에 붙여야 문서로 그려졌다가
+    슬라이드로 뒤바뀌는 깜빡임이 없다.
+
+    발표 모드는 첫 배치(슬라이드마다 한 화면에 맞추는 자동 축소)를 끝낸 뒤에 드러난다.
     93장짜리 덱에서 그 계산은 수십 ms가 걸리는데, 그걸 스크롤 도중에 하면 그때마다
     걸린다. 로딩 화면 뒤에서 한 번에 끝내고 나면 그 뒤로는 스크롤만 남는다.
+    문서 모드는 맞출 것이 없으므로 로딩 화면 없이 바로 보인다.
 
-    이 표시는 인라인 스크립트가 첫 페인트 전에 붙인다. JS가 없으면 붙지 않으므로
-    로딩 화면도 뜨지 않고 본문이 그대로 보인다 — 크롤러와 인쇄가 보는 것도 그 상태다.
+    JS가 없으면 아무 표시도 붙지 않아 문서 모드 그대로 보인다 — 크롤러가 보는 것도 그 상태다.
   */}
   <script is:inline>
     (function () {
-      document.documentElement.dataset.deckBooting = '';
-      // DeckController가 죽어도 덱이 영영 가려지지 않게 하는 안전장치.
-      setTimeout(function () {
-        delete document.documentElement.dataset.deckBooting;
-      }, 4000);
+      var root = document.documentElement;
+      if (new URLSearchParams(location.search).has('present')) {
+        root.dataset.deckPresent = '';
+        root.dataset.deckBooting = '';
+        // DeckController가 죽어도 덱이 영영 가려지지 않게 하는 안전장치.
+        setTimeout(function () {
+          delete root.dataset.deckBooting;
+        }, 4000);
+      } else {
+        delete root.dataset.deckPresent;
+      }
 
       /*
         첫 진입이면 표지에서 시작한다.
@@ -153,7 +165,7 @@ const PROSE = 'deck-prose prose prose-sm dark:prose-invert max-w-none prose-head
         초기화·복원이 통째로 꺼져 있고, iOS Safari는 그 상태에서 새 문서로 넘어갈 때
         앞 문서의 스크롤 오프셋을 그대로 들고 온다. 보통 페이지는 문서가 짧아 오프셋이
         0으로 잘려 티가 나지 않지만, 덱은 문서 하나가 10만 px대라 그 오프셋이 그대로
-        유효한 위치가 된다 — 그래서 이 현상은 work 상세에서만 보인다.
+        유효한 위치가 된다 — 그래서 이 현상은 work 상세에서만 보인다(문서 모드도 길다).
 
         되돌아온 것(뒤로/앞으로)과 딥링크는 그 위치가 맞으므로 건드리지 않는다.
       */

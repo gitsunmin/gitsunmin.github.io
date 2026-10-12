@@ -1,4 +1,4 @@
-import { ChevronDown, Printer, Search, X } from 'lucide-react';
+import { BookOpen, ChevronDown, Presentation, Printer, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { BottomSheet } from '@/components/BottomSheet';
 import type { Outline, OutlineGroup } from '@/components/deck/outline';
@@ -21,9 +21,11 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onGoTo: (index: number) => void;
+  present: boolean;
+  onTogglePresent: () => void;
 };
 
-export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Props) {
+export function DeckOutline({ outline, active, open, onOpenChange, onGoTo, present, onTogglePresent }: Props) {
   const isMobile = useMediaQuery(MOBILE_QUERY);
 
   // 모바일에서 고른 항목. 시트가 열려 있는 동안은 문서 스크롤이 잠겨 있어(iOS Safari는
@@ -57,10 +59,23 @@ export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Pro
     window.setTimeout(() => window.print(), 650);
   };
 
+  // 모드 전환도 인쇄와 같은 이유로 시트가 내려간 뒤에 한다. 스크롤이 잠긴 채로 배치가
+  // 바뀌면 읽던 슬라이드로 되돌아가는 이동이 먹지 않는다.
+  const togglePresent = () => {
+    if (!isMobile) {
+      onTogglePresent();
+      return;
+    }
+    onOpenChange(false);
+    window.setTimeout(onTogglePresent, 650);
+  };
+
+  const listProps = { outline, active, open, onSelect: select, onPrint: print, present, onTogglePresent: togglePresent };
+
   if (isMobile) {
     return (
       <BottomSheet open={open} onOpenChange={onOpenChange} onClosed={onClosed} title="목차" height={0.85}>
-        <OutlineList outline={outline} active={active} open={open} onSelect={select} onPrint={print} />
+        <OutlineList {...listProps} />
       </BottomSheet>
     );
   }
@@ -78,7 +93,7 @@ export function DeckOutline({ outline, active, open, onOpenChange, onGoTo }: Pro
           <X className="size-4" />
         </button>
       </div>
-      <OutlineList outline={outline} active={active} open={open} onSelect={select} onPrint={print} />
+      <OutlineList {...listProps} />
     </aside>
   );
 }
@@ -89,12 +104,14 @@ type ListProps = {
   open: boolean;
   onSelect: (index: number) => void;
   onPrint: () => void;
+  present: boolean;
+  onTogglePresent: () => void;
 };
 
 const containsActive = (group: OutlineGroup, active: number) =>
   group.items.some((item) => item.index === active);
 
-function OutlineList({ outline, active, open, onSelect, onPrint }: ListProps) {
+function OutlineList({ outline, active, open, onSelect, onPrint, present, onTogglePresent }: ListProps) {
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set());
   const listRef = useRef<HTMLDivElement>(null);
@@ -241,10 +258,21 @@ function OutlineList({ outline, active, open, onSelect, onPrint }: ListProps) {
         <span className="tabular-nums" aria-live="polite">
           {normalized ? `${total}개 슬라이드` : `${active + 1} / ${total}`}
         </span>
-        <button type="button" onClick={onPrint} className="deck-mode" title="덱 전체를 인쇄합니다">
-          <Printer className="size-3" />
-          인쇄
-        </button>
+        <span className="flex items-center gap-1.5">
+          <button type="button" onClick={onTogglePresent} className="deck-mode" aria-pressed={present} title={present ? '문서로 보기 (P)' : '발표 모드 (P)'}>
+            {present ? <BookOpen className="size-3" /> : <Presentation className="size-3" />}
+            {present ? '문서' : '발표'}
+          </button>
+          <button
+            type="button"
+            onClick={onPrint}
+            className="deck-mode"
+            title={present ? '슬라이드 한 장을 한 쪽으로, 가로로 인쇄합니다' : '문서로 이어서, 세로로 인쇄합니다'}
+          >
+            <Printer className="size-3" />
+            인쇄
+          </button>
+        </span>
       </div>
     </div>
   );
