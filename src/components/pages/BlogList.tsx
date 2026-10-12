@@ -1,7 +1,7 @@
 import { useInView } from '@/hooks/useInView';
 import { cn } from '@/lib/utils';
 import { Calendar, Clock } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import { type MouseEvent, useMemo, useRef, useState } from 'react';
 
 export type PostItem = {
   slug: string;
@@ -176,8 +176,47 @@ const GridCard = ({ post, index }: { post: PostItem; index: number }) => {
   );
 };
 
+const VISIBLE_TAG_COUNT = 10;
+
+const TagButton = ({
+  active,
+  onClick,
+  label,
+  count,
+  className,
+}: {
+  active: boolean;
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void;
+  label: string;
+  count: number;
+  className?: string;
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-pressed={active}
+    className={cn(
+      'shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm font-medium',
+      'transition-all duration-200 active:scale-95',
+      active
+        ? 'bg-primary text-primary-foreground shadow-md'
+        : 'bg-muted text-muted-foreground hover:bg-muted/80',
+      className,
+    )}
+  >
+    {label} <span className="ml-1 opacity-70">{count}</span>
+  </button>
+);
+
 export const BlogList = ({ posts }: { posts: PostItem[] }) => {
   const [selectedTag, setSelectedTag] = useState('전체');
+  const [expanded, setExpanded] = useState(false);
+
+  const selectTag = (tag: string, e: MouseEvent<HTMLButtonElement>) => {
+    setSelectedTag(tag);
+    // 모바일 가로 스크롤에서 선택한 태그가 가장자리에 걸리지 않도록 가운데로 옮김
+    e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  };
 
   const tagCounts = useMemo(() => {
     const map = new Map<string, number>();
@@ -189,6 +228,8 @@ export const BlogList = ({ posts }: { posts: PostItem[] }) => {
     return Array.from(map.entries()).sort((a, b) => b[1] - a[1]);
   }, [posts]);
 
+  const hiddenTagCount = Math.max(0, tagCounts.length - VISIBLE_TAG_COUNT);
+
   const filtered = useMemo(
     () => (selectedTag === '전체' ? posts : posts.filter((p) => p.tags.includes(selectedTag))),
     [posts, selectedTag],
@@ -199,38 +240,45 @@ export const BlogList = ({ posts }: { posts: PostItem[] }) => {
 
   return (
     <div>
-      {/* Tag filter */}
-      <div className="flex flex-wrap gap-2 mb-10">
-        <button
-          type="button"
-          onClick={() => setSelectedTag('전체')}
-          className={cn(
-            'px-3.5 py-1.5 rounded-full text-sm font-medium',
-            'transition-all duration-200 active:scale-95',
-            selectedTag === '전체'
-              ? 'bg-primary text-primary-foreground shadow-md'
-              : 'bg-muted text-muted-foreground hover:bg-muted/80',
-          )}
-        >
-          전체{' '}
-          <span className="ml-1 opacity-70">{posts.length}</span>
-        </button>
-        {tagCounts.map(([tag, count]) => (
-          <button
+      {/* Tag filter: 모바일은 한 줄 가로 스크롤, 데스크톱은 상위 태그만 펼치고 나머지는 접음 */}
+      <div
+        className={cn(
+          'flex gap-2 mb-10',
+          '-mx-6 px-6 overflow-x-auto flex-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+          '[mask-image:linear-gradient(to_right,black_85%,transparent)]',
+          'md:mx-0 md:px-0 md:overflow-visible md:flex-wrap md:[mask-image:none]',
+        )}
+      >
+        <TagButton
+          active={selectedTag === '전체'}
+          onClick={(e) => selectTag('전체', e)}
+          label="전체"
+          count={posts.length}
+        />
+        {tagCounts.map(([tag, count], i) => (
+          <TagButton
             key={tag}
+            active={selectedTag === tag}
+            onClick={(e) => selectTag(tag, e)}
+            label={`# ${tag}`}
+            count={count}
+            className={cn(!expanded && i >= VISIBLE_TAG_COUNT && selectedTag !== tag && 'md:hidden')}
+          />
+        ))}
+        {hiddenTagCount > 0 && (
+          <button
             type="button"
-            onClick={() => setSelectedTag(tag)}
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
             className={cn(
-              'px-3.5 py-1.5 rounded-full text-sm font-medium',
-              'transition-all duration-200 active:scale-95',
-              selectedTag === tag
-                ? 'bg-primary text-primary-foreground shadow-md'
-                : 'bg-muted text-muted-foreground hover:bg-muted/80',
+              'hidden md:inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-medium',
+              'border border-dashed border-border text-muted-foreground',
+              'hover:text-foreground hover:border-foreground/40 transition-colors duration-200',
             )}
           >
-            # {tag} <span className="ml-1 opacity-70">{count}</span>
+            {expanded ? '접기' : `+${hiddenTagCount}개 더보기`}
           </button>
-        ))}
+        )}
       </div>
 
       {filtered.length === 0 && (
