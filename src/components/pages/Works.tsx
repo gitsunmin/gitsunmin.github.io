@@ -5,7 +5,7 @@ import { SearchResults } from '@/components/works/SearchResults';
 import { WorkIndex } from '@/components/works/WorkIndex';
 import { replaceSearchParams, useLocationSearch } from '@/hooks/useLocationSearch';
 import type { WorkDigest } from '@/lib/workBriefs';
-import { hrefOf, search, tokenize } from '@/lib/workSearch';
+import { tokenize } from '@/lib/workSearch';
 import { suggestionVocabulary } from '@/lib/workSuggest';
 import { cn } from '@/lib/utils';
 
@@ -43,9 +43,6 @@ const Wordmark = ({ size, onClick }: { size: 'home' | 'compact'; onClick?: () =>
     </h1>
   );
 };
-
-const homeButton =
-  'rounded-md border border-transparent bg-muted/70 px-4 py-2 text-sm text-foreground hover:border-border hover:shadow-sm dark:bg-[#303134] dark:hover:border-[#5f6368]';
 
 /**
  * /works — Google식 검색이 맨 위, 그 아래 전체 작업 목록.
@@ -85,25 +82,6 @@ export const WorksPage = ({ digests }: Props) => {
   const goHome = () => {
     setDraft('');
     replaceSearchParams({ [QUERY_PARAM]: null });
-  };
-
-  // I'm Feeling Lucky — 검색어가 있으면 가장 잘 맞는 슬라이드로, 없으면 아무 프로젝트나 연다.
-  const lucky = () => {
-    if (!state.index) return;
-    const trimmed = draft.trim();
-    if (trimmed === '') {
-      const works = state.index.filter((r) => r.kind === 'work');
-      const pick = works[Math.floor(Math.random() * works.length)];
-      if (pick) window.location.assign(`/work/${pick.workId}/`);
-      return;
-    }
-    const [best] = search(state.index, trimmed);
-    if (!best) {
-      submit(trimmed);
-      return;
-    }
-    state.remember(trimmed);
-    window.location.assign(hrefOf(best, trimmed));
   };
 
   const box = (size: 'home' | 'compact') => (
@@ -151,16 +129,8 @@ export const WorksPage = ({ digests }: Props) => {
     <div className="w-full md:max-w-(--breakpoint-md) mx-auto pt-16 md:pt-20 px-4 md:px-0 pb-16 print:pt-0 print:px-0">
       <section className="flex flex-col items-center pt-[8vh] pb-16 md:pt-[12vh] md:pb-24 print:hidden">
         <Wordmark size="home" />
-        <p className="mt-3 mb-8 text-sm text-muted-foreground">프론트엔드 개발자 김선민의 작업물 검색</p>
+        <p className="mt-3 mb-8 text-sm text-muted-foreground">개발자 김선민의 작업물 검색</p>
         <div className="w-full max-w-[584px]">{box('home')}</div>
-        <div className="mt-7 hidden gap-3 sm:flex">
-          <button type="button" onClick={() => submit(draft)} className={homeButton}>
-            Works 검색
-          </button>
-          <button type="button" onClick={lucky} className={homeButton}>
-            I&apos;m Feeling Lucky
-          </button>
-        </div>
         <p className="mt-7 max-w-[584px] text-center text-sm leading-7 text-muted-foreground">
           추천 검색어:{' '}
           {SUGGESTED.map((word, i) => (
