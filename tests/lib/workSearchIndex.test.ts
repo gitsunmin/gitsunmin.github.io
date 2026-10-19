@@ -68,6 +68,9 @@ describe('plainText', () => {
   it('표 구분선과 세로줄을 지운다', () => {
     expect(plainText('| 항목 | 값 |\n|:---|:---|\n| A | B |')).toBe('항목 값 A B');
   });
+  it('이스케이프한 기호는 기호만 남긴다', () => {
+    expect(plainText('2\\~4GB, 20억\\~40억')).toBe('2~4GB, 20억~40억');
+  });
 });
 
 describe('sliceSlides', () => {

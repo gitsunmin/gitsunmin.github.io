@@ -4,6 +4,7 @@ export type WorkCategory = 'side-project' | 'service' | 'library' | 'vscode-exte
 
 export const WORK_IDS = [
   'doldeuls-forest',
+  'raphael',
   'gitsunmin-github-io',
   'k-number',
   'graph-man',
@@ -61,6 +62,23 @@ export const Works: Work[] = [
       { label: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.seonhamlabs.forestofstones' },
     ],
     range: '2026.01 ~',
+    careerId: 'seonhamlabs',
+    isFeatured: true,
+  },
+  {
+    id: 'raphael',
+    title: 'raphael',
+    icon: '/assets/logos/seonhamlabs_logo.webp',
+    tldr: '집 서버의 작은 오픈소스 AI 모델로 일정·할일·보안 점검을 맡는 Discord 비서를 만들었고, 모델이 틀리기 쉬운 일은 명령·버튼·규칙 같은 코드로 옮기도록 설계했습니다.',
+    category: 'side-project',
+    description: `Discord DM으로 부탁하면 집 서버에서 돌아가는 오픈소스 AI 모델(Ollama)이 처리하는 개인 비서 봇입니다.
+ChatGPT 같은 외부 AI 서비스 없이 그래픽 메모리 2~4GB GPU에서 동작하며, 일정·할일 관리(Google Calendar·Tasks), 웹 검색, 알림·반복 작업, 무작위 시각 체크인, 매일 아침 보안 뉴스와 코드 의존성 점검을 한 봇에서 처리합니다.`,
+    techs: ['TypeScript', 'Bun', 'discord.js', 'Ollama', 'zod', 'SQLite', 'croner', 'Google Calendar API', 'Google Tasks API', 'SearXNG', 'Docker'],
+    links: [
+      { label: '블로그 — 비서 고용', url: '/blog/home-server-04-assistant' },
+      { label: '블로그 — 셀프 호스팅 LLM에 웹 검색 추가하기', url: '/blog/self-hosted-llm-web-search' },
+    ],
+    range: '2026.09 ~',
     careerId: 'seonhamlabs',
     isFeatured: true,
   },

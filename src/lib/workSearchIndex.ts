@@ -41,6 +41,8 @@ export function plainText(markdown: string): string {
       .replace(/\|/g, ' ')
       .replace(/^\s*>\s?/gm, '')
       .replace(/^\s*([-*]|\d+\.)\s+/gm, '')
+      // 이스케이프한 기호 `\~` — 범위 표기가 취소선으로 렌더되지 않게 본문에서 쓴다
+      .replace(/\\([\\`*_~|#<>{}[\]()-])/g, '$1')
       .replace(/\s+/g, ' ')
       .trim()
   );
