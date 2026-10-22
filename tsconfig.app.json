@@ -5,10 +5,9 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "paths": {
       "@/*": ["./src/*"],
-      "@til/*": ["./src/docs/til/*"],
-      "@plugins/*": ["./plugins/*"]
+      "@til/*": ["./src/docs/til/*"]
     }
   },
-  "include": ["src", "plugins", "vite.config.ts", "tests/**/*.ts"],
+  "include": ["src", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist", "build", "modules"]
 }

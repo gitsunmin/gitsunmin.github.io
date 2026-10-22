@@ -374,11 +374,37 @@
 }
 
 /* ─── Living Background ──────────────────────────────────────────── */
+/*
+  블롭의 흔들림은 CSS 애니메이션(transform)으로, 포인터 패럴랙스는 JS가 넣어 주는
+  --living-bg-mx/my 변수(translate)로 따로 움직인다. 둘 다 컴포지터에서 처리되어
+  매 프레임 메인 스레드가 스타일을 다시 계산하지 않는다.
+  예전엔 blur(72px) 필터로 가장자리를 풀었는데, 전체 화면 크기 레이어를 계속 블러
+  합성하는 비용이 커서 그라디언트 끝을 넓혀 같은 부드러움을 낸다.
+*/
 .living-bg-blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(72px);
   will-change: transform;
+  translate: calc(var(--living-bg-mx, 0) * var(--prx)) calc(var(--living-bg-my, 0) * var(--pry));
+  transition: translate 600ms ease-out;
+  animation: living-bg-drift var(--drift-duration) ease-in-out infinite alternate;
+  animation-delay: var(--drift-delay);
+}
+
+@keyframes living-bg-drift {
+  0%   { transform: translate(0, var(--amp)); }
+  25%  { transform: translate(var(--amp), 0); }
+  50%  { transform: translate(0, calc(var(--amp) * -1)); }
+  75%  { transform: translate(calc(var(--amp) * -1), 0); }
+  100% { transform: translate(0, var(--amp)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .living-bg-blob {
+    animation: none;
+    translate: none;
+    transition: none;
+  }
 }
 
 .living-bg-blob-1 {
@@ -386,7 +412,12 @@
   height: 60vw;
   top: -20%;
   left: -10%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.28) 0%, transparent 70%);
+  --amp: 3.5%;
+  --prx: -4%;
+  --pry: -4%;
+  --drift-duration: 26s;
+  --drift-delay: 0s;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.24) 0%, rgba(37, 99, 235, 0.08) 45%, transparent 72%);
 }
 
 .living-bg-blob-2 {
@@ -394,7 +425,12 @@
   height: 50vw;
   bottom: -15%;
   right: -5%;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.22) 0%, transparent 70%);
+  --amp: 3%;
+  --prx: 3%;
+  --pry: 3%;
+  --drift-duration: 21s;
+  --drift-delay: -10s;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.19) 0%, rgba(124, 58, 237, 0.06) 45%, transparent 72%);
 }
 
 .living-bg-blob-3 {
@@ -402,19 +438,24 @@
   height: 40vw;
   top: 30%;
   left: 40%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.20) 0%, transparent 70%);
+  --amp: 2.5%;
+  --prx: -2.5%;
+  --pry: 2.5%;
+  --drift-duration: 29s;
+  --drift-delay: -5s;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.17) 0%, rgba(16, 185, 129, 0.05) 45%, transparent 72%);
 }
 
 :where(.dark, .dark *) .living-bg-blob-1 {
-  background: radial-gradient(circle, rgba(96, 165, 250, 0.16) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.14) 0%, rgba(96, 165, 250, 0.05) 45%, transparent 72%);
 }
 
 :where(.dark, .dark *) .living-bg-blob-2 {
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.13) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.11) 0%, rgba(167, 139, 250, 0.04) 45%, transparent 72%);
 }
 
 :where(.dark, .dark *) .living-bg-blob-3 {
-  background: radial-gradient(circle, rgba(52, 211, 153, 0.11) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.095) 0%, rgba(52, 211, 153, 0.035) 45%, transparent 72%);
 }
 
 .living-bg-grid {

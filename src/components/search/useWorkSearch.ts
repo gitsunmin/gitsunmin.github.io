@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useDeferredValue, useEffect, useMemo, useState } from 'react';
 import {
   groupByWork,
   search,
@@ -117,18 +117,21 @@ export function useWorkSearch(open: boolean, initialScope: SearchScope | null): 
 
   const loading = open && !index && !error;
 
+  // 입력창은 바로 반영하고 결과 계산은 뒤로 미룬다. 빠르게 칠 때 키 입력이 렌더에 막히지 않는다.
+  const deferredQuery = useDeferredValue(query);
+
   const hits = useMemo(
-    () => (index ? search(index, query, { scope: scope?.id }) : []),
-    [index, query, scope],
+    () => (index ? search(index, deferredQuery, { scope: scope?.id }) : []),
+    [index, deferredQuery, scope],
   );
   const groups = useMemo(() => groupByWork(hits, initialScope?.id), [hits, initialScope]);
   const unscopedCount = useMemo(
-    () => (index && scope ? search(index, query).length : hits.length),
-    [index, scope, query, hits.length],
+    () => (index && scope ? search(index, deferredQuery).length : hits.length),
+    [index, scope, deferredQuery, hits.length],
   );
   const alternatives = useMemo(
-    () => (index && query.trim() && hits.length === 0 ? suggestAlternatives(index, query) : []),
-    [index, query, hits.length],
+    () => (index && deferredQuery.trim() && hits.length === 0 ? suggestAlternatives(index, deferredQuery) : []),
+    [index, deferredQuery, hits.length],
   );
   const popularTechs = useMemo(() => (index ? topTechs(index) : []), [index]);
 

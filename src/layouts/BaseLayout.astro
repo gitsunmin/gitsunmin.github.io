@@ -1,6 +1,5 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import { Providers } from '@/components/Providers';
 import { LivingBackground } from '@/components/LivingBackground';
 import '@/globals.css';
 
@@ -123,10 +122,9 @@ const pageTitle = title === 'Gitsunmin' ? title : `${title} | Gitsunmin`;
     <ClientRouter />
   </head>
   <body>
-    <LivingBackground client:load />
-    <Providers client:load>
-      <slot />
-    </Providers>
+    <!-- 페이지를 옮겨도 다시 마운트하지 않는다. 캔버스·입자 위치가 매번 새로 잡혀 배경이 튀는 것을 막는다. -->
+    <LivingBackground client:load transition:persist="living-background" />
+    <slot />
   </body>
 </html>
 

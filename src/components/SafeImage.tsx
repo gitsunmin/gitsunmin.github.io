@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
-const NoImageAvailable = '/assets/no_image_available.png';
+const NoImageAvailable = '/assets/no_image_available.webp';
 
 type Props = React.ImgHTMLAttributes<HTMLImageElement>;
 

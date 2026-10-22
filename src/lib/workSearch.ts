@@ -106,6 +106,33 @@ export function tokenize(query: string): string[][] {
 
 const includesAny = (haystack: string, needles: string[]) => needles.some((n) => haystack.includes(n));
 
+type NormalizedRecord = {
+  techs: string[];
+  title: string;
+  contributions: string[];
+  text: string;
+};
+
+/**
+ * 레코드별 정규화 결과. 본문 전체를 NFC·소문자로 바꾸는 일이 검색 비용의 대부분이라,
+ * 글자를 칠 때마다 다시 하지 않고 레코드당 한 번만 한다. 인덱스가 버려지면 같이 버려진다.
+ */
+const normalizedCache = new WeakMap<SearchRecord, NormalizedRecord>();
+
+function normalizedOf(record: SearchRecord): NormalizedRecord {
+  let cached = normalizedCache.get(record);
+  if (!cached) {
+    cached = {
+      techs: (record.techs ?? []).map(normalize),
+      title: normalize(record.title),
+      contributions: (record.contributions ?? []).map(normalize),
+      text: normalize(record.text),
+    };
+    normalizedCache.set(record, cached);
+  }
+  return cached;
+}
+
 /**
  * 레코드 하나를 검색어에 대 본다. 토큰이 전부 어딘가에 걸려야 매치다(AND).
  * 종류별 점수는 토큰마다 더한다 — 두 토큰이 다 기술에 걸리면 기술 점수가 두 번.
@@ -113,10 +140,7 @@ const includesAny = (haystack: string, needles: string[]) => needles.some((n) =>
 export function matchRecord(record: SearchRecord, tokens: string[][]): SearchHit | null {
   if (tokens.length === 0) return null;
 
-  const techs = (record.techs ?? []).map(normalize);
-  const title = normalize(record.title);
-  const contributions = (record.contributions ?? []).map(normalize);
-  const text = normalize(record.text);
+  const { techs, title, contributions, text } = normalizedOf(record);
 
   const kinds = new Set<MatchKind>();
   let score = 0;
