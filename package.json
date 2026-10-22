@@ -16,7 +16,6 @@
     "pull:modules": "git submodule update --remote --merge",
     "gen:book-cover": "bun .scripts/generate-book-cover.ts",
     "test:vi": "vitest",
-    "test:ui": "vitest --ui",
     "prepare": "husky"
   },
   "dependencies": {
@@ -32,7 +31,7 @@
     "qrcode": "^1.5.4",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "satori": "^0.35.2",
+    "satori": "0.35.1",
     "tailwind-merge": "^3.7.0",
     "ts-pattern": "^5.9.2",
     "vaul": "^1.1.2",
@@ -55,7 +54,6 @@
     "@typescript-eslint/eslint-plugin": "^8.72.0",
     "@typescript-eslint/parser": "^8.72.0",
     "@vitest/snapshot": "^5.0.5",
-    "@vitest/ui": "^5.0.5",
     "caniuse-lite": "^1.0.30001818",
     "esbuild": "^0.28.2",
     "eslint": "^10.13.0",
