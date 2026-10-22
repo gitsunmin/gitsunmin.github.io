@@ -50,12 +50,12 @@ export const Works: Work[] = [
     id: 'doldeuls-forest',
     title: '돌들의 숲',
     icon: '/assets/logos/forest-of-stones.webp',
-    tldr: '익명 P2P 힐링 커뮤니티 앱을 기획부터 출시·운영까지 혼자 맡았고, WebView 하이브리드에서 순수 React Native로 전면 재구현했습니다.',
+    tldr: '혼잣말에 AI 돌이 대답하고 고민은 돌탑으로 쌓는 익명 위로 앱을 기획부터 출시·운영까지 혼자 맡았고, 순수 React Native 재구현과 AI 대화의 위기 대응·개인정보 설계까지 했습니다.',
     category: 'side-project',
-    description: `디지털 환경에서의 정서적 고립을 해소하고 싶어 만든 익명 P2P 힐링 커뮤니티입니다.
-누군가와 연결되고 싶지만 신분을 드러내기 어려운 순간을 위해, 완전한 익명성을 보장하면서도 진심 어린 대화가 가능한 공간을 만들었습니다.
-2026년 3월 1.x(WebView 하이브리드)로 정식 출시한 뒤, 2.0.0에서 순수 React Native 앱으로 전면 재구현하고 2.1.0에서 영어·일본어를 더했습니다.`,
-    techs: ['React Native', 'Expo', 'Expo Router', 'TypeScript', 'Relay', 'Reanimated', 'Zustand', 'i18next', 'Cloudflare Workers', 'Hono', 'GraphQL', 'Pothos', 'Prisma', 'Cloudflare D1', 'Durable Objects', 'React', 'TanStack Router', 'Tailwind CSS', 'Astro', 'Turborepo', 'Bun'],
+    description: `아무에게도 말하기 싫은 이야기를 내려놓는 익명 위로 앱입니다.
+숲의 나무 밑둥에 앉아 혼잣말을 하면 돌이 대답하고(AI), 사람에게 하고 싶은 이야기는 돌에 적어 돌탑으로 쌓으면 다른 사람이 조약돌로 위로를 얹어 줍니다.
+2026년 3월 정식 출시한 뒤, 2.0.0에서 순수 React Native 앱으로 전면 재구현하고, 2.1.0에서 영어·일본어를, 2.2.0에서 AI 돌과의 대화를 더했습니다.`,
+    techs: ['React Native', 'Expo', 'Expo Router', 'TypeScript', 'Relay', 'Reanimated', 'Zustand', 'i18next', 'Cloudflare Workers', 'Hono', 'GraphQL', 'Pothos', 'Prisma', 'Cloudflare D1', 'Durable Objects', 'Cloudflare AI Gateway', 'Gemini', 'React', 'TanStack Router', 'Tailwind CSS', 'Astro', 'Turborepo', 'Bun'],
     links: [
       { label: '돌들의 숲', url: 'https://forest.seonhamlabs.com' },
       { label: 'App Store', url: 'https://apps.apple.com/app/id6759519062' },
